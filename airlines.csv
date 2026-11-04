@@ -1,0 +1,8 @@
+sep=;
+#version;3
+code;displayName;description;standby;sim;keywords;signOnMins;signOffMins;travelBeforeMins;travelAfterMins;turnaroundMins
+ASL;ASL Airlines;Applies ASL airline-specific duty codes for primary line operations.;SBCO|SBCI|SBCW|SBLI|SBLO|SBS|ASBY;SIM|SN3|SN3C|CRM|CBT|GROUND|DRILL|RECURRENT;ASL|3V|TAY;40;30;50;30;45
+GEN;Commercial Airline (Generic);Applies standard commercial FTL rules and general duty codes.;SBY|STBY|STANDBY|RESERVE;SIM|SIMU|SIMULATOR|FTD|FFS;FLIGHT|FLYING|FLY|WORK|PILOT DUTY|AIRCRAFT DUTY;40;30;50;30;45
+ARCHIPEL;Air Archipel;Calibrated for Tahiti emergency medevac standby and island hopper flights.;EVSJ|EVSN|ASTREINTE VERTE|ASTREINTE|15M|SBY|STBY|RESERVE|EMERGENCY;SIM|SIMU;ARCHIPEL|FOH|FLIGHT|FLYING|PPT|FAAA;30;15;30;30;30
+FI_IRI;Flight Instructor (Primary);Calibrated for back-to-back flight instruction blocks and simulator briefings.;SBY|STBY;SIM|SIMU|FTD|FFS|BAA|SIMAERO|CAE|TRI|TRE;FI|TRI|TRE|INSTRUCTION|FLIGHT SCHOOL|DUAL|CHECK|SKILL TEST|LPC|OPC;30;15;30;30;30
+STUDENT;Student Pilot;Calibrated for ab-initio flight training blocks and checkride preparation.;SBY;SIM|SIMU|FTD|FFS|GROUND SCHOOL|BRIEFING;SOLO|DUAL|CPL|PPL|FLIGHT|TRAINING;30;15;30;30;30
