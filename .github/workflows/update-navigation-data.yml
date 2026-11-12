@@ -15,6 +15,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Install Official FlightGear Global NavData Package
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y flightgear-data-base
+
       - name: Set up Python 3.12
         uses: actions/setup-python@v5
         with:
@@ -42,5 +47,6 @@ jobs:
             echo "No navigation data changes to commit."
           else
             git commit -m "chore(navdata): update factual OurAirports & FlightGear navigation datasets"
-            git push
+            git pull --rebase origin main
+            git push origin main
           fi
