@@ -396,7 +396,6 @@ def download_ourairports_and_openflights(manifest_sources: list):
         ),
     ]
 
-    # Remove any old misclassified routes.dat or empty synthetic procedure files
     for stale in [
         "navigation/airways/routes.dat",
         "procedures/sids/sids.csv",
