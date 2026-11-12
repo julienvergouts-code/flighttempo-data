@@ -14,6 +14,9 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+          fetch-depth: 0
 
       - name: Set up Python 3.12
         uses: actions/setup-python@v5
@@ -37,11 +40,12 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
           git add -A navigation/ app/src/main/assets/airports.csv navigation_manifest.json
           if git diff --staged --quiet; then
             echo "No changes to commit."
           else
             git commit -m "chore(navdata): update commercial navigation and airport assets"
-            git pull --rebase origin main
-            git push origin main
+            git pull --rebase origin main || true
+            git push origin HEAD:main
           fi
