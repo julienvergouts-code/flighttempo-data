@@ -42,8 +42,6 @@ jobs:
       - name: Verify generated datasets
         run: |
           set -euo pipefail
-          git diff --check
-
           python3 - <<'PY'
           import csv
           import json
@@ -164,6 +162,9 @@ jobs:
               f"VOR-family={vor_count}, DME-capable={dme_count}, NDB-family={ndb_count}"
           )
           print("Manifest and generated datasets validated.")
+          PY
+
+          git diff --check
 
       - name: Commit updated datasets
         if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main')
