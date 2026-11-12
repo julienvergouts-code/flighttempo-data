@@ -1,401 +1,476 @@
+
 #!/usr/bin/env python3
 """
-FlightTempo Production-Grade Commercial Aviation Database Builder
-Strictly parses genuine open aviation data with zero synthetic placeholders.
-Validates records before staging and preserves prior working data on failure.
+FlightTempo Aviation Database Builder
+
+Source: OurAirports
+Datasets: Airports, runways, navaids
+
+No fabricated aviation records.
+No assumed AIRAC cycle.
+No synthetic SID, STAR or airway data.
 """
 
 import csv
-import datetime
-import gzip
 import hashlib
 import io
 import json
 import os
-import re
+import shutil
+import tempfile
 import urllib.request
+from datetime import datetime, timezone
+from pathlib import Path
 
-USER_AGENT = "FlightTempo-Builder/7.0 (https://github.com/julienvergouts-code/flighttempo-data)"
+ROOT = Path(__file__).resolve().parents[1]
 
-AIRPORTS_URL = "https://davidmegginson.github.io/ourairports-data/airports.csv"
-NAVAIDS_URL = "https://davidmegginson.github.io/ourairports-data/navaids.csv"
-RUNWAYS_URL = "https://davidmegginson.github.io/ourairports-data/runways.csv"
+SOURCE_BASE = "https://davidmegginson.github.io/ourairports-data"
 
-AWY_URLS = [
-    "https://raw.githubusercontent.com/FGMEMBERS-SCENERY/Navaids/master/awy.dat.gz",
-    "https://gitlab.com/flightgear/fgdata/-/raw/release/2024.1/Navaids/awy.dat.gz",
-]
-FIX_URLS = [
-    "https://raw.githubusercontent.com/FGMEMBERS-SCENERY/Navaids/master/fix.dat.gz",
-    "https://gitlab.com/flightgear/fgdata/-/raw/release/2024.1/Navaids/fix.dat.gz",
-]
+DATASETS = {
+    "airports": f"{SOURCE_BASE}/airports.csv",
+    "runways": f"{SOURCE_BASE}/runways.csv",
+    "navaids": f"{SOURCE_BASE}/navaids.csv",
+}
 
-PAVED_KEYWORDS = ("ASP", "CON", "BIT", "PEM", "PAV", "TAR", "MAC", "ASPH", "CONC")
+USER_AGENT = "FlightTempo-Aviation-Database/1.0"
 
-
-def download_bytes(url: str, timeout: int = 60) -> bytes:
-    req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
-    with urllib.request.urlopen(req, timeout=timeout) as resp:
-        return resp.read()
+MINIMUM_RECORDS = {
+    "airports": 1000,
+    "runways": 500,
+    "navaids": 1000,
+}
 
 
-def sha256_file(path: str) -> str:
-    h = hashlib.sha256()
-    with open(path, "rb") as f:
-        while chunk := f.read(65536):
-            h.update(chunk)
-    return h.hexdigest().upper()
+def log(message):
+    print(f"[FlightTempo] {message}", flush=True)
 
 
-def ensure_dirs():
-    os.makedirs("navigation/sources", exist_ok=True)
-    os.makedirs("navigation/waypoints", exist_ok=True)
-    os.makedirs("navigation/navaids", exist_ok=True)
-    os.makedirs("navigation/airways", exist_ok=True)
-    os.makedirs("navigation/runways", exist_ok=True)
-    os.makedirs("app/src/main/assets", exist_ok=True)
+def download(url):
+    request = urllib.request.Request(
+        url,
+        headers={"User-Agent": USER_AGENT}
+    )
+
+    with urllib.request.urlopen(request, timeout=90) as response:
+        if response.status != 200:
+            raise RuntimeError(
+                f"HTTP error {response.status}: {url}"
+            )
+
+        data = response.read()
+
+    if len(data) < 1000:
+        raise RuntimeError(
+            f"Downloaded file unexpectedly small: {url}"
+        )
+
+    return data
 
 
-def parse_xplane_header(lines: list) -> str:
-    for line in lines[:5]:
-        s = line.strip()
-        m = re.search(r"data cycle\s+([0-9.]+)", s, re.IGNORECASE)
-        if m:
-            return m.group(1)
-    return "unknown"
+def sha256(data):
+    return hashlib.sha256(data).hexdigest()
 
 
-def build_airports(today_iso: str, now_iso: str, manifest_sources: list) -> list:
-    print(f"Downloading airports from {AIRPORTS_URL}...")
-    raw = download_bytes(AIRPORTS_URL)
-    text = raw.decode("utf-8", errors="ignore")
-    reader = csv.DictReader(io.StringIO(text))
+def read_csv(data, name):
+    try:
+        text = data.decode("utf-8-sig")
+        reader = csv.DictReader(io.StringIO(text))
+
+        if not reader.fieldnames:
+            raise ValueError("Missing CSV header")
+
+        return list(reader)
+
+    except Exception as exc:
+        raise RuntimeError(
+            f"Unable to parse {name}: {exc}"
+        ) from exc
+
+
+def number(value):
+    if value is None or str(value).strip() == "":
+        return None
+
+    try:
+        result = float(value)
+        if result != result or abs(result) == float("inf"):
+            return None
+        return result
+    except (ValueError, TypeError):
+        return None
+
+
+def valid_coordinates(lat, lon):
+    return (
+        lat is not None
+        and lon is not None
+        and -90 <= lat <= 90
+        and -180 <= lon <= 180
+    )
+
+
+def write_csv(path, header, rows):
+    path.parent.mkdir(parents=True, exist_ok=True)
+
+    with path.open(
+        "w",
+        newline="",
+        encoding="utf-8"
+    ) as file:
+        writer = csv.writer(file)
+        writer.writerow(header)
+        writer.writerows(rows)
+
+
+def build_airports(records, stage):
     rows = []
+    seen = set()
 
-    for r in reader:
-        if r.get("type") == "closed_airport":
-            continue
-        ident = (r.get("ident") or "").strip().upper()
-        icao = (r.get("icao_code") or ident).strip().upper()
-        name = (r.get("name") or "").strip()
-        lat_s = (r.get("latitude_deg") or "").strip()
-        lon_s = (r.get("longitude_deg") or "").strip()
-        elev_s = (r.get("elevation_ft") or "0").strip()
-        country = (r.get("iso_country") or "").strip().upper()
-
-        if not icao or not lat_s or not lon_s:
-            continue
-        try:
-            lat = round(float(lat_s), 5)
-            lon = round(float(lon_s), 5)
-            elev = int(float(elev_s)) if elev_s else 0
-        except ValueError:
+    for record in records:
+        if record.get("type") == "closed_airport":
             continue
 
-        if -90.0 <= lat <= 90.0 and -180.0 <= lon <= 180.0:
-            rows.append((icao, country, lat, lon, elev, name))
+        ident = (
+            record.get("icao_code")
+            or record.get("ident")
+            or ""
+        ).strip().upper()
 
-    if len(rows) < 1000:
-        raise ValueError(f"Airport record count critically low ({len(rows)}). Aborting.")
+        if not ident or ident in seen:
+            continue
 
-    out_path = "app/src/main/assets/airports.csv"
-    with open(out_path, "w", newline="", encoding="utf-8") as f:
-        w = csv.writer(f)
-        w.writerow(["#version", today_iso, "source", "OurAirports"])
-        w.writerow(["icao", "country", "latitude", "longitude", "elevation_ft", "name"])
-        for row in sorted(rows, key=lambda x: x[0]):
-            w.writerow(row)
+        lat = number(record.get("latitude_deg"))
+        lon = number(record.get("longitude_deg"))
+        elevation = number(record.get("elevation_ft"))
 
-    manifest_sources.append({
-        "dataset": "airports",
-        "name": "Worldwide Airport Reference & Elevations Master",
-        "file": "airports.csv",
-        "url": AIRPORTS_URL,
-        "provider": "OurAirports",
-        "license": "Public Domain (CC0 1.0)",
-        "sourceVersionOrCycle": today_iso,
-        "recordCount": len(rows),
-        "sizeBytes": os.path.getsize(out_path),
-        "sha256": sha256_file(out_path),
-        "coverage": "Global airport coordinates, elevations MSL, and identifiers",
-        "downloadedAt": now_iso,
-    })
-    return manifest_sources
+        if not valid_coordinates(lat, lon):
+            continue
+
+        seen.add(ident)
+
+        rows.append((
+            ident,
+            (record.get("iso_country") or "").upper(),
+            round(lat, 5),
+            round(lon, 5),
+            round(elevation) if elevation is not None else "",
+            (record.get("name") or "").strip()
+        ))
+
+    if len(rows) < MINIMUM_RECORDS["airports"]:
+        raise RuntimeError(
+            f"Airport count too low: {len(rows)}"
+        )
+
+    rows.sort(key=lambda row: row[0])
+
+    write_csv(
+        stage / "app/src/main/assets/airports.csv",
+        [
+            "icao",
+            "country",
+            "latitude",
+            "longitude",
+            "elevation_ft",
+            "name"
+        ],
+        rows
+    )
+
+    return len(rows)
 
 
-def build_navaids(today_iso: str, now_iso: str, manifest_sources: list) -> list:
-    print(f"Downloading navaids from {NAVAIDS_URL}...")
-    raw = download_bytes(NAVAIDS_URL)
-    text = raw.decode("utf-8", errors="ignore")
-    reader = csv.DictReader(io.StringIO(text))
+def build_navaids(records, stage):
     rows = []
+    seen = set()
 
-    for r in reader:
-        ident = (r.get("ident") or "").strip().upper()
-        name = (r.get("name") or "").strip()
-        nav_type = (r.get("type") or "").strip().upper()
-        lat_s = (r.get("latitude_deg") or "").strip()
-        lon_s = (r.get("longitude_deg") or "").strip()
-        freq_khz = (r.get("frequency_khz") or "").strip()
-        country = (r.get("iso_country") or "").strip().upper()
-        apt = (r.get("associated_airport") or "").strip().upper()
+    for record in records:
+        ident = (record.get("ident") or "").strip().upper()
+        nav_type = (record.get("type") or "").strip().upper()
 
-        if not ident or not lat_s or not lon_s:
-            continue
-        try:
-            lat = round(float(lat_s), 5)
-            lon = round(float(lon_s), 5)
-            freq_mhz = round(float(freq_khz) / 1000.0, 3) if freq_khz else ""
-        except ValueError:
+        lat = number(record.get("latitude_deg"))
+        lon = number(record.get("longitude_deg"))
+
+        if not ident or not valid_coordinates(lat, lon):
             continue
 
-        if -90.0 <= lat <= 90.0 and -180.0 <= lon <= 180.0:
-            rows.append((ident, name, nav_type, freq_mhz, lat, lon, country, apt))
+        frequency = number(record.get("frequency_khz"))
 
-    if len(rows) < 1000:
-        raise ValueError(f"Navaid record count critically low ({len(rows)}). Aborting.")
+        key = (
+            ident,
+            nav_type,
+            round(lat, 5),
+            round(lon, 5)
+        )
 
-    out_path = "navigation/navaids/navaids.csv"
-    with open(out_path, "w", newline="", encoding="utf-8") as f:
-        w = csv.writer(f)
-        w.writerow(["#source_version", today_iso, "provider", "OurAirports"])
-        w.writerow(["id", "name", "type", "freq_mhz", "lat", "lon", "country", "airport_icao"])
-        for row in sorted(rows, key=lambda x: x[0]):
-            w.writerow(row)
+        if key in seen:
+            continue
 
-    manifest_sources.append({
-        "dataset": "navaids",
-        "name": "Worldwide Radio Navaids",
-        "file": out_path,
-        "url": NAVAIDS_URL,
-        "provider": "OurAirports",
-        "license": "Public Domain (CC0 1.0)",
-        "sourceVersionOrCycle": today_iso,
-        "recordCount": len(rows),
-        "sizeBytes": os.path.getsize(out_path),
-        "sha256": sha256_file(out_path),
-        "coverage": "Global VOR, VOR/DME, DME, NDB",
-        "downloadedAt": now_iso,
-    })
-    return manifest_sources
+        seen.add(key)
+
+        rows.append((
+            ident,
+            (record.get("name") or "").strip(),
+            nav_type,
+            round(frequency / 1000, 3)
+            if frequency is not None else "",
+            round(lat, 5),
+            round(lon, 5),
+            (record.get("iso_country") or "").upper(),
+            (record.get("associated_airport") or "").upper()
+        ))
+
+    if len(rows) < MINIMUM_RECORDS["navaids"]:
+        raise RuntimeError(
+            f"Navaid count too low: {len(rows)}"
+        )
+
+    rows.sort(key=lambda row: row[0])
+
+    write_csv(
+        stage / "navigation/navaids/navaids.csv",
+        [
+            "id", "name", "type", "freq_mhz",
+            "lat", "lon", "country", "airport_icao"
+        ],
+        rows
+    )
+
+    return len(rows)
 
 
-def build_runways(today_iso: str, now_iso: str, manifest_sources: list) -> list:
-    print(f"Downloading runways from {RUNWAYS_URL}...")
-    raw = download_bytes(RUNWAYS_URL)
-    text = raw.decode("utf-8", errors="ignore")
-    reader = csv.DictReader(io.StringIO(text))
+def build_runways(records, stage):
     rows = []
+    seen = set()
 
-    for r in reader:
-        if r.get("closed") == "1":
-            continue
-        apt = (r.get("airport_ident") or "").strip().upper()
-        le_ident = (r.get("le_ident") or "").strip().upper()
-        he_ident = (r.get("he_ident") or "").strip().upper()
-        length_s = (r.get("length_ft") or "").strip()
-        surface = (r.get("surface") or "").strip().upper()
-        lighted = "1" if r.get("lighted") == "1" else "0"
-        le_hdg_s = (r.get("le_heading_degT") or "").strip()
-        he_hdg_s = (r.get("he_heading_degT") or "").strip()
-
-        if not apt or len(apt) != 4 or not le_ident or le_ident.startswith("H"):
+    for record in records:
+        if str(record.get("closed", "")).strip() == "1":
             continue
 
-        try:
-            length_ft = int(float(length_s)) if length_s else 0
-        except ValueError:
-            length_ft = 0
+        airport = (
+            record.get("airport_ident") or ""
+        ).strip().upper()
 
-        is_paved = any(k in surface for k in PAVED_KEYWORDS)
-        if length_ft < 4000 or not is_paved:
+        low = (record.get("le_ident") or "").strip().upper()
+        high = (record.get("he_ident") or "").strip().upper()
+
+        if not airport or not low:
             continue
 
-        try:
-            le_hdg = round(float(le_hdg_s), 1) if le_hdg_s else ""
-        except ValueError:
-            le_hdg = ""
-        try:
-            he_hdg = round(float(he_hdg_s), 1) if he_hdg_s else ""
-        except ValueError:
-            he_hdg = ""
+        length = number(record.get("length_ft"))
+        width = number(record.get("width_ft"))
 
-        pair = f"{le_ident}/{he_ident}" if he_ident else le_ident
-        rows.append((apt, pair, le_ident, he_ident, le_hdg, he_hdg, length_ft, lighted))
+        low_heading = number(record.get("le_heading_degT"))
+        high_heading = number(record.get("he_heading_degT"))
 
-    if len(rows) < 500:
-        raise ValueError(f"Runway record count critically low ({len(rows)}). Aborting.")
+        key = (airport, low, high)
 
-    out_path = "navigation/runways/runways_parsed.csv"
-    with open(out_path, "w", newline="", encoding="utf-8") as f:
-        w = csv.writer(f)
-        w.writerow(["#source_version", today_iso, "provider", "OurAirports"])
-        w.writerow(["airport_icao", "runway_pair", "le_ident", "he_ident", "le_heading_degT", "he_heading_degT", "length_ft", "lighted"])
-        for row in sorted(rows, key=lambda x: (x[0], -x[6])):
-            w.writerow(row)
-
-    manifest_sources.append({
-        "dataset": "runways",
-        "name": "Worldwide Commercial Paved Runways (>= 4,000 ft)",
-        "file": out_path,
-        "url": RUNWAYS_URL,
-        "provider": "OurAirports",
-        "license": "Public Domain (CC0 1.0)",
-        "sourceVersionOrCycle": today_iso,
-        "recordCount": len(rows),
-        "sizeBytes": os.path.getsize(out_path),
-        "sha256": sha256_file(out_path),
-        "coverage": "Global paved commercial runways >= 4,000 ft",
-        "downloadedAt": now_iso,
-    })
-    return manifest_sources
-
-
-def build_airways_and_waypoints(now_iso: str, manifest_sources: list) -> list:
-    awy_raw = None
-    used_awy_url = ""
-    for url in AWY_URLS:
-        try:
-            print(f"Downloading airways from {url}...")
-            data = download_bytes(url, timeout=45)
-            if len(data) > 5000:
-                awy_raw = data
-                used_awy_url = url
-                break
-        except Exception as e:
-            print(f"Mirror {url} failed: {e}")
-
-    if not awy_raw:
-        raise RuntimeError("Failed to download valid global airway data from all configured mirrors.")
-
-    awy_text = gzip.decompress(awy_raw).decode("latin-1", errors="ignore")
-    awy_lines = awy_text.splitlines()
-    cycle = parse_xplane_header(awy_lines)
-
-    awy_segments = []
-    airway_fixes = {}
-
-    for line in awy_lines[2:]:
-        s = line.strip()
-        if not s or s == "99":
+        if key in seen:
             continue
-        parts = s.split()
-        if len(parts) >= 10:
-            try:
-                fix1 = parts[0].strip().upper()
-                lat1 = round(float(parts[1]), 5)
-                lon1 = round(float(parts[2]), 5)
-                fix2 = parts[3].strip().upper()
-                lat2 = round(float(parts[4]), 5)
-                lon2 = round(float(parts[5]), 5)
-                dir_code = parts[6].strip()
-                layer_code = parts[7].strip()
-                base_fl = int(float(parts[8]))
-                top_fl = int(float(parts[9]))
-                # Safely parse designators starting from index 10 if present, else index 9
-                designators = parts[10].strip().upper().split("-") if len(parts) > 10 else [parts[9].strip().upper()]
 
-                if not (-90.0 <= lat1 <= 90.0 and -180.0 <= lon1 <= 180.0):
-                    continue
-                if not (-90.0 <= lat2 <= 90.0 and -180.0 <= lon2 <= 180.0):
-                    continue
+        seen.add(key)
 
-                airway_fixes[(fix1, round(lat1, 2), round(lon1, 2))] = (fix1, lat1, lon1, "IFR")
-                airway_fixes[(fix2, round(lat2, 2), round(lon2, 2))] = (fix2, lat2, lon2, "IFR")
+        rows.append((
+            airport,
+            f"{low}/{high}" if high else low,
+            low,
+            high,
+            round(low_heading, 1) if low_heading is not None else "",
+            round(high_heading, 1) if high_heading is not None else "",
+            round(length) if length is not None else "",
+            round(width) if width is not None else "",
+            (record.get("surface") or "").strip(),
+            "1" if str(record.get("lighted", "")) == "1" else "0"
+        ))
 
-                for awy_id in designators:
-                    if not awy_id or awy_id == "99" or len(awy_id) > 6:
-                        continue
-                    awy_segments.append((
-                        awy_id, fix1, lat1, lon1, fix2, lat2, lon2,
-                        "F" if dir_code == "1" else "B",
-                        "H" if layer_code == "2" else "L",
-                        base_fl * 100, top_fl * 100
-                    ))
-            except ValueError:
-                continue
+    if len(rows) < MINIMUM_RECORDS["runways"]:
+        raise RuntimeError(
+            f"Runway count too low: {len(rows)}"
+        )
 
-    if len(awy_segments) < 1000:
-        raise ValueError(f"Parsed airway segment count critically low ({len(awy_segments)}). Aborting.")
+    rows.sort(key=lambda row: (row[0], row[1]))
 
-    wp_path = "navigation/waypoints/waypoints.csv"
-    with open(wp_path, "w", newline="", encoding="utf-8") as f:
-        w = csv.writer(f)
-        w.writerow(["#source_version", cycle, "provider", "FlightGear/X-Plane"])
-        w.writerow(["id", "latitude", "longitude", "region"])
-        for row in sorted(airway_fixes.values(), key=lambda x: (x[0], x[1])):
-            w.writerow(row)
+    write_csv(
+        stage / "navigation/runways/runways_parsed.csv",
+        [
+            "airport_icao",
+            "runway_pair",
+            "le_ident",
+            "he_ident",
+            "le_heading_degT",
+            "he_heading_degT",
+            "length_ft",
+            "width_ft",
+            "surface",
+            "lighted"
+        ],
+        rows
+    )
 
-    manifest_sources.append({
-        "dataset": "waypoints",
-        "name": "Worldwide Commercial IFR En-Route Waypoints",
-        "file": wp_path,
-        "url": used_awy_url,
-        "provider": "FlightGear Open Scenery / X-Plane Navigation Database",
-        "license": "GNU General Public License v2 (GPLv2)",
-        "sourceVersionOrCycle": cycle,
-        "recordCount": len(airway_fixes),
-        "sizeBytes": os.path.getsize(wp_path),
-        "sha256": sha256_file(wp_path),
-        "coverage": "Global 5LNC IFR waypoints connected to published airways",
-        "downloadedAt": now_iso,
-    })
+    return len(rows)
 
-    awy_path = "navigation/airways/airways.csv"
-    with open(awy_path, "w", newline="", encoding="utf-8") as f:
-        w = csv.writer(f)
-        w.writerow(["#source_version", cycle, "provider", "FlightGear/X-Plane"])
-        w.writerow(["airway_id", "from_fix", "from_lat", "from_lon", "to_fix", "to_lat", "to_lon", "dir", "level", "min_alt_ft", "max_alt_ft"])
-        for seg in awy_segments:
-            w.writerow(seg)
 
-    manifest_sources.append({
-        "dataset": "airways",
-        "name": "Worldwide Published High & Low IFR Airways",
-        "file": awy_path,
-        "url": used_awy_url,
-        "provider": "FlightGear Open Scenery / X-Plane Navigation Database",
-        "license": "GNU General Public License v2 (GPLv2)",
-        "sourceVersionOrCycle": cycle,
-        "recordCount": len(awy_segments),
-        "sizeBytes": os.path.getsize(awy_path),
-        "sha256": sha256_file(awy_path),
-        "coverage": "Global High & Low IFR Airway Segments",
-        "downloadedAt": now_iso,
-    })
-    return manifest_sources
+def validate_csv(path, minimum_records):
+    if not path.exists() or path.stat().st_size == 0:
+        raise RuntimeError(f"Missing or empty file: {path}")
+
+    with path.open(encoding="utf-8") as file:
+        count = sum(1 for _ in csv.reader(file)) - 1
+
+    if count < minimum_records:
+        raise RuntimeError(
+            f"Invalid record count in {path}: {count}"
+        )
+
+    return count
 
 
 def main():
-    ensure_dirs()
-    today_iso = datetime.date.today().isoformat()
-    now_iso = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
-    manifest_sources = []
+    now = datetime.now(timezone.utc)
+    timestamp = now.isoformat()
 
-    try:
-        build_airports(today_iso, now_iso, manifest_sources)
-        build_navaids(today_iso, now_iso, manifest_sources)
-        build_runways(today_iso, now_iso, manifest_sources)
-        build_airways_and_waypoints(now_iso, manifest_sources)
+    log("Starting aviation database build")
 
-        total_bytes = sum(s["sizeBytes"] for s in manifest_sources)
-        manifest = {
-            "schemaVersion": 9,
-            "generatedAtUtc": now_iso,
-            "targetProfile": "Commercial IFR Airline Operations",
-            "totalNavigationAssetsSizeBytes": total_bytes,
-            "totalNavigationAssetsSizeMb": round(total_bytes / (1024 * 1024), 2),
-            "dataSources": manifest_sources,
+    with tempfile.TemporaryDirectory(
+        prefix="flighttempo-nav-"
+    ) as temporary:
+
+        temp = Path(temporary)
+        stage = temp / "staging"
+        stage.mkdir()
+
+        sources = {}
+        counts = {}
+
+        # Download original files first.
+        for name, url in DATASETS.items():
+            log(f"Downloading {name}: {url}")
+
+            data = download(url)
+            sources[name] = {
+                "url": url,
+                "provider": "OurAirports",
+                "license": "CC0 / Public Domain as stated by OurAirports",
+                "downloadedAt": timestamp,
+                "sizeBytes": len(data),
+                "sha256": sha256(data)
+            }
+
+            raw_path = stage / "navigation/sources" / f"{name}.csv"
+            raw_path.parent.mkdir(parents=True, exist_ok=True)
+            raw_path.write_bytes(data)
+
+        # Parse and normalize.
+        airports = read_csv(
+            (stage / "navigation/sources/airports.csv").read_bytes(),
+            "airports"
+        )
+
+        navaids = read_csv(
+            (stage / "navigation/sources/navaids.csv").read_bytes(),
+            "navaids"
+        )
+
+        runways = read_csv(
+            (stage / "navigation/sources/runways.csv").read_bytes(),
+            "runways"
+        )
+
+        counts["airports"] = build_airports(airports, stage)
+        counts["navaids"] = build_navaids(navaids, stage)
+        counts["runways"] = build_runways(runways, stage)
+
+        # Validate all generated files.
+        generated = {
+            "airports": stage / "app/src/main/assets/airports.csv",
+            "navaids": stage / "navigation/navaids/navaids.csv",
+            "runways": stage / "navigation/runways/runways_parsed.csv"
         }
 
-        with open("navigation_manifest.json", "w", encoding="utf-8") as f:
-            json.dump(manifest, f, indent=2)
-        print(f"Success! Complete validated database built successfully ({round(total_bytes / (1024 * 1024), 2)} MB total).")
+        for name, path in generated.items():
+            validate_csv(path, MINIMUM_RECORDS[name])
+            log(f"Validated {name}: {counts[name]} records")
 
-    except Exception as e:
-        print(f"CRITICAL BUILD FAILURE: {e}")
-        exit(1)
+        manifest = {
+            "schemaVersion": 10,
+            "generatedAtUtc": timestamp,
+            "procedureAiracCycle": "unknown",
+            "targetProfile": "Aviation reference data",
+            "dataSources": [
+                {
+                    "dataset": name,
+                    **metadata,
+                    "recordCount": counts[name]
+                }
+                for name, metadata in sources.items()
+            ],
+            "capabilities": {
+                "airports": True,
+                "runways": True,
+                "navaids": True,
+                "independentWaypoints": False,
+                "publishedAirways": False,
+                "sids": False,
+                "stars": False,
+                "approaches": False
+            }
+        }
+
+        manifest_path = stage / "navigation_manifest.json"
+        manifest_path.write_text(
+            json.dumps(manifest, indent=2),
+            encoding="utf-8"
+        )
+
+        # Publish only after every dataset has passed validation.
+        destinations = [
+            "app/src/main/assets/airports.csv",
+            "navigation/navaids/navaids.csv",
+            "navigation/runways/runways_parsed.csv",
+            "navigation/sources/airports.csv",
+            "navigation/sources/navaids.csv",
+            "navigation/sources/runways.csv",
+            "navigation_manifest.json"
+        ]
+
+        backups = temp / "backups"
+        backups.mkdir()
+        installed = []
+
+        try:
+            for relative in destinations:
+                source = stage / relative
+                destination = ROOT / relative
+
+                destination.parent.mkdir(
+                    parents=True,
+                    exist_ok=True
+                )
+
+                backup = backups / relative
+
+                if destination.exists():
+                    backup.parent.mkdir(parents=True, exist_ok=True)
+                    shutil.copy2(destination, backup)
+
+                os.replace(source, destination)
+                installed.append((destination, backup))
+
+        except Exception:
+            for destination, backup in reversed(installed):
+                if backup.exists():
+                    shutil.copy2(backup, destination)
+                elif destination.exists():
+                    destination.unlink()
+            raise
+
+        log("Database successfully installed")
+        log(json.dumps(counts, indent=2))
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except Exception as error:
+        log(f"BUILD FAILED: {error}")
+        raise
