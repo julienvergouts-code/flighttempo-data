@@ -281,6 +281,13 @@ def build_runways(records, stage):
         low_heading = number(record.get("le_heading_degT"))
         high_heading = number(record.get("he_heading_degT"))
 
+        # Preserve the runway record, but do not publish impossible source headings.
+        # In particular, do not wrap values such as 362 degrees to 002 degrees.
+        if low_heading is not None and not 0 <= low_heading <= 360:
+            low_heading = None
+        if high_heading is not None and not 0 <= high_heading <= 360:
+            high_heading = None
+
         key = (airport, low, high)
 
         if key in seen:
