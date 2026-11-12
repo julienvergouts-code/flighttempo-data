@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import gzip
 import hashlib
 import json
 import os
@@ -19,9 +20,9 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 INPUT_NAMES = {
-    "fixes": ("earth_fix.dat", "fix.dat"),
-    "navaids": ("earth_nav.dat", "nav.dat"),
-    "airways": ("earth_awy.dat", "awy.dat"),
+    "fixes": ("earth_fix.dat", "fix.dat", "earth_fix.dat.gz", "fix.dat.gz"),
+    "navaids": ("earth_nav.dat", "nav.dat", "earth_nav.dat.gz", "nav.dat.gz"),
+    "airways": ("earth_awy.dat", "awy.dat", "earth_awy.dat.gz", "awy.dat.gz"),
 }
 OUTPUTS = {
     "flightgear_fixes": "navigation/waypoints/flightgear_fixes.csv",
@@ -59,25 +60,36 @@ def valid_coordinates(lat, lon) -> bool:
 
 def read_source_file(path: Path, kind: str):
     raw = path.read_bytes()
-    lines = raw.decode("utf-8-sig").splitlines()
+    compressed = raw.startswith(b"\x1f\x8b") or path.suffix.lower() == ".gz"
+    try:
+        payload = gzip.decompress(raw) if compressed else raw
+    except OSError as exc:
+        raise ValueError(f"{path}: invalid gzip-compressed source file: {exc}") from exc
+    lines = payload.decode("utf-8-sig").splitlines()
     if len(lines) < 3:
         raise ValueError(f"{path}: file is too short")
     byte_order = lines[0].strip()
     if byte_order not in {"I", "A"}:
         raise ValueError(f"{path}: unsupported header marker {byte_order!r}")
     header = lines[1].strip()
-    version_match = re.search(r"\b(\d{4})\s+Version\b", header, re.IGNORECASE)
-    cycle_match = re.search(r"\bdata\s+cycle\s+(\d{4})\b", header, re.IGNORECASE)
+    version_match = re.search(r"\b(\d{3,4})\s+Version\b", header, re.IGNORECASE)
+    # Preserve the complete source token: X-Plane/FlightGear headers may use
+    # values such as 2401, 201610 or 2013.10. Do not coerce these into AIRAC.
+    cycle_match = re.search(
+        r"\bdata\s+cycle\s+([0-9]{4,6}(?:\.[0-9]{1,2})?)\b",
+        header,
+        re.IGNORECASE,
+    )
     build_match = re.search(r"\bbuild\s+(\d{8})\b", header, re.IGNORECASE)
     if not version_match:
         raise ValueError(f"{path}: cannot identify format version: {header}")
     version = version_match.group(1)
     allowed = {
-        "fixes": {"1101", "1200"},
+        "fixes": {"600", "1101", "1200"},
         "navaids": {"1100", "1150", "1200"},
-        # XP AWY1101 is the specification revision, but the data-file
-        # header value specified by X-Plane is "1100 Version".
-        "airways": {"1100"},
+        # XP AWY1101 uses a 1100 data-file header; older regional datasets
+        # may use the legacy 640 layout.
+        "airways": {"640", "1100"},
     }[kind]
     if version not in allowed:
         raise ValueError(f"{path}: unsupported {kind} version {version}; expected {sorted(allowed)}")
@@ -94,6 +106,8 @@ def read_source_file(path: Path, kind: str):
         raise ValueError(f"{path}: missing 99 end-of-file record")
     return {
         "path": str(path), "file_name": path.name, "raw": raw,
+        "payload_sha256": sha256(payload),
+        "compression": "gzip" if compressed else "none",
         "header": header, "byte_order": byte_order,
         "format_version": version,
         "data_cycle": cycle_match.group(1) if cycle_match else "unknown",
@@ -114,33 +128,49 @@ def locate_source_files(source_dir: Path):
 
 
 def parse_fixes(source):
-    """Parse XPFIX1101 (type field) and XPFIX1200 (type + printed name)."""
+    """Parse legacy XPFIX600 plus typed XPFIX1101 and named XPFIX1200."""
     rows, rejected = [], 0
     version = source.get("format_version", "1101")
-    if version not in {"1101", "1200"}:
+    if version not in {"600", "1101", "1200"}:
         raise ValueError(f"Unsupported fix format version: {version}")
     for line_number, raw, fields in source["records"]:
-        minimum_fields = 6 if version == "1101" else 7
-        if len(fields) < minimum_fields:
-            rejected += 1
-            continue
-        lat, lon = number(fields[0]), number(fields[1])
+        lat = number(fields[0]) if len(fields) > 0 else None
+        lon = number(fields[1]) if len(fields) > 1 else None
         if not valid_coordinates(lat, lon):
             rejected += 1
             continue
-        ident, area, region, waypoint_type = fields[2:6]
-        if not waypoint_type:
-            rejected += 1
-            continue
-        printed_name = ident if version == "1101" else " ".join(fields[6:]).strip()
-        if version == "1200" and not printed_name:
-            rejected += 1
-            continue
+
+        if version == "600":
+            # Legacy FIX 600 carries only coordinates and an identifier.
+            # Region, terminal/en-route scope and waypoint type are absent,
+            # so they remain explicitly unknown rather than being inferred.
+            if len(fields) != 3 or not fields[2]:
+                rejected += 1
+                continue
+            ident = fields[2]
+            area = region = waypoint_type = ""
+            scope = "unknown"
+            printed_name = ident
+        else:
+            minimum_fields = 6 if version == "1101" else 7
+            if len(fields) < minimum_fields:
+                rejected += 1
+                continue
+            ident, area, region, waypoint_type = fields[2:6]
+            if not waypoint_type:
+                rejected += 1
+                continue
+            scope = "enroute" if area.upper() == "ENRT" else "terminal"
+            printed_name = ident if version == "1101" else " ".join(fields[6:]).strip()
+            if version == "1200" and not printed_name:
+                rejected += 1
+                continue
+
         rows.append({
             "ident": ident.upper(),
             "terminal_area": area.upper(),
             "region_code": region.upper(),
-            "scope": "enroute" if area.upper() == "ENRT" else "terminal",
+            "scope": scope,
             "entity_type": "FIX",
             "waypoint_type_code": waypoint_type,
             "printed_name": printed_name,
@@ -243,6 +273,61 @@ def parse_airways(source, fixes, navaids):
 
     rows, rejected, unresolved_segments, ambiguous_endpoints = [], 0, 0, 0
     for line_number, raw, fields in source["records"]:
+        if source.get("format_version") == "640":
+            # Legacy AWY 640 stores the endpoint coordinates in each segment,
+            # but has no endpoint region/type or low/high level classification.
+            # Preserve the supplied coordinates and raw direction code without
+            # pretending that these fields were resolved from typed fixes.
+            if len(fields) < 10:
+                rejected += 1
+                continue
+            from_ident, to_ident = fields[0], fields[3]
+            from_lat, from_lon = number(fields[1]), number(fields[2])
+            to_lat, to_lon = number(fields[4]), number(fields[5])
+            direction = fields[6]
+            minimum_fl, maximum_fl = number(fields[7]), number(fields[8])
+            airway_names = " ".join(fields[9:]).strip()
+            if (
+                not from_ident or not to_ident
+                or not valid_coordinates(from_lat, from_lon)
+                or not valid_coordinates(to_lat, to_lon)
+                or minimum_fl is None or maximum_fl is None
+                or minimum_fl < 0 or maximum_fl < minimum_fl
+                or not airway_names
+            ):
+                rejected += 1
+                continue
+            rows.append({
+                "airway_names": airway_names,
+                "airway_names_json": json.dumps(airway_names.split("-"), separators=(",", ":")),
+                "from_ident": from_ident.upper(),
+                "from_region": "",
+                "from_type_code": "",
+                "from_type": "UNKNOWN",
+                "from_latitude": f"{from_lat:.8f}",
+                "from_longitude": f"{from_lon:.8f}",
+                "from_resolution": "source_coordinates",
+                "to_ident": to_ident.upper(),
+                "to_region": "",
+                "to_type_code": "",
+                "to_type": "UNKNOWN",
+                "to_latitude": f"{to_lat:.8f}",
+                "to_longitude": f"{to_lon:.8f}",
+                "to_resolution": "source_coordinates",
+                "direction_restriction": direction,
+                "direction_semantics": "legacy_code_unmapped",
+                "level_code": "",
+                "level_classification": "unknown",
+                "minimum_altitude_hundreds_ft": minimum_fl,
+                "maximum_altitude_hundreds_ft": maximum_fl,
+                "minimum_altitude_ft": round(minimum_fl * 100),
+                "maximum_altitude_ft": round(maximum_fl * 100),
+                "source_file": source["file_name"],
+                "source_line": line_number,
+                "raw_record": raw,
+            })
+            continue
+
         if len(fields) < 11:
             rejected += 1
             continue
@@ -408,13 +493,13 @@ def import_navdata(source_dir: Path, root: Path, manifest_path: Path, optional=F
         return {"status": "skipped_missing_source", "missing": missing}
 
     sources = {kind: read_source_file(path, kind) for kind, path in located.items()}
-    cycles = {src["data_cycle"] for src in sources.values()}
-    if "unknown" in cycles or len(cycles) != 1:
+    cycles_by_kind = {kind: src["data_cycle"] for kind, src in sources.items()}
+    if "unknown" in cycles_by_kind.values() or len(set(cycles_by_kind.values())) != 1:
         raise ValueError(
-            "All three IFR source headers must declare the same four-digit AIRAC cycle; "
-            f"found {sorted(cycles)}"
+            "All three IFR source headers must declare the same known data-cycle token; "
+            f"found {cycles_by_kind}. Mixed or missing cycles must not be combined."
         )
-    data_cycle = next(iter(cycles))
+    data_cycle = next(iter(cycles_by_kind.values()))
 
     fixes, rejected_fixes = parse_fixes(sources["fixes"])
     navaids, rejected_navaids = parse_navaids(sources["navaids"])
@@ -450,7 +535,8 @@ def import_navdata(source_dir: Path, root: Path, manifest_path: Path, optional=F
         "formatVersions": {kind: src["format_version"] for kind, src in sources.items()},
         "files": [{
             "kind": kind, "fileName": src["file_name"],
-            "sha256": sha256(src["raw"]), "sizeBytes": len(src["raw"]),
+            "sha256": sha256(src["raw"]), "payloadSha256": src["payload_sha256"],
+            "sizeBytes": len(src["raw"]), "compression": src["compression"],
             "byteOrder": src["byte_order"], "formatVersion": src["format_version"],
             "dataCycle": src["data_cycle"], "buildDate": src["build_date"],
             "copyrightHeader": src["header"],
@@ -459,8 +545,9 @@ def import_navdata(source_dir: Path, root: Path, manifest_path: Path, optional=F
             "fixes": len(fixes),
             "navaids": len(navaids),
             "airwaySegments": len(airways),
-            "lowAirwaySegments": sum(row["level_code"] == "1" for row in airways),
-            "highAirwaySegments": sum(row["level_code"] == "2" for row in airways),
+            "lowAirwaySegments": sum(row.get("level_code") == "1" for row in airways),
+            "highAirwaySegments": sum(row.get("level_code") == "2" for row in airways),
+            "unknownLevelAirwaySegments": sum(row.get("level_classification") == "unknown" for row in airways),
             "rejectedFixRows": rejected_fixes,
             "rejectedNavaidRows": rejected_navaids,
             "rejectedAirwayRows": rejected_airways,
