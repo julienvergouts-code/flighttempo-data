@@ -20,27 +20,28 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Build Lightweight Global Navigation & Runway Datasets (< 2 MB)
+      - name: Build Commercial Aviation Database
         run: python3 scripts/build_aviation_db.py
 
-      - name: Validate Compact CSVs & Manifest
+      - name: Validate Generated Files & Manifest
         run: |
           test -f navigation_manifest.json
+          test -f app/src/main/assets/airports.csv
           test -s navigation/navaids/navaids.csv
           test -s navigation/runways/runways_parsed.csv
-          test -s navigation/airline_routes/airline_routes.csv
-          du -sh navigation/ navigation_manifest.json
+          test -s navigation/waypoints/waypoints.csv
+          test -s navigation/airways/airways.csv
           cat navigation_manifest.json
 
       - name: Commit and Push Updated Datasets
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -A navigation/ procedures/ navigation_manifest.json
+          git add -A navigation/ app/src/main/assets/airports.csv navigation_manifest.json
           if git diff --staged --quiet; then
-            echo "No navigation data changes to commit."
+            echo "No changes to commit."
           else
-            git commit -m "chore(navdata): build lightweight <2MB global runway & navaid DB"
+            git commit -m "chore(navdata): update commercial navigation and airport assets"
             git pull --rebase origin main
             git push origin main
           fi
