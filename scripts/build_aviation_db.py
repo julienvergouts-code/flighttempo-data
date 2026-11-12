@@ -1,10 +1,8 @@
 #!/usr/bin/env python3
 """
-FlightTempo Complete Commercial Aviation Database Builder (Bulletproof Edition v6.2)
-1. Worldwide Airports & Elevations -> app/src/main/assets/airports.csv
-2. Worldwide Commercial Paved Runways >= 4,000 ft -> navigation/runways/runways_parsed.csv
-3. Worldwide Radio Navaids -> navigation/navaids/navaids.csv
-4. Worldwide Airways & Waypoints -> navigation/airways/, navigation/waypoints/
+FlightTempo Production-Grade Commercial Aviation Database Builder
+Strictly parses genuine open aviation data with zero synthetic placeholders.
+Validates records before staging and preserves prior working data on failure.
 """
 
 import csv
@@ -15,10 +13,9 @@ import io
 import json
 import os
 import re
-import shutil
 import urllib.request
 
-USER_AGENT = "FlightTempo-Builder/6.2 (https://github.com/julienvergouts-code/flighttempo-data)"
+USER_AGENT = "FlightTempo-Builder/7.0 (https://github.com/julienvergouts-code/flighttempo-data)"
 
 AIRPORTS_URL = "https://davidmegginson.github.io/ourairports-data/airports.csv"
 NAVAIDS_URL = "https://davidmegginson.github.io/ourairports-data/navaids.csv"
@@ -36,8 +33,8 @@ FIX_URLS = [
 PAVED_KEYWORDS = ("ASP", "CON", "BIT", "PEM", "PAV", "TAR", "MAC", "ASPH", "CONC")
 
 
-def download_bytes(url: str, timeout: int = 30) -> bytes:
-    req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0 " + USER_AGENT})
+def download_bytes(url: str, timeout: int = 60) -> bytes:
+    req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
     with urllib.request.urlopen(req, timeout=timeout) as resp:
         return resp.read()
 
@@ -50,29 +47,29 @@ def sha256_file(path: str) -> str:
     return h.hexdigest().upper()
 
 
-def prepare_dirs():
-    for folder in ["navigation/sources", "procedures"]:
-        if os.path.exists(folder):
-            shutil.rmtree(folder, ignore_errors=True)
-    for d in [
-        "navigation/waypoints",
-        "navigation/navaids",
-        "navigation/airways",
-        "navigation/runways",
-        "navigation/airline_routes",
-    ]:
-        os.makedirs(d, exist_ok=True)
+def ensure_dirs():
+    os.makedirs("navigation/sources", exist_ok=True)
+    os.makedirs("navigation/waypoints", exist_ok=True)
+    os.makedirs("navigation/navaids", exist_ok=True)
+    os.makedirs("navigation/airways", exist_ok=True)
+    os.makedirs("navigation/runways", exist_ok=True)
+    os.makedirs("app/src/main/assets", exist_ok=True)
 
 
-def build_airports_master(today_iso: str, now_iso: str, manifest_sources: list):
-    print("Downloading & updating root airports.csv...")
-    try:
-        raw_text = download_bytes(AIRPORTS_URL).decode("utf-8", errors="ignore")
-    except Exception as e:
-        print(f"Warning: airports download failed ({e}), using fallback.")
-        raw_text = "ident,icao_code,name,latitude_deg,longitude_deg,elevation_ft,iso_country,type\nEBBR,EBBR,Brussels Airport,50.9014,4.4844,184,BE,large_airport\nLFPG,LFPG,Charles de Gaulle,49.0097,2.5479,392,FR,large_airport"
+def parse_xplane_header(lines: list) -> str:
+    for line in lines[:5]:
+        s = line.strip()
+        m = re.search(r"data cycle\s+([0-9.]+)", s, re.IGNORECASE)
+        if m:
+            return m.group(1)
+    return "unknown"
 
-    reader = csv.DictReader(io.StringIO(raw_text))
+
+def build_airports(today_iso: str, now_iso: str, manifest_sources: list) -> list:
+    print(f"Downloading airports from {AIRPORTS_URL}...")
+    raw = download_bytes(AIRPORTS_URL)
+    text = raw.decode("utf-8", errors="ignore")
+    reader = csv.DictReader(io.StringIO(text))
     rows = []
 
     for r in reader:
@@ -95,10 +92,13 @@ def build_airports_master(today_iso: str, now_iso: str, manifest_sources: list):
         except ValueError:
             continue
 
-        rows.append((icao, country, lat, lon, elev, name))
+        if -90.0 <= lat <= 90.0 and -180.0 <= lon <= 180.0:
+            rows.append((icao, country, lat, lon, elev, name))
+
+    if len(rows) < 1000:
+        raise ValueError(f"Airport record count critically low ({len(rows)}). Aborting.")
 
     out_path = "app/src/main/assets/airports.csv"
-    os.makedirs(os.path.dirname(out_path), exist_ok=True)
     with open(out_path, "w", newline="", encoding="utf-8") as f:
         w = csv.writer(f)
         w.writerow(["#version", today_iso, "source", "OurAirports"])
@@ -120,17 +120,14 @@ def build_airports_master(today_iso: str, now_iso: str, manifest_sources: list):
         "coverage": "Global airport coordinates, elevations MSL, and identifiers",
         "downloadedAt": now_iso,
     })
+    return manifest_sources
 
 
-def build_commercial_navaids(today_iso: str, now_iso: str, manifest_sources: list):
-    print("Downloading Radio Navaids...")
-    try:
-        raw_text = download_bytes(NAVAIDS_URL).decode("utf-8", errors="ignore")
-    except Exception as e:
-        print(f"Warning: navaids download failed ({e}), using fallback.")
-        raw_text = "ident,name,type,frequency_khz,latitude_deg,longitude_deg,iso_country,associated_airport\nBRU,Brussels,VOR-DME,114600,50.9014,4.4844,BE,EBBR"
-
-    reader = csv.DictReader(io.StringIO(raw_text))
+def build_navaids(today_iso: str, now_iso: str, manifest_sources: list) -> list:
+    print(f"Downloading navaids from {NAVAIDS_URL}...")
+    raw = download_bytes(NAVAIDS_URL)
+    text = raw.decode("utf-8", errors="ignore")
+    reader = csv.DictReader(io.StringIO(text))
     rows = []
 
     for r in reader:
@@ -155,12 +152,15 @@ def build_commercial_navaids(today_iso: str, now_iso: str, manifest_sources: lis
         if -90.0 <= lat <= 90.0 and -180.0 <= lon <= 180.0:
             rows.append((ident, name, nav_type, freq_mhz, lat, lon, country, apt))
 
+    if len(rows) < 1000:
+        raise ValueError(f"Navaid record count critically low ({len(rows)}). Aborting.")
+
     out_path = "navigation/navaids/navaids.csv"
     with open(out_path, "w", newline="", encoding="utf-8") as f:
         w = csv.writer(f)
         w.writerow(["#source_version", today_iso, "provider", "OurAirports"])
         w.writerow(["id", "name", "type", "freq_mhz", "lat", "lon", "country", "airport_icao"])
-        for row in rows:
+        for row in sorted(rows, key=lambda x: x[0]):
             w.writerow(row)
 
     manifest_sources.append({
@@ -177,17 +177,14 @@ def build_commercial_navaids(today_iso: str, now_iso: str, manifest_sources: lis
         "coverage": "Global VOR, VOR/DME, DME, NDB",
         "downloadedAt": now_iso,
     })
+    return manifest_sources
 
 
-def build_commercial_runways(today_iso: str, now_iso: str, manifest_sources: list):
-    print("Downloading Runways...")
-    try:
-        raw_text = download_bytes(RUNWAYS_URL).decode("utf-8", errors="ignore")
-    except Exception as e:
-        print(f"Warning: runways download failed ({e}), using fallback.")
-        raw_text = "airport_ident,le_ident,he_ident,length_ft,surface,lighted,le_heading_degT,he_heading_degT\nEBBR,25R,07L,11800,ASPH,1,249,69"
-
-    reader = csv.DictReader(io.StringIO(raw_text))
+def build_runways(today_iso: str, now_iso: str, manifest_sources: list) -> list:
+    print(f"Downloading runways from {RUNWAYS_URL}...")
+    raw = download_bytes(RUNWAYS_URL)
+    text = raw.decode("utf-8", errors="ignore")
+    reader = csv.DictReader(io.StringIO(text))
     rows = []
 
     for r in reader:
@@ -226,6 +223,9 @@ def build_commercial_runways(today_iso: str, now_iso: str, manifest_sources: lis
         pair = f"{le_ident}/{he_ident}" if he_ident else le_ident
         rows.append((apt, pair, le_ident, he_ident, le_hdg, he_hdg, length_ft, lighted))
 
+    if len(rows) < 500:
+        raise ValueError(f"Runway record count critically low ({len(rows)}). Aborting.")
+
     out_path = "navigation/runways/runways_parsed.csv"
     with open(out_path, "w", newline="", encoding="utf-8") as f:
         w = csv.writer(f)
@@ -248,65 +248,80 @@ def build_commercial_runways(today_iso: str, now_iso: str, manifest_sources: lis
         "coverage": "Global paved commercial runways >= 4,000 ft",
         "downloadedAt": now_iso,
     })
+    return manifest_sources
 
 
-def build_commercial_ifr_airways_and_waypoints(now_iso: str, manifest_sources: list):
-    print("Building IFR airways & waypoints...")
-    awy_segments = []
-    airway_fixes = {("DIKAS", 50.0, 4.0): ("DIKAS", 50.0, 4.0, "EUR")}
-    awy_segments.append(("UL607", "DIKAS", 50.0, 4.0, "KUMER", 51.0, 5.0, "F", "H", 24500, 46000))
-
+def build_airways_and_waypoints(now_iso: str, manifest_sources: list) -> list:
+    awy_raw = None
+    used_awy_url = ""
     for url in AWY_URLS:
         try:
-            awy_raw = download_bytes(url, timeout=20)
-            if len(awy_raw) > 1000:
-                awy_text = gzip.decompress(awy_raw).decode("latin-1", errors="ignore")
-                for line in awy_text.splitlines():
-                    s = line.strip()
-                    if not s or s == "99":
-                        continue
-                    parts = s.split()
-                    if len(parts) >= 10:
-                        try:
-                            fix1 = parts[0].strip().upper()
-                            lat1 = round(float(parts[1]), 5)
-                            lon1 = round(float(parts[2]), 5)
-                            fix2 = parts[3].strip().upper()
-                            lat2 = round(float(parts[4]), 5)
-                            lon2 = round(float(parts[5]), 5)
-                            dir_code = parts[6].strip()
-                            layer_code = parts[7].strip()
-                            base_fl = int(float(parts[8]))
-                            top_fl = int(float(parts[9]))
-                            designators = parts[9 if len(parts) == 10 else 10].strip().upper().split("-")
-
-                            if not (-90.0 <= lat1 <= 90.0 and -180.0 <= lon1 <= 180.0):
-                                continue
-                            if not (-90.0 <= lat2 <= 90.0 and -180.0 <= lon2 <= 180.0):
-                                continue
-
-                            airway_fixes[(fix1, round(lat1, 1), round(lon1, 1))] = (fix1, lat1, lon1, "IFR_AWY")
-                            airway_fixes[(fix2, round(lat2, 1), round(lon2, 1))] = (fix2, lat2, lon2, "IFR_AWY")
-
-                            for awy_id in designators:
-                                if not awy_id or awy_id == "99":
-                                    continue
-                                awy_segments.append((
-                                    awy_id, fix1, lat1, lon1, fix2, lat2, lon2,
-                                    "F" if dir_code == "1" else "B",
-                                    "H" if layer_code == "2" else "L",
-                                    base_fl * 100, top_fl * 100
-                                ))
-                        except ValueError:
-                            continue
+            print(f"Downloading airways from {url}...")
+            data = download_bytes(url, timeout=45)
+            if len(data) > 5000:
+                awy_raw = data
+                used_awy_url = url
                 break
         except Exception as e:
-            print(f"Mirror {url} skipped ({e})")
+            print(f"Mirror {url} failed: {e}")
+
+    if not awy_raw:
+        raise RuntimeError("Failed to download valid global airway data from all configured mirrors.")
+
+    awy_text = gzip.decompress(awy_raw).decode("latin-1", errors="ignore")
+    awy_lines = awy_text.splitlines()
+    cycle = parse_xplane_header(awy_lines)
+
+    awy_segments = []
+    airway_fixes = {}
+
+    for line in awy_lines[2:]:
+        s = line.strip()
+        if not s or s == "99":
+            continue
+        parts = s.split()
+        if len(parts) >= 10:
+            try:
+                fix1 = parts[0].strip().upper()
+                lat1 = round(float(parts[1]), 5)
+                lon1 = round(float(parts[2]), 5)
+                fix2 = parts[3].strip().upper()
+                lat2 = round(float(parts[4]), 5)
+                lon2 = round(float(parts[5]), 5)
+                dir_code = parts[6].strip()
+                layer_code = parts[7].strip()
+                base_fl = int(float(parts[8]))
+                top_fl = int(float(parts[9]))
+                # Safely parse designators starting from index 10 if present, else index 9
+                designators = parts[10].strip().upper().split("-") if len(parts) > 10 else [parts[9].strip().upper()]
+
+                if not (-90.0 <= lat1 <= 90.0 and -180.0 <= lon1 <= 180.0):
+                    continue
+                if not (-90.0 <= lat2 <= 90.0 and -180.0 <= lon2 <= 180.0):
+                    continue
+
+                airway_fixes[(fix1, round(lat1, 2), round(lon1, 2))] = (fix1, lat1, lon1, "IFR")
+                airway_fixes[(fix2, round(lat2, 2), round(lon2, 2))] = (fix2, lat2, lon2, "IFR")
+
+                for awy_id in designators:
+                    if not awy_id or awy_id == "99" or len(awy_id) > 6:
+                        continue
+                    awy_segments.append((
+                        awy_id, fix1, lat1, lon1, fix2, lat2, lon2,
+                        "F" if dir_code == "1" else "B",
+                        "H" if layer_code == "2" else "L",
+                        base_fl * 100, top_fl * 100
+                    ))
+            except ValueError:
+                continue
+
+    if len(awy_segments) < 1000:
+        raise ValueError(f"Parsed airway segment count critically low ({len(awy_segments)}). Aborting.")
 
     wp_path = "navigation/waypoints/waypoints.csv"
     with open(wp_path, "w", newline="", encoding="utf-8") as f:
         w = csv.writer(f)
-        w.writerow(["#source_version", "2026.11", "spec", "1100"])
+        w.writerow(["#source_version", cycle, "provider", "FlightGear/X-Plane"])
         w.writerow(["id", "latitude", "longitude", "region"])
         for row in sorted(airway_fixes.values(), key=lambda x: (x[0], x[1])):
             w.writerow(row)
@@ -315,9 +330,10 @@ def build_commercial_ifr_airways_and_waypoints(now_iso: str, manifest_sources: l
         "dataset": "waypoints",
         "name": "Worldwide Commercial IFR En-Route Waypoints",
         "file": wp_path,
-        "provider": "FlightGear / X-Plane Open Navigation Database",
+        "url": used_awy_url,
+        "provider": "FlightGear Open Scenery / X-Plane Navigation Database",
         "license": "GNU General Public License v2 (GPLv2)",
-        "sourceVersionOrCycle": "2026.11",
+        "sourceVersionOrCycle": cycle,
         "recordCount": len(airway_fixes),
         "sizeBytes": os.path.getsize(wp_path),
         "sha256": sha256_file(wp_path),
@@ -328,7 +344,7 @@ def build_commercial_ifr_airways_and_waypoints(now_iso: str, manifest_sources: l
     awy_path = "navigation/airways/airways.csv"
     with open(awy_path, "w", newline="", encoding="utf-8") as f:
         w = csv.writer(f)
-        w.writerow(["#source_version", "2026.11", "spec", "1100"])
+        w.writerow(["#source_version", cycle, "provider", "FlightGear/X-Plane"])
         w.writerow(["airway_id", "from_fix", "from_lat", "from_lon", "to_fix", "to_lat", "to_lon", "dir", "level", "min_alt_ft", "max_alt_ft"])
         for seg in awy_segments:
             w.writerow(seg)
@@ -337,41 +353,48 @@ def build_commercial_ifr_airways_and_waypoints(now_iso: str, manifest_sources: l
         "dataset": "airways",
         "name": "Worldwide Published High & Low IFR Airways",
         "file": awy_path,
-        "provider": "FlightGear / X-Plane Open Navigation Database",
+        "url": used_awy_url,
+        "provider": "FlightGear Open Scenery / X-Plane Navigation Database",
         "license": "GNU General Public License v2 (GPLv2)",
-        "sourceVersionOrCycle": "2026.11",
+        "sourceVersionOrCycle": cycle,
         "recordCount": len(awy_segments),
         "sizeBytes": os.path.getsize(awy_path),
         "sha256": sha256_file(awy_path),
         "coverage": "Global High & Low IFR Airway Segments",
         "downloadedAt": now_iso,
     })
+    return manifest_sources
 
 
 def main():
-    prepare_dirs()
+    ensure_dirs()
     today_iso = datetime.date.today().isoformat()
     now_iso = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
     manifest_sources = []
 
-    build_airports_master(today_iso, now_iso, manifest_sources)
-    build_commercial_navaids(today_iso, now_iso, manifest_sources)
-    build_commercial_runways(today_iso, now_iso, manifest_sources)
-    build_commercial_ifr_airways_and_waypoints(now_iso, manifest_sources)
+    try:
+        build_airports(today_iso, now_iso, manifest_sources)
+        build_navaids(today_iso, now_iso, manifest_sources)
+        build_runways(today_iso, now_iso, manifest_sources)
+        build_airways_and_waypoints(now_iso, manifest_sources)
 
-    total_bytes = sum(s["sizeBytes"] for s in manifest_sources)
-    manifest = {
-        "schemaVersion": 8,
-        "generatedAtUtc": now_iso,
-        "targetProfile": "Commercial IFR Airline Operations",
-        "totalNavigationAssetsSizeBytes": total_bytes,
-        "totalNavigationAssetsSizeMb": round(total_bytes / (1024 * 1024), 2),
-        "dataSources": manifest_sources,
-    }
+        total_bytes = sum(s["sizeBytes"] for s in manifest_sources)
+        manifest = {
+            "schemaVersion": 9,
+            "generatedAtUtc": now_iso,
+            "targetProfile": "Commercial IFR Airline Operations",
+            "totalNavigationAssetsSizeBytes": total_bytes,
+            "totalNavigationAssetsSizeMb": round(total_bytes / (1024 * 1024), 2),
+            "dataSources": manifest_sources,
+        }
 
-    with open("navigation_manifest.json", "w", encoding="utf-8") as f:
-        json.dump(manifest, f, indent=2)
-    print(f"Success! Complete Commercial Database built ({round(total_bytes / (1024 * 1024), 2)} MB total).")
+        with open("navigation_manifest.json", "w", encoding="utf-8") as f:
+            json.dump(manifest, f, indent=2)
+        print(f"Success! Complete validated database built successfully ({round(total_bytes / (1024 * 1024), 2)} MB total).")
+
+    except Exception as e:
+        print(f"CRITICAL BUILD FAILURE: {e}")
+        exit(1)
 
 
 if __name__ == "__main__":
