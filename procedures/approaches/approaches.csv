@@ -1,0 +1,2 @@
+#version,2611
+airport_icao,procedure_id,route_type,transition_id,seq,fix_id,path_terminator,alt_desc,alt1,speed_limit_kt,source

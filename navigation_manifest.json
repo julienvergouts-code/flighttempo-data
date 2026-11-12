@@ -1,0 +1,113 @@
+{
+  "schemaVersion": 2,
+  "airacCycle": "2611",
+  "effectiveDate": "2026-10-29",
+  "expiryDate": "2026-11-25",
+  "generatedAtUtc": "2026-11-12T14:16:54Z",
+  "europeanProceduresStatus": "Unavailable under open redistribution licence \u2014 fallback to Great-Circle / Recorded ADS-B",
+  "dataSources": [
+    {
+      "name": "OurAirports Worldwide Navaids",
+      "file": "navigation/navaids/navaids.csv",
+      "url": "https://davidmegginson.github.io/ourairports-data/navaids.csv",
+      "license": "Public Domain / CC0",
+      "recordCount": 11009,
+      "sizeBytes": 1524931,
+      "sha256": "D7292380662C33A95214945023EC0A5B13189599305FD18BE739E167A97A9BD1",
+      "coverage": "Worldwide VOR, VOR/DME, DME, NDB, TACAN & Radio Navaids",
+      "downloadedAt": "2026-11-12T14:16:53Z"
+    },
+    {
+      "name": "OurAirports Worldwide Runways & ILS",
+      "file": "navigation/sources/runways.csv",
+      "url": "https://davidmegginson.github.io/ourairports-data/runways.csv",
+      "license": "Public Domain / CC0",
+      "recordCount": 48413,
+      "sizeBytes": 3973983,
+      "sha256": "A20681ECD8375543DB4830618F71A56FCB04CB63B6608514C1B17F1963B3FCA8",
+      "coverage": "Worldwide Airport Runways, Thresholds, Surface Types & ILS Frequencies",
+      "downloadedAt": "2026-11-12T14:16:53Z"
+    },
+    {
+      "name": "OpenFlights Commercial Airline Route Connections (Not Published Airways)",
+      "file": "navigation/airline_routes/routes.dat",
+      "url": "https://raw.githubusercontent.com/jpatokal/openflights/master/data/routes.dat",
+      "license": "Open Database License (ODbL 1.0)",
+      "recordCount": 67663,
+      "sizeBytes": 2377148,
+      "sha256": "BD373706238134F619C624C606DCCC74C05C2582A977C489C81DE501735F2390",
+      "coverage": "Commercial Airline Airport-to-Airport Connections (For Airline Route Research Only)",
+      "downloadedAt": "2026-11-12T14:16:53Z"
+    },
+    {
+      "name": "FAA CIFP En-Route Waypoints",
+      "file": "navigation/waypoints/waypoints.csv",
+      "url": "https://aeronav.faa.gov/Upload_313-d/cifp/CIFP_261029.zip",
+      "license": "US Government Public Domain (FAA AeroNav)",
+      "airacCycle": "2611",
+      "effectiveDate": "2026-10-29",
+      "expiryDate": "2026-11-25",
+      "recordCount": 28626,
+      "sizeBytes": 1413742,
+      "sha256": "DFADF58B5CE0FA477AF6ADA78D3E7015BDCE4EE973FCCB6F829C6FD820D83761",
+      "coverage": "US & FAA National Airspace System 5LNC Fixes",
+      "downloadedAt": "2026-11-12T14:16:54Z"
+    },
+    {
+      "name": "FAA CIFP Published Airways",
+      "file": "navigation/airways/airways.csv",
+      "url": "https://aeronav.faa.gov/Upload_313-d/cifp/CIFP_261029.zip",
+      "license": "US Government Public Domain (FAA AeroNav)",
+      "airacCycle": "2611",
+      "effectiveDate": "2026-10-29",
+      "expiryDate": "2026-11-25",
+      "recordCount": 15716,
+      "sizeBytes": 701669,
+      "sha256": "494D9DD574A8D97F504D1D42BAA1212DEE70D39235CD8A0982312D55D714A052",
+      "coverage": "US & Oceanic Published En-Route Airways",
+      "downloadedAt": "2026-11-12T14:16:54Z"
+    },
+    {
+      "name": "FAA CIFP Published SIDs (ARINC 424 PD)",
+      "file": "procedures/sids/sids.csv",
+      "url": "https://aeronav.faa.gov/Upload_313-d/cifp/CIFP_261029.zip",
+      "license": "US Government Public Domain (FAA AeroNav)",
+      "airacCycle": "2611",
+      "effectiveDate": "2026-10-29",
+      "expiryDate": "2026-11-25",
+      "recordCount": 0,
+      "sizeBytes": 130,
+      "sha256": "A3BA3A0ED0CF04100F66FD72B1EB42988B4E93EB8D4058F474AB3C01A64EBC40",
+      "coverage": "US Departure Procedures with Path Terminators",
+      "downloadedAt": "2026-11-12T14:16:54Z"
+    },
+    {
+      "name": "FAA CIFP Published STARs (ARINC 424 PE)",
+      "file": "procedures/stars/stars.csv",
+      "url": "https://aeronav.faa.gov/Upload_313-d/cifp/CIFP_261029.zip",
+      "license": "US Government Public Domain (FAA AeroNav)",
+      "airacCycle": "2611",
+      "effectiveDate": "2026-10-29",
+      "expiryDate": "2026-11-25",
+      "recordCount": 0,
+      "sizeBytes": 130,
+      "sha256": "A3BA3A0ED0CF04100F66FD72B1EB42988B4E93EB8D4058F474AB3C01A64EBC40",
+      "coverage": "US Arrival Procedures with Path Terminators",
+      "downloadedAt": "2026-11-12T14:16:54Z"
+    },
+    {
+      "name": "FAA CIFP Instrument Approaches (ARINC 424 PF)",
+      "file": "procedures/approaches/approaches.csv",
+      "url": "https://aeronav.faa.gov/Upload_313-d/cifp/CIFP_261029.zip",
+      "license": "US Government Public Domain (FAA AeroNav)",
+      "airacCycle": "2611",
+      "effectiveDate": "2026-10-29",
+      "expiryDate": "2026-11-25",
+      "recordCount": 0,
+      "sizeBytes": 130,
+      "sha256": "A3BA3A0ED0CF04100F66FD72B1EB42988B4E93EB8D4058F474AB3C01A64EBC40",
+      "coverage": "US Instrument Approaches",
+      "downloadedAt": "2026-11-12T14:16:54Z"
+    }
+  ]
+}
