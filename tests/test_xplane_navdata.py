@@ -9,22 +9,43 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
 from import_xplane_navdata import parse_airways, parse_fixes, parse_navaids, resolve_endpoint
 
 
-def source(lines, name):
-    return {"file_name": name, "records": [(i + 3, line, line.split()) for i, line in enumerate(lines)]}
+def source(lines, name, version="1101"):
+    return {
+        "file_name": name,
+        "format_version": version,
+        "records": [(i + 3, line, line.split()) for i, line in enumerate(lines)],
+    }
 
 
 class XPlaneNavdataTests(unittest.TestCase):
     def test_fix_parser_uses_actual_xpfix_field_layout(self):
         fixes, rejected = parse_fixes(source([
-            "50.10000000 4.20000000 ABCDE ENRT EB",
-            "50.20000000 4.30000000 TERM1 EBBR EB",
+            "50.10000000 4.20000000 ABCDE ENRT EB 4530263",
+            "50.20000000 4.30000000 TERM1 EBBR EB 4530263",
         ], "earth_fix.dat"))
         self.assertEqual(rejected, 0)
         self.assertEqual(len(fixes), 2)
         self.assertEqual(fixes[0]["scope"], "enroute")
         self.assertEqual(fixes[0]["entity_type"], "FIX")
         self.assertEqual(fixes[0]["region_code"], "EB")
+        self.assertEqual(fixes[0]["waypoint_type_code"], "4530263")
+        self.assertEqual(fixes[0]["printed_name"], "ABCDE")
         self.assertEqual(fixes[1]["scope"], "terminal")
+
+    def test_fix_1200_parser_keeps_printed_name_with_spaces(self):
+        fixes, rejected = parse_fixes(source([
+            "43.740277778 -89.224722222 VPPLK ENRT K5 2105430 PUCKAWAY LAKE",
+        ], "earth_fix.dat", version="1200"))
+        self.assertEqual(rejected, 0)
+        self.assertEqual(fixes[0]["waypoint_type_code"], "2105430")
+        self.assertEqual(fixes[0]["printed_name"], "PUCKAWAY LAKE")
+
+    def test_fix_parser_rejects_missing_published_waypoint_type(self):
+        fixes, rejected = parse_fixes(source([
+            "50.10000000 4.20000000 ABCDE ENRT EB",
+        ], "earth_fix.dat", version="1101"))
+        self.assertEqual(fixes, [])
+        self.assertEqual(rejected, 1)
 
     def test_navaid_parser_preserves_navaid_types_and_procedure_facilities(self):
         navaids, rejected = parse_navaids(source([

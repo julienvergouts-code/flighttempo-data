@@ -73,9 +73,11 @@ def read_source_file(path: Path, kind: str):
         raise ValueError(f"{path}: cannot identify format version: {header}")
     version = version_match.group(1)
     allowed = {
-        "fixes": {"1101"},
-        "navaids": {"1100", "1150"},
-        "airways": {"1100", "1101"},
+        "fixes": {"1101", "1200"},
+        "navaids": {"1100", "1150", "1200"},
+        # XP AWY1101 is the specification revision, but the data-file
+        # header value specified by X-Plane is "1100 Version".
+        "airways": {"1100"},
     }[kind]
     if version not in allowed:
         raise ValueError(f"{path}: unsupported {kind} version {version}; expected {sorted(allowed)}")
@@ -112,23 +114,36 @@ def locate_source_files(source_dir: Path):
 
 
 def parse_fixes(source):
-    """XPFIX1101: latitude longitude ident airport/area region."""
+    """Parse XPFIX1101 (type field) and XPFIX1200 (type + printed name)."""
     rows, rejected = [], 0
+    version = source.get("format_version", "1101")
+    if version not in {"1101", "1200"}:
+        raise ValueError(f"Unsupported fix format version: {version}")
     for line_number, raw, fields in source["records"]:
-        if len(fields) < 5:
+        minimum_fields = 6 if version == "1101" else 7
+        if len(fields) < minimum_fields:
             rejected += 1
             continue
         lat, lon = number(fields[0]), number(fields[1])
         if not valid_coordinates(lat, lon):
             rejected += 1
             continue
-        ident, area, region = fields[2:5]
+        ident, area, region, waypoint_type = fields[2:6]
+        if not waypoint_type:
+            rejected += 1
+            continue
+        printed_name = ident if version == "1101" else " ".join(fields[6:]).strip()
+        if version == "1200" and not printed_name:
+            rejected += 1
+            continue
         rows.append({
             "ident": ident.upper(),
             "terminal_area": area.upper(),
             "region_code": region.upper(),
             "scope": "enroute" if area.upper() == "ENRT" else "terminal",
             "entity_type": "FIX",
+            "waypoint_type_code": waypoint_type,
+            "printed_name": printed_name,
             "latitude": f"{lat:.8f}",
             "longitude": f"{lon:.8f}",
             "source_file": source["file_name"],
@@ -380,10 +395,13 @@ def import_navdata(source_dir: Path, root: Path, manifest_path: Path, optional=F
         return {"status": "skipped_missing_source", "missing": missing}
 
     sources = {kind: read_source_file(path, kind) for kind, path in located.items()}
-    cycles = {src["data_cycle"] for src in sources.values() if src["data_cycle"] != "unknown"}
-    if len(cycles) > 1:
-        raise ValueError(f"Source files contain mismatched AIRAC cycles: {sorted(cycles)}")
-    data_cycle = next(iter(cycles), "unknown")
+    cycles = {src["data_cycle"] for src in sources.values()}
+    if "unknown" in cycles or len(cycles) != 1:
+        raise ValueError(
+            "All three IFR source headers must declare the same four-digit AIRAC cycle; "
+            f"found {sorted(cycles)}"
+        )
+    data_cycle = next(iter(cycles))
 
     fixes, rejected_fixes = parse_fixes(sources["fixes"])
     navaids, rejected_navaids = parse_navaids(sources["navaids"])

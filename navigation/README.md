@@ -20,11 +20,11 @@ Each verified dataset is independently described in the root manifest. Android c
 
 Place a single coherent source set in `navigation/sources/flightgear/`:
 
-- `earth_fix.dat` (XPFIX1101)
-- `earth_nav.dat` (XPNAV1100 or XPNAV1150)
-- `earth_awy.dat` (XPAWY1100 or XPAWY1101)
+- `earth_fix.dat` (XPFIX1101 or XPFIX1200)
+- `earth_nav.dat` (XPNAV1100, XPNAV1150 or XPNAV1200)
+- `earth_awy.dat` (XP AWY1101 specification; data header is `1100 Version`)
 
-Legacy filenames `fix.dat`, `nav.dat`, and `awy.dat` are also accepted when they contain one of those supported modern formats. Unsupported formats fail rather than being guessed.
+Legacy filenames `fix.dat`, `nav.dat`, and `awy.dat` are also accepted when they contain one of those supported formats. XPFIX1101 records retain the mandatory published waypoint-type code; XPFIX1200 also retains the printed waypoint name, including embedded spaces. XPNAV1200 retains the current NDB BFO field and newer approach path-point record fields in raw form. Unsupported formats fail rather than being guessed. All three input headers must declare the same four-digit data cycle.
 
 Add a `source-manifest.json` before publishing, containing the actual provider, licence and explicit confirmation that redistribution is permitted:
 
