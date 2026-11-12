@@ -136,13 +136,14 @@ class XPlaneNavdataTests(unittest.TestCase):
         self.assertEqual(row["airway_names"], "UL9")
 
     def test_gzip_source_is_decoded_and_full_cycle_token_is_preserved(self):
-        payload = (
-            "I\\n"
-            "600 Version - data cycle 2016.10, build 20161559\\n"
-            "\\n"
-            "50.10000000 4.20000000 FIX01\\n"
-            "99\\n"
-        ).encode("utf-8")
+        payload = "\\n".join([
+            "I",
+            "600 Version - data cycle 2016.10, build 20161559",
+            "",
+            "50.10000000 4.20000000 FIX01",
+            "99",
+            "",
+        ]).encode("utf-8")
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "fix.dat.gz"
             path.write_bytes(gzip.compress(payload))
