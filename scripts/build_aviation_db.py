@@ -117,7 +117,7 @@ def write_csv(path, header, rows):
         newline="",
         encoding="utf-8"
     ) as file:
-        writer = csv.writer(file)
+        writer = csv.writer(file, lineterminator="\n")
         writer.writerow(header)
         writer.writerows(rows)
 
@@ -150,7 +150,7 @@ def build_airports(records, stage):
 
         rows.append((
             ident,
-            (record.get("iso_country") or "").upper(),
+            (record.get("iso_country") or "").strip().upper(),
             round(lat, 5),
             round(lon, 5),
             round(elevation) if elevation is not None else "",
@@ -229,7 +229,7 @@ def build_navaids(records, stage):
             round(magnetic_variation, 3) if magnetic_variation is not None else "",
             (record.get("usageType") or "").strip().upper(),
             (record.get("power") or "").strip().upper(),
-            (record.get("associated_airport") or "").upper()
+            (record.get("associated_airport") or "").strip().upper()
         ))
 
         type_counts[nav_type] = type_counts.get(nav_type, 0) + 1
@@ -280,6 +280,13 @@ def build_runways(records, stage):
 
         low_heading = number(record.get("le_heading_degT"))
         high_heading = number(record.get("he_heading_degT"))
+
+        # Preserve the runway record, but do not publish impossible source headings.
+        # In particular, do not wrap values such as 362 degrees to 002 degrees.
+        if low_heading is not None and not 0 <= low_heading <= 360:
+            low_heading = None
+        if high_heading is not None and not 0 <= high_heading <= 360:
+            high_heading = None
 
         key = (airport, low, high)
 
