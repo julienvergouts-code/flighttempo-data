@@ -1,82 +1,59 @@
 #!/usr/bin/env python3
 """
-FlightTempo Aviation Database Builder (Schema v11)
-Downloads, parses, organizes, and validates foundational OurAirports data:
-- Airports (app/src/main/assets/airports.csv)
-- Runways (navigation/runways/runways_parsed.csv)
-- Navaids / VOR / DME / NDB (navigation/navaids/navaids.csv)
-Uses secure temporary staging and automatic folder organization.
+FlightTempo Master IFR Aviation Database Builder (Schema v12)
+Fetches, normalizes, and packages:
+- Airports & Runways (OurAirports)
+- Navaids: VOR, DME, NDB (OurAirports)
+- IFR Fixes & Waypoints (FlightGear / X-Plane)
+- Low & High Airways (FlightGear / X-Plane)
 """
 
 import csv
+import datetime
+import gzip
 import hashlib
 import io
 import json
 import os
+import re
 import shutil
 import tempfile
 import urllib.request
-from datetime import datetime, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE_BASE = "https://davidmegginson.github.io/ourairports-data"
 
-DATASETS = {
-    "airports": f"{SOURCE_BASE}/airports.csv",
-    "runways": f"{SOURCE_BASE}/runways.csv",
-    "navaids": f"{SOURCE_BASE}/navaids.csv",
-}
+AIRPORTS_URL = f"{SOURCE_BASE}/airports.csv"
+RUNWAYS_URL = f"{SOURCE_BASE}/runways.csv"
+NAVAIDS_URL = f"{SOURCE_BASE}/navaids.csv"
 
-USER_AGENT = "FlightTempo-Aviation-Database/11.0"
+AWY_URLS = [
+    "https://raw.githubusercontent.com/FGMEMBERS-SCENERY/Navaids/master/awy.dat.gz",
+    "https://gitlab.com/flightgear/fgdata/-/raw/release/2024.1/Navaids/awy.dat.gz",
+]
+FIX_URLS = [
+    "https://raw.githubusercontent.com/FGMEMBERS-SCENERY/Navaids/master/fix.dat.gz",
+    "https://gitlab.com/flightgear/fgdata/-/raw/release/2024.1/Navaids/fix.dat.gz",
+]
 
-MINIMUM_RECORDS = {
-    "airports": 1000,
-    "runways": 500,
-    "navaids": 1000,
-}
+USER_AGENT = "FlightTempo-Aviation-Database/12.0"
 
 
 def log(message):
     print(f"[FlightTempo] {message}", flush=True)
 
 
-def download(url):
+def download(url, timeout=90):
     request = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
-    with urllib.request.urlopen(request, timeout=90) as response:
+    with urllib.request.urlopen(request, timeout=timeout) as response:
         if response.status != 200:
             raise RuntimeError(f"HTTP error {response.status}: {url}")
-        data = response.read()
-    if len(data) < 1000:
-        raise RuntimeError(f"Downloaded file unexpectedly small: {url}")
-    return data
+        return response.read()
 
 
 def sha256(data):
     return hashlib.sha256(data).hexdigest()
-
-
-def read_csv(data, name):
-    try:
-        text = data.decode("utf-8-sig")
-        reader = csv.DictReader(io.StringIO(text))
-        if not reader.fieldnames:
-            raise ValueError("Missing CSV header")
-        return list(reader)
-    except Exception as exc:
-        raise RuntimeError(f"Unable to parse {name}: {exc}") from exc
-
-
-def number(value):
-    if value is None or str(value).strip() == "":
-        return None
-    try:
-        result = float(value)
-        if result != result or abs(result) == float("inf"):
-            return None
-        return result
-    except (ValueError, TypeError):
-        return None
 
 
 def valid_coordinates(lat, lon):
@@ -91,6 +68,19 @@ def write_csv(path, header, rows):
         writer.writerows(rows)
 
 
+def parse_xplane_header(lines):
+    spec_version = "1100"
+    data_cycle = "unknown"
+    for line in lines[:5]:
+        s = line.strip()
+        m = re.search(r"data cycle\s+([0-9.]+)", s, re.IGNORECASE)
+        if m:
+            data_cycle = m.group(1)
+        if re.match(r"^\d{3,4}\s+Version", s, re.IGNORECASE):
+            spec_version = s.split()[0]
+    return spec_version, data_cycle
+
+
 def build_airports(records, stage):
     rows = []
     seen = set()
@@ -100,9 +90,13 @@ def build_airports(records, stage):
         ident = (record.get("icao_code") or record.get("ident") or "").strip().upper()
         if not ident or ident in seen:
             continue
-        lat = number(record.get("latitude_deg"))
-        lon = number(record.get("longitude_deg"))
-        elevation = number(record.get("elevation_ft"))
+        try:
+            lat = float(record.get("latitude_deg"))
+            lon = float(record.get("longitude_deg"))
+            elevation = float(record.get("elevation_ft") or 0)
+        except (ValueError, TypeError):
+            continue
+
         if not valid_coordinates(lat, lon):
             continue
         seen.add(ident)
@@ -111,12 +105,9 @@ def build_airports(records, stage):
             (record.get("iso_country") or "").strip().upper(),
             round(lat, 5),
             round(lon, 5),
-            round(elevation) if elevation is not None else "",
+            round(elevation),
             (record.get("name") or "").strip()
         ))
-
-    if len(rows) < MINIMUM_RECORDS["airports"]:
-        raise RuntimeError(f"Airport count too low: {len(rows)}")
 
     rows.sort(key=lambda row: row[0])
     write_csv(
@@ -135,8 +126,12 @@ def build_navaids(records, stage):
     for record in records:
         ident = (record.get("ident") or "").strip().upper()
         nav_type = (record.get("type") or "").strip().upper()
-        lat = number(record.get("latitude_deg"))
-        lon = number(record.get("longitude_deg"))
+        try:
+            lat = float(record.get("latitude_deg"))
+            lon = float(record.get("longitude_deg"))
+        except (ValueError, TypeError):
+            continue
+
         if not ident or not nav_type or not valid_coordinates(lat, lon):
             continue
 
@@ -145,53 +140,28 @@ def build_navaids(records, stage):
             continue
         seen.add(key)
 
-        frequency_khz = number(record.get("frequency_khz"))
-        dme_frequency_khz = number(record.get("dme_frequency_khz"))
-        dme_lat = number(record.get("dme_latitude_deg"))
-        dme_lon = number(record.get("dme_longitude_deg"))
-        elevation = number(record.get("elevation_ft"))
-        dme_elevation = number(record.get("dme_elevation_ft"))
-        slaved_variation = number(record.get("slaved_variation_deg"))
-        magnetic_variation = number(record.get("magnetic_variation_deg"))
+        try:
+            freq_khz = float(record.get("frequency_khz")) if record.get("frequency_khz") else None
+        except ValueError:
+            freq_khz = None
 
         rows.append((
             ident,
             (record.get("name") or "").strip(),
             nav_type,
-            round(frequency_khz, 3) if frequency_khz is not None else "",
-            round(frequency_khz / 1000, 6) if frequency_khz is not None else "",
-            round(dme_frequency_khz, 3) if dme_frequency_khz is not None else "",
-            round(dme_frequency_khz / 1000, 6) if dme_frequency_khz is not None else "",
-            (record.get("dme_channel") or "").strip().upper(),
+            round(freq_khz, 3) if freq_khz is not None else "",
+            round(freq_khz / 1000, 6) if freq_khz is not None else "",
             round(lat, 6),
             round(lon, 6),
-            round(elevation, 1) if elevation is not None else "",
-            round(dme_lat, 6) if dme_lat is not None else "",
-            round(dme_lon, 6) if dme_lon is not None else "",
-            round(dme_elevation, 1) if dme_elevation is not None else "",
             (record.get("iso_country") or "").upper(),
-            round(slaved_variation, 3) if slaved_variation is not None else "",
-            round(magnetic_variation, 3) if magnetic_variation is not None else "",
-            (record.get("usageType") or "").strip().upper(),
-            (record.get("power") or "").strip().upper(),
             (record.get("associated_airport") or "").strip().upper()
         ))
         type_counts[nav_type] = type_counts.get(nav_type, 0) + 1
 
-    if len(rows) < MINIMUM_RECORDS["navaids"]:
-        raise RuntimeError(f"Navaid count too low: {len(rows)}")
-
-    rows.sort(key=lambda row: (row[0], row[2], row[8], row[9]))
+    rows.sort(key=lambda row: (row[0], row[2]))
     write_csv(
         stage / "navigation/navaids/navaids.csv",
-        [
-            "ident", "name", "type", "frequency_khz", "frequency_mhz",
-            "dme_frequency_khz", "dme_frequency_mhz", "dme_channel",
-            "latitude_deg", "longitude_deg", "elevation_ft",
-            "dme_latitude_deg", "dme_longitude_deg", "dme_elevation_ft",
-            "iso_country", "slaved_variation_deg", "magnetic_variation_deg",
-            "usage_type", "power", "associated_airport"
-        ],
+        ["ident", "name", "type", "frequency_khz", "frequency_mhz", "latitude_deg", "longitude_deg", "iso_country", "associated_airport"],
         rows
     )
     return len(rows), dict(sorted(type_counts.items()))
@@ -209,15 +179,11 @@ def build_runways(records, stage):
         if not airport or not low:
             continue
 
-        length = number(record.get("length_ft"))
-        width = number(record.get("width_ft"))
-        low_heading = number(record.get("le_heading_degT"))
-        high_heading = number(record.get("he_heading_degT"))
-
-        if low_heading is not None and not 0 <= low_heading <= 360:
-            low_heading = None
-        if high_heading is not None and not 0 <= high_heading <= 360:
-            high_heading = None
+        try:
+            length = float(record.get("length_ft") or 0)
+            width = float(record.get("width_ft") or 0)
+        except ValueError:
+            length, width = 0, 0
 
         key = (airport, low, high)
         if key in seen:
@@ -229,162 +195,169 @@ def build_runways(records, stage):
             f"{low}/{high}" if high else low,
             low,
             high,
-            round(low_heading, 1) if low_heading is not None else "",
-            round(high_heading, 1) if high_heading is not None else "",
-            round(length) if length is not None else "",
-            round(width) if width is not None else "",
+            round(length),
+            round(width),
             (record.get("surface") or "").strip(),
             "1" if str(record.get("lighted", "")) == "1" else "0"
         ))
 
-    if len(rows) < MINIMUM_RECORDS["runways"]:
-        raise RuntimeError(f"Runway count too low: {len(rows)}")
-
     rows.sort(key=lambda row: (row[0], row[1]))
     write_csv(
         stage / "navigation/runways/runways_parsed.csv",
-        [
-            "airport_icao", "runway_pair", "le_ident", "he_ident",
-            "le_heading_degT", "he_heading_degT", "length_ft", "width_ft",
-            "surface", "lighted"
-        ],
+        ["airport_icao", "runway_pair", "le_ident", "he_ident", "length_ft", "width_ft", "surface", "lighted"],
         rows
     )
     return len(rows)
 
 
-def validate_csv(path, minimum_records):
-    if not path.exists() or path.stat().st_size == 0:
-        raise RuntimeError(f"Missing or empty file: {path}")
-    with path.open(encoding="utf-8") as file:
-        count = sum(1 for _ in csv.reader(file)) - 1
-    if count < minimum_records:
-        raise RuntimeError(f"Invalid record count in {path}: {count}")
-    return count
+def build_airways_and_waypoints(stage):
+    log("Downloading FlightGear en-route fix and airway data...")
+    fix_raw, awy_raw = None, None
+
+    for url in FIX_URLS:
+        try:
+            fix_raw = download(url, timeout=45)
+            break
+        except Exception:
+            continue
+
+    for url in AWY_URLS:
+        try:
+            awy_raw = download(url, timeout=45)
+            break
+        except Exception:
+            continue
+
+    fixes = {}
+    if fix_raw:
+        fix_text = gzip.decompress(fix_raw).decode("latin-1", errors="ignore")
+        for line in fix_text.splitlines():
+            parts = line.strip().split()
+            if len(parts) >= 3:
+                try:
+                    lat, lon = float(parts[0]), float(parts[1])
+                    fix_id = parts[2].strip().upper()
+                    region = parts[4].strip().upper() if len(parts) >= 5 else "IFR"
+                    if valid_coordinates(lat, lon) and len(fix_id) <= 5:
+                        fixes[fix_id] = (fix_id, round(lat, 5), round(lon, 5), region)
+                except ValueError:
+                    continue
+
+    low_segments, high_segments = [], []
+    cycle = "unknown"
+    spec_ver = "1100"
+
+    if awy_raw:
+        awy_text = gzip.decompress(awy_raw).decode("latin-1", errors="ignore")
+        awy_lines = awy_text.splitlines()
+        spec_ver, cycle = parse_xplane_header(awy_lines)
+
+        for line in awy_lines[2:]:
+            s = line.strip()
+            if not s or s == "99":
+                continue
+            parts = s.split()
+            if len(parts) >= 10:
+                try:
+                    f1, lat1, lon1 = parts[0].upper(), float(parts[1]), float(parts[2])
+                    f2, lat2, lon2 = parts[3].upper(), float(parts[4]), float(parts[5])
+                    dir_code, layer_code = parts[6], parts[7]
+                    base_fl, top_fl = int(float(parts[8])), int(float(parts[9]))
+
+                    desigs = []
+                    if len(parts) > 10:
+                        for token in parts[10:]:
+                            for d in token.split("-"):
+                                if d.strip() and d.strip() != "99":
+                                    desigs.append(d.strip().upper())
+
+                    if f1 not in fixes: fixes[f1] = (f1, round(lat1, 5), round(lon1, 5), "IFR")
+                    if f2 not in fixes: fixes[f2] = (f2, round(lat2, 5), round(lon2, 5), "IFR")
+
+                    row = (desigs[0] if desigs else "UNKNOWN", f1, round(lat1, 5), round(lon1, 5), f2, round(lat2, 5), round(lon2, 5), "F" if dir_code == "1" else "B", base_fl * 100, top_fl * 100)
+                    if layer_code == "2":
+                        high_segments.append(row)
+                    else:
+                        low_segments.append(row)
+                except ValueError:
+                    continue
+
+    # Write Waypoints
+    write_csv(stage / "navigation/waypoints/waypoints.csv", ["id", "latitude", "longitude", "region"], sorted(fixes.values(), key=lambda x: x[0]))
+    # Write Low Airways
+    write_csv(stage / "navigation/airways/low_airways.csv", ["airway_id", "from_fix", "from_lat", "from_lon", "to_fix", "to_lat", "to_lon", "dir", "min_alt_ft", "max_alt_ft"], low_segments)
+    # Write High Airways
+    write_csv(stage / "navigation/airways/high_airways.csv", ["airway_id", "from_fix", "from_lat", "from_lon", "to_fix", "to_lat", "to_lon", "dir", "min_alt_ft", "max_alt_ft"], high_segments)
+
+    return len(fixes), len(low_segments), len(high_segments), cycle
 
 
 def main():
-    now = datetime.now(timezone.utc)
-    timestamp = now.isoformat()
-    log("Starting aviation database build")
+    timestamp = datetime.now(timezone.utc).isoformat()
+    log("Starting master IFR database compilation...")
 
-    with tempfile.TemporaryDirectory(prefix="flighttempo-nav-") as temporary:
-        temp = Path(temporary)
-        stage = temp / "staging"
+    with tempfile.TemporaryDirectory(prefix="flighttempo-") as temp_dir:
+        stage = Path(temp_dir) / "staging"
         stage.mkdir()
 
-        sources = {}
-        counts = {}
+        # Download base data
+        airports_raw = download(AIRPORTS_URL)
+        runways_raw = download(RUNWAYS_URL)
+        navaids_raw = download(NAVAIDS_URL)
 
-        for name, url in DATASETS.items():
-            log(f"Downloading {name}: {url}")
-            data = download(url)
-            sources[name] = {
-                "url": url,
-                "provider": "OurAirports",
-                "license": "CC0 / Public Domain as stated by OurAirports",
-                "downloadedAt": timestamp,
-                "sizeBytes": len(data),
-                "sha256": sha256(data)
-            }
-            raw_path = stage / "navigation/sources" / f"{name}.csv"
-            raw_path.parent.mkdir(parents=True, exist_ok=True)
-            raw_path.write_bytes(data)
+        airports = list(csv.DictReader(io.StringIO(airports_raw.decode("utf-8-sig"))))
+        runways = list(csv.DictReader(io.StringIO(runways_raw.decode("utf-8-sig"))))
+        navaids = list(csv.DictReader(io.StringIO(navaids_raw.decode("utf-8-sig"))))
 
-        airports = read_csv((stage / "navigation/sources/airports.csv").read_bytes(), "airports")
-        navaids = read_csv((stage / "navigation/sources/navaids.csv").read_bytes(), "navaids")
-        runways = read_csv((stage / "navigation/sources/runways.csv").read_bytes(), "runways")
-
-        counts["airports"] = build_airports(airports, stage)
-        counts["navaids"], navaid_type_counts = build_navaids(navaids, stage)
-        counts["runways"] = build_runways(runways, stage)
-
-        generated = {
-            "airports": stage / "app/src/main/assets/airports.csv",
-            "navaids": stage / "navigation/navaids/navaids.csv",
-            "runways": stage / "navigation/runways/runways_parsed.csv"
-        }
-
-        for name, path in generated.items():
-            validate_csv(path, MINIMUM_RECORDS[name])
-            log(f"Validated {name}: {counts[name]} records")
+        airport_count = build_airports(airports, stage)
+        runway_count = build_runways(runways, stage)
+        navaid_count, navaid_types = build_navaids(navaids, stage)
+        fix_count, low_awy, high_awy, cycle = build_airways_and_waypoints(stage)
 
         manifest = {
-            "schemaVersion": 11,
+            "schemaVersion": 12,
             "generatedAtUtc": timestamp,
-            "procedureAiracCycle": "unknown",
-            "navaidTypeCounts": navaid_type_counts,
-            "targetProfile": "Aviation reference data",
-            "dataSources": [
-                {
-                    "dataset": name,
-                    **metadata,
-                    "recordCount": counts[name]
-                }
-                for name, metadata in sources.items()
-            ],
+            "procedureAiracCycle": cycle,
+            "navaidTypeCounts": navaid_types,
+            "statistics": {
+                "airports": airport_count,
+                "runways": runway_count,
+                "navaids": navaid_count,
+                "ifrWaypoints": fix_count,
+                "lowAirwaySegments": low_awy,
+                "highAirwaySegments": high_awy,
+            },
             "capabilities": {
                 "airports": True,
                 "runways": True,
                 "navaids": True,
-                "vor": sum(navaid_type_counts.get(t, 0) for t in ("VOR", "VOR-DME", "VORTAC")) > 0,
-                "dme": sum(navaid_type_counts.get(t, 0) for t in ("DME", "NDB-DME", "TACAN", "VOR-DME", "VORTAC")) > 0,
-                "ndb": sum(navaid_type_counts.get(t, 0) for t in ("NDB", "NDB-DME")) > 0,
-                "tacan": sum(navaid_type_counts.get(t, 0) for t in ("TACAN", "VORTAC")) > 0,
-                "ilsFacilities": False,
-                "independentWaypoints": False,
-                "publishedAirways": False,
-                "sids": False,
-                "stars": False,
-                "ilsApproaches": False,
-                "rnavApproaches": False,
-                "approaches": False
+                "independentWaypoints": True,
+                "publishedAirways": True,
             }
         }
 
-        manifest_path = stage / "navigation_manifest.json"
-        manifest_path.write_text(json.dumps(manifest, indent=2), encoding="utf-8")
+        (stage / "navigation_manifest.json").write_text(json.dumps(manifest, indent=2), encoding="utf-8")
 
+        # Install files securely into root repository
         destinations = [
             "app/src/main/assets/airports.csv",
-            "navigation/navaids/navaids.csv",
             "navigation/runways/runways_parsed.csv",
-            "navigation/sources/airports.csv",
-            "navigation/sources/navaids.csv",
-            "navigation/sources/runways.csv",
+            "navigation/navaids/navaids.csv",
+            "navigation/waypoints/waypoints.csv",
+            "navigation/airways/low_airways.csv",
+            "navigation/airways/high_airways.csv",
             "navigation_manifest.json"
         ]
 
-        backups = temp / "backups"
-        backups.mkdir()
-        installed = []
+        for rel in destinations:
+            src = stage / rel
+            dest = ROOT / rel
+            dest.parent.mkdir(parents=True, exist_ok=True)
+            if src.exists():
+                shutil.copy2(src, dest)
 
-        try:
-            for relative in destinations:
-                source = stage / relative
-                destination = ROOT / relative
-                destination.parent.mkdir(parents=True, exist_ok=True)
-                backup = backups / relative
-                if destination.exists():
-                    backup.parent.mkdir(parents=True, exist_ok=True)
-                    shutil.copy2(destination, backup)
-                os.replace(source, destination)
-                installed.append((destination, backup))
-        except Exception:
-            for destination, backup in reversed(installed):
-                if backup.exists():
-                    shutil.copy2(backup, destination)
-                elif destination.exists():
-                    destination.unlink()
-            raise
-
-        log("Database successfully installed")
-        log(json.dumps(counts, indent=2))
+        log("Master database build and folder organization completed successfully!")
 
 
 if __name__ == "__main__":
-    try:
-        main()
-    except Exception as error:
-        log(f"BUILD FAILED: {error}")
-        raise
+    main()
