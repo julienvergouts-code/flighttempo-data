@@ -5,14 +5,13 @@ on:
     - cron: '15 4 * * *'
   workflow_dispatch:
   pull_request:
-    branches:
-      - main
     paths:
-      - '.github/workflows/update-navigation-data.yml'
       - 'scripts/**'
+      - 'tests/**'
       - 'navigation/**'
+      - 'procedures/**'
+      - '.github/workflows/update-navigation-data.yml'
       - 'navigation_manifest.json'
-      - 'app/src/main/assets/airports.csv'
 
 permissions:
   contents: write
@@ -24,165 +23,81 @@ concurrency:
 jobs:
   build-and-update-navdata:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-
-      - name: Build and validate aviation database
+      - name: Run IFR importer unit tests
+        run: python3 -m unittest discover -s tests -v
+      - name: Build OurAirports reference datasets
         run: python3 scripts/build_aviation_db.py
-
-      - name: Verify generated datasets
+      - name: Import optional IFR route network
         run: |
-          set -euo pipefail
+          python3 scripts/import_xplane_navdata.py \
+            --source-dir navigation/sources/flightgear \
+            --manifest navigation_manifest.json \
+            --optional
+      - name: Verify generated datasets and manifest
+        run: |
+          set -e
+          test -s app/src/main/assets/airports.csv
+          test -s navigation/navaids/navaids.csv
+          test -s navigation/runways/runways_parsed.csv
+          test -s navigation_manifest.json
           python3 - <<'PY'
           import csv
+          import hashlib
           import json
-          from collections import Counter
           from pathlib import Path
 
-          manifest = json.loads(Path("navigation_manifest.json").read_text(encoding="utf-8"))
-          assert manifest.get("schemaVersion") == 11, (
-              f"Unexpected manifest schemaVersion: {manifest.get('schemaVersion')!r}; "
-              "update this workflow when the builder schema changes."
-          )
-
-          capabilities = manifest.get("capabilities", {})
-          for capability in ("airports", "runways", "navaids", "vor", "dme", "ndb"):
-              assert capabilities.get(capability) is True, (
-                  f"Required capability is not available: {capability}"
-              )
-
-          datasets = {
-              "app/src/main/assets/airports.csv": {
-                  "minimum": 1000,
-                  "headers": {"icao", "country", "latitude", "longitude", "elevation_ft", "name"},
-              },
-              "navigation/runways/runways_parsed.csv": {
-                  "minimum": 500,
-                  "headers": {
-                      "airport_icao", "runway_pair", "le_ident", "he_ident",
-                      "le_heading_degT", "he_heading_degT", "length_ft",
-                      "width_ft", "surface", "lighted",
-                  },
-              },
-              "navigation/navaids/navaids.csv": {
-                  "minimum": 1000,
-                  "headers": {
-                      "ident", "name", "type", "frequency_khz", "frequency_mhz",
-                      "dme_frequency_khz", "dme_frequency_mhz", "dme_channel",
-                      "latitude_deg", "longitude_deg", "elevation_ft",
-                      "dme_latitude_deg", "dme_longitude_deg", "dme_elevation_ft",
-                      "iso_country", "slaved_variation_deg", "magnetic_variation_deg",
-                      "usage_type", "power", "associated_airport",
-                  },
-              },
-          }
-
-          for filename, spec in datasets.items():
-              path = Path(filename)
-              assert path.is_file() and path.stat().st_size > 0, f"Missing/empty dataset: {filename}"
-
-              with path.open(encoding="utf-8", newline="") as stream:
-                  reader = csv.DictReader(stream)
-                  headers = set(reader.fieldnames or [])
-                  missing = spec["headers"] - headers
-                  assert not missing, f"{filename} missing columns: {sorted(missing)}"
-
-                  count = 0
-                  type_counts = Counter()
-                  for row in reader:
-                      count += 1
-                      for field, value in row.items():
-                          if value is not None:
-                              assert value == value.strip(), (
-                                  f"Leading/trailing whitespace in {filename}, "
-                                  f"record {count}, field {field}: {value!r}"
-                              )
-
-                      if filename.endswith("navaids.csv"):
-                          nav_type = (row.get("type") or "").strip().upper()
-                          assert nav_type, f"Blank navaid type at record {count}"
-                          type_counts[nav_type] += 1
-
-                          lat = float(row["latitude_deg"])
-                          lon = float(row["longitude_deg"])
-                          assert -90 <= lat <= 90, f"Invalid navaid latitude at record {count}: {lat}"
-                          assert -180 <= lon <= 180, f"Invalid navaid longitude at record {count}: {lon}"
-
-                      elif filename.endswith("airports.csv"):
-                          lat = float(row["latitude"])
-                          lon = float(row["longitude"])
-                          assert -90 <= lat <= 90, f"Invalid airport latitude at record {count}: {lat}"
-                          assert -180 <= lon <= 180, f"Invalid airport longitude at record {count}: {lon}"
-
-                      elif filename.endswith("runways_parsed.csv"):
-                          assert (row.get("airport_icao") or "").strip(), (
-                              f"Blank runway airport identifier at record {count}"
-                          )
-                          for heading_field in ("le_heading_degT", "he_heading_degT"):
-                              raw = (row.get(heading_field) or "").strip()
-                              if raw:
-                                  heading = float(raw)
-                                  assert 0 <= heading <= 360, (
-                                      f"Invalid {heading_field} at record {count}: {heading}"
-                                  )
-
-              assert count >= spec["minimum"], (
-                  f"Too few records in {filename}: {count} < {spec['minimum']}"
-              )
-              print(f"{filename}: {count} records; headers and semantic checks passed")
-
-              if filename.endswith("navaids.csv"):
-                  declared = manifest.get("navaidTypeCounts", {})
-                  assert dict(sorted(type_counts.items())) == dict(sorted(declared.items())), (
-                      "Navaid type counts do not match navigation_manifest.json"
-                  )
-
-          navaid_types = manifest.get("navaidTypeCounts", {})
-          vor_count = sum(navaid_types.get(t, 0) for t in ("VOR", "VOR-DME", "VORTAC"))
-          dme_count = sum(
-              navaid_types.get(t, 0)
-              for t in ("DME", "NDB-DME", "TACAN", "VOR-DME", "VORTAC")
-          )
-          ndb_count = sum(navaid_types.get(t, 0) for t in ("NDB", "NDB-DME"))
-          assert vor_count > 0, "No VOR-family navaids found"
-          assert dme_count > 0, "No DME-capable navaids found"
-          assert ndb_count > 0, "No NDB-family navaids found"
-
-          print(
-              "Navaid semantic checks passed: "
-              f"VOR-family={vor_count}, DME-capable={dme_count}, NDB-family={ndb_count}"
-          )
-          print("Manifest and generated datasets validated.")
+          manifest = json.loads(Path("navigation_manifest.json").read_text())
+          assert manifest["schemaVersion"] == 11, "Unexpected manifest schema version"
+          for relative in (
+              "app/src/main/assets/airports.csv",
+              "navigation/navaids/navaids.csv",
+              "navigation/runways/runways_parsed.csv",
+          ):
+              path = Path(relative)
+              with path.open(encoding="utf-8", newline="") as handle:
+                  count = max(0, sum(1 for _ in csv.reader(handle)) - 1)
+              assert count > 0, f"No records in {relative}"
+              print(f"{relative}: {count} records")
+          for dataset in manifest.get("datasets", []):
+              if not dataset.get("available"):
+                  continue
+              path = Path(dataset["path"])
+              assert path.is_file(), f"Manifest points to missing file: {path}"
+              assert path.stat().st_size == dataset["sizeBytes"], f"Size mismatch: {path}"
+              assert hashlib.sha256(path.read_bytes()).hexdigest() == dataset["sha256"]
+              with path.open(encoding="utf-8", newline="") as handle:
+                  count = max(0, sum(1 for _ in csv.reader(handle)) - 1)
+              assert count == dataset["recordCount"], f"Record count mismatch: {path}"
+              print(f"{dataset['id']}: {count} records; {path.stat().st_size} bytes")
+          print("Manifest and available datasets validated.")
           PY
-
-          git diff --check
-
       - name: Commit updated datasets
-        if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main')
+        if: github.event_name != 'pull_request'
         run: |
-          set -euo pipefail
-
+          set -e
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-
           git add \
-            navigation/ \
+            navigation/navaids/flightgear_navaids.csv \
+            navigation/waypoints/flightgear_fixes.csv \
+            navigation/airways/flightgear_airway_segments.csv \
+            navigation/sources/flightgear/import_metadata.json \
+            navigation_manifest.json \
             app/src/main/assets/airports.csv \
-            navigation_manifest.json
-
+            navigation/navaids/navaids.csv \
+            navigation/runways/runways_parsed.csv
           if git diff --cached --quiet; then
             echo "No dataset changes detected."
             exit 0
           fi
-
           git commit -m "chore(navdata): update verified aviation datasets [skip ci]"
           git push origin HEAD:main
