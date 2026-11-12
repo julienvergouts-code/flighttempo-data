@@ -42,7 +42,7 @@ class XPlaneNavdataTests(unittest.TestCase):
 
     def test_fix_parser_rejects_missing_published_waypoint_type(self):
         fixes, rejected = parse_fixes(source([
-            "50.10000000 4.20000000 ABCDE ENRT",
+            "50.10000000 4.20000000 ABCDE ENRT EB",
         ], "earth_fix.dat", version="1101"))
         self.assertEqual(fixes, [])
         self.assertEqual(rejected, 1)
