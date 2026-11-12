@@ -63,7 +63,7 @@ class XPlaneNavdataTests(unittest.TestCase):
 
     def test_airway_type_direction_level_altitude_and_coordinates(self):
         fixes, _ = parse_fixes(source([
-            "50.10000000 4.20000000 FIX01 ENRT EB",
+            "50.10000000 4.20000000 FIX01 ENRT EB 4530263",
         ], "earth_fix.dat"))
         navaids, _ = parse_navaids(source([
             "3 50.30000000 4.40000000 350 11340 130 2.5 VOR1 ENRT EB TEST VOR",
