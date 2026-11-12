@@ -1,77 +1,48 @@
 {
-  "schemaVersion": 8,
-  "generatedAtUtc": "2026-11-12T15:22:07Z",
-  "targetProfile": "Commercial IFR Airline Operations",
-  "totalNavigationAssetsSizeBytes": 5780445,
-  "totalNavigationAssetsSizeMb": 5.51,
+  "schemaVersion": 10,
+  "generatedAtUtc": "2026-11-12T15:32:09.236598+00:00",
+  "procedureAiracCycle": "unknown",
+  "targetProfile": "Aviation reference data",
   "dataSources": [
     {
       "dataset": "airports",
-      "name": "Worldwide Airport Reference & Elevations Master",
-      "file": "airports.csv",
       "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
       "provider": "OurAirports",
-      "license": "Public Domain (CC0 1.0)",
-      "sourceVersionOrCycle": "2026-11-12",
-      "recordCount": 86351,
-      "sizeBytes": 4883744,
-      "sha256": "B2AB9171B5E07AF2FD533D9287F6A4CA06EA0E5B7337DC1F21E5CE0F7F1CC28F",
-      "coverage": "Global airport coordinates, elevations MSL, and identifiers",
-      "downloadedAt": "2026-11-12T15:22:07Z"
-    },
-    {
-      "dataset": "navaids",
-      "name": "Worldwide Radio Navaids",
-      "file": "navigation/navaids/navaids.csv",
-      "url": "https://davidmegginson.github.io/ourairports-data/navaids.csv",
-      "provider": "OurAirports",
-      "license": "Public Domain (CC0 1.0)",
-      "sourceVersionOrCycle": "2026-11-12",
-      "recordCount": 11008,
-      "sizeBytes": 529176,
-      "sha256": "9D3B75F13F20916129F094AEA863488E2C368D80A47B7A95D4BEF1D18C87F5CB",
-      "coverage": "Global VOR, VOR/DME, DME, NDB",
-      "downloadedAt": "2026-11-12T15:22:07Z"
+      "license": "CC0 / Public Domain as stated by OurAirports",
+      "downloadedAt": "2026-11-12T15:32:09.236598+00:00",
+      "sizeBytes": 12758762,
+      "sha256": "11e7a1edf9e5bef91aa4492e3ab42bb5b38b5f2df81358a235ed5a393a571e54",
+      "recordCount": 86302
     },
     {
       "dataset": "runways",
-      "name": "Worldwide Commercial Paved Runways (>= 4,000 ft)",
-      "file": "navigation/runways/runways_parsed.csv",
       "url": "https://davidmegginson.github.io/ourairports-data/runways.csv",
       "provider": "OurAirports",
-      "license": "Public Domain (CC0 1.0)",
-      "sourceVersionOrCycle": "2026-11-12",
-      "recordCount": 9437,
-      "sizeBytes": 338821,
-      "sha256": "D6AA92FA1820D277EA6B6FF935FE628610F305EE5ACDC36BCCA606B762AD3E53",
-      "coverage": "Global paved commercial runways >= 4,000 ft",
-      "downloadedAt": "2026-11-12T15:22:07Z"
+      "license": "CC0 / Public Domain as stated by OurAirports",
+      "downloadedAt": "2026-11-12T15:32:09.236598+00:00",
+      "sizeBytes": 3973983,
+      "sha256": "a20681ecd8375543db4830618f71a56fcb04cb63b6608514c1b17f1963b3fca8",
+      "recordCount": 47094
     },
     {
-      "dataset": "waypoints",
-      "name": "Worldwide Commercial IFR En-Route Waypoints",
-      "file": "navigation/waypoints/waypoints.csv",
-      "provider": "FlightGear / X-Plane Open Navigation Database",
-      "license": "GNU General Public License v2 (GPLv2)",
-      "sourceVersionOrCycle": "2026.11",
-      "recordCount": 217,
-      "sizeBytes": 6837,
-      "sha256": "46EA3EB35C8AB005084D7E2FC05B92DD5ECBCEDD6E7D142E468FB5EBAAD0132D",
-      "coverage": "Global 5LNC IFR waypoints connected to published airways",
-      "downloadedAt": "2026-11-12T15:22:07Z"
-    },
-    {
-      "dataset": "airways",
-      "name": "Worldwide Published High & Low IFR Airways",
-      "file": "navigation/airways/airways.csv",
-      "provider": "FlightGear / X-Plane Open Navigation Database",
-      "license": "GNU General Public License v2 (GPLv2)",
-      "sourceVersionOrCycle": "2026.11",
-      "recordCount": 179,
-      "sizeBytes": 21867,
-      "sha256": "8B998233B31DC049B552D69CD01CFD1199596D940BE0C4B588F583A2244DDCA9",
-      "coverage": "Global High & Low IFR Airway Segments",
-      "downloadedAt": "2026-11-12T15:22:07Z"
+      "dataset": "navaids",
+      "url": "https://davidmegginson.github.io/ourairports-data/navaids.csv",
+      "provider": "OurAirports",
+      "license": "CC0 / Public Domain as stated by OurAirports",
+      "downloadedAt": "2026-11-12T15:32:09.236598+00:00",
+      "sizeBytes": 1524931,
+      "sha256": "d7292380662c33a95214945023ec0a5b13189599305fd18be739e167a97a9bd1",
+      "recordCount": 11008
     }
-  ]
+  ],
+  "capabilities": {
+    "airports": true,
+    "runways": true,
+    "navaids": true,
+    "independentWaypoints": false,
+    "publishedAirways": false,
+    "sids": false,
+    "stars": false,
+    "approaches": false
+  }
 }
