@@ -417,11 +417,21 @@ def main():
             log(f"Validated {name}: {counts[name]} records")
 
         manifest = {
-            "schemaVersion": 11,
+            "schemaVersion": 12,
             "generatedAtUtc": timestamp,
             "procedureAiracCycle": "unknown",
             "navaidTypeCounts": navaid_type_counts,
             "targetProfile": "Aviation reference data",
+            "statistics": {
+                "airports": counts["airports"],
+                "runways": counts["runways"],
+                "navaids": counts["navaids"],
+                "ifrWaypoints": 0,
+                "flightgearNavaids": 0,
+                "airwaySegments": 0,
+                "lowAirwaySegments": 0,
+                "highAirwaySegments": 0
+            },
             "dataSources": [
                 {
                     "dataset": name,

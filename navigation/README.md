@@ -47,6 +47,8 @@ python3 scripts/import_xplane_navdata.py
 python3 -m unittest discover -s tests -v
 ```
 
+The OurAirports builder deliberately does not synthesize or infer airway geometry from coordinate-only legacy records. A public FlightGear repository candidate was inspected and its regional fix/airway samples used legacy FIX 600 and AWY 640 formats; these do not carry the typed endpoint references required by FlightTempo and are therefore not used by this pipeline.
+
 The importer writes:
 - `navigation/waypoints/flightgear_fixes.csv`
 - `navigation/navaids/flightgear_navaids.csv`

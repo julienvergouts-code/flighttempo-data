@@ -56,17 +56,25 @@ jobs:
           from pathlib import Path
 
           manifest = json.loads(Path("navigation_manifest.json").read_text())
-          assert manifest["schemaVersion"] == 11, "Unexpected manifest schema version"
-          for relative in (
-              "app/src/main/assets/airports.csv",
-              "navigation/navaids/navaids.csv",
-              "navigation/runways/runways_parsed.csv",
-          ):
+          assert manifest["schemaVersion"] == 12, "Unexpected manifest schema version"
+          expected = {
+              "app/src/main/assets/airports.csv": 1000,
+              "navigation/navaids/navaids.csv": 1000,
+              "navigation/runways/runways_parsed.csv": 500,
+          }
+          for relative, minimum in expected.items():
               path = Path(relative)
               with path.open(encoding="utf-8", newline="") as handle:
-                  count = max(0, sum(1 for _ in csv.reader(handle)) - 1)
-              assert count > 0, f"No records in {relative}"
-              print(f"{relative}: {count} records")
+                  rows = list(csv.DictReader(handle))
+              assert len(rows) >= minimum, f"Too few records in {relative}: {len(rows)}"
+              if relative.endswith("runways_parsed.csv"):
+                  required = {"le_heading_degT", "he_heading_degT", "length_ft", "width_ft"}
+                  assert required.issubset(rows[0].keys()), "Runway geometry columns missing"
+              if relative.endswith("navaids.csv"):
+                  required = {"frequency_khz", "dme_frequency_khz", "dme_latitude_deg",
+                              "slaved_variation_deg", "usage_type"}
+                  assert required.issubset(rows[0].keys()), "Navaid detail columns missing"
+              print(f"{relative}: {len(rows)} records")
           for dataset in manifest.get("datasets", []):
               if not dataset.get("available"):
                   continue
@@ -78,6 +86,11 @@ jobs:
                   count = max(0, sum(1 for _ in csv.reader(handle)) - 1)
               assert count == dataset["recordCount"], f"Record count mismatch: {path}"
               print(f"{dataset['id']}: {count} records; {path.stat().st_size} bytes")
+          capabilities = manifest.get("capabilities", {})
+          for capability in ("airports", "runways", "navaids", "vor", "dme", "ndb"):
+              assert capabilities.get(capability) is True, f"Missing required capability: {capability}"
+          for metric in ("airports", "runways", "navaids"):
+              assert manifest.get("statistics", {}).get(metric, 0) > 0, f"Missing statistic: {metric}"
           print("Manifest and available datasets validated.")
           PY
       - name: Commit updated datasets
