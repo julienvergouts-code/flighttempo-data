@@ -136,7 +136,7 @@ class XPlaneNavdataTests(unittest.TestCase):
         self.assertEqual(row["airway_names"], "UL9")
 
     def test_gzip_source_is_decoded_and_full_cycle_token_is_preserved(self):
-        payload = "\\n".join([
+        payload = "\n".join([
             "I",
             "600 Version - data cycle 2016.10, build 20161559",
             "",
