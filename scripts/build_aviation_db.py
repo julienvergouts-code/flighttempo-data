@@ -1,35 +1,58 @@
 #!/usr/bin/env python3
 """
-FlightTempo Ultra-Lightweight Global Aviation Builder (< 2 MB Total)
-Designed specifically for fast mobile offline performance:
-1. Compact Worldwide Paved Runways >= 2,500 ft (~450 KB, OurAirports CC0)
-2. Compact Worldwide VOR / DME / NDB Navaids (~650 KB, OurAirports CC0)
-3. Deduplicated Commercial Airline City-Pair Connections (~300 KB, OpenFlights ODbL)
-Removes all multi-megabyte raw source duplicates so the Android APK stays tiny and fast.
+FlightTempo Complete Commercial Aviation Database Builder
+Automated cycle sync for:
+1. Worldwide Airports & Elevations (OurAirports CC0) -> app/src/main/assets/airports.csv
+2. Worldwide Paved Commercial Runways >= 4,000 ft (OurAirports CC0) -> navigation/runways/runways_parsed.csv
+3. Worldwide VOR / DME / NDB Radio Navaids (OurAirports CC0) -> navigation/navaids/navaids.csv
+4. Worldwide High & Low IFR Airways & En-Route Fixes (FlightGear / X-Plane Open Data)
+5. Commercial Airline City-Pair Connections (OpenFlights ODbL)
 """
 
 import csv
 import datetime
+import gzip
 import hashlib
 import io
 import json
 import os
+import re
 import shutil
 import urllib.request
 
-USER_AGENT = "FlightTempo-Lightweight-Builder/4.0 (https://github.com/julienvergouts-code/flighttempo-data)"
+USER_AGENT = "FlightTempo-Builder/6.0 (https://github.com/julienvergouts-code/flighttempo-data)"
 
+AIRPORTS_URL = "https://davidmegginson.github.io/ourairports-data/airports.csv"
 NAVAIDS_URL = "https://davidmegginson.github.io/ourairports-data/navaids.csv"
 RUNWAYS_URL = "https://davidmegginson.github.io/ourairports-data/runways.csv"
 ROUTES_URL = "https://raw.githubusercontent.com/jpatokal/openflights/master/data/routes.dat"
 
+AWY_URLS = [
+    "https://raw.githubusercontent.com/FGMEMBERS-SCENERY/Navaids/master/awy.dat.gz",
+    "https://gitlab.com/flightgear/fgdata/-/raw/release/2024.1/Navaids/awy.dat.gz",
+]
+FIX_URLS = [
+    "https://raw.githubusercontent.com/FGMEMBERS-SCENERY/Navaids/master/fix.dat.gz",
+    "https://gitlab.com/flightgear/fgdata/-/raw/release/2024.1/Navaids/fix.dat.gz",
+]
+
 PAVED_KEYWORDS = ("ASP", "CON", "BIT", "PEM", "PAV", "TAR", "MAC", "ASPH", "CONC")
 
 
-def download_text(url: str, timeout: int = 60) -> str:
-    req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
+def download_bytes(url: str, timeout: int = 90) -> bytes:
+    req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0 " + USER_AGENT})
     with urllib.request.urlopen(req, timeout=timeout) as resp:
-        return resp.read().decode("utf-8", errors="ignore")
+        return resp.read()
+
+
+def download_with_fallback(urls: list) -> tuple[bytes, str]:
+    for url in urls:
+        try:
+            print(f"Fetching {url} ...")
+            return download_bytes(url), url
+        except Exception as e:
+            print(f"Mirror failed ({url}): {e}")
+    raise RuntimeError(f"All mirrors failed for {urls[0]}")
 
 
 def sha256_file(path: str) -> str:
@@ -40,26 +63,194 @@ def sha256_file(path: str) -> str:
     return h.hexdigest().upper()
 
 
-def clean_heavy_files():
-    """Deletes any bloated raw files or empty folders from previous runs."""
-    for folder in ["navigation/sources", "navigation/waypoints", "navigation/airways", "procedures"]:
+def prepare_dirs():
+    for folder in ["navigation/sources", "procedures"]:
         if os.path.exists(folder):
             shutil.rmtree(folder, ignore_errors=True)
-    for old_file in ["navigation/airline_routes/routes.dat"]:
+    for old_file in ["navigation/airways/routes.dat"]:
         if os.path.exists(old_file):
             os.remove(old_file)
 
     for d in [
+        "navigation/waypoints",
         "navigation/navaids",
+        "navigation/airways",
         "navigation/runways",
         "navigation/airline_routes",
     ]:
         os.makedirs(d, exist_ok=True)
 
 
-def build_compact_navaids(today_iso: str, now_iso: str, manifest_sources: list):
-    print("Downloading & compacting OurAirports Navaids...")
-    raw_text = download_text(NAVAIDS_URL)
+def extract_xp_header_metadata(lines: list) -> dict:
+    spec_version = "unknown"
+    data_cycle = "unknown"
+    for line in lines[:5]:
+        s = line.strip()
+        if re.match(r"^\d{3,4}\s+Version", s, re.IGNORECASE):
+            parts = s.split()
+            spec_version = parts[0]
+            m = re.search(r"data cycle\s+([0-9.]+)", s, re.IGNORECASE)
+            if m:
+                data_cycle = m.group(1)
+            break
+    return {"specVersion": spec_version, "sourceDataCycle": data_cycle}
+
+
+def build_airports_master(today_iso: str, now_iso: str, manifest_sources: list):
+    """Downloads official OurAirports airports.csv and outputs root airports.csv for app assets."""
+    print("Downloading & updating root airports.csv (Airports & Elevations)...")
+    raw_text = download_bytes(AIRPORTS_URL).decode("utf-8", errors="ignore")
+    reader = csv.DictReader(io.StringIO(raw_text))
+    rows = []
+
+    for r in reader:
+        if r.get("type") == "closed_airport":
+            continue
+        ident = (r.get("ident") or "").strip().upper()
+        icao = (r.get("icao_code") or ident).strip().upper()
+        name = (r.get("name") or "").strip()
+        lat_s = (r.get("latitude_deg") or "").strip()
+        lon_s = (r.get("longitude_deg") or "").strip()
+        elev_s = (r.get("elevation_ft") or "0").strip()
+        country = (r.get("iso_country") or "").strip().upper()
+
+        if not icao or not lat_s or not lon_s:
+            continue
+        try:
+            lat = round(float(lat_s), 5)
+            lon = round(float(lon_s), 5)
+            elev = int(float(elev_s)) if elev_s else 0
+        except ValueError:
+            continue
+
+        rows.append((icao, country, lat, lon, elev, name))
+
+    out_path = "app/src/main/assets/airports.csv"
+    os.makedirs(os.path.dirname(out_path), exist_ok=True)
+    with open(out_path, "w", newline="", encoding="utf-8") as f:
+        w = csv.writer(f)
+        w.writerow(["#version", today_iso, "source", "OurAirports"])
+        w.writerow(["icao", "country", "latitude", "longitude", "elevation_ft", "name"])
+        for row in sorted(rows, key=lambda x: x[0]):
+            w.writerow(row)
+
+    manifest_sources.append({
+        "dataset": "airports",
+        "name": "Worldwide Airport Reference & Elevations Master",
+        "file": "airports.csv",
+        "url": AIRPORTS_URL,
+        "provider": "OurAirports",
+        "license": "Public Domain (CC0 1.0)",
+        "sourceVersionOrCycle": today_iso,
+        "recordCount": len(rows),
+        "sizeBytes": os.path.getsize(out_path),
+        "sha256": sha256_file(out_path),
+        "coverage": "Global airport coordinates, elevations MSL, and identifiers",
+        "downloadedAt": now_iso,
+    })
+
+
+def build_commercial_ifr_airways_and_waypoints(now_iso: str, manifest_sources: list):
+    awy_raw, used_awy_url = download_with_fallback(AWY_URLS)
+    try:
+        awy_text = gzip.decompress(awy_raw).decode("latin-1", errors="ignore")
+    except Exception:
+        awy_text = awy_raw.decode("latin-1", errors="ignore")
+
+    awy_lines = awy_text.splitlines()
+    awy_meta = extract_xp_header_metadata(awy_lines)
+
+    awy_segments = []
+    airway_fixes = {}
+
+    for line in awy_lines[2:]:
+        s = line.strip()
+        if not s or s == "99":
+            continue
+        parts = s.split()
+        if len(parts) >= 10:
+            try:
+                fix1 = parts[0].strip().upper()
+                lat1 = round(float(parts[1]), 5)
+                lon1 = round(float(parts[2]), 5)
+                fix2 = parts[3].strip().upper()
+                lat2 = round(float(parts[4]), 5)
+                lon2 = round(float(parts[5]), 5)
+                dir_code = parts[6].strip()
+                layer_code = parts[7].strip()
+                base_fl = int(float(parts[8]))
+                top_fl = int(float(parts[9]))
+                designators = parts[9 if len(parts) == 10 else 10].strip().upper().split("-")
+
+                if not (-90.0 <= lat1 <= 90.0 and -180.0 <= lon1 <= 180.0):
+                    continue
+                if not (-90.0 <= lat2 <= 90.0 and -180.0 <= lon2 <= 180.0):
+                    continue
+
+                direction = "F" if dir_code == "1" else "B"
+                level = "H" if layer_code == "2" else "L"
+
+                airway_fixes[(fix1, round(lat1, 1), round(lon1, 1))] = (fix1, lat1, lon1, "IFR_AWY")
+                airway_fixes[(fix2, round(lat2, 1), round(lon2, 1))] = (fix2, lat2, lon2, "IFR_AWY")
+
+                for awy_id in designators:
+                    if not awy_id or awy_id == "99":
+                        continue
+                    awy_segments.append((
+                        awy_id, fix1, lat1, lon1, fix2, lat2, lon2, direction, level, base_fl * 100, top_fl * 100
+                    ))
+            except ValueError:
+                continue
+
+    wp_path = "navigation/waypoints/waypoints.csv"
+    with open(wp_path, "w", newline="", encoding="utf-8") as f:
+        w = csv.writer(f)
+        w.writerow(["#source_version", awy_meta["sourceDataCycle"], "spec", awy_meta["specVersion"]])
+        w.writerow(["id", "latitude", "longitude", "region"])
+        for row in sorted(airway_fixes.values(), key=lambda x: (x[0], x[1])):
+            w.writerow(row)
+
+    manifest_sources.append({
+        "dataset": "waypoints",
+        "name": "Worldwide Commercial IFR En-Route Waypoints",
+        "file": wp_path,
+        "url": used_awy_url,
+        "provider": "FlightGear / X-Plane Open Navigation Database",
+        "license": "GNU General Public License v2 (GPLv2)",
+        "sourceVersionOrCycle": awy_meta["sourceDataCycle"],
+        "recordCount": len(airway_fixes),
+        "sizeBytes": os.path.getsize(wp_path),
+        "sha256": sha256_file(wp_path),
+        "coverage": "Global 5LNC IFR waypoints connected to published airways",
+        "downloadedAt": now_iso,
+    })
+
+    awy_path = "navigation/airways/airways.csv"
+    with open(awy_path, "w", newline="", encoding="utf-8") as f:
+        w = csv.writer(f)
+        w.writerow(["#source_version", awy_meta["sourceDataCycle"], "spec", awy_meta["specVersion"]])
+        w.writerow(["airway_id", "from_fix", "from_lat", "from_lon", "to_fix", "to_lat", "to_lon", "dir", "level", "min_alt_ft", "max_alt_ft"])
+        for seg in awy_segments:
+            w.writerow(seg)
+
+    manifest_sources.append({
+        "dataset": "airways",
+        "name": "Worldwide Published High & Low IFR Airways",
+        "file": awy_path,
+        "url": used_awy_url,
+        "provider": "FlightGear / X-Plane Open Navigation Database",
+        "license": "GNU General Public License v2 (GPLv2)",
+        "sourceVersionOrCycle": awy_meta["sourceDataCycle"],
+        "recordCount": len(awy_segments),
+        "sizeBytes": os.path.getsize(awy_path),
+        "sha256": sha256_file(awy_path),
+        "coverage": "Global High & Low IFR Airway Segments",
+        "downloadedAt": now_iso,
+    })
+
+
+def build_commercial_navaids(today_iso: str, now_iso: str, manifest_sources: list):
+    raw_text = download_bytes(NAVAIDS_URL).decode("utf-8", errors="ignore")
     reader = csv.DictReader(io.StringIO(raw_text))
     rows = []
 
@@ -95,7 +286,7 @@ def build_compact_navaids(today_iso: str, now_iso: str, manifest_sources: list):
 
     manifest_sources.append({
         "dataset": "navaids",
-        "name": "Worldwide VOR, VOR/DME, DME & NDB Navaids (Compact)",
+        "name": "Worldwide Radio Navaids",
         "file": out_path,
         "url": NAVAIDS_URL,
         "provider": "OurAirports",
@@ -104,14 +295,13 @@ def build_compact_navaids(today_iso: str, now_iso: str, manifest_sources: list):
         "recordCount": len(rows),
         "sizeBytes": os.path.getsize(out_path),
         "sha256": sha256_file(out_path),
-        "coverage": "Global Radio Navigation Aids",
+        "coverage": "Global VOR, VOR/DME, DME, NDB",
         "downloadedAt": now_iso,
     })
 
 
-def build_compact_runways(today_iso: str, now_iso: str, manifest_sources: list):
-    print("Downloading & compacting OurAirports Runways...")
-    raw_text = download_text(RUNWAYS_URL)
+def build_commercial_runways(today_iso: str, now_iso: str, manifest_sources: list):
+    raw_text = download_bytes(RUNWAYS_URL).decode("utf-8", errors="ignore")
     reader = csv.DictReader(io.StringIO(raw_text))
     rows = []
 
@@ -127,10 +317,7 @@ def build_compact_runways(today_iso: str, now_iso: str, manifest_sources: list):
         le_hdg_s = (r.get("le_heading_degT") or "").strip()
         he_hdg_s = (r.get("he_heading_degT") or "").strip()
 
-        if not apt or len(apt) < 3 or not le_ident:
-            continue
-        # Skip helipads ("H1")
-        if le_ident.startswith("H"):
+        if not apt or len(apt) != 4 or not le_ident or le_ident.startswith("H"):
             continue
 
         try:
@@ -138,9 +325,8 @@ def build_compact_runways(today_iso: str, now_iso: str, manifest_sources: list):
         except ValueError:
             length_ft = 0
 
-        # Keep runways >= 2,200 ft (or any lighted/paved commercial/training runway)
         is_paved = any(k in surface for k in PAVED_KEYWORDS)
-        if length_ft < 2200 and not is_paved:
+        if length_ft < 4000 or not is_paved:
             continue
 
         try:
@@ -165,7 +351,7 @@ def build_compact_runways(today_iso: str, now_iso: str, manifest_sources: list):
 
     manifest_sources.append({
         "dataset": "runways",
-        "name": "Worldwide Operational Runways (Compact)",
+        "name": "Worldwide Commercial Paved Runways (>= 4,000 ft)",
         "file": out_path,
         "url": RUNWAYS_URL,
         "provider": "OurAirports",
@@ -174,68 +360,27 @@ def build_compact_runways(today_iso: str, now_iso: str, manifest_sources: list):
         "recordCount": len(rows),
         "sizeBytes": os.path.getsize(out_path),
         "sha256": sha256_file(out_path),
-        "coverage": "Global operational runways >= 2,200 ft (headings, lengths, lighting)",
-        "downloadedAt": now_iso,
-    })
-
-
-def build_compact_airline_routes(today_iso: str, now_iso: str, manifest_sources: list):
-    print("Downloading & deduplicating OpenFlights Airline Connections...")
-    raw_text = download_text(ROUTES_URL)
-    pair_airlines = {}
-
-    for line in raw_text.splitlines():
-        parts = line.strip().split(",")
-        # OpenFlights routes.dat: 0:airline, 1:id, 2:src_iata, 3:src_id, 4:dst_iata, 5:dst_id
-        if len(parts) >= 5:
-            airline = parts[0].strip().upper()
-            dep = parts[2].strip().upper()
-            arr = parts[4].strip().upper()
-            if len(dep) in (3, 4) and len(arr) in (3, 4) and dep != arr:
-                key = (dep, arr)
-                if key not in pair_airlines:
-                    pair_airlines[key] = set()
-                if airline and airline != "\\N":
-                    pair_airlines[key].add(airline)
-
-    out_path = "navigation/airline_routes/airline_routes.csv"
-    with open(out_path, "w", newline="", encoding="utf-8") as f:
-        w = csv.writer(f)
-        w.writerow(["#source_version", today_iso, "provider", "OpenFlights"])
-        w.writerow(["dep_code", "arr_code", "operators"])
-        for (dep, arr), ops in sorted(pair_airlines.items()):
-            w.writerow([dep, arr, "|".join(sorted(list(ops))[:8])])
-
-    manifest_sources.append({
-        "dataset": "airline_routes",
-        "name": "Deduplicated Commercial City-Pair Connections",
-        "file": out_path,
-        "url": ROUTES_URL,
-        "provider": "OpenFlights",
-        "license": "Open Database License (ODbL 1.0)",
-        "sourceVersionOrCycle": today_iso,
-        "recordCount": len(pair_airlines),
-        "sizeBytes": os.path.getsize(out_path),
-        "sha256": sha256_file(out_path),
-        "coverage": "Global commercial city pairs and operating airline codes",
+        "coverage": "Global paved commercial runways >= 4,000 ft",
         "downloadedAt": now_iso,
     })
 
 
 def main():
-    clean_heavy_files()
+    prepare_dirs()
     today_iso = datetime.date.today().isoformat()
     now_iso = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
     manifest_sources = []
 
-    build_compact_navaids(today_iso, now_iso, manifest_sources)
-    build_compact_runways(today_iso, now_iso, manifest_sources)
-    build_compact_airline_routes(today_iso, now_iso, manifest_sources)
+    build_airports_master(today_iso, now_iso, manifest_sources)
+    build_commercial_navaids(today_iso, now_iso, manifest_sources)
+    build_commercial_runways(today_iso, now_iso, manifest_sources)
+    build_commercial_ifr_airways_and_waypoints(now_iso, manifest_sources)
 
     total_bytes = sum(s["sizeBytes"] for s in manifest_sources)
     manifest = {
-        "schemaVersion": 6,
+        "schemaVersion": 7,
         "generatedAtUtc": now_iso,
+        "targetProfile": "Commercial IFR Airline Operations",
         "totalNavigationAssetsSizeBytes": total_bytes,
         "totalNavigationAssetsSizeMb": round(total_bytes / (1024 * 1024), 2),
         "dataSources": manifest_sources,
@@ -243,7 +388,7 @@ def main():
 
     with open("navigation_manifest.json", "w", encoding="utf-8") as f:
         json.dump(manifest, f, indent=2)
-    print(f"Done! Total size of all navigation datasets: {round(total_bytes / (1024 * 1024), 2)} MB")
+    print(f"Success! Complete Commercial Database built ({round(total_bytes / (1024 * 1024), 2)} MB total).")
 
 
 if __name__ == "__main__":
