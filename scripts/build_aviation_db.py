@@ -13,7 +13,6 @@ import hashlib
 import io
 import json
 import os
-import re
 import urllib.request
 import zipfile
 
@@ -30,7 +29,6 @@ def get_active_airac(target_date: datetime.date = None):
     idx = (days // 28)
     eff_date = AIRAC_EPOCH + datetime.timedelta(days=idx * 28)
     exp_date = eff_date + datetime.timedelta(days=27)
-    # Compute year and cycle number within that year
     year_short = eff_date.year % 100
     jan1 = datetime.date(eff_date.year, 1, 1)
     cycle_in_year = ((eff_date - jan1).days // 28) + 1
@@ -47,7 +45,7 @@ def get_active_airac(target_date: datetime.date = None):
 
 def download_bytes(url: str) -> bytes:
     req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
-    with urllib.request.urlopen(req, timeout=60) as resp:
+    with urllib.request.urlopen(req, timeout=90) as resp:
         return resp.read()
 
 
@@ -109,10 +107,6 @@ def process_faa_cifp(airac_info: dict, manifest_sources: list):
         print(f"WARNING: Could not download {url}: {e}")
         return False
 
-    zip_path = os.path.join("procedures/source_data", airac_info["cifpZipName"])
-    with open(zip_path, "wb") as f:
-        f.write(raw_zip)
-
     waypoints = {}
     airways = []
     sids = []
@@ -129,20 +123,26 @@ def process_faa_cifp(airac_info: dict, manifest_sources: list):
             for raw_line in io.TextIOWrapper(raw_arinc, encoding="latin-1", errors="ignore"):
                 if len(raw_line) < 120 or not raw_line.startswith("SUS"):
                     continue
-                sec = raw_line[4]
-                sub = raw_line[5]
 
-                # 1. En-route Waypoints (Section EA)
-                if sec == "E" and sub == "A":
+                sec = raw_line[4]
+                sub_col6 = raw_line[5]      # Used by En-route (EA, ER)
+                sub_col13 = raw_line[12]    # Used by Airport (PC, PD, PE, PF)
+                cont_no = raw_line[38]      # Primary record continuation number ('0' or '1')
+
+                # 1. En-route Waypoints (Section EA) & Terminal Waypoints (Section PC)
+                if (sec == "E" and sub_col6 == "A") or (sec == "P" and sub_col13 == "C"):
                     fix_id = raw_line[13:18].strip()
                     region = raw_line[19:21].strip()
                     lat, lon = parse_arinc_lat_lon(raw_line[32:41], raw_line[41:51])
                     name = raw_line[98:123].strip()
+                    src_tag = "FAA_CIFP_EA" if sec == "E" else "FAA_CIFP_PC"
                     if fix_id and lat is not None and lon is not None:
-                        waypoints[f"{fix_id}_{region}"] = (fix_id, name or fix_id, lat, lon, region, "FAA_CIFP_EA")
+                        waypoints[f"{fix_id}_{region}"] = (fix_id, name or fix_id, lat, lon, region, src_tag)
 
                 # 2. En-route Airways (Section ER)
-                elif sec == "E" and sub == "R":
+                elif sec == "E" and sub_col6 == "R":
+                    if cont_no not in ("0", "1", " "):
+                        continue
                     awy_id = raw_line[13:18].strip()
                     seq_no = raw_line[25:29].strip()
                     fix_id = raw_line[29:34].strip()
@@ -152,12 +152,15 @@ def process_faa_cifp(airac_info: dict, manifest_sources: list):
                     if awy_id and fix_id and seq_no.isdigit():
                         airways.append((awy_id, int(seq_no), fix_id, region, min_alt, max_alt, "FAA_CIFP_ER"))
 
-                # 3. Terminal Procedures: SIDs (PD), STARs (PE), Approaches (PF)
-                elif sec == "P" and sub in ("D", "E", "F"):
+                # 3. Airport Procedures: SIDs (PD), STARs (PE), Approaches (PF)
+                # In ARINC 424-18, sec (index 4) is 'P', index 5 is ' ', and subsection (index 12) is 'D', 'E', or 'F'
+                elif sec == "P" and sub_col13 in ("D", "E", "F"):
+                    # Only parse primary leg records (continuation number '0' or '1' at index 38)
+                    if cont_no not in ("0", "1"):
+                        continue
                     apt_icao = raw_line[6:10].strip()
-                    proc_sub = raw_line[12] if sub == "P" else sub
                     proc_id = raw_line[13:19].strip()
-                    route_type = raw_line[19]
+                    route_type = raw_line[19].strip()
                     trans_id = raw_line[20:25].strip()
                     seq_no = raw_line[26:29].strip()
                     fix_id = raw_line[29:34].strip()
@@ -169,13 +172,27 @@ def process_faa_cifp(airac_info: dict, manifest_sources: list):
                     if not apt_icao or not proc_id or not seq_no.isdigit():
                         continue
 
-                    row = (apt_icao, proc_id, route_type, trans_id, int(seq_no), fix_id, path_term, alt_desc, alt1, spd_limit, f"FAA_CIFP_{airac_info['cycleId']}")
-                    if sub == "D":
+                    row = (
+                        apt_icao,
+                        proc_id,
+                        route_type,
+                        trans_id,
+                        int(seq_no),
+                        fix_id,
+                        path_term,
+                        alt_desc,
+                        alt1,
+                        spd_limit,
+                        f"FAA_CIFP_{airac_info['cycleId']}",
+                    )
+                    if sub_col13 == "D":
                         sids.append(row)
-                    elif sub == "E":
+                    elif sub_col13 == "E":
                         stars.append(row)
-                    elif sub == "F":
+                    elif sub_col13 == "F":
                         approaches.append(row)
+
+    print(f"Parsed counts -> Waypoints: {len(waypoints)}, Airways raw: {len(airways)}, SIDs: {len(sids)}, STARs: {len(stars)}, Approaches: {len(approaches)}")
 
     # Write Waypoints CSV
     wp_path = "navigation/waypoints/waypoints.csv"
@@ -219,8 +236,8 @@ def process_faa_cifp(airac_info: dict, manifest_sources: list):
 
     now_iso = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
     for label, path, count, cov in [
-        ("FAA CIFP En-Route Waypoints", wp_path, len(waypoints), "US & FAA National Airspace System 5LNC Fixes"),
-        ("FAA CIFP Published Airways", awy_path, len(awy_segments), "US & Oceanic Published En-Route Airways"),
+        ("FAA CIFP En-Route & Terminal Waypoints", wp_path, len(waypoints), "US & FAA NAS 5LNC En-Route (EA) & Terminal (PC) Fixes"),
+        ("FAA CIFP Published Airways", awy_path, len(awy_segments), "US & Oceanic Published En-Route Airways (ER)"),
         ("FAA CIFP Published SIDs (ARINC 424 PD)", "procedures/sids/sids.csv", len(sids), "US Departure Procedures with Path Terminators"),
         ("FAA CIFP Published STARs (ARINC 424 PE)", "procedures/stars/stars.csv", len(stars), "US Arrival Procedures with Path Terminators"),
         ("FAA CIFP Instrument Approaches (ARINC 424 PF)", "procedures/approaches/approaches.csv", len(approaches), "US Instrument Approaches"),
@@ -240,10 +257,7 @@ def process_faa_cifp(airac_info: dict, manifest_sources: list):
             "downloadedAt": now_iso,
         })
 
-    # Remove the raw zip before committing if you want to keep repo size lean, or keep if under 50MB
-    if os.path.exists(zip_path):
-        os.remove(zip_path)
-    return True
+    return len(sids) > 0 and len(stars) > 0
 
 
 def download_ourairports_and_openflights(manifest_sources: list):
@@ -272,7 +286,6 @@ def download_ourairports_and_openflights(manifest_sources: list):
         ),
     ]
 
-    # Clean up old misclassified routes.dat if present
     old_routes_path = "navigation/airways/routes.dat"
     if os.path.exists(old_routes_path):
         os.remove(old_routes_path)
