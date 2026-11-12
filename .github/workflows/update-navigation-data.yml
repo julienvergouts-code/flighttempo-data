@@ -36,7 +36,7 @@ jobs:
         run: python3 -m unittest discover -s tests -v
       - name: Build OurAirports reference datasets
         run: python3 scripts/build_aviation_db.py
-      - name: Import optional IFR route network
+      - name: Import optional global IFR fixes and navaids
         run: |
           python3 scripts/import_xplane_navdata.py \
             --source-dir navigation/sources/flightgear \
