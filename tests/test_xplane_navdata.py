@@ -1,4 +1,5 @@
 import gzip
+import json
 import hashlib
 import sys
 import tempfile
@@ -10,6 +11,8 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
 
 from import_xplane_navdata import (
+    import_navdata,
+    locate_source_files,
     parse_airways,
     parse_fixes,
     parse_navaids,
@@ -28,6 +31,57 @@ def source(lines, name, version="1101"):
 
 
 class XPlaneNavdataTests(unittest.TestCase):
+    def test_airways_are_not_required_or_imported_by_default(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            source_dir = root / "source"
+            source_dir.mkdir()
+            header_fix = "XPFIX 1101 Version - data cycle 2026 build 20261101"
+            header_nav = "XPNAV 1100 Version - data cycle 2026 build 20261101"
+            (source_dir / "earth_fix.dat").write_text(
+                "I\n" + header_fix + "\n"
+                + "50.10000000 4.20000000 ABCDE ENRT EB 4530263\n"
+                + "99\n",
+                encoding="utf-8",
+            )
+            (source_dir / "earth_nav.dat").write_text(
+                "I\n" + header_nav + "\n"
+                + "3 50.30000000 4.40000000 350 11340 130 2.5 VOR1 ENRT EB TEST VOR\n"
+                + "99\n",
+                encoding="utf-8",
+            )
+            # An airway file may exist in a source bundle, but the MVP must
+            # ignore it unless the operator explicitly opts in.
+            (source_dir / "earth_awy.dat").write_text(
+                "I\nXPAWY 1100 Version - data cycle 2026 build 20261101\n"
+                + "FIX01 EB 11 VOR1 EB 3 F 2 180 450 UQ1\n99\n",
+                encoding="utf-8",
+            )
+            (source_dir / "source-manifest.json").write_text(json.dumps({
+                "provider": "Unit test only",
+                "license": "Test fixture licence",
+                "redistributable": True,
+            }), encoding="utf-8")
+
+            located, missing = locate_source_files(source_dir)
+            self.assertEqual(missing, [])
+            self.assertEqual(set(located), {"fixes", "navaids"})
+
+            manifest_path = root / "navigation_manifest.json"
+            result = import_navdata(source_dir, root, manifest_path)
+            self.assertEqual(result["status"], "imported")
+            self.assertFalse(result["airwaysIncluded"])
+            self.assertEqual(result["airwaySegments"], 0)
+            self.assertTrue((root / "navigation/waypoints/flightgear_fixes.csv").is_file())
+            self.assertTrue((root / "navigation/navaids/flightgear_navaids.csv").is_file())
+            self.assertFalse((root / "navigation/airways/flightgear_airway_segments.csv").exists())
+
+            manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+            self.assertTrue(manifest["capabilities"]["independentWaypoints"])
+            self.assertTrue(manifest["capabilities"]["flightgearNavaids"])
+            self.assertFalse(manifest["capabilities"]["publishedAirways"])
+            self.assertEqual(manifest["statistics"]["airwaySegments"], 0)
+
     def test_fix_parser_uses_actual_xpfix_field_layout(self):
         fixes, rejected = parse_fixes(source([
             "50.10000000 4.20000000 ABCDE ENRT EB 4530263",

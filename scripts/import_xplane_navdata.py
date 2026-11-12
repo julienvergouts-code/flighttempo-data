@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 """Lossless import of X-Plane/FlightGear-compatible IFR navigation text files.
 
-Reads user-provided earth_fix.dat, earth_nav.dat and earth_awy.dat files.
-No source files are downloaded and no licence is inferred from their format.
+Reads user-provided earth_fix.dat and earth_nav.dat files. An optional
+earth_awy.dat may be retained for a future airway-routing phase, but is not
+required or imported by default. No source files are downloaded and no licence
+is inferred from their format.
 """
 
 from __future__ import annotations
@@ -22,6 +24,8 @@ ROOT = Path(__file__).resolve().parents[1]
 INPUT_NAMES = {
     "fixes": ("earth_fix.dat", "fix.dat", "earth_fix.dat.gz", "fix.dat.gz"),
     "navaids": ("earth_nav.dat", "nav.dat", "earth_nav.dat.gz", "nav.dat.gz"),
+}
+OPTIONAL_INPUT_NAMES = {
     "airways": ("earth_awy.dat", "awy.dat", "earth_awy.dat.gz", "awy.dat.gz"),
 }
 OUTPUTS = {
@@ -116,7 +120,8 @@ def read_source_file(path: Path, kind: str):
     }
 
 
-def locate_source_files(source_dir: Path):
+def locate_source_files(source_dir: Path, include_airways=False):
+    """Locate required fixes/navaids and optionally explicitly requested airway data."""
     located, missing = {}, []
     for kind, candidates in INPUT_NAMES.items():
         path = next((source_dir / name for name in candidates if (source_dir / name).is_file()), None)
@@ -124,6 +129,11 @@ def locate_source_files(source_dir: Path):
             missing.append(" or ".join(candidates))
         else:
             located[kind] = path
+    if include_airways:
+        for kind, candidates in OPTIONAL_INPUT_NAMES.items():
+            path = next((source_dir / name for name in candidates if (source_dir / name).is_file()), None)
+            if path is not None:
+                located[kind] = path
     return located, missing
 
 
@@ -132,7 +142,7 @@ def validate_source_cycles(sources):
     cycles_by_kind = {kind: src.get("data_cycle", "unknown") for kind, src in sources.items()}
     if "unknown" in cycles_by_kind.values() or len(set(cycles_by_kind.values())) != 1:
         raise ValueError(
-            "All three IFR source headers must declare the same known data-cycle token; "
+            "All supplied IFR source headers must declare the same known data-cycle token; "
             f"found {cycles_by_kind}. Mixed or missing cycles must not be combined."
         )
     return next(iter(cycles_by_kind.values()))
@@ -441,6 +451,12 @@ def update_manifest(manifest_path: Path, root: Path, import_meta=None):
         file_summary(root, "flightgear_navaids", OUTPUTS["flightgear_navaids"], import_meta),
         file_summary(root, "flightgear_airway_segments", OUTPUTS["flightgear_airway_segments"], import_meta),
     ]
+    # Airway data is intentionally disabled in the MVP unless explicitly imported.
+    airways_included = bool(import_meta.get("airwaysIncluded", False))
+    datasets[5]["available"] = bool(datasets[5]["available"] and airways_included)
+    datasets[5]["status"] = "verified" if datasets[5]["available"] else (
+        "present_but_disabled" if datasets[5]["recordCount"] > 0 else "not_imported"
+    )
     capabilities = manifest.setdefault("capabilities", {})
     for dataset_id, relative_path, capability in (
         ("sids", "procedures/sids/sids.csv", "sids"),
@@ -484,8 +500,8 @@ def update_manifest(manifest_path: Path, root: Path, import_meta=None):
     statistics["flightgearNavaids"] = datasets[4]["recordCount"] if datasets[4]["available"] else 0
     airway_counts = (import_meta or {}).get("counts", {})
     statistics["airwaySegments"] = datasets[5]["recordCount"] if datasets[5]["available"] else 0
-    statistics["lowAirwaySegments"] = airway_counts.get("lowAirwaySegments", 0)
-    statistics["highAirwaySegments"] = airway_counts.get("highAirwaySegments", 0)
+    statistics["lowAirwaySegments"] = airway_counts.get("lowAirwaySegments", 0) if datasets[5]["available"] else 0
+    statistics["highAirwaySegments"] = airway_counts.get("highAirwaySegments", 0) if datasets[5]["available"] else 0
 
     manifest_path.parent.mkdir(parents=True, exist_ok=True)
     temp_path = manifest_path.with_suffix(manifest_path.suffix + ".tmp")
@@ -494,13 +510,19 @@ def update_manifest(manifest_path: Path, root: Path, import_meta=None):
     return manifest
 
 
-def import_navdata(source_dir: Path, root: Path, manifest_path: Path, optional=False):
-    located, missing = locate_source_files(source_dir)
+def import_navdata(
+    source_dir: Path,
+    root: Path,
+    manifest_path: Path,
+    optional=False,
+    include_airways=False,
+):
+    located, missing = locate_source_files(source_dir, include_airways=include_airways)
     if missing:
         if not optional:
-            raise FileNotFoundError(f"Missing IFR source files in {source_dir}: {', '.join(missing)}")
+            raise FileNotFoundError(f"Missing required IFR fixes/navaids files in {source_dir}: {', '.join(missing)}")
         update_manifest(manifest_path, root)
-        print(f"[FlightTempo] IFR import skipped; missing: {', '.join(missing)}")
+        print(f"[FlightTempo] IFR fixes/navaids import skipped; missing: {', '.join(missing)}")
         return {"status": "skipped_missing_source", "missing": missing}
 
     sources = {kind: read_source_file(path, kind) for kind, path in located.items()}
@@ -508,11 +530,18 @@ def import_navdata(source_dir: Path, root: Path, manifest_path: Path, optional=F
 
     fixes, rejected_fixes = parse_fixes(sources["fixes"])
     navaids, rejected_navaids = parse_navaids(sources["navaids"])
-    airways, rejected_airways, unresolved_segments, ambiguous_endpoints = parse_airways(
-        sources["airways"], fixes, navaids
-    )
-    if not fixes or not navaids or not airways:
-        raise ValueError("One or more IFR source files produced zero valid records; refusing to publish")
+    if not fixes or not navaids:
+        raise ValueError("Fixes or navaids produced zero valid records; refusing to publish")
+
+    airways_included = "airways" in sources
+    airways, rejected_airways = [], 0
+    unresolved_segments, ambiguous_endpoints = 0, 0
+    if airways_included:
+        airways, rejected_airways, unresolved_segments, ambiguous_endpoints = parse_airways(
+            sources["airways"], fixes, navaids
+        )
+        if not airways:
+            raise ValueError("Optional airway file was supplied but produced zero valid segments")
 
     source_manifest = source_dir / "source-manifest.json"
     supplied = json.loads(source_manifest.read_text(encoding="utf-8")) if source_manifest.exists() else {}
@@ -538,6 +567,7 @@ def import_navdata(source_dir: Path, root: Path, manifest_path: Path, optional=F
         "licenseUrl": supplied.get("licenseUrl", ""),
         "dataCycle": data_cycle,
         "formatVersions": {kind: src["format_version"] for kind, src in sources.items()},
+        "airwaysIncluded": airways_included,
         "files": [{
             "kind": kind, "fileName": src["file_name"],
             "sha256": sha256(src["raw"]), "payloadSha256": src["payload_sha256"],
@@ -567,23 +597,35 @@ def import_navdata(source_dir: Path, root: Path, manifest_path: Path, optional=F
         staged = {
             "flightgear_fixes": Path(temporary) / "fixes.csv",
             "flightgear_navaids": Path(temporary) / "navaids.csv",
-            "flightgear_airway_segments": Path(temporary) / "airways.csv",
         }
-        for name, rows in (
-            ("flightgear_fixes", fixes),
-            ("flightgear_navaids", navaids),
-            ("flightgear_airway_segments", airways),
-        ):
-            write_csv(staged[name], rows)
-        # Replace all three normalized files only after all have been generated.
+        write_csv(staged["flightgear_fixes"], fixes)
+        write_csv(staged["flightgear_navaids"], navaids)
+        if airways_included:
+            staged["flightgear_airway_segments"] = Path(temporary) / "airways.csv"
+            write_csv(staged["flightgear_airway_segments"], airways)
+
+        # Replace the required files only after both normalized datasets exist.
+        # A legacy airway file is left untouched but disabled in the manifest
+        # unless this import explicitly opted in to airway processing.
         for name, staged_path in staged.items():
             destination = root / OUTPUTS[name]
             destination.parent.mkdir(parents=True, exist_ok=True)
             os.replace(staged_path, destination)
 
+        if airways_included:
+            destination = root / OUTPUTS["flightgear_airway_segments"]
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            os.replace(staged["flightgear_airway_segments"], destination)
+
     update_manifest(manifest_path, root, metadata)
-    print("[FlightTempo] IFR import complete: " + json.dumps(metadata["counts"] | metadata["airwayResolution"]))
-    return {"status": "imported", **metadata["counts"], **metadata["airwayResolution"]}
+    result = {
+        "status": "imported",
+        **metadata["counts"],
+        **metadata["airwayResolution"],
+        "airwaysIncluded": airways_included,
+    }
+    print("[FlightTempo] IFR fixes/navaids import complete: " + json.dumps(result))
+    return result
 
 
 def main():
@@ -592,8 +634,19 @@ def main():
     parser.add_argument("--root", type=Path, default=ROOT)
     parser.add_argument("--manifest", type=Path, default=ROOT / "navigation_manifest.json")
     parser.add_argument("--optional", action="store_true")
+    parser.add_argument(
+        "--include-airways",
+        action="store_true",
+        help="Explicitly include earth_awy.dat; ignored by default in the FlightTempo MVP.",
+    )
     args = parser.parse_args()
-    import_navdata(args.source_dir, args.root, args.manifest, optional=args.optional)
+    import_navdata(
+        args.source_dir,
+        args.root,
+        args.manifest,
+        optional=args.optional,
+        include_airways=args.include_airways,
+    )
 
 
 if __name__ == "__main__":
