@@ -6,9 +6,6 @@ Strictly separates:
 2. Radio Navaids (OurAirports - Public Domain CC0)
 3. En-Route Waypoints & Airway Segments (FlightGear fgdata - GNU GPLv2, actual upstream header cycle)
 4. Commercial Airline Connections (OpenFlights - ODbL 1.0, for route discovery only)
-
-Does NOT manufacture synthetic SIDs/STARs, does NOT stamp calculated AIRAC dates onto
-non-AIRAC datasets, and does NOT invent climatological runway preferences.
 """
 
 import csv
@@ -19,17 +16,21 @@ import io
 import json
 import os
 import re
+import shutil
 import urllib.request
 
-USER_AGENT = "FlightTempo-Data-Builder/3.1 (https://github.com/julienvergouts-code/flighttempo-data)"
+USER_AGENT = "FlightTempo-Data-Builder/3.2 (https://github.com/julienvergouts-code/flighttempo-data)"
+
+LOCAL_FG_FIX = "/usr/share/games/flightgear/Navaids/fix.dat.gz"
+LOCAL_FG_AWY = "/usr/share/games/flightgear/Navaids/awy.dat.gz"
 
 FG_FIX_URLS = [
+    "https://gitlab.com/flightgear/fgdata/-/raw/release/2024.1/Navaids/fix.dat.gz",
     "https://sourceforge.net/p/flightgear/fgdata/ci/next/tree/Navaids/fix.dat.gz?format=raw",
-    "https://gitlab.com/flightgear/fgdata/-/raw/next/Navaids/fix.dat.gz",
 ]
 FG_AWY_URLS = [
+    "https://gitlab.com/flightgear/fgdata/-/raw/release/2024.1/Navaids/awy.dat.gz",
     "https://sourceforge.net/p/flightgear/fgdata/ci/next/tree/Navaids/awy.dat.gz?format=raw",
-    "https://gitlab.com/flightgear/fgdata/-/raw/next/Navaids/awy.dat.gz",
 ]
 
 
@@ -64,7 +65,6 @@ def ensure_dirs():
 
 
 def extract_xp_header_metadata(lines: list) -> dict:
-    """Reads the actual X-Plane/FlightGear file header (lines 1-2) to extract genuine spec version & cycle."""
     spec_version = "unknown"
     data_cycle = "unknown"
     raw_header = ""
@@ -87,189 +87,176 @@ def extract_xp_header_metadata(lines: list) -> dict:
     }
 
 
+def load_fg_file(local_path: str, urls: list):
+    if os.path.exists(local_path):
+        print(f"Loading local system package file: {local_path}")
+        with open(local_path, "rb") as f:
+            return f.read(), f"ubuntu:flightgear-data-base ({local_path})"
+    for url in urls:
+        try:
+            print(f"Downloading from {url} ...")
+            return download_bytes(url, timeout=120), url
+        except Exception as e:
+            print(f"Mirror failed ({url}): {e}")
+    raise RuntimeError(f"Could not load {local_path} or any mirror URL")
+
+
 def process_flightgear_navigation(manifest_sources: list):
     now_iso = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
     # 1. En-Route Fixes (fix.dat.gz)
-    fix_raw, used_fix_url = None, ""
-    for url in FG_FIX_URLS:
-        try:
-            print(f"Downloading FlightGear fix.dat.gz from {url} ...")
-            fix_raw = download_bytes(url, timeout=120)
-            used_fix_url = url
-            break
-        except Exception as e:
-            print(f"Mirror failed ({url}): {e}")
+    fix_raw, used_fix_url = load_fg_file(LOCAL_FG_FIX, FG_FIX_URLS)
+    with open("navigation/sources/fix.dat.gz", "wb") as f:
+        f.write(fix_raw)
 
-    if fix_raw:
-        with open("navigation/sources/fix.dat.gz", "wb") as f:
-            f.write(fix_raw)
+    try:
+        text = gzip.decompress(fix_raw).decode("latin-1", errors="ignore")
+    except Exception:
+        text = fix_raw.decode("latin-1", errors="ignore")
 
-        try:
-            text = gzip.decompress(fix_raw).decode("latin-1", errors="ignore")
-        except Exception:
-            text = fix_raw.decode("latin-1", errors="ignore")
+    lines = text.splitlines()
+    meta = extract_xp_header_metadata(lines)
+    waypoints = []
 
-        lines = text.splitlines()
-        meta = extract_xp_header_metadata(lines)
-        waypoints = []
-
-        for line in lines[2:]:
-            s = line.strip()
-            if not s or s == "99":
+    for line in lines[2:]:
+        s = line.strip()
+        if not s or s == "99":
+            continue
+        parts = s.split()
+        if len(parts) >= 3:
+            try:
+                lat = float(parts[0])
+                lon = float(parts[1])
+                fix_id = parts[2].strip().upper()
+                terminal_apt = parts[3].strip().upper() if len(parts) >= 4 else ""
+                region = parts[4].strip().upper() if len(parts) >= 5 else ""
+                if -90.0 <= lat <= 90.0 and -180.0 <= lon <= 180.0 and 1 <= len(fix_id) <= 6:
+                    waypoints.append((
+                        fix_id,
+                        round(lat, 6),
+                        round(lon, 6),
+                        terminal_apt,
+                        region,
+                        f"FG_FIX_{meta['sourceDataCycle']}",
+                    ))
+            except ValueError:
                 continue
-            parts = s.split()
-            # Verified X-Plane 600/1100 fix.dat spec:
-            # Col 0: Latitude, Col 1: Longitude, Col 2: 5LNC Fix Identifier, [Col 3: Airport/Terminal], [Col 4: ICAO Region]
-            if len(parts) >= 3:
-                try:
-                    lat = float(parts[0])
-                    lon = float(parts[1])
-                    fix_id = parts[2].strip().upper()
-                    terminal_apt = parts[3].strip().upper() if len(parts) >= 4 else ""
-                    region = parts[4].strip().upper() if len(parts) >= 5 else ""
-                    if -90.0 <= lat <= 90.0 and -180.0 <= lon <= 180.0 and 1 <= len(fix_id) <= 6:
-                        waypoints.append((
-                            fix_id,
-                            round(lat, 6),
-                            round(lon, 6),
-                            terminal_apt,
-                            region,
-                            f"FG_FIX_{meta['sourceDataCycle']}",
-                        ))
-                except ValueError:
-                    continue
 
-        wp_path = "navigation/waypoints/waypoints.csv"
-        with open(wp_path, "w", newline="", encoding="utf-8") as f:
-            w = csv.writer(f)
-            w.writerow(["#source_version", meta["sourceDataCycle"], "spec", meta["specVersion"]])
-            w.writerow(["id", "latitude", "longitude", "terminal_airport", "icao_region", "source"])
-            for row in waypoints:
-                w.writerow(row)
+    wp_path = "navigation/waypoints/waypoints.csv"
+    with open(wp_path, "w", newline="", encoding="utf-8") as f:
+        w = csv.writer(f)
+        w.writerow(["#source_version", meta["sourceDataCycle"], "spec", meta["specVersion"]])
+        w.writerow(["id", "latitude", "longitude", "terminal_airport", "icao_region", "source"])
+        for row in waypoints:
+            w.writerow(row)
 
-        manifest_sources.append({
-            "dataset": "waypoints",
-            "name": "FlightGear / X-Plane Global En-Route Fixes",
-            "file": wp_path,
-            "originalSourceFile": "navigation/sources/fix.dat.gz",
-            "url": used_fix_url,
-            "provider": "FlightGear Open Scenery / X-Plane Robin Peel Navigation Database",
-            "license": "GNU General Public License v2 (GPLv2)",
-            "sourceVersionOrCycle": meta["sourceDataCycle"],
-            "sourceHeader": meta["rawHeader"],
-            "airacCycle": None,
-            "recordCount": len(waypoints),
-            "sizeBytes": os.path.getsize(wp_path),
-            "sha256": sha256_file(wp_path),
-            "coverage": "Global (Subject to source cycle coverage; not current operational AIRAC)",
-            "downloadedAt": now_iso,
-        })
+    manifest_sources.append({
+        "dataset": "waypoints",
+        "name": "FlightGear / X-Plane Global En-Route Fixes",
+        "file": wp_path,
+        "originalSourceFile": "navigation/sources/fix.dat.gz",
+        "url": used_fix_url,
+        "provider": "FlightGear Open Scenery / X-Plane Robin Peel Navigation Database",
+        "license": "GNU General Public License v2 (GPLv2)",
+        "sourceVersionOrCycle": meta["sourceDataCycle"],
+        "sourceHeader": meta["rawHeader"],
+        "airacCycle": None,
+        "recordCount": len(waypoints),
+        "sizeBytes": os.path.getsize(wp_path),
+        "sha256": sha256_file(wp_path),
+        "coverage": "Global (Subject to source cycle coverage; not current operational AIRAC)",
+        "downloadedAt": now_iso,
+    })
 
     # 2. Published Airway Segments (awy.dat.gz)
-    awy_raw, used_awy_url = None, ""
-    for url in FG_AWY_URLS:
-        try:
-            print(f"Downloading FlightGear awy.dat.gz from {url} ...")
-            awy_raw = download_bytes(url, timeout=120)
-            used_awy_url = url
-            break
-        except Exception as e:
-            print(f"Mirror failed ({url}): {e}")
+    awy_raw, used_awy_url = load_fg_file(LOCAL_FG_AWY, FG_AWY_URLS)
+    with open("navigation/sources/awy.dat.gz", "wb") as f:
+        f.write(awy_raw)
 
-    if awy_raw:
-        with open("navigation/sources/awy.dat.gz", "wb") as f:
-            f.write(awy_raw)
+    try:
+        text = gzip.decompress(awy_raw).decode("latin-1", errors="ignore")
+    except Exception:
+        text = awy_raw.decode("latin-1", errors="ignore")
 
-        try:
-            text = gzip.decompress(awy_raw).decode("latin-1", errors="ignore")
-        except Exception:
-            text = awy_raw.decode("latin-1", errors="ignore")
+    lines = text.splitlines()
+    meta = extract_xp_header_metadata(lines)
+    awy_segments = []
 
-        lines = text.splitlines()
-        meta = extract_xp_header_metadata(lines)
-        awy_segments = []
+    for line in lines[2:]:
+        s = line.strip()
+        if not s or s == "99":
+            continue
+        parts = s.split()
+        if len(parts) >= 10:
+            try:
+                fix1 = parts[0].strip().upper()
+                lat1 = round(float(parts[1]), 6)
+                lon1 = round(float(parts[2]), 6)
+                fix2 = parts[3].strip().upper()
+                lat2 = round(float(parts[4]), 6)
+                lon2 = round(float(parts[5]), 6)
+                dir_code = parts[6].strip()
+                layer_code = parts[7].strip()
+                base_fl = int(float(parts[8]))
+                top_fl = int(float(parts[9]))
+                designators = parts[9 if len(parts) == 10 else 10].strip().upper().split("-")
 
-        for line in lines[2:]:
-            s = line.strip()
-            if not s or s == "99":
-                continue
-            parts = s.split()
-            # Verified X-Plane 640/1100 awy.dat spec:
-            # 0:fix1, 1:lat1, 2:lon1, 3:fix2, 4:lat2, 5:lon2, 6:dir(1=F,2=B), 7:layer(1=low,2=high), 8:base_fl, 9:top_fl, 10:airway_designators
-            if len(parts) >= 10:
-                try:
-                    fix1 = parts[0].strip().upper()
-                    lat1 = round(float(parts[1]), 6)
-                    lon1 = round(float(parts[2]), 6)
-                    fix2 = parts[3].strip().upper()
-                    lat2 = round(float(parts[4]), 6)
-                    lon2 = round(float(parts[5]), 6)
-                    dir_code = parts[6].strip()  # '1' = one-way forward, '2' = bi-directional
-                    layer_code = parts[7].strip()  # '1' = low altitude, '2' = high altitude
-                    base_fl = int(float(parts[8]))
-                    top_fl = int(float(parts[9]))
-                    designators = parts[9 if len(parts) == 10 else 10].strip().upper().split("-")
-
-                    if not (-90.0 <= lat1 <= 90.0 and -180.0 <= lon1 <= 180.0):
-                        continue
-                    if not (-90.0 <= lat2 <= 90.0 and -180.0 <= lon2 <= 180.0):
-                        continue
-
-                    direction = "FORWARD_ONLY" if dir_code == "1" else "BIDIRECTIONAL"
-                    level = "HIGH" if layer_code == "2" else "LOW"
-
-                    for awy_id in designators:
-                        if not awy_id or awy_id == "99":
-                            continue
-                        awy_segments.append((
-                            awy_id,
-                            fix1, lat1, lon1,
-                            fix2, lat2, lon2,
-                            direction,
-                            level,
-                            base_fl * 100,
-                            top_fl * 100,
-                            f"FG_AWY_{meta['sourceDataCycle']}",
-                        ))
-                except ValueError:
+                if not (-90.0 <= lat1 <= 90.0 and -180.0 <= lon1 <= 180.0):
+                    continue
+                if not (-90.0 <= lat2 <= 90.0 and -180.0 <= lon2 <= 180.0):
                     continue
 
-        awy_path = "navigation/airways/airways.csv"
-        with open(awy_path, "w", newline="", encoding="utf-8") as f:
-            w = csv.writer(f)
-            w.writerow(["#source_version", meta["sourceDataCycle"], "spec", meta["specVersion"]])
-            w.writerow([
-                "airway_id", "from_fix", "from_lat", "from_lon",
-                "to_fix", "to_lat", "to_lon", "direction_restriction",
-                "airspace_layer", "base_alt_ft", "top_alt_ft", "source"
-            ])
-            for seg in awy_segments:
-                w.writerow(seg)
+                direction = "FORWARD_ONLY" if dir_code == "1" else "BIDIRECTIONAL"
+                level = "HIGH" if layer_code == "2" else "LOW"
 
-        manifest_sources.append({
-            "dataset": "airways",
-            "name": "FlightGear / X-Plane Global Airway Segments",
-            "file": awy_path,
-            "originalSourceFile": "navigation/sources/awy.dat.gz",
-            "url": used_awy_url,
-            "provider": "FlightGear Open Scenery / X-Plane Navigation Database",
-            "license": "GNU General Public License v2 (GPLv2)",
-            "sourceVersionOrCycle": meta["sourceDataCycle"],
-            "sourceHeader": meta["rawHeader"],
-            "airacCycle": None,
-            "recordCount": len(awy_segments),
-            "sizeBytes": os.path.getsize(awy_path),
-            "sha256": sha256_file(awy_path),
-            "coverage": "Global pairwise airway segments (Not operational current AIRAC)",
-            "downloadedAt": now_iso,
-        })
+                for awy_id in designators:
+                    if not awy_id or awy_id == "99":
+                        continue
+                    awy_segments.append((
+                        awy_id,
+                        fix1, lat1, lon1,
+                        fix2, lat2, lon2,
+                        direction,
+                        level,
+                        base_fl * 100,
+                        top_fl * 100,
+                        f"FG_AWY_{meta['sourceDataCycle']}",
+                    ))
+            except ValueError:
+                continue
+
+    awy_path = "navigation/airways/airways.csv"
+    with open(awy_path, "w", newline="", encoding="utf-8") as f:
+        w = csv.writer(f)
+        w.writerow(["#source_version", meta["sourceDataCycle"], "spec", meta["specVersion"]])
+        w.writerow([
+            "airway_id", "from_fix", "from_lat", "from_lon",
+            "to_fix", "to_lat", "to_lon", "direction_restriction",
+            "airspace_layer", "base_alt_ft", "top_alt_ft", "source"
+        ])
+        for seg in awy_segments:
+            w.writerow(seg)
+
+    manifest_sources.append({
+        "dataset": "airways",
+        "name": "FlightGear / X-Plane Global Airway Segments",
+        "file": awy_path,
+        "originalSourceFile": "navigation/sources/awy.dat.gz",
+        "url": used_awy_url,
+        "provider": "FlightGear Open Scenery / X-Plane Navigation Database",
+        "license": "GNU General Public License v2 (GPLv2)",
+        "sourceVersionOrCycle": meta["sourceDataCycle"],
+        "sourceHeader": meta["rawHeader"],
+        "airacCycle": None,
+        "recordCount": len(awy_segments),
+        "sizeBytes": os.path.getsize(awy_path),
+        "sha256": sha256_file(awy_path),
+        "coverage": "Global pairwise airway segments (Not operational current AIRAC)",
+        "downloadedAt": now_iso,
+    })
 
 
 def build_factual_runways_table(runways_csv_bytes: bytes, manifest_sources: list):
-    """
-    Extracts strictly factual runway geometry from OurAirports (no synthetic prevailing-wind claims).
-    """
     text = runways_csv_bytes.decode("utf-8", errors="ignore")
     reader = csv.DictReader(io.StringIO(text))
     parsed_rows = []
