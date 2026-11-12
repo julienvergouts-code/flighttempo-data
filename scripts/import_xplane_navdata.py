@@ -127,6 +127,17 @@ def locate_source_files(source_dir: Path):
     return located, missing
 
 
+def validate_source_cycles(sources):
+    """Require one identical, explicitly declared source-cycle token."""
+    cycles_by_kind = {kind: src.get("data_cycle", "unknown") for kind, src in sources.items()}
+    if "unknown" in cycles_by_kind.values() or len(set(cycles_by_kind.values())) != 1:
+        raise ValueError(
+            "All three IFR source headers must declare the same known data-cycle token; "
+            f"found {cycles_by_kind}. Mixed or missing cycles must not be combined."
+        )
+    return next(iter(cycles_by_kind.values()))
+
+
 def parse_fixes(source):
     """Parse legacy XPFIX600 plus typed XPFIX1101 and named XPFIX1200."""
     rows, rejected = [], 0
@@ -493,13 +504,7 @@ def import_navdata(source_dir: Path, root: Path, manifest_path: Path, optional=F
         return {"status": "skipped_missing_source", "missing": missing}
 
     sources = {kind: read_source_file(path, kind) for kind, path in located.items()}
-    cycles_by_kind = {kind: src["data_cycle"] for kind, src in sources.items()}
-    if "unknown" in cycles_by_kind.values() or len(set(cycles_by_kind.values())) != 1:
-        raise ValueError(
-            "All three IFR source headers must declare the same known data-cycle token; "
-            f"found {cycles_by_kind}. Mixed or missing cycles must not be combined."
-        )
-    data_cycle = next(iter(cycles_by_kind.values()))
+    data_cycle = validate_source_cycles(sources)
 
     fixes, rejected_fixes = parse_fixes(sources["fixes"])
     navaids, rejected_navaids = parse_navaids(sources["navaids"])
