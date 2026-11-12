@@ -1,5 +1,11 @@
+import sys
 import unittest
-from collections import defaultdict
+from pathlib import Path
+
+# The implementation lives in scripts/ so add that directory explicitly when
+# tests are launched through "python -m unittest discover -s tests".
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
+
 from import_xplane_navdata import parse_airways, parse_fixes, parse_navaids, resolve_endpoint
 
 
