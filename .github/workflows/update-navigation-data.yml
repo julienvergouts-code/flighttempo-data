@@ -102,6 +102,13 @@ jobs:
                   type_counts = Counter()
                   for row in reader:
                       count += 1
+                      for field, value in row.items():
+                          if value is not None:
+                              assert value == value.strip(), (
+                                  f"Leading/trailing whitespace in {filename}, "
+                                  f"record {count}, field {field}: {value!r}"
+                              )
+
                       if filename.endswith("navaids.csv"):
                           nav_type = (row.get("type") or "").strip().upper()
                           assert nav_type, f"Blank navaid type at record {count}"
