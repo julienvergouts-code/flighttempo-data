@@ -150,7 +150,7 @@ def build_airports(records, stage):
 
         rows.append((
             ident,
-            (record.get("iso_country") or "").upper(),
+            (record.get("iso_country") or "").strip().upper(),
             round(lat, 5),
             round(lon, 5),
             round(elevation) if elevation is not None else "",
@@ -229,7 +229,7 @@ def build_navaids(records, stage):
             round(magnetic_variation, 3) if magnetic_variation is not None else "",
             (record.get("usageType") or "").strip().upper(),
             (record.get("power") or "").strip().upper(),
-            (record.get("associated_airport") or "").upper()
+            (record.get("associated_airport") or "").strip().upper()
         ))
 
         type_counts[nav_type] = type_counts.get(nav_type, 0) + 1
