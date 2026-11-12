@@ -30,16 +30,17 @@ jobs:
           test -s navigation/runways/runways_parsed.csv
           test -s navigation/waypoints/waypoints.csv
           test -s navigation/airways/airways.csv
+          test -s navigation/airline_routes/routes.dat
           cat navigation_manifest.json
 
       - name: Commit and Push Updated Datasets
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add navigation/ navigation_manifest.json
+          git add -A navigation/ procedures/ navigation_manifest.json
           if git diff --staged --quiet; then
             echo "No navigation data changes to commit."
           else
-            git commit -m "chore(navdata): auto-update Worldwide Sim & OurAirports datasets"
+            git commit -m "chore(navdata): update factual OurAirports & FlightGear navigation datasets"
             git push
           fi
