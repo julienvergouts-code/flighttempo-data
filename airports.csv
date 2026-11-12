@@ -1,4 +1,4 @@
-#version,20261112
+#version,20261113
 AAA,NTGA,Pacific/Tahiti,Anaa Airport,-17.3526,-145.5100,10,14/32,150
 AAB,YARY,Australia/Brisbane,Arrabury Airport,-26.6964,141.0487,334,,-1
 AAC,HEAR,Africa/Cairo,El Arish International Airport,31.0553,33.8280,118,16L/34R,157
@@ -5046,7 +5046,7 @@ MTB,SKML,America/Bogota,Montelibano Airport,7.9717,-75.4325,160,18/36,174
 MTC,KMTC,America/Detroit,Selfridge Air National Guard Base Airport,42.6135,-82.8369,580,01/19,2
 MTD,YMSF,Australia/Darwin,Mount Sanford Station Airport,-16.9783,130.5550,231,,-1
 MTE,SNMA,America/Santarem,Monte Alegre Airport,-1.9958,-54.0742,325,,-1
-MTF,HAMT,Africa/Addis_Ababa,Mizan Teferi Airport,6.9571,35.5547,4396,,-1
+MTF,HAMT,America/Anchorage,Mizan Teferi Airport,6.9571,35.5547,4396,,-1
 MTG,BR-3150,America/Cuiaba,Vila Bela da Santíssima Trindade Airport,-14.9955,-59.9457,660,,-1
 MTH,KMTH,America/New_York,Florida Keys Marathon International Airport,24.7260,-81.0514,5,07/25,67
 MTI,GVMT,Atlantic/Cape_Verde,Mosteiros Airport,15.0450,-24.3392,66,,-1
