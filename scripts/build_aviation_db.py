@@ -183,6 +183,7 @@ def build_airports(records, stage):
 def build_navaids(records, stage):
     rows = []
     seen = set()
+    type_counts = {}
 
     for record in records:
         ident = (record.get("ident") or "").strip().upper()
@@ -191,53 +192,70 @@ def build_navaids(records, stage):
         lat = number(record.get("latitude_deg"))
         lon = number(record.get("longitude_deg"))
 
-        if not ident or not valid_coordinates(lat, lon):
+        if not ident or not nav_type or not valid_coordinates(lat, lon):
             continue
 
-        frequency = number(record.get("frequency_khz"))
-
-        key = (
-            ident,
-            nav_type,
-            round(lat, 5),
-            round(lon, 5)
-        )
-
+        key = (ident, nav_type, round(lat, 6), round(lon, 6))
         if key in seen:
             continue
-
         seen.add(key)
+
+        frequency_khz = number(record.get("frequency_khz"))
+        dme_frequency_khz = number(record.get("dme_frequency_khz"))
+        dme_lat = number(record.get("dme_latitude_deg"))
+        dme_lon = number(record.get("dme_longitude_deg"))
+        elevation = number(record.get("elevation_ft"))
+        dme_elevation = number(record.get("dme_elevation_ft"))
+        slaved_variation = number(record.get("slaved_variation_deg"))
+        magnetic_variation = number(record.get("magnetic_variation_deg"))
 
         rows.append((
             ident,
             (record.get("name") or "").strip(),
             nav_type,
-            round(frequency / 1000, 3)
-            if frequency is not None else "",
-            round(lat, 5),
-            round(lon, 5),
+            round(frequency_khz, 3) if frequency_khz is not None else "",
+            round(frequency_khz / 1000, 6) if frequency_khz is not None else "",
+            round(dme_frequency_khz, 3) if dme_frequency_khz is not None else "",
+            round(dme_frequency_khz / 1000, 6) if dme_frequency_khz is not None else "",
+            (record.get("dme_channel") or "").strip().upper(),
+            round(lat, 6),
+            round(lon, 6),
+            round(elevation, 1) if elevation is not None else "",
+            round(dme_lat, 6) if dme_lat is not None else "",
+            round(dme_lon, 6) if dme_lon is not None else "",
+            round(dme_elevation, 1) if dme_elevation is not None else "",
             (record.get("iso_country") or "").upper(),
+            round(slaved_variation, 3) if slaved_variation is not None else "",
+            round(magnetic_variation, 3) if magnetic_variation is not None else "",
+            (record.get("usageType") or "").strip().upper(),
+            (record.get("power") or "").strip().upper(),
             (record.get("associated_airport") or "").upper()
         ))
+
+        type_counts[nav_type] = type_counts.get(nav_type, 0) + 1
 
     if len(rows) < MINIMUM_RECORDS["navaids"]:
         raise RuntimeError(
             f"Navaid count too low: {len(rows)}"
         )
 
-    rows.sort(key=lambda row: row[0])
+    rows.sort(key=lambda row: (row[0], row[2], row[8], row[9]))
 
     write_csv(
         stage / "navigation/navaids/navaids.csv",
         [
-            "id", "name", "type", "freq_mhz",
-            "lat", "lon", "country", "airport_icao"
+            "ident", "name", "type",
+            "frequency_khz", "frequency_mhz",
+            "dme_frequency_khz", "dme_frequency_mhz", "dme_channel",
+            "latitude_deg", "longitude_deg", "elevation_ft",
+            "dme_latitude_deg", "dme_longitude_deg", "dme_elevation_ft",
+            "iso_country", "slaved_variation_deg", "magnetic_variation_deg",
+            "usage_type", "power", "associated_airport"
         ],
         rows
     )
 
-    return len(rows)
-
+    return len(rows), dict(sorted(type_counts.items()))
 
 def build_runways(records, stage):
     rows = []
@@ -377,7 +395,7 @@ def main():
         )
 
         counts["airports"] = build_airports(airports, stage)
-        counts["navaids"] = build_navaids(navaids, stage)
+        counts["navaids"], navaid_type_counts = build_navaids(navaids, stage)
         counts["runways"] = build_runways(runways, stage)
 
         # Validate all generated files.
@@ -392,9 +410,10 @@ def main():
             log(f"Validated {name}: {counts[name]} records")
 
         manifest = {
-            "schemaVersion": 10,
+            "schemaVersion": 11,
             "generatedAtUtc": timestamp,
             "procedureAiracCycle": "unknown",
+            "navaidTypeCounts": navaid_type_counts,
             "targetProfile": "Aviation reference data",
             "dataSources": [
                 {
@@ -408,10 +427,17 @@ def main():
                 "airports": True,
                 "runways": True,
                 "navaids": True,
+                "vor": sum(navaid_type_counts.get(t, 0) for t in ("VOR", "VOR-DME", "VORTAC")) > 0,
+                "dme": sum(navaid_type_counts.get(t, 0) for t in ("DME", "NDB-DME", "TACAN", "VOR-DME", "VORTAC")) > 0,
+                "ndb": sum(navaid_type_counts.get(t, 0) for t in ("NDB", "NDB-DME")) > 0,
+                "tacan": sum(navaid_type_counts.get(t, 0) for t in ("TACAN", "VORTAC")) > 0,
+                "ilsFacilities": False,
                 "independentWaypoints": False,
                 "publishedAirways": False,
                 "sids": False,
                 "stars": False,
+                "ilsApproaches": False,
+                "rnavApproaches": False,
                 "approaches": False
             }
         }
