@@ -1,0 +1,97 @@
+name: Auto-Update Airports & Runways DB
+
+on:
+  schedule:
+    - cron: '0 3 1 */3 *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update-airports:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Fetch OurAirports & Rebuild airports.csv
+        run: |
+          python3 - << 'EOF'
+          import csv, urllib.request, os, re
+          from datetime import datetime, timezone
+
+          AIRPORTS_URL = "https://davidmegginson.github.io/ourairports-data/airports.csv"
+          RUNWAYS_URL = "https://davidmegginson.github.io/ourairports-data/runways.csv"
+
+          old_version = 1
+          existing_tz = {}
+          if os.path.exists("airports.csv"):
+              with open("airports.csv", "r", encoding="utf-8-sig") as f:
+                  for line in f:
+                      s = line.strip()
+                      if s.lower().startswith("#version"):
+                          m = re.search(r"(\d+)", s)
+                          if m: old_version = int(m.group(1))
+                      elif s and not s.startswith("#") and not s.startswith("sep="):
+                          row = next(csv.reader([s]))
+                          if len(row) >= 3:
+                              if row[0].strip(): existing_tz[row[0].strip().upper()] = row[2].strip()
+                              if row[1].strip(): existing_tz[row[1].strip().upper()] = row[2].strip()
+
+          urllib.request.urlretrieve(RUNWAYS_URL, "/tmp/oa_runways.csv")
+          best_rwy = {}
+          with open("/tmp/oa_runways.csv", "r", encoding="utf-8") as f:
+              for row in csv.DictReader(f):
+                  if row.get("closed") == "1": continue
+                  ident = (row.get("airport_ident") or "").strip().upper()
+                  try:
+                      length = int(float(row.get("length_ft") or 0))
+                      hdg = int(round(float(row.get("le_heading_degT") or ""))) % 360
+                  except ValueError: continue
+                  le = (row.get("le_ident") or "").strip()
+                  he = (row.get("he_ident") or "").strip()
+                  label = f"{le}/{he}" if le and he else le
+                  if ident not in best_rwy or length > best_rwy[ident][0]:
+                      best_rwy[ident] = (length, label, hdg)
+
+          urllib.request.urlretrieve(AIRPORTS_URL, "/tmp/oa_airports.csv")
+          rows_out = []
+          with open("/tmp/oa_airports.csv", "r", encoding="utf-8") as f:
+              for row in csv.DictReader(f):
+                  iata = (row.get("iata_code") or "").strip().upper()
+                  icao = (row.get("ident") or "").strip().upper()
+                  if len(iata) != 3 and len(icao) != 4: continue
+                  tz = existing_tz.get(iata) or existing_tz.get(icao)
+                  if not tz or "/" not in tz: continue
+                  name = (row.get("name") or "").replace(",", " ").replace('"', "").strip()
+                  try:
+                      lat = float(row.get("latitude_deg") or 0.0)
+                      lon = float(row.get("longitude_deg") or 0.0)
+                  except ValueError: continue
+                  try: elev = int(round(float(row.get("elevation_ft") or 0)))
+                  except ValueError: elev = 0
+                  rwy_info = best_rwy.get(icao, (0, "", -1))
+                  rows_out.append((iata, icao, tz, name, f"{lat:.4f}", f"{lon:.4f}", str(elev), rwy_info[1], str(rwy_info[2])))
+
+          if len(rows_out) >= 50:
+              new_version = int(datetime.now(timezone.utc).strftime("%Y%m%d"))
+              if new_version <= old_version: new_version = old_version + 1
+              rows_out.sort(key=lambda r: (r[0] if r[0] else "ZZZ", r[1]))
+              with open("airports.csv", "w", encoding="utf-8", newline="\n") as out:
+                  out.write(f"#version,{new_version}\n")
+                  w = csv.writer(out)
+                  for r in rows_out: w.writerow(r)
+          EOF
+
+      - name: Commit and push if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          if [[ -n $(git status --porcelain airports.csv) ]]; then
+            git add airports.csv
+            git commit -m "chore: auto-update airports & runway headings DB"
+            git push
+          else
+            echo "No changes to commit."
+          fi
