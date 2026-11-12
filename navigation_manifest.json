@@ -1,16 +1,7 @@
 {
-  "schemaVersion": 11,
-  "generatedAtUtc": "2026-11-12T17:02:51.771136+00:00",
+  "schemaVersion": 12,
+  "generatedAtUtc": "2026-11-12T15:32:09.236598+00:00",
   "procedureAiracCycle": "unknown",
-  "navaidTypeCounts": {
-    "DME": 167,
-    "NDB": 6609,
-    "NDB-DME": 137,
-    "TACAN": 442,
-    "VOR": 308,
-    "VOR-DME": 2601,
-    "VORTAC": 744
-  },
   "targetProfile": "Aviation reference data",
   "dataSources": [
     {
@@ -18,7 +9,7 @@
       "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
       "provider": "OurAirports",
       "license": "CC0 / Public Domain as stated by OurAirports",
-      "downloadedAt": "2026-11-12T17:02:51.771136+00:00",
+      "downloadedAt": "2026-11-12T15:32:09.236598+00:00",
       "sizeBytes": 12758762,
       "sha256": "11e7a1edf9e5bef91aa4492e3ab42bb5b38b5f2df81358a235ed5a393a571e54",
       "recordCount": 86302
@@ -28,7 +19,7 @@
       "url": "https://davidmegginson.github.io/ourairports-data/runways.csv",
       "provider": "OurAirports",
       "license": "CC0 / Public Domain as stated by OurAirports",
-      "downloadedAt": "2026-11-12T17:02:51.771136+00:00",
+      "downloadedAt": "2026-11-12T15:32:09.236598+00:00",
       "sizeBytes": 3973983,
       "sha256": "a20681ecd8375543db4830618f71a56fcb04cb63b6608514c1b17f1963b3fca8",
       "recordCount": 47094
@@ -38,7 +29,7 @@
       "url": "https://davidmegginson.github.io/ourairports-data/navaids.csv",
       "provider": "OurAirports",
       "license": "CC0 / Public Domain as stated by OurAirports",
-      "downloadedAt": "2026-11-12T17:02:51.771136+00:00",
+      "downloadedAt": "2026-11-12T15:32:09.236598+00:00",
       "sizeBytes": 1524931,
       "sha256": "d7292380662c33a95214945023ec0a5b13189599305fd18be739e167a97a9bd1",
       "recordCount": 11008
@@ -60,5 +51,24 @@
     "ilsApproaches": false,
     "rnavApproaches": false,
     "approaches": false
+  },
+  "navaidTypeCounts": {
+    "DME": 167,
+    "NDB": 6609,
+    "NDB-DME": 137,
+    "TACAN": 442,
+    "VOR": 308,
+    "VOR-DME": 2601,
+    "VORTAC": 744
+  },
+  "statistics": {
+    "airports": 86302,
+    "runways": 47094,
+    "navaids": 11008,
+    "ifrWaypoints": 0,
+    "flightgearNavaids": 0,
+    "airwaySegments": 0,
+    "lowAirwaySegments": 0,
+    "highAirwaySegments": 0
   }
 }

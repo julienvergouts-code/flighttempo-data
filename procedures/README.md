@@ -1,23 +1,15 @@
-# FlightTempo Procedures Data
+# FlightTempo Procedures
 
-This directory is reserved for genuine terminal procedure datasets.
+This directory stores genuine published terminal procedures:
 
-- `sids/`: Standard Instrument Departure procedures.
-- `stars/`: Standard Terminal Arrival procedures.
-- `approaches/`: Published ILS and RNAV/RNP approach procedures.
-- `source_data/`: Original, redistributable source files used to build the normalized procedure datasets.
+- SIDs
+- STARs
+- ILS approaches
+- RNAV/RNP approaches
+- Transitions, runway associations, ordered legs, path terminators, altitude/speed constraints and relevant fix/navaid references
 
-## Inclusion rules
+An ILS is an approach procedure, not a runway attribute. RNAV/RNP approaches are separate procedures. Do not generate procedure legs from runway headings or generic airport geometry.
 
-- Include only procedures supported by authentic source records.
-- Retain the procedure identifier, airport, runway/transition applicability, ordered legs, constraints, source and provenance.
-- Do not construct SID, STAR or approach legs from runway headings, airport locations, VOR positions or guessed geometry.
-- Do not treat a localizer facility record alone as a complete published ILS approach.
-- LOC-only approaches are outside the current display scope.
-- If no suitable ILS or RNAV/RNP procedure is available, the app may draw a simplified direct airport/runway connection, explicitly labelled as a visual fallback rather than a published procedure.
+The repository contains earlier procedure export files, but their source provenance, licence, AIRAC cycle and coverage require verification. Their existence alone is not evidence that they are safe to advertise as a verified published procedure dataset. The master manifest should keep their capabilities disabled until these checks are complete.
 
-## Source and cycle
-
-The selected expansion source ecosystem is FlightGear navigation data. A procedure dataset is not eligible for publication until its actual upstream origin, redistribution licence, release/cycle (if explicitly supplied), parser and semantic validation have been verified.
-
-Do not ingest FAA CIFP, commercial navdata exports or other replacement sources unless the project source decision is explicitly changed. Never infer or manufacture an AIRAC cycle.
+Never manufacture missing legs or claim worldwide procedure coverage without source-backed counts and geographic coverage.

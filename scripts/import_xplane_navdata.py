@@ -114,13 +114,13 @@ def locate_source_files(source_dir: Path):
 
 
 def parse_fixes(source):
-    """Parse XPFIX1101 (type field optional for legacy rows) and XPFIX1200 (type + printed name)."""
+    """Parse XPFIX1101 (type field) and XPFIX1200 (type + printed name)."""
     rows, rejected = [], 0
     version = source.get("format_version", "1101")
     if version not in {"1101", "1200"}:
         raise ValueError(f"Unsupported fix format version: {version}")
     for line_number, raw, fields in source["records"]:
-        minimum_fields = 5 if version == "1101" else 7
+        minimum_fields = 6 if version == "1101" else 7
         if len(fields) < minimum_fields:
             rejected += 1
             continue
@@ -128,19 +128,11 @@ def parse_fixes(source):
         if not valid_coordinates(lat, lon):
             rejected += 1
             continue
-        if version == "1101":
-            if len(fields) < 5:
-                rejected += 1
-                continue
-            ident, area, region = fields[2:5]
-            waypoint_type = fields[5] if len(fields) >= 6 else ""
-            printed_name = ident
-        else:
-            ident, area, region, waypoint_type = fields[2:6]
-            printed_name = " ".join(fields[6:]).strip()
-            if not waypoint_type:
-                rejected += 1
-                continue
+        ident, area, region, waypoint_type = fields[2:6]
+        if not waypoint_type:
+            rejected += 1
+            continue
+        printed_name = ident if version == "1101" else " ".join(fields[6:]).strip()
         if version == "1200" and not printed_name:
             rejected += 1
             continue
@@ -344,7 +336,7 @@ def update_manifest(manifest_path: Path, root: Path, import_meta=None):
     else:
         import_meta = {}
 
-    manifest.setdefault("schemaVersion", 11)
+    manifest.setdefault("schemaVersion", 12)
     datasets = [
         file_summary(root, "airports", "app/src/main/assets/airports.csv"),
         file_summary(root, "runways", "navigation/runways/runways_parsed.csv"),
@@ -386,6 +378,19 @@ def update_manifest(manifest_path: Path, root: Path, import_meta=None):
     capabilities["independentWaypoints"] = datasets[3]["available"]
     capabilities["flightgearNavaids"] = datasets[4]["available"]
     capabilities["publishedAirways"] = datasets[5]["available"]
+
+    # Keep manifest totals synchronized with the normalized datasets.
+    statistics = manifest.setdefault("statistics", {})
+    statistics["airports"] = datasets[0]["recordCount"]
+    statistics["runways"] = datasets[1]["recordCount"]
+    statistics["navaids"] = datasets[2]["recordCount"]
+    statistics["ifrWaypoints"] = datasets[3]["recordCount"] if datasets[3]["available"] else 0
+    statistics["flightgearNavaids"] = datasets[4]["recordCount"] if datasets[4]["available"] else 0
+    airway_counts = (import_meta or {}).get("counts", {})
+    statistics["airwaySegments"] = datasets[5]["recordCount"] if datasets[5]["available"] else 0
+    statistics["lowAirwaySegments"] = airway_counts.get("lowAirwaySegments", 0)
+    statistics["highAirwaySegments"] = airway_counts.get("highAirwaySegments", 0)
+
     manifest_path.parent.mkdir(parents=True, exist_ok=True)
     temp_path = manifest_path.with_suffix(manifest_path.suffix + ".tmp")
     temp_path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
@@ -451,8 +456,13 @@ def import_navdata(source_dir: Path, root: Path, manifest_path: Path, optional=F
             "copyrightHeader": src["header"],
         } for kind, src in sources.items()],
         "counts": {
-            "fixes": len(fixes), "navaids": len(navaids), "airwaySegments": len(airways),
-            "rejectedFixRows": rejected_fixes, "rejectedNavaidRows": rejected_navaids,
+            "fixes": len(fixes),
+            "navaids": len(navaids),
+            "airwaySegments": len(airways),
+            "lowAirwaySegments": sum(row["level_code"] == "1" for row in airways),
+            "highAirwaySegments": sum(row["level_code"] == "2" for row in airways),
+            "rejectedFixRows": rejected_fixes,
+            "rejectedNavaidRows": rejected_navaids,
             "rejectedAirwayRows": rejected_airways,
         },
         "airwayResolution": {
@@ -496,167 +506,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-																																																																																
