@@ -1,4 +1,5 @@
 import gzip
+import hashlib
 import sys
 import tempfile
 import unittest
@@ -14,6 +15,7 @@ from import_xplane_navdata import (
     parse_navaids,
     read_source_file,
     resolve_endpoint,
+    validate_source_cycles,
 )
 
 
@@ -150,10 +152,32 @@ class XPlaneNavdataTests(unittest.TestCase):
         self.assertEqual(parsed["compression"], "gzip")
         self.assertEqual(len(parsed["records"]), 1)
         self.assertEqual(parsed["records"][0][2][2], "FIX01")
-        self.assertNotEqual(parsed["payload_sha256"], parsed["raw"] and "")
+        self.assertEqual(parsed["payload_sha256"], hashlib.sha256(payload).hexdigest())
 
-    def test_source_cycle_mismatch_is_not_normalized_to_same_airac(self):
-        self.assertNotEqual("2016.10", "2013.10")
+    def test_source_cycle_validation_preserves_full_tokens_and_rejects_mismatch(self):
+        coherent = {
+            "fixes": {"data_cycle": "2016.10"},
+            "navaids": {"data_cycle": "2016.10"},
+            "airways": {"data_cycle": "2016.10"},
+        }
+        self.assertEqual(validate_source_cycles(coherent), "2016.10")
+
+        mismatched = {
+            "fixes": {"data_cycle": "201610"},
+            "navaids": {"data_cycle": "1611"},
+            "airways": {"data_cycle": "2013.10"},
+        }
+        with self.assertRaisesRegex(ValueError, "Mixed or missing cycles"):
+            validate_source_cycles(mismatched)
+
+    def test_source_cycle_validation_rejects_unknown_cycle(self):
+        sources = {
+            "fixes": {"data_cycle": "2016.10"},
+            "navaids": {"data_cycle": "unknown"},
+            "airways": {"data_cycle": "2016.10"},
+        }
+        with self.assertRaisesRegex(ValueError, "Mixed or missing cycles"):
+            validate_source_cycles(sources)
 
 
 if __name__ == "__main__":
