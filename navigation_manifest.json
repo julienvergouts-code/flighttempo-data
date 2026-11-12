@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 10,
+  "schemaVersion": 11,
   "generatedAtUtc": "2026-11-12T15:32:09.236598+00:00",
   "procedureAiracCycle": "unknown",
   "targetProfile": "Aviation reference data",
@@ -39,10 +39,26 @@
     "airports": true,
     "runways": true,
     "navaids": true,
+    "vor": true,
+    "dme": true,
+    "ndb": true,
+    "tacan": true,
+    "ilsFacilities": false,
     "independentWaypoints": false,
     "publishedAirways": false,
     "sids": false,
     "stars": false,
+    "ilsApproaches": false,
+    "rnavApproaches": false,
     "approaches": false
+  },
+  "navaidTypeCounts": {
+    "DME": 167,
+    "NDB": 6609,
+    "NDB-DME": 137,
+    "TACAN": 442,
+    "VOR": 308,
+    "VOR-DME": 2601,
+    "VORTAC": 744
   }
 }
