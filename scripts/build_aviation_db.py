@@ -117,7 +117,7 @@ def write_csv(path, header, rows):
         newline="",
         encoding="utf-8"
     ) as file:
-        writer = csv.writer(file)
+        writer = csv.writer(file, lineterminator="\n")
         writer.writerow(header)
         writer.writerows(rows)
 
