@@ -20,11 +20,13 @@ Each verified dataset is independently described in the root manifest. Android c
 
 Place a single coherent source set in `navigation/sources/flightgear/`:
 
-- `earth_fix.dat` (XPFIX1101 or XPFIX1200)
+- `earth_fix.dat` (XPFIX600, XPFIX1101 or XPFIX1200)
 - `earth_nav.dat` (XPNAV1100, XPNAV1150 or XPNAV1200)
-- `earth_awy.dat` (XP AWY1101 specification; data header is `1100 Version`)
+- `earth_awy.dat` (AWY640 legacy or XP AWY1101 specification; the latter has a `1100 Version` data-file header)
 
-Legacy filenames `fix.dat`, `nav.dat`, and `awy.dat` are also accepted when they contain one of those supported formats. XPFIX1101 records retain the mandatory published waypoint-type code; XPFIX1200 also retains the printed waypoint name, including embedded spaces. XPNAV1200 retains the current NDB BFO field and newer approach path-point record fields in raw form. Unsupported formats fail rather than being guessed. All three input headers must declare the same four-digit data cycle.
+Plain-text and gzip-compressed `.dat.gz` / `.gz` inputs are accepted. Legacy FIX600 records contain only coordinates and an identifier, so their region, terminal/en-route scope and published waypoint type remain unknown. Legacy AWY640 records carry endpoint coordinates but lack typed endpoint references and low/high classification; the importer preserves their coordinates, raw direction code and altitude values while explicitly marking unavailable metadata as unknown. Such rows must not be treated as typed airway graph edges.
+
+XPFIX1101 records retain the mandatory published waypoint-type code; XPFIX1200 also retains the printed waypoint name, including embedded spaces. XPNAV1200 retains newer record fields in raw form. Unsupported formats fail rather than being guessed. All three input headers must declare the same complete known data-cycle token (for example, `2016.10`); mismatched cycles are rejected. A source's date/cycle string is not assumed to be a current AIRAC cycle.
 
 Add a `source-manifest.json` before publishing, containing the actual provider, licence and explicit confirmation that redistribution is permitted:
 
@@ -47,7 +49,7 @@ python3 scripts/import_xplane_navdata.py
 python3 -m unittest discover -s tests -v
 ```
 
-The OurAirports builder deliberately does not synthesize or infer airway geometry from coordinate-only legacy records. A public FlightGear repository candidate was inspected and its regional fix/airway samples used legacy FIX 600 and AWY 640 formats; these do not carry the typed endpoint references required by FlightTempo and are therefore not used by this pipeline.
+The importer can retain coordinate-only legacy airway segments for reference display, but they are not promoted to typed/verified airway graph connectivity. The examined public FlightGear candidate also contains source subsets with different cycle labels; those subsets cannot be combined into one coherent import.
 
 The importer writes:
 - `navigation/waypoints/flightgear_fixes.csv`

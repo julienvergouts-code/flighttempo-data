@@ -1,4 +1,7 @@
+import gzip
+import hashlib
 import sys
+import tempfile
 import unittest
 from pathlib import Path
 
@@ -6,7 +9,14 @@ from pathlib import Path
 # tests are launched through "python -m unittest discover -s tests".
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
 
-from import_xplane_navdata import parse_airways, parse_fixes, parse_navaids, resolve_endpoint
+from import_xplane_navdata import (
+    parse_airways,
+    parse_fixes,
+    parse_navaids,
+    read_source_file,
+    resolve_endpoint,
+    validate_source_cycles,
+)
 
 
 def source(lines, name, version="1101"):
@@ -99,6 +109,76 @@ class XPlaneNavdataTests(unittest.TestCase):
     def test_unknown_endpoint_types_remain_explicit(self):
         result = resolve_endpoint("ABC", "EB", "99", {}, {})
         self.assertEqual(result["status"], "unsupported_type")
+
+    def test_legacy_fix_600_keeps_unknown_metadata_unknown(self):
+        fixes, rejected = parse_fixes(source([
+            "50.10000000 4.20000000 FIX01",
+        ], "fix.dat", version="600"))
+        self.assertEqual(rejected, 0)
+        self.assertEqual(len(fixes), 1)
+        self.assertEqual(fixes[0]["ident"], "FIX01")
+        self.assertEqual(fixes[0]["scope"], "unknown")
+        self.assertEqual(fixes[0]["region_code"], "")
+        self.assertEqual(fixes[0]["waypoint_type_code"], "")
+
+    def test_legacy_awy_640_preserves_source_coordinates_without_fake_types(self):
+        airways, rejected, unresolved, ambiguous = parse_airways(source([
+            "FIX01 50.10000000 4.20000000 FIX02 51.10000000 5.20000000 1 045 180 UL9",
+        ], "awy.dat", version="640"), [], [])
+        self.assertEqual((rejected, unresolved, ambiguous), (0, 0, 0))
+        row = airways[0]
+        self.assertEqual(row["from_resolution"], "source_coordinates")
+        self.assertEqual(row["to_resolution"], "source_coordinates")
+        self.assertEqual(row["from_type"], "UNKNOWN")
+        self.assertEqual(row["level_classification"], "unknown")
+        self.assertEqual(row["minimum_altitude_ft"], 4500)
+        self.assertEqual(row["maximum_altitude_ft"], 18000)
+        self.assertEqual(row["airway_names"], "UL9")
+
+    def test_gzip_source_is_decoded_and_full_cycle_token_is_preserved(self):
+        payload = "\n".join([
+            "I",
+            "600 Version - data cycle 2016.10, build 20161559",
+            "",
+            "50.10000000 4.20000000 FIX01",
+            "99",
+            "",
+        ]).encode("utf-8")
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "fix.dat.gz"
+            path.write_bytes(gzip.compress(payload))
+            parsed = read_source_file(path, "fixes")
+        self.assertEqual(parsed["format_version"], "600")
+        self.assertEqual(parsed["data_cycle"], "2016.10")
+        self.assertEqual(parsed["compression"], "gzip")
+        self.assertEqual(len(parsed["records"]), 1)
+        self.assertEqual(parsed["records"][0][2][2], "FIX01")
+        self.assertEqual(parsed["payload_sha256"], hashlib.sha256(payload).hexdigest())
+
+    def test_source_cycle_validation_preserves_full_tokens_and_rejects_mismatch(self):
+        coherent = {
+            "fixes": {"data_cycle": "2016.10"},
+            "navaids": {"data_cycle": "2016.10"},
+            "airways": {"data_cycle": "2016.10"},
+        }
+        self.assertEqual(validate_source_cycles(coherent), "2016.10")
+
+        mismatched = {
+            "fixes": {"data_cycle": "201610"},
+            "navaids": {"data_cycle": "1611"},
+            "airways": {"data_cycle": "2013.10"},
+        }
+        with self.assertRaisesRegex(ValueError, "Mixed or missing cycles"):
+            validate_source_cycles(mismatched)
+
+    def test_source_cycle_validation_rejects_unknown_cycle(self):
+        sources = {
+            "fixes": {"data_cycle": "2016.10"},
+            "navaids": {"data_cycle": "unknown"},
+            "airways": {"data_cycle": "2016.10"},
+        }
+        with self.assertRaisesRegex(ValueError, "Mixed or missing cycles"):
+            validate_source_cycles(sources)
 
 
 if __name__ == "__main__":
