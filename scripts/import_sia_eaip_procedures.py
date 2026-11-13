@@ -238,7 +238,7 @@ def parse_table_rows(
             "fix_longitude": fix_lon,
             "fix_resolution": fix_resolution,
             "source_provider": "Service de l'Information Aeronautique (SIA France)",
-            "source_license": "Licence Ouverte / Open Licence (Etalab)",
+            "source_license": "SIA eAIP DATA PDF; redistribution licence scope pending confirmation",
             "source_file": source_file,
             "source_url": source_url,
             "source_document_date": source_document_date,
@@ -408,7 +408,7 @@ def main() -> int:
         report = {
             "schemaVersion": 1,
             "provider": "Service de l'Information Aeronautique (SIA France)",
-            "license": "Licence Ouverte / Open Licence (Etalab)",
+            "license": "SIA eAIP DATA PDF; redistribution licence scope pending confirmation",
             "attribution": "Service de l'Information Aeronautique (SIA France); include the source and last update date.",
             "airacEffectiveDate": args.airac_effective_date,
             "status": "parsed_not_independently_validated",
