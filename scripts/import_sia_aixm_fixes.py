@@ -39,7 +39,7 @@ def find_text(element: ET.Element, name: str) -> str:
 def parse_aixm_coordinate(value: str, axis: str) -> str:
     """Convert AIXM DDMMSS.sH / DDDMMSS.sH into signed decimal degrees."""
     value = re.sub(r"\s+", "", value or "").upper()
-    match = re.fullmatch(r"(\d+)([NSEW])", value)
+    match = re.fullmatch(r"(\d+(?:\.\d+)?)([NSEW])", value)
     if not match:
         raise ValueError(f"Invalid AIXM coordinate: {value!r}")
     body, hemisphere = match.groups()
