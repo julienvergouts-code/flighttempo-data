@@ -1,6 +1,6 @@
 {
   "schemaVersion": 13,
-  "generatedAtUtc": "2026-11-13T22:14:34.698075+00:00",
+  "generatedAtUtc": "2026-11-13T23:07:57.138383+00:00",
   "procedureAiracCycle": "2611",
   "navaidTypeCounts": {
     "DME": 167,
@@ -23,7 +23,11 @@
     "highAirwaySegments": 0,
     "ourairportsAirports": 86306,
     "airlineProfiles": 2,
-    "routeRules": 109
+    "routeRules": 109,
+    "airportReferenceRecords": 29747,
+    "airportReferenceOurAirportsElevationMatches": 28488,
+    "airportReferenceRunwayMatches": 24049,
+    "airportReferenceMultipleRunwayAirports": 3874
   },
   "dataSources": [
     {
@@ -31,7 +35,7 @@
       "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
       "provider": "OurAirports",
       "license": "CC0 / Public Domain as stated by OurAirports",
-      "downloadedAt": "2026-11-13T22:14:34.698075+00:00",
+      "downloadedAt": "2026-11-13T23:07:57.138383+00:00",
       "sizeBytes": 12759291,
       "sha256": "a3bbdc1d7321c19e7a3ee6ddc7b570850fdfa56f6357c30bae9600cef08637be",
       "recordCount": 86306
@@ -41,7 +45,7 @@
       "url": "https://davidmegginson.github.io/ourairports-data/runways.csv",
       "provider": "OurAirports",
       "license": "CC0 / Public Domain as stated by OurAirports",
-      "downloadedAt": "2026-11-13T22:14:34.698075+00:00",
+      "downloadedAt": "2026-11-13T23:07:57.138383+00:00",
       "sizeBytes": 3974142,
       "sha256": "e1026851f59e3714c2074432e469aeb9c3b83908315cfa547f353ae607f74a1d",
       "recordCount": 47096
@@ -51,7 +55,7 @@
       "url": "https://davidmegginson.github.io/ourairports-data/navaids.csv",
       "provider": "OurAirports",
       "license": "CC0 / Public Domain as stated by OurAirports",
-      "downloadedAt": "2026-11-13T22:14:34.698075+00:00",
+      "downloadedAt": "2026-11-13T23:07:57.138383+00:00",
       "sizeBytes": 1524931,
       "sha256": "d7292380662c33a95214945023ec0a5b13189599305fd18be739e167a97a9bd1",
       "recordCount": 11008
@@ -317,19 +321,19 @@
       "path": "airports.csv",
       "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/airports.csv",
       "available": true,
-      "recordCount": 29746,
-      "sizeBytes": 2193455,
-      "sha256": "f74fe4e7e60cb61fd51017b21b4e801cc53239b001f0ed2e12618052c52aaa06",
-      "sourceProvider": "FlightTempo airport reference export",
-      "sourceUrl": "",
-      "coverage": "",
+      "recordCount": 29747,
+      "sizeBytes": 2701696,
+      "sha256": "a0a0961540a12f6851d2ef9bb1bb40f3f415d03f0311ddee3dc23e09bddeb7b0",
+      "sourceProvider": "FlightTempo airport reference with OurAirports enrichment",
+      "sourceUrl": "https://ourairports.com/data/",
+      "coverage": "Global airport reference; elevation and all paired open runways enriched where ICAO/OurAirports identifiers match",
       "sourceTag": "",
-      "license": "Upstream provenance and redistribution terms not recorded in repository",
-      "licenseStatus": "source_review_required",
-      "dataCycle": "unknown",
+      "license": "OurAirports enrichment is Public Domain/CC0; original IATA/time-zone reference provenance remains under review",
+      "licenseStatus": "mixed_source_review_required",
+      "dataCycle": "daily_source_snapshot",
       "effectiveDate": "",
       "expiryDate": "",
-      "provenanceVerification": "not_declared"
+      "provenanceVerification": "partial"
     },
     {
       "id": "ourairports_airports",
@@ -561,5 +565,17 @@
     "baseUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/",
     "integrity": "SHA-256",
     "installPolicy": "download-to-staging-verify-then-activate"
+  },
+  "airportReferenceEnrichment": {
+    "provider": "OurAirports",
+    "airportSource": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+    "runwaySource": "https://davidmegginson.github.io/ourairports-data/runways.csv",
+    "license": "Public Domain / CC0 as stated by OurAirports",
+    "downloadedAtUtc": "2026-11-13T23:08:00.102233+00:00",
+    "matchedElevationRecords": 28488,
+    "matchedAirportsWithRunways": 24049,
+    "matchedAirportsWithMultipleRunways": 3874,
+    "runwaySelection": "Longest open paired runway is placed in legacy primary fields; all matched pairs/headings/lengths are retained in appended pipe-delimited columns.",
+    "limitations": "Community-maintained source data; no guarantee of accuracy or operational fitness. Full runway records remain in navigation/runways/runways_parsed.csv."
   }
 }
