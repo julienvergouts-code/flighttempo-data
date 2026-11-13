@@ -339,5 +339,51 @@ class XPlaneNavdataTests(unittest.TestCase):
 
 
 
+    def test_regional_procedure_source_registry_is_copied_to_manifest(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            regions = {
+                "europe": {
+                    "status": "partial_public_source_confirmed_not_ingested",
+                    "operationallyAvailable": False,
+                    "candidateProcedureCountries": ["FR"],
+                },
+                "asia": {
+                    "status": "no_public_redistributable_ifr_source_confirmed",
+                    "operationallyAvailable": False,
+                    "confirmedProcedureCountries": [],
+                },
+            }
+            registry = {
+                "schemaVersion": 1,
+                "checkedAtUtc": "2026-11-13",
+                "regions": regions,
+            }
+            registry_path = root / "procedures/source-registry.json"
+            registry_path.parent.mkdir(parents=True)
+            registry_path.write_text(json.dumps(registry), encoding="utf-8")
+
+            manifest_path = root / "navigation_manifest.json"
+            manifest_path.write_text(json.dumps({
+                "schemaVersion": 13,
+                "capabilities": {
+                    "sids": False,
+                    "stars": False,
+                    "approaches": False,
+                },
+                "statistics": {},
+            }), encoding="utf-8")
+
+            result = update_manifest(manifest_path, root)
+            self.assertEqual(result["procedureSourceRegistryVersion"], 1)
+            self.assertEqual(result["procedureSourceRegistryCheckedAtUtc"], "2026-11-13")
+            self.assertEqual(result["regionalProcedureCoverage"], regions)
+            self.assertFalse(result["procedureOperationalUse"])
+            self.assertFalse(result["capabilities"]["sids"])
+            self.assertFalse(result["capabilities"]["stars"])
+            self.assertFalse(result["capabilities"]["approaches"])
+
+
+
 if __name__ == "__main__":
     unittest.main()
