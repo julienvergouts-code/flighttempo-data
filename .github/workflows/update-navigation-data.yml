@@ -100,12 +100,12 @@ jobs:
               assert capabilities.get(capability) is True, f"Missing required capability: {capability}"
           for metric in ("airports", "runways", "navaids"):
               assert manifest.get("statistics", {}).get(metric, 0) > 0, f"Missing statistic: {metric}"
-          profile = Path("profiles/airlines.csv").read_text(encoding="utf-8").splitlines()
+          profile = Path("airlines.csv").read_text(encoding="utf-8").splitlines()
           profile_lines = [line for line in profile if line.strip() and not line.startswith("sep=") and not line.startswith("#version")]
           assert profile_lines, "Airline profile catalogue missing"
           airline_header = next(csv.reader([profile_lines[0]], delimiter=";"))
           assert {"code", "displayName", "signOnMins", "iataCodes"}.issubset(set(airline_header)), "Airline profile schema mismatch"
-          route_lines = [line for line in Path("profiles/route_rules.csv").read_text(encoding="utf-8").splitlines() if line.strip() and not line.startswith("#version")]
+          route_lines = [line for line in Path("route_rules.csv").read_text(encoding="utf-8").splitlines() if line.strip() and not line.startswith("#version")]
           assert route_lines and route_lines[0].split(",") == ["kind", "code"], "Route rules schema mismatch"
           print("Manifest, navigation datasets and airline profile packages validated.")
           PY
