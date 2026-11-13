@@ -10,7 +10,6 @@ on:
       - 'tests/**'
       - 'navigation/**'
       - 'procedures/**'
-      - 'profiles/**'
       - 'airports.csv'
       - 'airlines.csv'
       - 'route_rules.csv'
@@ -50,9 +49,9 @@ jobs:
         run: |
           set -e
           test -s airports.csv
+          test -s airlines.csv
+          test -s route_rules.csv
           test -s navigation/airports/ourairports_airports.csv
-          test -s profiles/airlines.csv
-          test -s profiles/route_rules.csv
           test -s navigation/navaids/navaids.csv
           test -s navigation/runways/runways_parsed.csv
           test -s navigation_manifest.json
@@ -118,7 +117,6 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add \
             navigation/ \
-            profiles/ \
             airports.csv \
             airlines.csv \
             route_rules.csv \
