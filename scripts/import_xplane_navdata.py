@@ -543,13 +543,8 @@ def update_manifest(manifest_path: Path, root: Path, import_meta=None):
                 ("airwayResolution", {}),
             )
         }
-    capabilities["independentWaypoints"] = datasets[3]["available"]
-    capabilities["flightgearNavaids"] = datasets[4]["available"]
-    capabilities["publishedAirways"] = datasets[5]["available"]
-    capabilities["airlineProfiles"] = datasets[-2]["available"]
-    capabilities["rosterClassificationRules"] = datasets[-1]["available"]
 
-    # Keep manifest totals synchronized with the normalized datasets.
+    # Keep manifest totals synchronized with the exact downloadable datasets.
     statistics = manifest.setdefault("statistics", {})
     statistics["airports"] = datasets[0]["recordCount"]
     statistics["ourairportsAirports"] = datasets[1]["recordCount"]
@@ -561,8 +556,6 @@ def update_manifest(manifest_path: Path, root: Path, import_meta=None):
     statistics["airwaySegments"] = datasets[6]["recordCount"] if datasets[6]["available"] else 0
     statistics["lowAirwaySegments"] = airway_counts.get("lowAirwaySegments", 0) if datasets[6]["available"] else 0
     statistics["highAirwaySegments"] = airway_counts.get("highAirwaySegments", 0) if datasets[6]["available"] else 0
-    statistics["airlineProfiles"] = datasets[-2]["recordCount"] if datasets[-2]["available"] else 0
-    statistics["routeRules"] = datasets[-1]["recordCount"] if datasets[-1]["available"] else 0
     statistics["airlineProfiles"] = datasets[-2]["recordCount"] if datasets[-2]["available"] else 0
     statistics["routeRules"] = datasets[-1]["recordCount"] if datasets[-1]["available"] else 0
 
