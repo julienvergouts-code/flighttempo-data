@@ -58,6 +58,8 @@ jobs:
             --source-dir navigation/sources/flightgear \
             --manifest navigation_manifest.json \
             --optional
+      - name: Enrich airport reference with OurAirports runway and elevation data
+        run: python3 scripts/enrich_airport_reference.py
       - name: Verify generated datasets and manifest
         run: |
           set -e
