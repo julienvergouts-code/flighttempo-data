@@ -240,7 +240,7 @@ class XPlaneNavdataTests(unittest.TestCase):
             root = Path(temporary)
             procedure_path = root / "procedures/sids/sids.csv"
             procedure_path.parent.mkdir(parents=True)
-            payload = "\\n".join([
+            payload = "\n".join([
                 "#version,2611",
                 "airport_icao,procedure_id,source",
                 "KAAA,TEST1,FAA_CIFP_2611",
@@ -274,7 +274,7 @@ class XPlaneNavdataTests(unittest.TestCase):
             )
             self.assertEqual(result["dataCycle"], "2611")
 
-            procedure_path.write_bytes(payload + b"KCCC,TEST3,FAA_CIFP_2611\\n")
+            procedure_path.write_bytes(payload + b"\nKCCC,TEST3,FAA_CIFP_2611")
             changed = load_procedure_metadata(root, "sids", "procedures/sids/sids.csv")
             self.assertEqual(
                 changed["provenanceVerification"],
