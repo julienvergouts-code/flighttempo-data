@@ -165,7 +165,7 @@ def build_airports(records, stage):
     rows.sort(key=lambda row: row[0])
 
     write_csv(
-        stage / "navigation/airports/airports.csv",
+        stage / "navigation/airports/ourairports_airports.csv",
         [
             "icao",
             "country",
@@ -407,7 +407,7 @@ def main():
 
         # Validate all generated files.
         generated = {
-            "airports": stage / "navigation/airports/airports.csv",
+            "airports": stage / "navigation/airports/ourairports_airports.csv",
             "navaids": stage / "navigation/navaids/navaids.csv",
             "runways": stage / "navigation/runways/runways_parsed.csv"
         }
@@ -469,7 +469,7 @@ def main():
 
         # Publish only after every dataset has passed validation.
         destinations = [
-            "navigation/airports/airports.csv",
+            "navigation/airports/ourairports_airports.csv",
             "navigation/navaids/navaids.csv",
             "navigation/runways/runways_parsed.csv",
             "navigation/sources/airports.csv",
