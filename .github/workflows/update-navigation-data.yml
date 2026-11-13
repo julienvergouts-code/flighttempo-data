@@ -57,17 +57,17 @@ jobs:
           set -euo pipefail
           BASE_URL="https://www.sia.aviation-civile.gouv.fr/media/dvd/eAIP_29_OCT_2026/FRANCE/AIRAC-2026-10-29/html/eAIP/Cartes"
           mkdir -p /tmp/flighttempo-sia-pdfs
-          curl --fail --location --retry 3 --retry-delay 2 \\
-            "$BASE_URL/LFPG/AD_2_LFPG_DATA_SID_RWY26L-26R_RNAV_CODE_02.pdf" \\
+          curl --fail --location --retry 3 --retry-delay 2 \
+            "$BASE_URL/LFPG/AD_2_LFPG_DATA_SID_RWY26L-26R_RNAV_CODE_02.pdf" \
             -o /tmp/flighttempo-sia-pdfs/AD_2_LFPG_DATA_SID_RWY26L-26R_RNAV_CODE_02.pdf
-          curl --fail --location --retry 3 --retry-delay 2 \\
-            "$BASE_URL/LFPG/AD_2_LFPG_DATA_STAR_RWY26L_RNAV_CODE_02.pdf" \\
+          curl --fail --location --retry 3 --retry-delay 2 \
+            "$BASE_URL/LFPG/AD_2_LFPG_DATA_STAR_RWY26L_RNAV_CODE_02.pdf" \
             -o /tmp/flighttempo-sia-pdfs/AD_2_LFPG_DATA_STAR_RWY26L_RNAV_CODE_02.pdf
-          python3 scripts/import_sia_eaip_procedures.py \\
-            --pdf-dir /tmp/flighttempo-sia-pdfs \\
-            --airac-effective-date 2026-10-29 \\
-            --source-base-url "$BASE_URL" \\
-            --output /tmp/flighttempo-sia-pilot.csv \\
+          python3 scripts/import_sia_eaip_procedures.py \
+            --pdf-dir /tmp/flighttempo-sia-pdfs \
+            --airac-effective-date 2026-10-29 \
+            --source-base-url "$BASE_URL" \
+            --output /tmp/flighttempo-sia-pilot.csv \
             --manifest /tmp/flighttempo-sia-pilot-manifest.json
           python3 - <<'PY'
           import csv
