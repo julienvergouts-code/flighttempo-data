@@ -1,6 +1,19 @@
 name: Update Airports & Navigation Data
 
 on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'scripts/**'
+      - 'tests/**'
+      - 'navigation/**'
+      - 'procedures/**'
+      - 'airports.csv'
+      - 'airlines.csv'
+      - 'route_rules.csv'
+      - '.github/workflows/update-navigation-data.yml'
+      - 'navigation_manifest.json'
   schedule:
     - cron: '15 4 * * *'
   workflow_dispatch:
@@ -110,7 +123,7 @@ jobs:
           print("Manifest, navigation datasets and airline profile packages validated.")
           PY
       - name: Commit updated datasets
-        if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main')
+        if: github.ref == 'refs/heads/main' && (github.event_name == 'schedule' || github.event_name == 'push' || github.event_name == 'workflow_dispatch')
         run: |
           set -e
           git config user.name "github-actions[bot]"
