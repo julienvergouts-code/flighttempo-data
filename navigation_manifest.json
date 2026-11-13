@@ -1,6 +1,6 @@
 {
-  "schemaVersion": 12,
-  "generatedAtUtc": "2026-11-13T05:02:12.356896+00:00",
+  "schemaVersion": 13,
+  "generatedAtUtc": "2026-11-13T12:14:13.030460+00:00",
   "procedureAiracCycle": "unknown",
   "navaidTypeCounts": {
     "DME": 167,
@@ -11,16 +11,19 @@
     "VOR-DME": 2601,
     "VORTAC": 744
   },
-  "targetProfile": "Aviation reference data",
+  "targetProfile": "FlightTempo downloadable aviation reference data",
   "statistics": {
-    "airports": 86306,
+    "airports": 29746,
     "runways": 47096,
     "navaids": 11008,
     "ifrWaypoints": 0,
     "flightgearNavaids": 0,
     "airwaySegments": 0,
     "lowAirwaySegments": 0,
-    "highAirwaySegments": 0
+    "highAirwaySegments": 0,
+    "ourairportsAirports": 86306,
+    "airlineProfiles": 2,
+    "routeRules": 109
   },
   "dataSources": [
     {
@@ -28,7 +31,7 @@
       "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
       "provider": "OurAirports",
       "license": "CC0 / Public Domain as stated by OurAirports",
-      "downloadedAt": "2026-11-13T05:02:12.356896+00:00",
+      "downloadedAt": "2026-11-13T12:14:13.030460+00:00",
       "sizeBytes": 12759291,
       "sha256": "a3bbdc1d7321c19e7a3ee6ddc7b570850fdfa56f6357c30bae9600cef08637be",
       "recordCount": 86306
@@ -38,7 +41,7 @@
       "url": "https://davidmegginson.github.io/ourairports-data/runways.csv",
       "provider": "OurAirports",
       "license": "CC0 / Public Domain as stated by OurAirports",
-      "downloadedAt": "2026-11-13T05:02:12.356896+00:00",
+      "downloadedAt": "2026-11-13T12:14:13.030460+00:00",
       "sizeBytes": 3974142,
       "sha256": "e1026851f59e3714c2074432e469aeb9c3b83908315cfa547f353ae607f74a1d",
       "recordCount": 47096
@@ -48,7 +51,7 @@
       "url": "https://davidmegginson.github.io/ourairports-data/navaids.csv",
       "provider": "OurAirports",
       "license": "CC0 / Public Domain as stated by OurAirports",
-      "downloadedAt": "2026-11-13T05:02:12.356896+00:00",
+      "downloadedAt": "2026-11-13T12:14:13.030460+00:00",
       "sizeBytes": 1524931,
       "sha256": "d7292380662c33a95214945023ec0a5b13189599305fd18be739e167a97a9bd1",
       "recordCount": 11008
@@ -56,6 +59,8 @@
   ],
   "capabilities": {
     "airports": true,
+    "airlineProfiles": true,
+    "rosterClassificationRules": true,
     "runways": true,
     "navaids": true,
     "vor": true,
@@ -70,48 +75,66 @@
     "ilsApproaches": false,
     "rnavApproaches": false,
     "approaches": false,
+    "ourairportsAirports": true,
     "flightgearNavaids": false
   },
   "datasets": [
     {
-      "id": "airports",
-      "path": "app/src/main/assets/airports.csv",
+      "id": "airport_reference",
+      "path": "airports.csv",
+      "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/airports.csv",
+      "available": true,
+      "recordCount": 29746,
+      "sizeBytes": 2193455,
+      "sha256": "f74fe4e7e60cb61fd51017b21b4e801cc53239b001f0ed2e12618052c52aaa06",
+      "sourceProvider": "FlightTempo airport reference export",
+      "license": "Upstream provenance and redistribution terms not recorded in repository",
+      "licenseStatus": "source_review_required",
+      "dataCycle": "unknown"
+    },
+    {
+      "id": "ourairports_airports",
+      "path": "navigation/airports/ourairports_airports.csv",
+      "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/navigation/airports/ourairports_airports.csv",
       "available": true,
       "recordCount": 86306,
       "sizeBytes": 4780020,
       "sha256": "c9e9007a9d4c90aa421836277bb27adec229957beb50686753fb3cfc8bfacad9",
-      "sourceProvider": "",
-      "license": "",
-      "licenseStatus": "not_applicable",
+      "sourceProvider": "OurAirports",
+      "license": "CC0 / Public Domain as stated by OurAirports",
+      "licenseStatus": "public_domain",
       "dataCycle": "unknown"
     },
     {
       "id": "runways",
       "path": "navigation/runways/runways_parsed.csv",
+      "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/navigation/runways/runways_parsed.csv",
       "available": true,
       "recordCount": 47096,
       "sizeBytes": 1733567,
       "sha256": "e7f987b237e8f744bab3cb99237ac4a26e5e5372bae5f0292ab53e8db2bb5efe",
-      "sourceProvider": "",
-      "license": "",
-      "licenseStatus": "not_applicable",
+      "sourceProvider": "OurAirports",
+      "license": "CC0 / Public Domain as stated by OurAirports",
+      "licenseStatus": "public_domain",
       "dataCycle": "unknown"
     },
     {
       "id": "ourairports_navaids",
       "path": "navigation/navaids/navaids.csv",
+      "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/navigation/navaids/navaids.csv",
       "available": true,
       "recordCount": 11008,
       "sizeBytes": 1037670,
       "sha256": "f6ca5ea55ebaf6706d86c8a21da73b090df5745182f6f9b5900ad3f7f33c7997",
-      "sourceProvider": "",
-      "license": "",
-      "licenseStatus": "not_applicable",
+      "sourceProvider": "OurAirports",
+      "license": "CC0 / Public Domain as stated by OurAirports",
+      "licenseStatus": "public_domain",
       "dataCycle": "unknown"
     },
     {
       "id": "flightgear_fixes",
       "path": "navigation/waypoints/flightgear_fixes.csv",
+      "downloadUrl": null,
       "available": false,
       "recordCount": 0,
       "sizeBytes": 0,
@@ -124,6 +147,7 @@
     {
       "id": "flightgear_navaids",
       "path": "navigation/navaids/flightgear_navaids.csv",
+      "downloadUrl": null,
       "available": false,
       "recordCount": 0,
       "sizeBytes": 0,
@@ -136,6 +160,7 @@
     {
       "id": "flightgear_airway_segments",
       "path": "navigation/airways/flightgear_airway_segments.csv",
+      "downloadUrl": null,
       "available": false,
       "recordCount": 0,
       "sizeBytes": 0,
@@ -149,8 +174,9 @@
     {
       "id": "sids",
       "path": "procedures/sids/sids.csv",
+      "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/procedures/sids/sids.csv",
       "available": false,
-      "recordCount": 33350,
+      "recordCount": 33349,
       "sizeBytes": 1646963,
       "sha256": "be974a777fe0da70bb143bedce4f05d5744c2c62ad382691937c4b35494bf3cf",
       "sourceProvider": "",
@@ -162,8 +188,9 @@
     {
       "id": "stars",
       "path": "procedures/stars/stars.csv",
+      "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/procedures/stars/stars.csv",
       "available": false,
-      "recordCount": 44198,
+      "recordCount": 44197,
       "sizeBytes": 2257773,
       "sha256": "6bf123c683e442c1a07fbc46f4f11ad45045f8322a1b2506d65f6719055c0c06",
       "sourceProvider": "",
@@ -175,8 +202,9 @@
     {
       "id": "approaches",
       "path": "procedures/approaches/approaches.csv",
+      "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/procedures/approaches/approaches.csv",
       "available": false,
-      "recordCount": 114967,
+      "recordCount": 114966,
       "sizeBytes": 5608604,
       "sha256": "ff7b9121e79b56ff616a77e285c9cba764575fd2c58335b3281124813362d3dd",
       "sourceProvider": "",
@@ -184,6 +212,40 @@
       "licenseStatus": "not_applicable",
       "dataCycle": "unknown",
       "status": "present_but_unverified"
+    },
+    {
+      "id": "airline_profiles",
+      "path": "airlines.csv",
+      "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/airlines.csv",
+      "available": true,
+      "recordCount": 2,
+      "sizeBytes": 630,
+      "sha256": "3357c8fe4d0a78d33b955e5bf2749bac88953d9cc865c6b5268069406bcb66ad",
+      "sourceProvider": "FlightTempo",
+      "license": "",
+      "licenseStatus": "owner_authored_profile",
+      "dataCycle": "unknown"
+    },
+    {
+      "id": "route_rules",
+      "path": "route_rules.csv",
+      "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/route_rules.csv",
+      "available": true,
+      "recordCount": 109,
+      "sizeBytes": 1177,
+      "sha256": "f5deb5ea849076cc5fa4e43204c439cb46b6c6f7192730f1b9fcb607acf61127",
+      "sourceProvider": "FlightTempo",
+      "license": "",
+      "licenseStatus": "owner_authored_profile",
+      "dataCycle": "unknown"
     }
-  ]
+  ],
+  "downloadContract": {
+    "version": 1,
+    "repository": "julienvergouts-code/flighttempo-data",
+    "manifestUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/navigation_manifest.json",
+    "baseUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/",
+    "integrity": "SHA-256",
+    "installPolicy": "download-to-staging-verify-then-activate"
+  }
 }
