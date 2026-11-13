@@ -20,6 +20,7 @@ from import_xplane_navdata import (
     resolve_endpoint,
     validate_source_cycles,
     load_procedure_metadata,
+    update_manifest,
 )
 
 
@@ -280,6 +281,62 @@ class XPlaneNavdataTests(unittest.TestCase):
                 changed["provenanceVerification"],
                 "mismatch_requires_review",
             )
+
+    def test_pinned_procedure_is_downloadable_but_not_operational(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            procedure_path = root / "procedures/sids/sids.csv"
+            procedure_path.parent.mkdir(parents=True)
+            payload = "\\n".join([
+                "#version,2611",
+                "airport_icao,procedure_id,source",
+                "KAAA,TEST1,FAA_CIFP_2611",
+                "KBBB,TEST2,FAA_CIFP_2611",
+            ]).encode("utf-8")
+            procedure_path.write_bytes(payload)
+            source_manifest = {
+                "datasets": {
+                    "sids": {
+                        "sourceTag": "FAA_CIFP_2611",
+                        "provider": "FAA AeroNav",
+                        "sourceUrl": "https://example.test/CIFP_261029.zip",
+                        "coverage": "United States / FAA NAS test data",
+                        "license": "US Government Public Domain (FAA AeroNav)",
+                        "licenseStatus": "public_domain",
+                        "dataCycle": "2611",
+                        "effectiveDate": "2026-10-29",
+                        "expiryDate": "2026-11-25",
+                        "recordCount": 2,
+                        "airportCount": 2,
+                        "sizeBytes": len(payload),
+                        "sha256": hashlib.sha256(payload).hexdigest(),
+                    }
+                }
+            }
+            (root / "procedures/source-manifest.json").write_text(
+                json.dumps(source_manifest), encoding="utf-8"
+            )
+            manifest_path = root / "navigation_manifest.json"
+            manifest_path.write_text(json.dumps({
+                "schemaVersion": 13,
+                "capabilities": {
+                    "sids": False,
+                    "stars": False,
+                    "approaches": False,
+                },
+                "statistics": {},
+            }), encoding="utf-8")
+
+            result = update_manifest(manifest_path, root)
+            sid = next(item for item in result["datasets"] if item["id"] == "sids")
+            self.assertTrue(sid["available"])
+            self.assertTrue(sid["testDownloadAvailable"])
+            self.assertFalse(sid["operationallyAvailable"])
+            self.assertEqual(sid["downloadPurpose"], "development_test_only")
+            self.assertEqual(sid["status"], "present_unverified_test_only")
+            self.assertFalse(result["capabilities"]["sids"])
+            self.assertFalse(result["procedureOperationalUse"])
+
 
 
 if __name__ == "__main__":
