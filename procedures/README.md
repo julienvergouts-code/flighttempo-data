@@ -22,7 +22,7 @@ The CSV files currently present in this directory are parsed from the FAA CIFP s
 
 Pinned file hashes, source tags, source URL, effective/expiry dates and exact counts are in [source-manifest.json](source-manifest.json). A manifest record is marked as a matching repository artifact only when its byte size, SHA-256, version directive, source tag, row count and airport count match.
 
-These files are retained for **development and importer testing**. In `navigation_manifest.json`, they are marked `present_unverified_test_only` and `testDownloadAvailable: true` when their pinned identity matches. They remain `available: false`, and the `sids`, `stars`, and `approaches` operational capability flags remain false. The files must not be selected as European procedures or used for operational flight planning/navigation. Treat this cycle as expired after 25 November 2026 unless a newer, verified file replaces it.
+These files are retained for **development and importer testing**. In `navigation_manifest.json`, a matching pinned identity sets `available: true` so the app can fetch/cache the files, and sets `testDownloadAvailable: true` with `downloadPurpose: development_test_only`. This does **not** enable procedure use: `operationallyAvailable` remains false and the `sids`, `stars`, `approaches`, `ilsApproaches` and `rnavApproaches` capability flags remain false. The files must not be selected as European procedures or used for operational flight planning/navigation. Treat this cycle as expired after 25 November 2026 unless a newer, verified file replaces it.
 
 ## Europe
 
