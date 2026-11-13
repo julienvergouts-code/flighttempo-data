@@ -10,6 +10,10 @@ on:
       - 'tests/**'
       - 'navigation/**'
       - 'procedures/**'
+      - 'profiles/**'
+      - 'airports.csv'
+      - 'airlines.csv'
+      - 'route_rules.csv'
       - '.github/workflows/update-navigation-data.yml'
       - 'navigation_manifest.json'
 
@@ -45,7 +49,7 @@ jobs:
       - name: Verify generated datasets and manifest
         run: |
           set -e
-          test -s app/src/main/assets/airports.csv
+          test -s airports.csv
           test -s navigation/navaids/navaids.csv
           test -s navigation/runways/runways_parsed.csv
           test -s navigation_manifest.json
@@ -56,9 +60,9 @@ jobs:
           from pathlib import Path
 
           manifest = json.loads(Path("navigation_manifest.json").read_text())
-          assert manifest["schemaVersion"] == 12, "Unexpected manifest schema version"
+          assert manifest["schemaVersion"] == 13, "Unexpected manifest schema version"
           expected = {
-              "app/src/main/assets/airports.csv": 1000,
+              "airports.csv": 1000,
               "navigation/navaids/navaids.csv": 1000,
               "navigation/runways/runways_parsed.csv": 500,
           }
@@ -87,7 +91,7 @@ jobs:
               assert count == dataset["recordCount"], f"Record count mismatch: {path}"
               print(f"{dataset['id']}: {count} records; {path.stat().st_size} bytes")
           capabilities = manifest.get("capabilities", {})
-          for capability in ("airports", "runways", "navaids", "vor", "dme", "ndb"):
+          for capability in ("airports", "ourairportsAirports", "runways", "navaids", "vor", "dme", "ndb", "airlineProfiles", "rosterClassificationRules"):
               assert capabilities.get(capability) is True, f"Missing required capability: {capability}"
           for metric in ("airports", "runways", "navaids"):
               assert manifest.get("statistics", {}).get(metric, 0) > 0, f"Missing statistic: {metric}"
@@ -101,7 +105,7 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add \
             navigation/ \
-            app/src/main/assets/airports.csv \
+            airports.csv \
             navigation_manifest.json
           if git diff --cached --quiet; then
             echo "No dataset changes detected."
