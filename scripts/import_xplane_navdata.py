@@ -575,9 +575,17 @@ def update_manifest(manifest_path: Path, root: Path, import_meta=None):
         # They must not enable the published-procedure capabilities until the
         # procedure content and operational currency have been independently reviewed.
         summary["testDownloadAvailable"] = bool(summary["recordCount"] > 0 and provenance_matches)
+        summary["downloadPurpose"] = "development_test_only" if summary["testDownloadAvailable"] else "not_available"
         verified = bool(capabilities.get(capability, False))
-        summary["available"] = bool(summary["available"] and verified)
-        summary["status"] = "verified" if summary["available"] else (
+        summary["operationallyAvailable"] = bool(provenance_matches and verified)
+        # The standard 'available' field controls whether the app can fetch and
+        # cache the file. It does not assert operational approval. Keep procedure
+        # capability flags and operationallyAvailable separate from downloadability.
+        summary["available"] = bool(
+            summary["recordCount"] > 0
+            and (summary["testDownloadAvailable"] or verified)
+        )
+        summary["status"] = "verified" if summary["operationallyAvailable"] else (
             "present_unverified_test_only" if summary["testDownloadAvailable"] else
             ("present_but_unverified" if summary["recordCount"] > 0 else "not_imported")
         )
