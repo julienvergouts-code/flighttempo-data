@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
-  "checkedAtUtc": "2026-11-13",
+  "checkedAtUtc": "2026-11-14",
   "purpose": "Source and redistribution inventory for IFR terminal procedures and relevant VFR procedure geometry. This registry is not an operational data publication.",
   "regions": {
     "europe": {
       "status": "partial_public_source_confirmed_not_ingested",
       "operationallyAvailable": false,
-      "summary": "France has a public, commercial-redistributable SIA AIXM 4.5/XML source. No complete Europe-wide IFR SID/STAR/approach feed has been established.",
+      "summary": "France publishes current procedure DATA sheets in its eAIP, including structured SID and STAR leg tables and some RNP approach precoding tables. Its separate SIA AIXM4.5/XML export is openly reusable reference data but is not yet treated as a complete IFPD feed. No complete Europe-wide IFR procedure dataset has been established.",
       "confirmedProcedureCountries": [],
       "candidateProcedureCountries": [
         "FR"
@@ -25,11 +25,7 @@
             "AIXM 4.5 XML",
             "XML_SIA"
           ],
-          "procedureScope": [
-            "SIDs",
-            "STARs",
-            "instrument approaches"
-          ],
+          "procedureScope": [],
           "license": "Licence Ouverte / Open Licence v2.0 (Etalab)",
           "redistribution": "public_redistribution",
           "licenseStatus": "verified_from_official_SIA_open_data_terms",
@@ -43,9 +39,9 @@
             "AIXM4.5_all_FR_OM_YYYY-MM-DD.xml",
             "XML_SIA_YYYY-MM-DD.xml"
           ],
-          "sourceStatus": "current_source_identified_not_downloaded_or_imported",
+          "sourceStatus": "public_open_data_reference_dataset",
           "dataStatus": "not_available_in_FlightTempo",
-          "notes": "The package covers the AIP France and overseas territories. Validate AIXM procedure associations, ordered legs, fix coordinates and cycle metadata before producing downloadable procedure CSVs. The source being open does not mean the FlightTempo parser is already validated."
+          "notes": "The SIA XML export is an openly reusable reference-data source (Licence Ouverte 2.0), useful for airports, runways, navaids and designated-point coordinates. Do not assume that this XML package contains complete IFR SID/STAR/approach leg sequences. France's published procedure tables are available separately as eAIP DATA PDFs and must be ingested and validated independently."
         },
         {
           "id": "OFMA_EUROPE",
@@ -143,19 +139,61 @@
           "sourceStatus": "terms_review_required",
           "dataStatus": "not_imported",
           "notes": "Do not redistribute UK terminal procedures until the applicable Crown Copyright / NATS licence for extracted procedure data is verified."
+        },
+        {
+          "id": "FR_SIA_EAIP_DATA_PDFS",
+          "jurisdiction": "FR",
+          "provider": "Service de l'Information Aeronautique (SIA France)",
+          "sourceUrl": "https://www.sia.aviation-civile.gouv.fr/media/dvd/eAIP_29_OCT_2026/FRANCE/AIRAC-2026-10-29/html/eAIP/Cartes/",
+          "indexUrl": "https://www.sia.aviation-civile.gouv.fr/media/dvd/eAIP_29_OCT_2026/FRANCE/AIRAC-2026-10-29/pdf/FR-GEN-0.4-fr-FR.pdf",
+          "format": [
+            "PDF DATA tables embedded in official eAIP chart package"
+          ],
+          "procedureScope": [
+            "RNAV SIDs",
+            "RNAV STARs",
+            "RNP approach DATA tables where complete non-FNA sheets are published"
+          ],
+          "license": "SIA Licence Ouverte / Open Licence terms for products in the free-disposition catalogue; exact inclusion of each eAIP chart/PDF product must be confirmed before public redistribution",
+          "redistribution": "document_scope_confirmation_required",
+          "licenseStatus": "general_SIA_open_data_terms_verified_specific_eAIP_DATA_PDF_scope_to_confirm",
+          "attribution": "Service de l'Information Aeronautique (SIA France); cite the source URL and last update date.",
+          "cycle": "2611",
+          "effectiveDate": "2026-10-29",
+          "expiryDate": "2026-11-25",
+          "sourceStatus": "current_structured_procedure_tables_found_parser_added_not_yet_source_validated",
+          "dataStatus": "not_imported",
+          "exampleSources": [
+            {
+              "id": "LFPG_SID",
+              "airport": "LFPG",
+              "file": "AD_2_LFPG_DATA_SID_RWY26L-26R_RNAV_CODE_02.pdf",
+              "documentDate": "2026-10-01",
+              "url": "https://www.sia.aviation-civile.gouv.fr/media/dvd/eAIP_29_OCT_2026/FRANCE/AIRAC-2026-10-29/html/eAIP/Cartes/LFPG/AD_2_LFPG_DATA_SID_RWY26L-26R_RNAV_CODE_02.pdf"
+            },
+            {
+              "id": "LFPG_STAR",
+              "airport": "LFPG",
+              "file": "AD_2_LFPG_DATA_STAR_RWY26L_RNAV_CODE_02.pdf",
+              "documentDate": "2026-06-11",
+              "url": "https://www.sia.aviation-civile.gouv.fr/media/dvd/eAIP_29_OCT_2026/FRANCE/AIRAC-2026-10-29/html/eAIP/Cartes/LFPG/AD_2_LFPG_DATA_STAR_RWY26L_RNAV_CODE_02.pdf"
+            }
+          ],
+          "notes": "The current AIP's GEN 0.4 checklist identifies individual DATA SID, DATA STAR and DATA RWY precoding sheets. Example LFPG SID/STAR PDFs expose row-level path terminators, waypoint identifiers, fly-over flags, magnetic/true courses, distances, turn direction, altitude/IAS constraints and navigation accuracy. The importer stores these fields as published, keeps shared runway selectors unexpanded, and leaves coordinates unresolved unless linked to a unique source-backed fix. FNA-only final-approach sheets are excluded from the complete RNP approach pattern. Do not release extracted PDFs or derived data until the licence scope for the specific eAIP product has been confirmed."
         }
       ]
     },
     "asia": {
       "status": "no_public_redistributable_ifr_source_confirmed",
       "operationallyAvailable": false,
-      "summary": "Official AIP portals are accessible in several Asian states, but the reviewed terms restrict use to personal/non-commercial viewing or require permission. No Asia-wide or country-level public commercial redistribution source for IFR procedures has been confirmed.",
+      "summary": "Official AIP procedure material is accessible in several Asian states, but reviewed terms commonly restrict extraction, redistribution or commercial use without permission. This review covers Thailand, India, Singapore, Hong Kong and South Korea; no Asia-wide public commercial-redistribution IFR procedure source is confirmed.",
       "confirmedProcedureCountries": [],
       "reviewedCountries": [
-        "TH",
+        "HK",
         "IN",
+        "KR",
         "SG",
-        "HK"
+        "TH"
       ],
       "sources": [
         {
@@ -227,6 +265,23 @@
           "sourceStatus": "terms_review_required",
           "dataStatus": "not_imported",
           "notes": "The AIS site labels AIP products as controlled documents and warns that downloaded or copied copies are uncontrolled. No public commercial redistribution permission was established in this review."
+        },
+        {
+          "id": "KR_MOLIT_AIP",
+          "jurisdiction": "KR",
+          "provider": "Ministry of Land, Infrastructure and Transport (MOLIT), Republic of Korea",
+          "sourceUrl": "https://aim.koca.go.kr/eaipPub/Package/2026-10-28-AIRAC/html/eAIP/KR-GEN-0.1-en-GB.html",
+          "license": "Korea AIP GEN 0.1 copyright policy",
+          "redistribution": "prior_permission_required_for_reproduction_distribution_or_commercial_use",
+          "licenseStatus": "copyrighted_MOLIT_prior_permission_or_consultation_required",
+          "procedureScope": [
+            "SIDs",
+            "STARs",
+            "approaches"
+          ],
+          "sourceStatus": "official_aip_and_procedures_accessible",
+          "dataStatus": "not_imported",
+          "notes": "The current AIP states all content is MOLIT-copyrighted unless otherwise indicated; unauthorized reproduction/distribution is prohibited. Use for profit or equivalent benefit requires prior permission or consultation. Public viewing does not grant FlightTempo redistribution rights."
         }
       ]
     }
