@@ -287,7 +287,7 @@ class XPlaneNavdataTests(unittest.TestCase):
             root = Path(temporary)
             procedure_path = root / "procedures/sids/sids.csv"
             procedure_path.parent.mkdir(parents=True)
-            payload = "\\n".join([
+            payload = "\n".join([
                 "#version,2611",
                 "airport_icao,procedure_id,source",
                 "KAAA,TEST1,FAA_CIFP_2611",
