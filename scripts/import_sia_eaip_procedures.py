@@ -105,7 +105,7 @@ def identify_table_header(row: list[str]) -> dict[str, int] | None:
 
 
 def parse_doc_identity(path: Path) -> tuple[str, str] | None:
-    name = path.stem.upper()
+    name = Path(path).stem.upper()
     match = re.match(r"AD_2_([A-Z0-9]{4})_DATA_(.+)", name)
     if not match:
         return None
