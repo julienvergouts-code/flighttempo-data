@@ -50,6 +50,39 @@ jobs:
           python-version: '3.12'
       - name: Run IFR importer unit tests
         run: python3 -m unittest discover -s tests -v
+      - name: Install French SIA procedure PDF parser
+        run: python3 -m pip install -r requirements-sia-procedures.txt
+      - name: Smoke-test extraction against current official SIA SID and STAR tables
+        run: |
+          set -euo pipefail
+          BASE_URL="https://www.sia.aviation-civile.gouv.fr/media/dvd/eAIP_29_OCT_2026/FRANCE/AIRAC-2026-10-29/html/eAIP/Cartes"
+          mkdir -p /tmp/flighttempo-sia-pdfs
+          curl --fail --location --retry 3 --retry-delay 2 \\
+            "$BASE_URL/LFPG/AD_2_LFPG_DATA_SID_RWY26L-26R_RNAV_CODE_02.pdf" \\
+            -o /tmp/flighttempo-sia-pdfs/AD_2_LFPG_DATA_SID_RWY26L-26R_RNAV_CODE_02.pdf
+          curl --fail --location --retry 3 --retry-delay 2 \\
+            "$BASE_URL/LFPG/AD_2_LFPG_DATA_STAR_RWY26L_RNAV_CODE_02.pdf" \\
+            -o /tmp/flighttempo-sia-pdfs/AD_2_LFPG_DATA_STAR_RWY26L_RNAV_CODE_02.pdf
+          python3 scripts/import_sia_eaip_procedures.py \\
+            --pdf-dir /tmp/flighttempo-sia-pdfs \\
+            --airac-effective-date 2026-10-29 \\
+            --source-base-url "$BASE_URL" \\
+            --output /tmp/flighttempo-sia-pilot.csv \\
+            --manifest /tmp/flighttempo-sia-pilot-manifest.json
+          python3 - <<'PY'
+          import csv
+          import json
+          from pathlib import Path
+          rows = list(csv.DictReader(Path("/tmp/flighttempo-sia-pilot.csv").open(encoding="utf-8", newline="")))
+          assert rows, "SIA smoke test extracted no procedure legs"
+          counts = {kind: sum(row["procedure_type"] == kind for row in rows) for kind in ("SID", "STAR")}
+          assert all(count > 0 for count in counts.values()), f"SID/STAR table extraction failed: {counts}"
+          assert all(row["airport_icao"] == "LFPG" for row in rows)
+          assert all(row["path_terminator"] for row in rows)
+          manifest = json.loads(Path("/tmp/flighttempo-sia-pilot-manifest.json").read_text())
+          assert manifest["operationallyAvailable"] is False
+          print(f"SIA LFPG procedure table smoke test passed: {counts}; total={len(rows)}")
+          PY
       - name: Build OurAirports reference datasets
         run: python3 scripts/build_aviation_db.py
       - name: Import optional global IFR fixes and navaids
