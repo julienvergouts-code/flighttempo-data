@@ -1,0 +1,57 @@
+{
+  "schemaVersion": 1,
+  "description": "Pinned provenance for the procedure CSV exports currently retained in this repository. Metadata is accepted only when the file version directive, source tag, row count, byte size and SHA-256 all match.",
+  "datasets": {
+    "sids": {
+      "sourceTag": "FAA_CIFP_2611",
+      "provider": "FAA AeroNav",
+      "sourceUrl": "https://aeronav.faa.gov/Upload_313-d/cifp/CIFP_261029.zip",
+      "license": "US Government Public Domain (FAA AeroNav)",
+      "licenseStatus": "public_domain",
+      "redistributable": true,
+      "dataCycle": "2611",
+      "effectiveDate": "2026-10-29",
+      "expiryDate": "2026-11-25",
+      "downloadedAt": "2026-11-12T14:22:04Z",
+      "coverage": "United States / FAA National Airspace System — departure procedures",
+      "recordCount": 33349,
+      "airportCount": 480,
+      "sizeBytes": 1646963,
+      "sha256": "be974a777fe0da70bb143bedce4f05d5744c2c62ad382691937c4b35494bf3cf"
+    },
+    "stars": {
+      "sourceTag": "FAA_CIFP_2611",
+      "provider": "FAA AeroNav",
+      "sourceUrl": "https://aeronav.faa.gov/Upload_313-d/cifp/CIFP_261029.zip",
+      "license": "US Government Public Domain (FAA AeroNav)",
+      "licenseStatus": "public_domain",
+      "redistributable": true,
+      "dataCycle": "2611",
+      "effectiveDate": "2026-10-29",
+      "expiryDate": "2026-11-25",
+      "downloadedAt": "2026-11-12T14:22:04Z",
+      "coverage": "United States / FAA National Airspace System — arrival procedures",
+      "recordCount": 44197,
+      "airportCount": 482,
+      "sizeBytes": 2257773,
+      "sha256": "6bf123c683e442c1a07fbc46f4f11ad45045f8322a1b2506d65f6719055c0c06"
+    },
+    "approaches": {
+      "sourceTag": "FAA_CIFP_2611",
+      "provider": "FAA AeroNav",
+      "sourceUrl": "https://aeronav.faa.gov/Upload_313-d/cifp/CIFP_261029.zip",
+      "license": "US Government Public Domain (FAA AeroNav)",
+      "licenseStatus": "public_domain",
+      "redistributable": true,
+      "dataCycle": "2611",
+      "effectiveDate": "2026-10-29",
+      "expiryDate": "2026-11-25",
+      "downloadedAt": "2026-11-12T14:22:04Z",
+      "coverage": "United States / FAA National Airspace System — instrument approaches",
+      "recordCount": 114966,
+      "airportCount": 2839,
+      "sizeBytes": 5608604,
+      "sha256": "ff7b9121e79b56ff616a77e285c9cba764575fd2c58335b3281124813362d3dd"
+    }
+  }
+}
