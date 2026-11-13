@@ -16,7 +16,7 @@ The manifest lists the available datasets, their relative paths, download URLs, 
 
 | File | Purpose |
 | --- | --- |
-| `airports.csv` | FlightTempo airport-reference export with IATA/ICAO identifiers, IANA time-zone IDs and coordinates |
+| `airports.csv` | FlightTempo airport reference with IATA/ICAO, IANA timezone, coordinates, elevation, a longest-runway compatibility field, and pipe-delimited lists of all matched runway pairs, headings and lengths |
 | `airlines.csv` | Airline/operator roster profiles (currently ASL and generic commercial profile) |
 | `route_rules.csv` | Roster text/classification rules |
 | `navigation/airports/ourairports_airports.csv` | OurAirports global airport reference extract |
@@ -28,6 +28,21 @@ The manifest lists the available datasets, their relative paths, download URLs, 
 | `procedures/**` | Reserved for verified published SIDs, STARs and approaches; current files are not advertised as available |
 
 Direct downloads use the paths recorded in the manifest. Do not hard-code a future AIRAC cycle or record count in the app.
+
+### Airport reference enrichment
+
+The first nine columns of `airports.csv` retain the legacy Android parser contract:
+
+`iata, icao, timeZone, name, latitude, longitude, elevationFt, runwayPair, runwayHeadingDeg`
+
+The following appended columns retain all paired open runway records matched from OurAirports:
+
+- `allRunwayPairs`: pipe-delimited runway-end pairs (for example `07L/25R|07R/25L|01/19`)
+- `allRunwayHeadingsDeg`: matching low-end true headings, in the same order
+- `allRunwayLengthsFt`: matching runway lengths in feet, in the same order
+- `runwayCount`: number of matched paired open runways
+
+The longest runway is copied into the legacy primary runway fields so older app builds continue to parse the file. The extra fields are available for future multi-runway UI support. Enrichment is rebuilt from the daily OurAirports source snapshots. OurAirports releases its data to the public domain; the source provenance for the pre-existing IATA/time-zone reference fields remains under review. This dataset is community-maintained and is not guaranteed for operational use.
 
 ## Updating the data
 
