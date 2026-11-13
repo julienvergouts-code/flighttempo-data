@@ -417,10 +417,19 @@ def file_summary(root: Path, dataset_id: str, relative_path: str, source_meta=No
     count = 0
     if exists:
         with path.open("r", encoding="utf-8", newline="") as handle:
-            count = max(0, sum(1 for _ in csv.reader(handle)) - 1)
+            # Skip optional CSV dialect/version directives (e.g. sep=; and #version;4).
+            rows = [
+                row for row in csv.reader(handle)
+                if row and not row[0].strip().lower().startswith(("sep=", "#version"))
+            ]
+            count = max(0, len(rows) - 1)
     meta = source_meta or {}
     return {
         "id": dataset_id, "path": relative_path,
+        "downloadUrl": (
+            f"https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/{relative_path}"
+            if exists else None
+        ),
         "available": bool(exists and count > 0),
         "recordCount": count, "sizeBytes": path.stat().st_size if exists else 0,
         "sha256": sha256(path.read_bytes()) if exists else None,
@@ -442,9 +451,9 @@ def update_manifest(manifest_path: Path, root: Path, import_meta=None):
     else:
         import_meta = {}
 
-    manifest.setdefault("schemaVersion", 12)
+    manifest.setdefault("schemaVersion", 13)
     datasets = [
-        file_summary(root, "airports", "app/src/main/assets/airports.csv"),
+        file_summary(root, "airports", "navigation/airports/airports.csv"),
         file_summary(root, "runways", "navigation/runways/runways_parsed.csv"),
         file_summary(root, "ourairports_navaids", "navigation/navaids/navaids.csv"),
         file_summary(root, "flightgear_fixes", OUTPUTS["flightgear_fixes"], import_meta),
@@ -470,6 +479,18 @@ def update_manifest(manifest_path: Path, root: Path, import_meta=None):
             "present_but_unverified" if summary["recordCount"] > 0 else "not_imported"
         )
         datasets.append(summary)
+    # Profiles are versioned data packages as well as navigation datasets.
+    # These files are maintained by the repository owner and downloaded independently.
+    datasets.extend([
+        file_summary(
+            root, "airline_profiles", "profiles/airlines.csv",
+            {"provider": "FlightTempo", "licenseStatus": "repository_owner_published"},
+        ),
+        file_summary(
+            root, "route_rules", "profiles/route_rules.csv",
+            {"provider": "FlightTempo", "licenseStatus": "repository_owner_published"},
+        ),
+    ])
     manifest["datasets"] = datasets
     if import_meta:
         manifest["flightgearImport"] = {
@@ -490,6 +511,8 @@ def update_manifest(manifest_path: Path, root: Path, import_meta=None):
     capabilities["independentWaypoints"] = datasets[3]["available"]
     capabilities["flightgearNavaids"] = datasets[4]["available"]
     capabilities["publishedAirways"] = datasets[5]["available"]
+    capabilities["airlineProfiles"] = datasets[-2]["available"]
+    capabilities["rosterClassificationRules"] = datasets[-1]["available"]
 
     # Keep manifest totals synchronized with the normalized datasets.
     statistics = manifest.setdefault("statistics", {})
@@ -502,6 +525,8 @@ def update_manifest(manifest_path: Path, root: Path, import_meta=None):
     statistics["airwaySegments"] = datasets[5]["recordCount"] if datasets[5]["available"] else 0
     statistics["lowAirwaySegments"] = airway_counts.get("lowAirwaySegments", 0) if datasets[5]["available"] else 0
     statistics["highAirwaySegments"] = airway_counts.get("highAirwaySegments", 0) if datasets[5]["available"] else 0
+    statistics["airlineProfiles"] = datasets[-2]["recordCount"] if datasets[-2]["available"] else 0
+    statistics["routeRules"] = datasets[-1]["recordCount"] if datasets[-1]["available"] else 0
 
     manifest_path.parent.mkdir(parents=True, exist_ok=True)
     temp_path = manifest_path.with_suffix(manifest_path.suffix + ".tmp")
