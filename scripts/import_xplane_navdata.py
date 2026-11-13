@@ -434,10 +434,83 @@ def file_summary(root: Path, dataset_id: str, relative_path: str, source_meta=No
         "recordCount": count, "sizeBytes": path.stat().st_size if exists else 0,
         "sha256": sha256(path.read_bytes()) if exists else None,
         "sourceProvider": meta.get("provider", ""),
+        "sourceUrl": meta.get("sourceUrl", ""),
+        "coverage": meta.get("coverage", ""),
+        "sourceTag": meta.get("sourceTag", ""),
         "license": meta.get("license", ""),
         "licenseStatus": meta.get("licenseStatus", "not_applicable"),
         "dataCycle": meta.get("dataCycle", "unknown"),
+        "effectiveDate": meta.get("effectiveDate", ""),
+        "expiryDate": meta.get("expiryDate", ""),
+        "provenanceVerification": meta.get("provenanceVerification", "not_declared"),
     }
+
+
+def load_procedure_metadata(root: Path, dataset_id: str, relative_path: str):
+    """Load procedure provenance only when its pinned file identity is verified.
+
+    A matching hash/count/version/source tag proves that the repository file is
+    the exact artifact described by source-manifest.json. It does not certify
+    operational validity, chart correctness, completeness or current currency.
+    """
+    source_manifest_path = root / "procedures/source-manifest.json"
+    procedure_path = root / relative_path
+    if not source_manifest_path.is_file():
+        return {}
+
+    source_manifest = json.loads(source_manifest_path.read_text(encoding="utf-8"))
+    declared = source_manifest.get("datasets", {}).get(dataset_id)
+    if not isinstance(declared, dict):
+        return {}
+
+    metadata = dict(declared)
+    metadata["provenanceVerification"] = "mismatch_requires_review"
+    if not procedure_path.is_file():
+        metadata["provenanceVerification"] = "file_missing"
+        return metadata
+
+    raw = procedure_path.read_bytes()
+    actual_hash = sha256(raw)
+    actual_size = len(raw)
+    actual_count = 0
+    airport_ids = set()
+    source_tags = set()
+    directive = None
+
+    try:
+        with procedure_path.open("r", encoding="utf-8-sig", newline="") as handle:
+            reader = csv.reader(handle)
+            directive = next(reader, None)
+            header = next(reader, None)
+            if not header:
+                return metadata
+            airport_index = header.index("airport_icao")
+            source_index = header.index("source")
+            for row in reader:
+                if not row:
+                    continue
+                if len(row) <= max(airport_index, source_index):
+                    return metadata
+                actual_count += 1
+                airport_ids.add(row[airport_index].strip())
+                source_tags.add(row[source_index].strip())
+    except (OSError, UnicodeError, ValueError, csv.Error):
+        return metadata
+
+    expected_tag = str(declared.get("sourceTag", ""))
+    expected_cycle = str(declared.get("dataCycle", ""))
+    checks_match = (
+        actual_size == declared.get("sizeBytes")
+        and actual_hash.lower() == str(declared.get("sha256", "")).lower()
+        and actual_count == declared.get("recordCount")
+        and len(airport_ids) == declared.get("airportCount")
+        and directive == ["#version", expected_cycle]
+        and bool(expected_tag)
+        and source_tags == {expected_tag}
+    )
+    if checks_match:
+        metadata["provenanceVerification"] = "matched_repository_artifact"
+    return metadata
 
 
 def update_manifest(manifest_path: Path, root: Path, import_meta=None):
@@ -486,18 +559,49 @@ def update_manifest(manifest_path: Path, root: Path, import_meta=None):
         "present_but_disabled" if datasets[6]["recordCount"] > 0 else "not_imported"
     )
     capabilities = manifest.setdefault("capabilities", {})
+    procedure_metadata = {}
     for dataset_id, relative_path, capability in (
         ("sids", "procedures/sids/sids.csv", "sids"),
         ("stars", "procedures/stars/stars.csv", "stars"),
         ("approaches", "procedures/approaches/approaches.csv", "approaches"),
     ):
-        summary = file_summary(root, dataset_id, relative_path)
+        source_meta = load_procedure_metadata(root, dataset_id, relative_path)
+        procedure_metadata[dataset_id] = source_meta
+        summary = file_summary(root, dataset_id, relative_path, source_meta)
+        provenance_matches = (
+            source_meta.get("provenanceVerification") == "matched_repository_artifact"
+        )
+        # The files are intentionally exposed only as development/test downloads.
+        # They must not enable the published-procedure capabilities until the
+        # procedure content and operational currency have been independently reviewed.
+        summary["testDownloadAvailable"] = bool(summary["recordCount"] > 0 and provenance_matches)
         verified = bool(capabilities.get(capability, False))
         summary["available"] = bool(summary["available"] and verified)
         summary["status"] = "verified" if summary["available"] else (
-            "present_but_unverified" if summary["recordCount"] > 0 else "not_imported"
+            "present_unverified_test_only" if summary["testDownloadAvailable"] else
+            ("present_but_unverified" if summary["recordCount"] > 0 else "not_imported")
         )
         datasets.append(summary)
+
+    procedure_cycles = {
+        str(meta.get("dataCycle"))
+        for meta in procedure_metadata.values()
+        if meta.get("provenanceVerification") == "matched_repository_artifact"
+        and meta.get("dataCycle")
+    }
+    manifest["procedureAiracCycle"] = (
+        next(iter(procedure_cycles)) if len(procedure_cycles) == 1
+        else ("mixed" if procedure_cycles else "unknown")
+    )
+    manifest["procedureCoverageStatus"] = (
+        "FAA_US_NAS_ONLY_TEST_DATA; EUROPE_UNAVAILABLE"
+        if procedure_metadata and all(
+            meta.get("provenanceVerification") == "matched_repository_artifact"
+            for meta in procedure_metadata.values()
+        )
+        else "UNVERIFIED"
+    )
+    manifest["procedureOperationalUse"] = False
     # Profile packages are versioned independently from AIRAC navigation data.
     datasets.extend([
         file_summary(
