@@ -19,6 +19,7 @@ from import_xplane_navdata import (
     read_source_file,
     resolve_endpoint,
     validate_source_cycles,
+    load_procedure_metadata,
 )
 
 
@@ -233,6 +234,52 @@ class XPlaneNavdataTests(unittest.TestCase):
         }
         with self.assertRaisesRegex(ValueError, "Mixed or missing cycles"):
             validate_source_cycles(sources)
+
+    def test_procedure_metadata_requires_matching_file_identity(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            procedure_path = root / "procedures/sids/sids.csv"
+            procedure_path.parent.mkdir(parents=True)
+            payload = (
+                "#version,2611\\n"
+                "airport_icao,procedure_id,source\\n"
+                "KAAA,TEST1,FAA_CIFP_2611\\n"
+                "KBBB,TEST2,FAA_CIFP_2611\\n"
+            ).encode("utf-8")
+            procedure_path.write_bytes(payload)
+            metadata = {
+                "datasets": {
+                    "sids": {
+                        "sourceTag": "FAA_CIFP_2611",
+                        "provider": "FAA AeroNav",
+                        "license": "US Government Public Domain (FAA AeroNav)",
+                        "licenseStatus": "public_domain",
+                        "dataCycle": "2611",
+                        "effectiveDate": "2026-10-29",
+                        "expiryDate": "2026-11-25",
+                        "recordCount": 2,
+                        "airportCount": 2,
+                        "sizeBytes": len(payload),
+                        "sha256": hashlib.sha256(payload).hexdigest(),
+                    }
+                }
+            }
+            source_manifest = root / "procedures/source-manifest.json"
+            source_manifest.write_text(json.dumps(metadata), encoding="utf-8")
+
+            result = load_procedure_metadata(root, "sids", "procedures/sids/sids.csv")
+            self.assertEqual(
+                result["provenanceVerification"],
+                "matched_repository_artifact",
+            )
+            self.assertEqual(result["dataCycle"], "2611")
+
+            procedure_path.write_bytes(payload + b"KCCC,TEST3,FAA_CIFP_2611\\n")
+            changed = load_procedure_metadata(root, "sids", "procedures/sids/sids.csv")
+            self.assertEqual(
+                changed["provenanceVerification"],
+                "mismatch_requires_review",
+            )
 
 
 if __name__ == "__main__":
