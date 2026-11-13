@@ -501,11 +501,11 @@ def update_manifest(manifest_path: Path, root: Path, import_meta=None):
     # Profile packages are versioned independently from AIRAC navigation data.
     datasets.extend([
         file_summary(
-            root, "airline_profiles", "profiles/airlines.csv",
+            root, "airline_profiles", "airlines.csv",
             {"provider": "FlightTempo", "licenseStatus": "owner_authored_profile"},
         ),
         file_summary(
-            root, "route_rules", "profiles/route_rules.csv",
+            root, "route_rules", "route_rules.csv",
             {"provider": "FlightTempo", "licenseStatus": "owner_authored_profile"},
         ),
     ])
