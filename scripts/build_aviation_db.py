@@ -165,7 +165,7 @@ def build_airports(records, stage):
     rows.sort(key=lambda row: row[0])
 
     write_csv(
-        stage / "app/src/main/assets/airports.csv",
+        stage / "navigation/airports/airports.csv",
         [
             "icao",
             "country",
@@ -407,7 +407,7 @@ def main():
 
         # Validate all generated files.
         generated = {
-            "airports": stage / "app/src/main/assets/airports.csv",
+            "airports": stage / "navigation/airports/airports.csv",
             "navaids": stage / "navigation/navaids/navaids.csv",
             "runways": stage / "navigation/runways/runways_parsed.csv"
         }
@@ -417,11 +417,11 @@ def main():
             log(f"Validated {name}: {counts[name]} records")
 
         manifest = {
-            "schemaVersion": 12,
+            "schemaVersion": 13,
             "generatedAtUtc": timestamp,
             "procedureAiracCycle": "unknown",
             "navaidTypeCounts": navaid_type_counts,
-            "targetProfile": "Aviation reference data",
+            "targetProfile": "FlightTempo downloadable aviation reference data",
             "statistics": {
                 "airports": counts["airports"],
                 "runways": counts["runways"],
@@ -442,6 +442,8 @@ def main():
             ],
             "capabilities": {
                 "airports": True,
+                "airlineProfiles": True,
+                "rosterClassificationRules": True,
                 "runways": True,
                 "navaids": True,
                 "vor": sum(navaid_type_counts.get(t, 0) for t in ("VOR", "VOR-DME", "VORTAC")) > 0,
@@ -467,7 +469,7 @@ def main():
 
         # Publish only after every dataset has passed validation.
         destinations = [
-            "app/src/main/assets/airports.csv",
+            "navigation/airports/airports.csv",
             "navigation/navaids/navaids.csv",
             "navigation/runways/runways_parsed.csv",
             "navigation/sources/airports.csv",
