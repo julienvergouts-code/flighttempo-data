@@ -26,19 +26,23 @@ Treat cycle 2611 as expired after 25 November 2026 unless a newer, verified file
 
 ## Europe
 
-**No complete Europe-wide IFR dataset is currently available in FlightTempo.** France's official SIA XML feed is a confirmed public commercial-redistribution source under Licence Ouverte 2.0, but it has not yet been ingested or validated. OpenFlightMaps is a viable conditional source for VFR routes/traffic circuits, not IFR SIDs/STARs. DFS INSPIRE provides German baseline geodata, not the German IFR terminal procedure set. EAD and other national AIPs have separate paid, personal-use or permission requirements.
+**No complete Europe-wide IFR dataset is currently available in FlightTempo.** The current French eAIP (AIRAC 11/26) publishes DATA SID and DATA STAR PDFs with structured leg tables, and a parser has been added for testing against official LFPG examples. No French procedure CSV has yet been published. The SIA XML export is a separate open-licensed reference-data product; it is not assumed to contain complete IFR procedure legs. The exact Licence Ouverte scope for the eAIP DATA PDFs must be confirmed before the derived rows are released publicly. OpenFlightMaps is a viable conditional source for VFR routes/traffic circuits, not IFR SIDs/STARs. DFS INSPIRE provides German baseline geodata, not the German IFR terminal procedure set. EAD and other national AIPs have separate paid, personal-use or permission requirements.
 
 See [European procedure source status](europe/README.md).
 
 ## Asia
 
-**No public-commercial-redistribution source for Asian IFR SIDs/STARs/approaches has been confirmed in the reviewed sources.** Thailand, India and Singapore impose personal-use or approval conditions; Hong Kong's AIP is a controlled document and a redistribution grant was not established. Do not copy AIP files into the public repository merely because they are freely viewable or downloadable.
+**No public-commercial-redistribution source for Asian IFR SIDs/STARs/approaches has been confirmed in the reviewed sources.** Thailand, India and Singapore impose personal-use or approval conditions; Hong Kong's AIP is a controlled document; South Korea's MOLIT copyright policy requires prior permission or consultation for profit-making use. Do not copy AIP files into the public repository merely because they are freely viewable or downloadable.
 
 See [Asian procedure source status](asia/README.md).
 
 ## Machine-readable source inventory
 
 [Source registry](source-registry.json) records regional source candidates, licences, restrictions, AIRAC dates where known, and whether a dataset has actually been imported. The navigation manifest generator copies this inventory into `regionalProcedureCoverage` so the app can distinguish a source candidate from an installed procedure dataset.
+
+## French SIA procedure-table importer
+
+The importer in scripts/import_sia_eaip_procedures.py reads official SIA DATA PDFs, preserves their leg fields and produces a provenance report. A CI smoke test downloads current LFPG SID and STAR DATA PDFs and checks that the PDF tables are extractable. It does not generate route geometry or synthetic fixes, and it leaves the procedure capability flags disabled. The importer is not yet a published French dataset: extraction across the national set, fix-coordinate joins, approach coverage and the specific eAIP PDF licence scope still require validation.
 
 ## Data handling rules
 

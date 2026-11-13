@@ -2,30 +2,30 @@
 
 ## Current position
 
-FlightTempo does **not** currently have a confirmed, public-commercial-redistribution source for Asian IFR SIDs, STARs or instrument approaches. Several national AIP portals make current procedures freely viewable or downloadable, but free access is not the same as permission to extract, bundle and redistribute them in a public app.
+No public, commercial-redistributable Asia-wide IFR SID/STAR/approach source has been confirmed. National AIP portals provide procedure information, but access to a chart or PDF is not the same as permission to extract it, republish it, or embed derived data in a commercial app.
 
-No Asian procedure files have been imported or enabled. The review below covers selected major AIP portals; it is not a legal audit of every Asian state.
+## Reviewed national sources
 
-## National sources reviewed
+| Jurisdiction | Official source / terms | Current FlightTempo decision |
+| --- | --- | --- |
+| Thailand | [CAAT AIP terms](https://ais.caat.or.th/term-condition) | Personal, non-commercial use only by default. Extraction, copying, storage, redistribution, republishing, adaptation and commercial use require authorization. CAAT invites commercial publishers and app developers to contact it. |
+| India | [AAI disclaimer](https://aai.aero/en/disclaimer) and [AIM India terms](https://aim-india.aai.aero/terms-conditions) | AAI copyright remains with AAI; prior approval is required for reproduction/distribution. Do not import for public redistribution without approval. |
+| Singapore | [CAAS terms of use](https://www.caas.gov.sg/terms-of-use/) and [AIS Singapore](https://aim-sg.caas.gov.sg/) | The default website terms limit downloads to one copy on one computer for personal, non-commercial use. No commercial bundle permission established. |
+| Hong Kong | [Hong Kong AIS](https://www.ais.gov.hk/) | AIP items are labelled controlled documents and downloaded/copied versions are uncontrolled. Public commercial redistribution permission has not been established. |
+| South Korea | [Current AIP GEN 0.1 copyright policy](https://aim.koca.go.kr/eaipPub/Package/2026-10-28-AIRAC/html/eAIP/KR-GEN-0.1-en-GB.html) | MOLIT claims copyright in all AIP content unless otherwise stated. Unauthorized reproduction/distribution is prohibited; use for profit or equivalent benefit requires prior permission or consultation. |
 
-| Jurisdiction | Authority/source | Reuse position found | FlightTempo decision |
-| --- | --- | --- | --- |
-| Thailand | [CAAT AIS terms](https://ais.caat.or.th/term-condition) | Personal non-commercial use only. The terms prohibit extracting, copying, storing, redistributing, republishing, adapting or commercially exploiting AIP material without authorization. Commercial app developers are directed to contact CAAT. | Permission required; do not ingest into public data. |
-| India | [AAI disclaimer](https://aai.aero/en/disclaimer) and [AIM India terms](https://aim-india.aai.aero/terms-conditions) | AAI states its website material remains copyrighted and may not be reproduced or distributed without prior approval. AIM India terms restrict certain documents to AAI personnel for internal non-commercial use. | Prior written permission required. |
-| Singapore | [CAAS terms of use](https://www.caas.gov.sg/terms-of-use/) and [AIM-SG AIP portal](https://aim-sg.caas.gov.sg/) | AIP and charts are viewable, but CAAS website terms limit downloaded copies to one computer and personal, non-commercial use. | Commercial redistribution permission required. |
-| Hong Kong | [Hong Kong AIS](https://www.ais.gov.hk/) | AIP products are identified as controlled documents. The reviewed portal terms did not establish a public commercial redistribution grant. | Do not copy; obtain written permission or a clear licence first. |
+## Practical route for Asia
 
-Other national AIS portals, including China, Japan, Korea, Malaysia, Indonesia and the Philippines, have not yet passed a source-by-source redistribution review. Their availability online must not be treated as an open-data licence.
+1. Identify the official AIS/AIP portal and current AIRAC package for each country.
+2. Find whether it provides AIXM, a digital IFP dataset, or structured DATA procedure tables in the AIP.
+3. Read the current copyright/reuse terms before extracting anything.
+4. Request written commercial redistribution permission where required.
+5. Only then build a country-specific importer and validate all procedures against the source AIP.
 
-## What would unlock Asia
+South Korea is a good example of why this distinction matters: its current AIP is directly accessible online, but GEN 0.1 expressly requires prior permission or consultation before using AIP information for profit. Public visibility is not a redistribution licence.
 
-For each country, FlightTempo needs one of:
+## Repository rule
 
-- an explicit open licence permitting public and commercial redistribution of extracted procedure data; or
-- a written licence from the national AIS that permits redistribution in a commercial mobile application.
+Do not place Asian AIP procedure files or derived procedure rows in the public FlightTempo data repository until explicit redistribution rights are established. A private local test may still be technically possible, but the same source licence must be respected and it must not be represented as an official or operational navigation source.
 
-A user's individual subscription, personal AIP login or local simulator installation cannot be used to seed this public repository. This includes commercial navigation providers and any personal-use-only AIP source.
-
-Once a country is cleared, store it as a separately attributable provider/country package with its own AIRAC cycle, effective/expiry dates, record counts, file hashes and validation results. Do not represent partial country coverage as Asia-wide coverage.
-
-The current source-by-source status is machine-readable in [source-registry.json](../source-registry.json).
+The machine-readable inventory is in [source-registry.json](../source-registry.json).

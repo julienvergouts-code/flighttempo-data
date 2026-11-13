@@ -2,36 +2,53 @@
 
 ## Current position
 
-FlightTempo does **not** yet contain a complete Europe-wide IFR SID/STAR/approach dataset. The existing FAA CIFP files remain US-only test data and must never be labelled as European procedures.
+FlightTempo does **not** yet contain a complete Europe-wide IFR SID/STAR/approach dataset. The FAA CIFP files in this repository are US-only development/test data and must never be labelled as European procedures.
 
-There is one confirmed, openly reusable national IFR source to start with: **France SIA**. It has not yet been ingested into FlightTempo. Other European sources have narrower coverage or require separate licences.
+France is the first practical national candidate because its official eAIP publishes separate **DATA SID**, **DATA STAR** and some **DATA RWY / RNP** procedure tables. These are more useful for structured extraction than the graphical route charts alone.
 
-## France — public redistribution source
+## France — structured procedure tables identified
 
-The SIA's official open-data catalogue lists the XML AIRAC 11/26 export as free to download (EUR 0), 5.8 MB, effective **29 October to 25 November 2026**. The ZIP contains:
+The current French eAIP package is AIRAC 11/26, effective **29 October to 25 November 2026**. Its official GEN 0.4 checklist lists the individual aerodrome documents, including the DATA procedure sheets. The package can be browsed as PDFs; for FlightTempo ingestion, download only the procedure DATA sheets rather than the full eAIP ZIP.
 
-- `AIXM4.5_all_FR_OM_YYYY-MM-DD.xml` — AIXM 4.5 export for the France and overseas AIP database
-- `XML_SIA_YYYY-MM-DD.xml` — SIA-specific XML export
+Key sources:
 
-Sources:
+- [Official AIP France GEN 0.4 document index — AIRAC 11/26](https://www.sia.aviation-civile.gouv.fr/media/dvd/eAIP_29_OCT_2026/FRANCE/AIRAC-2026-10-29/pdf/FR-GEN-0.4-fr-FR.pdf)
+- [LFPG SID DATA example — RWY 26L/26R RNAV CODE 02](https://www.sia.aviation-civile.gouv.fr/media/dvd/eAIP_29_OCT_2026/FRANCE/AIRAC-2026-10-29/html/eAIP/Cartes/LFPG/AD_2_LFPG_DATA_SID_RWY26L-26R_RNAV_CODE_02.pdf)
+- [LFPG STAR DATA example — RWY 26L RNAV CODE 02](https://www.sia.aviation-civile.gouv.fr/media/dvd/eAIP_29_OCT_2026/FRANCE/AIRAC-2026-10-29/html/eAIP/Cartes/LFPG/AD_2_LFPG_DATA_STAR_RWY26L_RNAV_CODE_02.pdf)
+- [SIA open-data catalogue and Licence Ouverte terms](https://www.sia.aviation-civile.gouv.fr/produits-numeriques-en-libre-disposition.html)
 
-- [SIA XML AIRAC 11/26 product page](https://www.sia.aviation-civile.gouv.fr/produits-numeriques-en-libre-disposition/les-bases-de-donnees-sia/donnees-aeronautiques-xml-airac-11-26.html)
-- [SIA open-data products and legal terms](https://www.sia.aviation-civile.gouv.fr/produits-numeriques-en-libre-disposition.html)
-- [SIA legal information](https://www.sia.aviation-civile.gouv.fr/informationslegales)
-- [Licence Ouverte 2.0 full terms](https://www.data.gouv.fr/pages/legal/licences/etalab-2-0)
-- [Public mirror directory used by open-data tooling](https://data.cquest.org/dgac/aip/)
+The DATA SID/STAR PDFs contain table columns such as procedure identification, path terminator, waypoint identification, fly-over, magnetic and true direction, distance, turn direction, minimum/maximum altitude, maximum IAS and navigation accuracy. Some RNP approach DATA sheets also include a leg sequence, path terminator, waypoint, altitude/speed constraints and vertical-angle/TCH information.
 
-The SIA's open-data terms permit worldwide commercial and non-commercial reuse, including extraction, transformation, redistribution and inclusion in a product or application. FlightTempo must preserve the SIA attribution and the last-update date, and must not alter or misrepresent the meaning of the source data.
+### Extraction implementation
 
-**Important:** the source is approved for reuse, but FlightTempo has not yet downloaded, parsed or validated the AIXM/XML export. The source is therefore recorded as `source_current_not_ingested`, not as available procedure data. Before publication, the importer must validate airport identity, runway and transition associations, ordered legs, path terminators, altitude/speed constraints, fix references, AIRAC dates and checksums. Unknown or unsupported legs must not be guessed.
+The first importer is now in scripts/import_sia_eaip_procedures.py. It is designed to:
+
+1. Read individual SIA DATA PDFs using pdfplumber.
+2. Preserve the published procedure heading, runway selector and each row's path terminator and constraints.
+3. Keep shared/blank runway selectors as shared/unspecified rather than expanding them into guessed runway branches.
+4. Preserve altitude and speed text as published rather than silently converting ambiguous formats.
+5. Resolve a waypoint coordinate only when an optional source-backed fix list produces exactly one matching ident; otherwise the fix remains unresolved or ambiguous.
+6. Write a provenance report with source file hash, document revision date, AIRAC effective date, source URL and row counts.
+
+The importer does not create route geometry from headings/distances, invent missing legs, infer a coordinate from a waypoint name, or enable operational procedure capabilities. FNA-only final-approach precoding sheets are excluded from the complete-RNP-approach filename pattern.
+
+A CI smoke test downloads two current LFPG DATA PDFs (one SID and one STAR) from the SIA site and verifies that the rows can be extracted. The output is temporary test data only; no French procedure CSV is yet published in this repository. The parser still needs coverage testing across different airport document layouts, approach variants, fix-coordinate joins and AIRAC updates.
+
+### Licence boundary
+
+The SIA's open-data catalogue says that products in its "Produits numériques en libre disposition" subcategories are under Licence Ouverte. That licence permits commercial and non-commercial extraction, adaptation, redistribution and inclusion in an app, subject to SIA attribution and preservation of meaning.
+
+However, the DATA tables used above are individual eAIP chart/PDF documents. Before placing extracted rows in the public FlightTempo data repository, confirm that the specific eAIP DATA PDF product is within the scope of the SIA free-disposition licence. The presence of a public download URL and an SIA copyright notice alone is not a substitute for that scope check. Until confirmed, the repository must not publish the extracted procedure records as redistributable data.
+
+The separate SIA XML AIRAC export is expressly listed as a free-disposition product under Licence Ouverte 2.0. It is useful reference data for airports, runways, navaids and designated points, but FlightTempo does not currently assume it is a complete IFR procedure-leg feed. Keep its provenance separate from the eAIP DATA PDF source.
 
 ## Other European sources
 
 | Source | What it provides | Current FlightTempo decision |
 | --- | --- | --- |
 | OpenFlightMaps (OFMA) | VFR traffic circuits, arrival routes and departure routes in supported regions | Commercial app use is permitted subject to the OFMA General Users' License. Treat it as VFR geometry, **not** IFR SIDs/STARs or instrument approaches. Coverage varies by region. |
-| DFS INSPIRE (Germany) | Airports, runways, navaids, waypoints, routes and airspace via WFS/WMS | Public reference geodata only; it does not provide the German IFR terminal procedure set. DFS notes data may be incomplete and is updated twice per year. |
-| EUROCONTROL EAD | ECAC AIP/AIXM source material | EAD Basic is a limited, general-purpose consultation tool, not an operational source. Commercial third-party re-serving requires EAD Type 3 service charges and Member State royalty fees. Not a public bundle source. |
+| DFS INSPIRE (Germany) | Airports, runways, navaids, waypoints, routes and airspace via WFS/WMS | Public reference geodata only; it does not provide the German IFR terminal procedure set. |
+| EUROCONTROL EAD | ECAC AIP/AIXM source material | The EAD is a source for procedures and wider AIS data, but commercial third-party re-serving requires the applicable service charges and State royalties. Not a free public bundle source. |
 | ENAIRE (Spain) | National AIP, including terminal procedures | Public commercial redistribution rights have not been confirmed. Do not publish until the relevant licence or written permission is established. |
 | NATS / UK AIS | UK AIP procedure material | Crown Copyright / NATS reuse terms require review before extraction or redistribution. |
 
@@ -39,10 +56,11 @@ Simulator and community files reviewed (TerraSync Brest/Ponta Delgada, Bulgaria 
 
 ## Import and release policy
 
-1. Keep the French SIA data in its own source namespace and retain source attribution and AIRAC metadata.
+1. Keep each country's procedures in their own source namespace and retain both AIRAC effective date and document revision date.
 2. Keep OFMA VFR routes separate from IFR procedure datasets.
 3. Treat each national AIP as a separate licence and provenance boundary.
 4. Do not use EAD, paid navdata or personal-use AIP downloads in a public dataset without the necessary commercial redistribution licence.
-5. Enable the app's IFR procedure capability only after content validation and current-cycle checks have passed.
+5. Keep unsupported path terminators, unresolved fixes and incomplete transitions visible as validation errors; do not fabricate substitutes.
+6. Enable an app's IFR procedure capability only after the complete procedure content, source licence, cycle and fix links have been reviewed.
 
 The current source-by-source status is machine-readable in [source-registry.json](../source-registry.json).
