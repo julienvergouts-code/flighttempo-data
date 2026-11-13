@@ -7,7 +7,7 @@ from scripts.import_sia_aixm_fixes import extract_points, parse_aixm_coordinate
 
 class SiaAixmFixImporterTests(unittest.TestCase):
     def test_coordinate_conversion_handles_latitude_and_longitude_formats(self):
-        self.assertEqual(parse_aixm_coordinate("464000.00N", "lat"), "46")
+        self.assertEqual(parse_aixm_coordinate("464000.00N", "lat"), "46.66666667")
         self.assertEqual(parse_aixm_coordinate("0060711.00E", "lon"), "6.11972222")
         self.assertEqual(parse_aixm_coordinate("443227N", "lat"), "44.54083333")
         self.assertEqual(parse_aixm_coordinate("0431636.09W", "lon"), "-43.27669167")
