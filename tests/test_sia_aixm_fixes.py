@@ -69,7 +69,7 @@ class SiaAixmFixImporterTests(unittest.TestCase):
         self.assertEqual(digest, points[0]["source_sha256"])
         self.assertEqual(member, "sample.xml")
         self.assertEqual(points[0]["ident"], "DINOX")
-        self.assertEqual(points[0]["latitude"], "46")
+        self.assertEqual(points[0]["latitude"], "46.66666667")
         self.assertEqual(points[0]["longitude"], "6.11972222")
         self.assertEqual(points[0]["datum"], "WGS84")
         self.assertEqual([p["ident"] for p in points].count("DUP"), 2)
