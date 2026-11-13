@@ -10,6 +10,9 @@ on:
       - 'tests/**'
       - 'navigation/**'
       - 'procedures/**'
+      - 'airports.csv'
+      - 'airlines.csv'
+      - 'route_rules.csv'
       - '.github/workflows/update-navigation-data.yml'
       - 'navigation_manifest.json'
 
@@ -45,7 +48,10 @@ jobs:
       - name: Verify generated datasets and manifest
         run: |
           set -e
-          test -s app/src/main/assets/airports.csv
+          test -s airports.csv
+          test -s airlines.csv
+          test -s route_rules.csv
+          test -s navigation/airports/ourairports_airports.csv
           test -s navigation/navaids/navaids.csv
           test -s navigation/runways/runways_parsed.csv
           test -s navigation_manifest.json
@@ -56,9 +62,10 @@ jobs:
           from pathlib import Path
 
           manifest = json.loads(Path("navigation_manifest.json").read_text())
-          assert manifest["schemaVersion"] == 12, "Unexpected manifest schema version"
+          assert manifest["schemaVersion"] == 13, "Unexpected manifest schema version"
           expected = {
-              "app/src/main/assets/airports.csv": 1000,
+              "airports.csv": 1000,
+              "navigation/airports/ourairports_airports.csv": 1000,
               "navigation/navaids/navaids.csv": 1000,
               "navigation/runways/runways_parsed.csv": 500,
           }
@@ -83,15 +90,24 @@ jobs:
               assert path.stat().st_size == dataset["sizeBytes"], f"Size mismatch: {path}"
               assert hashlib.sha256(path.read_bytes()).hexdigest() == dataset["sha256"]
               with path.open(encoding="utf-8", newline="") as handle:
-                  count = max(0, sum(1 for _ in csv.reader(handle)) - 1)
+                  rows = [row for row in csv.reader(handle)
+                          if row and not row[0].strip().lower().startswith(("sep=", "#version"))]
+                  count = max(0, len(rows) - 1)
               assert count == dataset["recordCount"], f"Record count mismatch: {path}"
               print(f"{dataset['id']}: {count} records; {path.stat().st_size} bytes")
           capabilities = manifest.get("capabilities", {})
-          for capability in ("airports", "runways", "navaids", "vor", "dme", "ndb"):
+          for capability in ("airports", "ourairportsAirports", "runways", "navaids", "vor", "dme", "ndb", "airlineProfiles", "rosterClassificationRules"):
               assert capabilities.get(capability) is True, f"Missing required capability: {capability}"
           for metric in ("airports", "runways", "navaids"):
               assert manifest.get("statistics", {}).get(metric, 0) > 0, f"Missing statistic: {metric}"
-          print("Manifest and available datasets validated.")
+          profile = Path("airlines.csv").read_text(encoding="utf-8").splitlines()
+          profile_lines = [line for line in profile if line.strip() and not line.startswith("sep=") and not line.startswith("#version")]
+          assert profile_lines, "Airline profile catalogue missing"
+          airline_header = next(csv.reader([profile_lines[0]], delimiter=";"))
+          assert {"code", "displayName", "signOnMins", "iataCodes"}.issubset(set(airline_header)), "Airline profile schema mismatch"
+          route_lines = [line for line in Path("route_rules.csv").read_text(encoding="utf-8").splitlines() if line.strip() and not line.startswith("#version")]
+          assert route_lines and route_lines[0].split(",") == ["kind", "code"], "Route rules schema mismatch"
+          print("Manifest, navigation datasets and airline profile packages validated.")
           PY
       - name: Commit updated datasets
         if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main')
@@ -101,7 +117,9 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add \
             navigation/ \
-            app/src/main/assets/airports.csv \
+            airports.csv \
+            airlines.csv \
+            route_rules.csv \
             navigation_manifest.json
           if git diff --cached --quiet; then
             echo "No dataset changes detected."

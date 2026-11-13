@@ -417,10 +417,19 @@ def file_summary(root: Path, dataset_id: str, relative_path: str, source_meta=No
     count = 0
     if exists:
         with path.open("r", encoding="utf-8", newline="") as handle:
-            count = max(0, sum(1 for _ in csv.reader(handle)) - 1)
+            # Skip optional CSV dialect/version directives (e.g. sep=; and #version;4).
+            rows = [
+                row for row in csv.reader(handle)
+                if row and not row[0].strip().lower().startswith(("sep=", "#version"))
+            ]
+            count = max(0, len(rows) - 1)
     meta = source_meta or {}
     return {
         "id": dataset_id, "path": relative_path,
+        "downloadUrl": (
+            f"https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/{relative_path}"
+            if exists else None
+        ),
         "available": bool(exists and count > 0),
         "recordCount": count, "sizeBytes": path.stat().st_size if exists else 0,
         "sha256": sha256(path.read_bytes()) if exists else None,
@@ -442,20 +451,39 @@ def update_manifest(manifest_path: Path, root: Path, import_meta=None):
     else:
         import_meta = {}
 
-    manifest.setdefault("schemaVersion", 12)
+    manifest.setdefault("schemaVersion", 13)
     datasets = [
-        file_summary(root, "airports", "app/src/main/assets/airports.csv"),
-        file_summary(root, "runways", "navigation/runways/runways_parsed.csv"),
-        file_summary(root, "ourairports_navaids", "navigation/navaids/navaids.csv"),
+        file_summary(
+            root, "airport_reference", "airports.csv",
+            {
+                "provider": "FlightTempo airport reference export",
+                "license": "Upstream provenance and redistribution terms not recorded in repository",
+                "licenseStatus": "source_review_required",
+            },
+        ),
+        file_summary(
+            root, "ourairports_airports", "navigation/airports/ourairports_airports.csv",
+            {
+                "provider": "OurAirports",
+                "license": "CC0 / Public Domain as stated by OurAirports",
+                "licenseStatus": "public_domain",
+            },
+        ),
+        file_summary(root, "runways", "navigation/runways/runways_parsed.csv",
+                     {"provider": "OurAirports", "license": "CC0 / Public Domain as stated by OurAirports",
+                      "licenseStatus": "public_domain"}),
+        file_summary(root, "ourairports_navaids", "navigation/navaids/navaids.csv",
+                     {"provider": "OurAirports", "license": "CC0 / Public Domain as stated by OurAirports",
+                      "licenseStatus": "public_domain"}),
         file_summary(root, "flightgear_fixes", OUTPUTS["flightgear_fixes"], import_meta),
         file_summary(root, "flightgear_navaids", OUTPUTS["flightgear_navaids"], import_meta),
         file_summary(root, "flightgear_airway_segments", OUTPUTS["flightgear_airway_segments"], import_meta),
     ]
     # Airway data is intentionally disabled in the MVP unless explicitly imported.
     airways_included = bool(import_meta.get("airwaysIncluded", False))
-    datasets[5]["available"] = bool(datasets[5]["available"] and airways_included)
-    datasets[5]["status"] = "verified" if datasets[5]["available"] else (
-        "present_but_disabled" if datasets[5]["recordCount"] > 0 else "not_imported"
+    datasets[6]["available"] = bool(datasets[6]["available"] and airways_included)
+    datasets[6]["status"] = "verified" if datasets[6]["available"] else (
+        "present_but_disabled" if datasets[6]["recordCount"] > 0 else "not_imported"
     )
     capabilities = manifest.setdefault("capabilities", {})
     for dataset_id, relative_path, capability in (
@@ -470,7 +498,35 @@ def update_manifest(manifest_path: Path, root: Path, import_meta=None):
             "present_but_unverified" if summary["recordCount"] > 0 else "not_imported"
         )
         datasets.append(summary)
+    # Profile packages are versioned independently from AIRAC navigation data.
+    datasets.extend([
+        file_summary(
+            root, "airline_profiles", "airlines.csv",
+            {"provider": "FlightTempo", "licenseStatus": "owner_authored_profile"},
+        ),
+        file_summary(
+            root, "route_rules", "route_rules.csv",
+            {"provider": "FlightTempo", "licenseStatus": "owner_authored_profile"},
+        ),
+    ])
     manifest["datasets"] = datasets
+    manifest["downloadContract"] = {
+        "version": 1,
+        "repository": "julienvergouts-code/flighttempo-data",
+        "manifestUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/navigation_manifest.json",
+        "baseUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/",
+        "integrity": "SHA-256",
+        "installPolicy": "download-to-staging-verify-then-activate",
+    }
+    capabilities["airports"] = datasets[0]["available"]
+    capabilities["ourairportsAirports"] = datasets[1]["available"]
+    capabilities["runways"] = datasets[2]["available"]
+    capabilities["navaids"] = datasets[3]["available"]
+    capabilities["independentWaypoints"] = datasets[4]["available"]
+    capabilities["flightgearNavaids"] = datasets[5]["available"]
+    capabilities["publishedAirways"] = datasets[6]["available"]
+    capabilities["airlineProfiles"] = datasets[-2]["available"]
+    capabilities["rosterClassificationRules"] = datasets[-1]["available"]
     if import_meta:
         manifest["flightgearImport"] = {
             key: import_meta.get(key, default)
@@ -487,21 +543,21 @@ def update_manifest(manifest_path: Path, root: Path, import_meta=None):
                 ("airwayResolution", {}),
             )
         }
-    capabilities["independentWaypoints"] = datasets[3]["available"]
-    capabilities["flightgearNavaids"] = datasets[4]["available"]
-    capabilities["publishedAirways"] = datasets[5]["available"]
 
-    # Keep manifest totals synchronized with the normalized datasets.
+    # Keep manifest totals synchronized with the exact downloadable datasets.
     statistics = manifest.setdefault("statistics", {})
     statistics["airports"] = datasets[0]["recordCount"]
-    statistics["runways"] = datasets[1]["recordCount"]
-    statistics["navaids"] = datasets[2]["recordCount"]
-    statistics["ifrWaypoints"] = datasets[3]["recordCount"] if datasets[3]["available"] else 0
-    statistics["flightgearNavaids"] = datasets[4]["recordCount"] if datasets[4]["available"] else 0
+    statistics["ourairportsAirports"] = datasets[1]["recordCount"]
+    statistics["runways"] = datasets[2]["recordCount"]
+    statistics["navaids"] = datasets[3]["recordCount"]
+    statistics["ifrWaypoints"] = datasets[4]["recordCount"] if datasets[4]["available"] else 0
+    statistics["flightgearNavaids"] = datasets[5]["recordCount"] if datasets[5]["available"] else 0
     airway_counts = (import_meta or {}).get("counts", {})
-    statistics["airwaySegments"] = datasets[5]["recordCount"] if datasets[5]["available"] else 0
-    statistics["lowAirwaySegments"] = airway_counts.get("lowAirwaySegments", 0) if datasets[5]["available"] else 0
-    statistics["highAirwaySegments"] = airway_counts.get("highAirwaySegments", 0) if datasets[5]["available"] else 0
+    statistics["airwaySegments"] = datasets[6]["recordCount"] if datasets[6]["available"] else 0
+    statistics["lowAirwaySegments"] = airway_counts.get("lowAirwaySegments", 0) if datasets[6]["available"] else 0
+    statistics["highAirwaySegments"] = airway_counts.get("highAirwaySegments", 0) if datasets[6]["available"] else 0
+    statistics["airlineProfiles"] = datasets[-2]["recordCount"] if datasets[-2]["available"] else 0
+    statistics["routeRules"] = datasets[-1]["recordCount"] if datasets[-1]["available"] else 0
 
     manifest_path.parent.mkdir(parents=True, exist_ok=True)
     temp_path = manifest_path.with_suffix(manifest_path.suffix + ".tmp")
