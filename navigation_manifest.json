@@ -1,7 +1,7 @@
 {
   "schemaVersion": 13,
-  "generatedAtUtc": "2026-11-13T21:47:01.275614+00:00",
-  "procedureAiracCycle": "unknown",
+  "generatedAtUtc": "2026-11-13T21:51:57.552763+00:00",
+  "procedureAiracCycle": "2611",
   "navaidTypeCounts": {
     "DME": 167,
     "NDB": 6609,
@@ -31,7 +31,7 @@
       "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
       "provider": "OurAirports",
       "license": "CC0 / Public Domain as stated by OurAirports",
-      "downloadedAt": "2026-11-13T21:47:01.275614+00:00",
+      "downloadedAt": "2026-11-13T21:51:57.552763+00:00",
       "sizeBytes": 12759291,
       "sha256": "a3bbdc1d7321c19e7a3ee6ddc7b570850fdfa56f6357c30bae9600cef08637be",
       "recordCount": 86306
@@ -41,7 +41,7 @@
       "url": "https://davidmegginson.github.io/ourairports-data/runways.csv",
       "provider": "OurAirports",
       "license": "CC0 / Public Domain as stated by OurAirports",
-      "downloadedAt": "2026-11-13T21:47:01.275614+00:00",
+      "downloadedAt": "2026-11-13T21:51:57.552763+00:00",
       "sizeBytes": 3974142,
       "sha256": "e1026851f59e3714c2074432e469aeb9c3b83908315cfa547f353ae607f74a1d",
       "recordCount": 47096
@@ -51,7 +51,7 @@
       "url": "https://davidmegginson.github.io/ourairports-data/navaids.csv",
       "provider": "OurAirports",
       "license": "CC0 / Public Domain as stated by OurAirports",
-      "downloadedAt": "2026-11-13T21:47:01.275614+00:00",
+      "downloadedAt": "2026-11-13T21:51:57.552763+00:00",
       "sizeBytes": 1524931,
       "sha256": "d7292380662c33a95214945023ec0a5b13189599305fd18be739e167a97a9bd1",
       "recordCount": 11008
@@ -78,6 +78,8 @@
     "ourairportsAirports": true,
     "flightgearNavaids": false
   },
+  "procedureCoverageStatus": "FAA_US_NAS_ONLY_TEST_DATA; EUROPE_UNAVAILABLE",
+  "procedureOperationalUse": false,
   "datasets": [
     {
       "id": "airport_reference",
@@ -88,9 +90,15 @@
       "sizeBytes": 2193455,
       "sha256": "f74fe4e7e60cb61fd51017b21b4e801cc53239b001f0ed2e12618052c52aaa06",
       "sourceProvider": "FlightTempo airport reference export",
+      "sourceUrl": "",
+      "coverage": "",
+      "sourceTag": "",
       "license": "Upstream provenance and redistribution terms not recorded in repository",
       "licenseStatus": "source_review_required",
-      "dataCycle": "unknown"
+      "dataCycle": "unknown",
+      "effectiveDate": "",
+      "expiryDate": "",
+      "provenanceVerification": "not_declared"
     },
     {
       "id": "ourairports_airports",
@@ -101,9 +109,15 @@
       "sizeBytes": 4780020,
       "sha256": "c9e9007a9d4c90aa421836277bb27adec229957beb50686753fb3cfc8bfacad9",
       "sourceProvider": "OurAirports",
+      "sourceUrl": "",
+      "coverage": "",
+      "sourceTag": "",
       "license": "CC0 / Public Domain as stated by OurAirports",
       "licenseStatus": "public_domain",
-      "dataCycle": "unknown"
+      "dataCycle": "unknown",
+      "effectiveDate": "",
+      "expiryDate": "",
+      "provenanceVerification": "not_declared"
     },
     {
       "id": "runways",
@@ -114,9 +128,15 @@
       "sizeBytes": 1733567,
       "sha256": "e7f987b237e8f744bab3cb99237ac4a26e5e5372bae5f0292ab53e8db2bb5efe",
       "sourceProvider": "OurAirports",
+      "sourceUrl": "",
+      "coverage": "",
+      "sourceTag": "",
       "license": "CC0 / Public Domain as stated by OurAirports",
       "licenseStatus": "public_domain",
-      "dataCycle": "unknown"
+      "dataCycle": "unknown",
+      "effectiveDate": "",
+      "expiryDate": "",
+      "provenanceVerification": "not_declared"
     },
     {
       "id": "ourairports_navaids",
@@ -127,9 +147,15 @@
       "sizeBytes": 1037670,
       "sha256": "f6ca5ea55ebaf6706d86c8a21da73b090df5745182f6f9b5900ad3f7f33c7997",
       "sourceProvider": "OurAirports",
+      "sourceUrl": "",
+      "coverage": "",
+      "sourceTag": "",
       "license": "CC0 / Public Domain as stated by OurAirports",
       "licenseStatus": "public_domain",
-      "dataCycle": "unknown"
+      "dataCycle": "unknown",
+      "effectiveDate": "",
+      "expiryDate": "",
+      "provenanceVerification": "not_declared"
     },
     {
       "id": "flightgear_fixes",
@@ -140,9 +166,15 @@
       "sizeBytes": 0,
       "sha256": null,
       "sourceProvider": "",
+      "sourceUrl": "",
+      "coverage": "",
+      "sourceTag": "",
       "license": "",
       "licenseStatus": "not_applicable",
-      "dataCycle": "unknown"
+      "dataCycle": "unknown",
+      "effectiveDate": "",
+      "expiryDate": "",
+      "provenanceVerification": "not_declared"
     },
     {
       "id": "flightgear_navaids",
@@ -153,9 +185,15 @@
       "sizeBytes": 0,
       "sha256": null,
       "sourceProvider": "",
+      "sourceUrl": "",
+      "coverage": "",
+      "sourceTag": "",
       "license": "",
       "licenseStatus": "not_applicable",
-      "dataCycle": "unknown"
+      "dataCycle": "unknown",
+      "effectiveDate": "",
+      "expiryDate": "",
+      "provenanceVerification": "not_declared"
     },
     {
       "id": "flightgear_airway_segments",
@@ -166,9 +204,15 @@
       "sizeBytes": 0,
       "sha256": null,
       "sourceProvider": "",
+      "sourceUrl": "",
+      "coverage": "",
+      "sourceTag": "",
       "license": "",
       "licenseStatus": "not_applicable",
       "dataCycle": "unknown",
+      "effectiveDate": "",
+      "expiryDate": "",
+      "provenanceVerification": "not_declared",
       "status": "not_imported"
     },
     {
@@ -179,11 +223,18 @@
       "recordCount": 33349,
       "sizeBytes": 1646963,
       "sha256": "be974a777fe0da70bb143bedce4f05d5744c2c62ad382691937c4b35494bf3cf",
-      "sourceProvider": "",
-      "license": "",
-      "licenseStatus": "not_applicable",
-      "dataCycle": "unknown",
-      "status": "present_but_unverified"
+      "sourceProvider": "FAA AeroNav",
+      "sourceUrl": "https://aeronav.faa.gov/Upload_313-d/cifp/CIFP_261029.zip",
+      "coverage": "United States / FAA National Airspace System \u2014 departure procedures",
+      "sourceTag": "FAA_CIFP_2611",
+      "license": "US Government Public Domain (FAA AeroNav)",
+      "licenseStatus": "public_domain",
+      "dataCycle": "2611",
+      "effectiveDate": "2026-10-29",
+      "expiryDate": "2026-11-25",
+      "provenanceVerification": "matched_repository_artifact",
+      "testDownloadAvailable": true,
+      "status": "present_unverified_test_only"
     },
     {
       "id": "stars",
@@ -193,11 +244,18 @@
       "recordCount": 44197,
       "sizeBytes": 2257773,
       "sha256": "6bf123c683e442c1a07fbc46f4f11ad45045f8322a1b2506d65f6719055c0c06",
-      "sourceProvider": "",
-      "license": "",
-      "licenseStatus": "not_applicable",
-      "dataCycle": "unknown",
-      "status": "present_but_unverified"
+      "sourceProvider": "FAA AeroNav",
+      "sourceUrl": "https://aeronav.faa.gov/Upload_313-d/cifp/CIFP_261029.zip",
+      "coverage": "United States / FAA National Airspace System \u2014 arrival procedures",
+      "sourceTag": "FAA_CIFP_2611",
+      "license": "US Government Public Domain (FAA AeroNav)",
+      "licenseStatus": "public_domain",
+      "dataCycle": "2611",
+      "effectiveDate": "2026-10-29",
+      "expiryDate": "2026-11-25",
+      "provenanceVerification": "matched_repository_artifact",
+      "testDownloadAvailable": true,
+      "status": "present_unverified_test_only"
     },
     {
       "id": "approaches",
@@ -207,11 +265,18 @@
       "recordCount": 114966,
       "sizeBytes": 5608604,
       "sha256": "ff7b9121e79b56ff616a77e285c9cba764575fd2c58335b3281124813362d3dd",
-      "sourceProvider": "",
-      "license": "",
-      "licenseStatus": "not_applicable",
-      "dataCycle": "unknown",
-      "status": "present_but_unverified"
+      "sourceProvider": "FAA AeroNav",
+      "sourceUrl": "https://aeronav.faa.gov/Upload_313-d/cifp/CIFP_261029.zip",
+      "coverage": "United States / FAA National Airspace System \u2014 instrument approaches",
+      "sourceTag": "FAA_CIFP_2611",
+      "license": "US Government Public Domain (FAA AeroNav)",
+      "licenseStatus": "public_domain",
+      "dataCycle": "2611",
+      "effectiveDate": "2026-10-29",
+      "expiryDate": "2026-11-25",
+      "provenanceVerification": "matched_repository_artifact",
+      "testDownloadAvailable": true,
+      "status": "present_unverified_test_only"
     },
     {
       "id": "airline_profiles",
@@ -222,9 +287,15 @@
       "sizeBytes": 630,
       "sha256": "3357c8fe4d0a78d33b955e5bf2749bac88953d9cc865c6b5268069406bcb66ad",
       "sourceProvider": "FlightTempo",
+      "sourceUrl": "",
+      "coverage": "",
+      "sourceTag": "",
       "license": "",
       "licenseStatus": "owner_authored_profile",
-      "dataCycle": "unknown"
+      "dataCycle": "unknown",
+      "effectiveDate": "",
+      "expiryDate": "",
+      "provenanceVerification": "not_declared"
     },
     {
       "id": "route_rules",
@@ -235,9 +306,15 @@
       "sizeBytes": 1177,
       "sha256": "f5deb5ea849076cc5fa4e43204c439cb46b6c6f7192730f1b9fcb607acf61127",
       "sourceProvider": "FlightTempo",
+      "sourceUrl": "",
+      "coverage": "",
+      "sourceTag": "",
       "license": "",
       "licenseStatus": "owner_authored_profile",
-      "dataCycle": "unknown"
+      "dataCycle": "unknown",
+      "effectiveDate": "",
+      "expiryDate": "",
+      "provenanceVerification": "not_declared"
     }
   ],
   "downloadContract": {
