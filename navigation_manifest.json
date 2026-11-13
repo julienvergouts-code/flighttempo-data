@@ -1,6 +1,6 @@
 {
   "schemaVersion": 13,
-  "generatedAtUtc": "2026-11-13T12:14:13.030460+00:00",
+  "generatedAtUtc": "2026-11-13T21:47:01.275614+00:00",
   "procedureAiracCycle": "unknown",
   "navaidTypeCounts": {
     "DME": 167,
@@ -31,7 +31,7 @@
       "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
       "provider": "OurAirports",
       "license": "CC0 / Public Domain as stated by OurAirports",
-      "downloadedAt": "2026-11-13T12:14:13.030460+00:00",
+      "downloadedAt": "2026-11-13T21:47:01.275614+00:00",
       "sizeBytes": 12759291,
       "sha256": "a3bbdc1d7321c19e7a3ee6ddc7b570850fdfa56f6357c30bae9600cef08637be",
       "recordCount": 86306
@@ -41,7 +41,7 @@
       "url": "https://davidmegginson.github.io/ourairports-data/runways.csv",
       "provider": "OurAirports",
       "license": "CC0 / Public Domain as stated by OurAirports",
-      "downloadedAt": "2026-11-13T12:14:13.030460+00:00",
+      "downloadedAt": "2026-11-13T21:47:01.275614+00:00",
       "sizeBytes": 3974142,
       "sha256": "e1026851f59e3714c2074432e469aeb9c3b83908315cfa547f353ae607f74a1d",
       "recordCount": 47096
@@ -51,7 +51,7 @@
       "url": "https://davidmegginson.github.io/ourairports-data/navaids.csv",
       "provider": "OurAirports",
       "license": "CC0 / Public Domain as stated by OurAirports",
-      "downloadedAt": "2026-11-13T12:14:13.030460+00:00",
+      "downloadedAt": "2026-11-13T21:47:01.275614+00:00",
       "sizeBytes": 1524931,
       "sha256": "d7292380662c33a95214945023ec0a5b13189599305fd18be739e167a97a9bd1",
       "recordCount": 11008
