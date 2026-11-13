@@ -1,0 +1,251 @@
+{
+  "schemaVersion": 1,
+  "checkedAtUtc": "2026-11-13",
+  "purpose": "Source and redistribution inventory for IFR terminal procedures and relevant VFR procedure geometry. This registry is not an operational data publication.",
+  "regions": {
+    "europe": {
+      "status": "partial_public_source_confirmed_not_ingested",
+      "operationallyAvailable": false,
+      "summary": "France has a public, commercial-redistributable SIA AIXM 4.5/XML source. No complete Europe-wide IFR SID/STAR/approach feed has been established.",
+      "confirmedProcedureCountries": [],
+      "candidateProcedureCountries": [
+        "FR"
+      ],
+      "vfrOnlyProviders": [
+        "OpenFlightMaps"
+      ],
+      "sources": [
+        {
+          "id": "FR_SIA_XML",
+          "jurisdiction": "FR",
+          "provider": "Service de l'Information Aeronautique (DGAC France)",
+          "sourceUrl": "https://www.sia.aviation-civile.gouv.fr/produits-numeriques-en-libre-disposition/les-bases-de-donnees-sia/donnees-aeronautiques-xml-airac-11-26.html",
+          "mirrorUrl": "https://data.cquest.org/dgac/aip/",
+          "format": [
+            "AIXM 4.5 XML",
+            "XML_SIA"
+          ],
+          "procedureScope": [
+            "SIDs",
+            "STARs",
+            "instrument approaches"
+          ],
+          "license": "Licence Ouverte / Open Licence v2.0 (Etalab)",
+          "redistribution": "public_redistribution",
+          "licenseStatus": "verified_from_official_SIA_open_data_terms",
+          "attribution": "Service de l'Information Aeronautique (SIA France); include the source and last update date.",
+          "cycle": "2611",
+          "effectiveDate": "2026-10-29",
+          "expiryDate": "2026-11-25",
+          "downloadPrice": "EUR 0",
+          "packageSize": "5.8 MB",
+          "fileMembers": [
+            "AIXM4.5_all_FR_OM_YYYY-MM-DD.xml",
+            "XML_SIA_YYYY-MM-DD.xml"
+          ],
+          "sourceStatus": "current_source_identified_not_downloaded_or_imported",
+          "dataStatus": "not_available_in_FlightTempo",
+          "notes": "The package covers the AIP France and overseas territories. Validate AIXM procedure associations, ordered legs, fix coordinates and cycle metadata before producing downloadable procedure CSVs. The source being open does not mean the FlightTempo parser is already validated."
+        },
+        {
+          "id": "OFMA_EUROPE",
+          "jurisdiction": "European regions; coverage varies by OFM region",
+          "provider": "open flightmaps association (OFMA)",
+          "sourceUrl": "https://openflightmaps.org/",
+          "license": "OFMA General Users' License",
+          "redistribution": "conditional_public_redistribution",
+          "licenseStatus": "commercial_app_use_permitted_subject_to_GUL",
+          "attribution": "open flightmaps (OFMA)",
+          "procedureScope": [
+            "VFR traffic circuits",
+            "VFR arrival routes",
+            "VFR departure routes"
+          ],
+          "excludes": [
+            "IFR SIDs",
+            "IFR STARs",
+            "instrument approaches"
+          ],
+          "sourceStatus": "candidate_vfr_source",
+          "dataStatus": "not_imported",
+          "notes": "OFMA FAQ permits use in an app that is sold when the General Users' License is followed. Coverage and completeness differ by region; do not promote these VFR vectors to IFR procedures."
+        },
+        {
+          "id": "DFS_INSPIRE",
+          "jurisdiction": "DE",
+          "provider": "DFS Deutsche Flugsicherung GmbH",
+          "sourceUrl": "https://www.dfs.de/homepage/en/services/geo-data/",
+          "catalogUrl": "https://data.europa.eu/data/datasets/73b4aa43-6e9d-489e-bb2e-4b86cfd53617",
+          "format": [
+            "INSPIRE WFS",
+            "INSPIRE WMS"
+          ],
+          "license": "GeoZG / INSPIRE open geodata framework",
+          "redistribution": "public_reference_geodata",
+          "licenseStatus": "public_geodata_source",
+          "procedureScope": [],
+          "sourceStatus": "geodata_only",
+          "dataStatus": "not_imported",
+          "notes": "The published air transport network includes airports, runways, navaids, points, routes and airspace; it is not the German IFR SID/STAR/approach publication. DFS states updates twice yearly and warns the data may contain errors or be incomplete."
+        },
+        {
+          "id": "EUROCONTROL_EAD",
+          "jurisdiction": "ECAC",
+          "provider": "EUROCONTROL European AIS Database",
+          "sourceUrl": "https://www.eurocontrol.int/service/european-ais-database",
+          "termsUrl": "https://www.ead.eurocontrol.int/fwf-eadbasic/public/static/terms.faces",
+          "format": [
+            "AIXM",
+            "AIP publications"
+          ],
+          "license": "EAD Terms of Use; Type 3 charges and Member State royalty fees apply to commercial re-serving",
+          "redistribution": "negotiated_license_required",
+          "licenseStatus": "not_public_redistribution",
+          "procedureScope": [
+            "SIDs",
+            "STARs",
+            "approaches"
+          ],
+          "sourceStatus": "authenticated_or_paid_service",
+          "dataStatus": "not_imported",
+          "notes": "EAD Basic is a limited general-purpose consultation tool and is not the operational EAD database. Commercial data/software providers re-serving EAD data fall under Type 3 charges and Member State royalties."
+        },
+        {
+          "id": "ES_ENAIRE_AIP",
+          "jurisdiction": "ES",
+          "provider": "ENAIRE",
+          "sourceUrl": "https://aip.enaire.es/",
+          "license": "ENAIRE AIP legal terms",
+          "redistribution": "permission_review_required",
+          "licenseStatus": "public_redistribution_not_confirmed",
+          "procedureScope": [
+            "SIDs",
+            "STARs",
+            "approaches"
+          ],
+          "sourceStatus": "terms_review_required",
+          "dataStatus": "not_imported",
+          "notes": "Do not copy Spanish AIP procedures into the public data repository until ENAIRE's current redistribution terms or a written permission grant has been reviewed."
+        },
+        {
+          "id": "UK_NATS_AIP",
+          "jurisdiction": "GB",
+          "provider": "NATS / UK AIS",
+          "sourceUrl": "https://www.aurora.nats.co.uk/",
+          "license": "UK AIP copyright / NATS terms",
+          "redistribution": "permission_review_required",
+          "licenseStatus": "public_redistribution_not_confirmed",
+          "procedureScope": [
+            "SIDs",
+            "STARs",
+            "approaches"
+          ],
+          "sourceStatus": "terms_review_required",
+          "dataStatus": "not_imported",
+          "notes": "Do not redistribute UK terminal procedures until the applicable Crown Copyright / NATS licence for extracted procedure data is verified."
+        }
+      ]
+    },
+    "asia": {
+      "status": "no_public_redistributable_ifr_source_confirmed",
+      "operationallyAvailable": false,
+      "summary": "Official AIP portals are accessible in several Asian states, but the reviewed terms restrict use to personal/non-commercial viewing or require permission. No Asia-wide or country-level public commercial redistribution source for IFR procedures has been confirmed.",
+      "confirmedProcedureCountries": [],
+      "reviewedCountries": [
+        "TH",
+        "IN",
+        "SG",
+        "HK"
+      ],
+      "sources": [
+        {
+          "id": "TH_CAAT_AIP",
+          "jurisdiction": "TH",
+          "provider": "Civil Aviation Authority of Thailand (CAAT)",
+          "sourceUrl": "https://ais.caat.or.th/term-condition",
+          "license": "CAAT AIP website terms",
+          "redistribution": "personal_noncommercial_only",
+          "licenseStatus": "redistribution_and_extraction_prohibited_without_permission",
+          "procedureScope": [
+            "SIDs",
+            "STARs",
+            "approaches"
+          ],
+          "sourceStatus": "permission_required",
+          "dataStatus": "not_imported",
+          "notes": "CAAT terms expressly prohibit extracting, copying, storing, redistributing, republishing, adapting or commercially exploiting AIP material without authorization. Commercial app developers are told to contact CAAT."
+        },
+        {
+          "id": "IN_AAI_AIP",
+          "jurisdiction": "IN",
+          "provider": "Airports Authority of India (AAI)",
+          "sourceUrl": "https://aai.aero/en/disclaimer",
+          "termsUrl": "https://aim-india.aai.aero/terms-conditions",
+          "license": "AAI copyright / AIM India terms",
+          "redistribution": "prior_written_approval_required",
+          "licenseStatus": "public_redistribution_not_confirmed",
+          "procedureScope": [
+            "SIDs",
+            "STARs",
+            "approaches"
+          ],
+          "sourceStatus": "permission_required",
+          "dataStatus": "not_imported",
+          "notes": "AAI states its website material remains copyrighted and may not be reproduced or distributed without prior approval. AIM India terms also restrict certain AIP documents to AAI personnel's internal non-commercial use."
+        },
+        {
+          "id": "SG_CAAS_AIP",
+          "jurisdiction": "SG",
+          "provider": "Civil Aviation Authority of Singapore (CAAS)",
+          "sourceUrl": "https://www.caas.gov.sg/terms-of-use/",
+          "aipsUrl": "https://aim-sg.caas.gov.sg/",
+          "license": "CAAS website terms of use",
+          "redistribution": "personal_noncommercial_only",
+          "licenseStatus": "commercial_redistribution_not_permitted_by_default_terms",
+          "procedureScope": [
+            "SIDs",
+            "STARs",
+            "approaches"
+          ],
+          "sourceStatus": "permission_required",
+          "dataStatus": "not_imported",
+          "notes": "The AIP charts are freely viewable, but CAAS website terms limit downloads to one copy on one computer for the user's own personal, non-commercial use. Free access is not a commercial redistribution licence."
+        },
+        {
+          "id": "HK_CAD_AIP",
+          "jurisdiction": "HK",
+          "provider": "Hong Kong Civil Aviation Department (CAD)",
+          "sourceUrl": "https://www.ais.gov.hk/",
+          "license": "AIP controlled-document terms; redistribution permission not established",
+          "redistribution": "permission_review_required",
+          "licenseStatus": "not_confirmed",
+          "procedureScope": [
+            "SIDs",
+            "STARs",
+            "approaches"
+          ],
+          "sourceStatus": "terms_review_required",
+          "dataStatus": "not_imported",
+          "notes": "The AIS site labels AIP products as controlled documents and warns that downloaded or copied copies are uncontrolled. No public commercial redistribution permission was established in this review."
+        }
+      ]
+    }
+  },
+  "policy": {
+    "neverInferRedistributionFrom": [
+      "free website access",
+      "free simulator scenery or procedure files",
+      "publicly accessible PDFs or XML",
+      "a source repository's software licence where the aviation data has separate rights"
+    ],
+    "procedurePublicationGate": [
+      "provider and exact source URL",
+      "explicit redistribution licence or written permission covering a public commercial app",
+      "AIRAC/effective and expiry dates",
+      "airport/country coverage and verified record counts",
+      "lossless procedure-leg parsing and source-linked fix coordinates",
+      "content checksum and automated validation"
+    ],
+    "noSyntheticProcedures": true
+  }
+}

@@ -513,6 +513,24 @@ def load_procedure_metadata(root: Path, dataset_id: str, relative_path: str):
     return metadata
 
 
+def load_procedure_source_registry(root: Path):
+    """Load the reviewed regional procedure-source/licensing inventory.
+
+    This registry describes source availability and reuse terms; it does not
+    imply that a country's procedure dataset has been ingested or validated.
+    """
+    registry_path = root / "procedures/source-registry.json"
+    if not registry_path.is_file():
+        return {}
+    try:
+        registry = json.loads(registry_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        raise RuntimeError(f"Unable to read procedure source registry {registry_path}: {exc}") from exc
+    if not isinstance(registry, dict) or not isinstance(registry.get("regions"), dict):
+        raise ValueError(f"Invalid procedure source registry structure: {registry_path}")
+    return registry
+
+
 def update_manifest(manifest_path: Path, root: Path, import_meta=None):
     manifest = json.loads(manifest_path.read_text(encoding="utf-8")) if manifest_path.exists() else {}
     metadata_path = root / "navigation/sources/flightgear/import_metadata.json"
@@ -602,7 +620,8 @@ def update_manifest(manifest_path: Path, root: Path, import_meta=None):
         else ("mixed" if procedure_cycles else "unknown")
     )
     manifest["procedureCoverageStatus"] = (
-        "FAA_US_NAS_ONLY_TEST_DATA; EUROPE_UNAVAILABLE"
+        "FAA_US_NAS_ONLY_TEST_DATA; EUROPE_FRANCE_SOURCE_NOT_INGESTED; "
+        "ASIA_NO_PUBLIC_REDISTRIBUTABLE_SOURCE_CONFIRMED"
         if procedure_metadata and all(
             meta.get("provenanceVerification") == "matched_repository_artifact"
             for meta in procedure_metadata.values()
@@ -610,6 +629,12 @@ def update_manifest(manifest_path: Path, root: Path, import_meta=None):
         else "UNVERIFIED"
     )
     manifest["procedureOperationalUse"] = False
+
+    procedure_source_registry = load_procedure_source_registry(root)
+    if procedure_source_registry:
+        manifest["procedureSourceRegistryVersion"] = procedure_source_registry.get("schemaVersion")
+        manifest["procedureSourceRegistryCheckedAtUtc"] = procedure_source_registry.get("checkedAtUtc", "")
+        manifest["regionalProcedureCoverage"] = procedure_source_registry["regions"]
     # Profile packages are versioned independently from AIRAC navigation data.
     datasets.extend([
         file_summary(
