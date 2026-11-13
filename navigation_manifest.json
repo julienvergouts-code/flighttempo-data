@@ -1,35 +1,54 @@
 {
   "schemaVersion": 12,
-  "generatedAtUtc": "2026-11-12T15:32:09.236598+00:00",
+  "generatedAtUtc": "2026-11-13T05:02:12.356896+00:00",
   "procedureAiracCycle": "unknown",
+  "navaidTypeCounts": {
+    "DME": 167,
+    "NDB": 6609,
+    "NDB-DME": 137,
+    "TACAN": 442,
+    "VOR": 308,
+    "VOR-DME": 2601,
+    "VORTAC": 744
+  },
   "targetProfile": "Aviation reference data",
+  "statistics": {
+    "airports": 86306,
+    "runways": 47096,
+    "navaids": 11008,
+    "ifrWaypoints": 0,
+    "flightgearNavaids": 0,
+    "airwaySegments": 0,
+    "lowAirwaySegments": 0,
+    "highAirwaySegments": 0
+  },
   "dataSources": [
     {
       "dataset": "airports",
       "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
       "provider": "OurAirports",
       "license": "CC0 / Public Domain as stated by OurAirports",
-      "downloadedAt": "2026-11-12T15:32:09.236598+00:00",
-      "sizeBytes": 12758762,
-      "sha256": "11e7a1edf9e5bef91aa4492e3ab42bb5b38b5f2df81358a235ed5a393a571e54",
-      "recordCount": 86302
+      "downloadedAt": "2026-11-13T05:02:12.356896+00:00",
+      "sizeBytes": 12759291,
+      "sha256": "a3bbdc1d7321c19e7a3ee6ddc7b570850fdfa56f6357c30bae9600cef08637be",
+      "recordCount": 86306
     },
     {
       "dataset": "runways",
       "url": "https://davidmegginson.github.io/ourairports-data/runways.csv",
       "provider": "OurAirports",
       "license": "CC0 / Public Domain as stated by OurAirports",
-      "downloadedAt": "2026-11-12T15:32:09.236598+00:00",
-      "sizeBytes": 3973983,
-      "sha256": "a20681ecd8375543db4830618f71a56fcb04cb63b6608514c1b17f1963b3fca8",
-      "recordCount": 47094
+      "downloadedAt": "2026-11-13T05:02:12.356896+00:00",
+      "sizeBytes": 3974142,
+      "sha256": "e1026851f59e3714c2074432e469aeb9c3b83908315cfa547f353ae607f74a1d",
+      "recordCount": 47096
     },
     {
       "dataset": "navaids",
       "url": "https://davidmegginson.github.io/ourairports-data/navaids.csv",
       "provider": "OurAirports",
       "license": "CC0 / Public Domain as stated by OurAirports",
-      "downloadedAt": "2026-11-12T15:32:09.236598+00:00",
+      "downloadedAt": "2026-11-13T05:02:12.356896+00:00",
       "sizeBytes": 1524931,
       "sha256": "d7292380662c33a95214945023ec0a5b13189599305fd18be739e167a97a9bd1",
       "recordCount": 11008
@@ -50,25 +69,121 @@
     "stars": false,
     "ilsApproaches": false,
     "rnavApproaches": false,
-    "approaches": false
+    "approaches": false,
+    "flightgearNavaids": false
   },
-  "navaidTypeCounts": {
-    "DME": 167,
-    "NDB": 6609,
-    "NDB-DME": 137,
-    "TACAN": 442,
-    "VOR": 308,
-    "VOR-DME": 2601,
-    "VORTAC": 744
-  },
-  "statistics": {
-    "airports": 86302,
-    "runways": 47094,
-    "navaids": 11008,
-    "ifrWaypoints": 0,
-    "flightgearNavaids": 0,
-    "airwaySegments": 0,
-    "lowAirwaySegments": 0,
-    "highAirwaySegments": 0
-  }
+  "datasets": [
+    {
+      "id": "airports",
+      "path": "app/src/main/assets/airports.csv",
+      "available": true,
+      "recordCount": 86306,
+      "sizeBytes": 4780020,
+      "sha256": "c9e9007a9d4c90aa421836277bb27adec229957beb50686753fb3cfc8bfacad9",
+      "sourceProvider": "",
+      "license": "",
+      "licenseStatus": "not_applicable",
+      "dataCycle": "unknown"
+    },
+    {
+      "id": "runways",
+      "path": "navigation/runways/runways_parsed.csv",
+      "available": true,
+      "recordCount": 47096,
+      "sizeBytes": 1733567,
+      "sha256": "e7f987b237e8f744bab3cb99237ac4a26e5e5372bae5f0292ab53e8db2bb5efe",
+      "sourceProvider": "",
+      "license": "",
+      "licenseStatus": "not_applicable",
+      "dataCycle": "unknown"
+    },
+    {
+      "id": "ourairports_navaids",
+      "path": "navigation/navaids/navaids.csv",
+      "available": true,
+      "recordCount": 11008,
+      "sizeBytes": 1037670,
+      "sha256": "f6ca5ea55ebaf6706d86c8a21da73b090df5745182f6f9b5900ad3f7f33c7997",
+      "sourceProvider": "",
+      "license": "",
+      "licenseStatus": "not_applicable",
+      "dataCycle": "unknown"
+    },
+    {
+      "id": "flightgear_fixes",
+      "path": "navigation/waypoints/flightgear_fixes.csv",
+      "available": false,
+      "recordCount": 0,
+      "sizeBytes": 0,
+      "sha256": null,
+      "sourceProvider": "",
+      "license": "",
+      "licenseStatus": "not_applicable",
+      "dataCycle": "unknown"
+    },
+    {
+      "id": "flightgear_navaids",
+      "path": "navigation/navaids/flightgear_navaids.csv",
+      "available": false,
+      "recordCount": 0,
+      "sizeBytes": 0,
+      "sha256": null,
+      "sourceProvider": "",
+      "license": "",
+      "licenseStatus": "not_applicable",
+      "dataCycle": "unknown"
+    },
+    {
+      "id": "flightgear_airway_segments",
+      "path": "navigation/airways/flightgear_airway_segments.csv",
+      "available": false,
+      "recordCount": 0,
+      "sizeBytes": 0,
+      "sha256": null,
+      "sourceProvider": "",
+      "license": "",
+      "licenseStatus": "not_applicable",
+      "dataCycle": "unknown",
+      "status": "not_imported"
+    },
+    {
+      "id": "sids",
+      "path": "procedures/sids/sids.csv",
+      "available": false,
+      "recordCount": 33350,
+      "sizeBytes": 1646963,
+      "sha256": "be974a777fe0da70bb143bedce4f05d5744c2c62ad382691937c4b35494bf3cf",
+      "sourceProvider": "",
+      "license": "",
+      "licenseStatus": "not_applicable",
+      "dataCycle": "unknown",
+      "status": "present_but_unverified"
+    },
+    {
+      "id": "stars",
+      "path": "procedures/stars/stars.csv",
+      "available": false,
+      "recordCount": 44198,
+      "sizeBytes": 2257773,
+      "sha256": "6bf123c683e442c1a07fbc46f4f11ad45045f8322a1b2506d65f6719055c0c06",
+      "sourceProvider": "",
+      "license": "",
+      "licenseStatus": "not_applicable",
+      "dataCycle": "unknown",
+      "status": "present_but_unverified"
+    },
+    {
+      "id": "approaches",
+      "path": "procedures/approaches/approaches.csv",
+      "available": false,
+      "recordCount": 114967,
+      "sizeBytes": 5608604,
+      "sha256": "ff7b9121e79b56ff616a77e285c9cba764575fd2c58335b3281124813362d3dd",
+      "sourceProvider": "",
+      "license": "",
+      "licenseStatus": "not_applicable",
+      "dataCycle": "unknown",
+      "status": "present_but_unverified"
+    }
+  ]
 }

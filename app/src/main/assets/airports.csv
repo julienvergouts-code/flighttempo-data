@@ -29728,7 +29728,7 @@ GB-0998,GB,51.69443,-0.08695,,Dysons Osiers Airstrip
 GB-0999,GB,52.75706,-0.14091,,Cowbit Airstrip
 GB-1000,GB,54.47681,-6.74402,,Donnydeade Airstrip
 GB-1001,GB,51.97658,0.74173,,Clees Hall Airstrip
-GB-1002,GB,53.16963,-2.69955,,Clotton airstrip UL
+GB-1002,GB,53.16963,-2.69955,,Clotton Airstrip
 GB-1003,GB,51.66378,-1.44663,,Hamilton House Airstrip
 GB-1004,GB,51.29102,-0.16613,,Chipstead Private Airstrip
 GB-1005,GB,55.01432,-6.53859,,Plains Airstrip
@@ -30027,7 +30027,7 @@ GB-1298,GB,55.43076,-4.59822,,Ayr University Hospital
 GB-1299,GB,55.61323,-4.54476,,Crosshouse University Hospital
 GB-1300,GB,55.06064,-3.66087,,Dumfries Hospital
 GB-1301,GB,55.77413,-3.93738,,Wishaw Hospital
-GB-1302,GB,55.95252,-3.16835,,Holyrood Palace temp landing site
+GB-1302,GB,55.95252,-3.16835,,Holyrood Palace
 GB-1303,GB,55.96111,-3.22644,,Fettes Police HQ
 GB-1304,GB,55.68826,-3.2192,,Cringletie House Hotel
 GB-1305,GB,55.74639,-4.93949,,Cumbrae Helipad
@@ -30067,7 +30067,7 @@ GB-1340,GB,51.24151,-0.60619,220,Royal Surrey County Hospital Heliport
 GB-1341,GB,51.4365,-0.59276,259,Bishopsgate House Heliport
 GB-1342,GB,51.60734,-0.48456,282,Harefield Hospital Heliport
 GB-1343,GB,51.54096,-0.67334,198,Windsor/Ascot Heliport
-GB-1344,GB,54.40159,-2.91771,351,Broadoaks Country House Heliport
+GB-1344,GB,54.40159,-2.91771,351,Broadoaks Country House Helipad
 GB-1345,GB,51.08235,-1.36822,350,Lainston House Hotel Heliport
 GB-1346,GB,55.75889,-6.28806,0,Bowmore Flying Boat Station
 GB-1347,GB,53.77328,-2.56938,249,Samlesbury Aerodrome
@@ -31827,6 +31827,7 @@ ID-0406,ID,-3.99145,140.44502,791,Teraplu Airport
 ID-0407,ID,-4.41176,135.99873,161,Kapiraya Airstrip
 ID-0408,ID,-4.30957,138.12215,3291,Kilmit Airstrip
 ID-0411,ID,-4.37669,139.08346,4269,Pasema Airstrip
+ID-0412,ID,0.0,0.0,,Twon
 ID-AAS,ID,-3.8825,139.31093,3100,Apalapsili Airport
 ID-AGD,ID,-1.3858,133.8737,6644,Anggi Airport
 ID-AHI,ID,-7.54073,139.11092,22,Mina Wanam Airport
@@ -62145,6 +62146,7 @@ SLAP,BO,-14.7356,-68.4119,4639,Apolo Airport
 SLAQ,BO,-18.2154,-65.1878,7208,Aiquile Airport
 SLAS,BO,-15.93337,-63.15557,807,Ascención de Guarayos Airport
 SLBB,BO,-17.25733,-64.36667,886,Bulo Bulo Airport
+SLBE,BO,-17.6525,-62.65472,925,Beirut Airstrip
 SLBF,BO,-11.7272,-66.9263,598,Blanca Flor Airport
 SLBH,BO,-12.13333,-66.53333,656,Buena Hora Airport
 SLBJ,BO,-22.7733,-64.3129,1249,Bermejo Airport
@@ -62162,10 +62164,11 @@ SLCG,BO,-19.7856,-63.1884,2040,Charagua Airport
 SLCH,BO,-17.4366,-62.34067,885,Carol Marghata Airport
 SLCI,BO,-21.13639,-63.75278,1685,Caigua Airport
 SLCL,BO,-18.88271,-66.79667,12185,Collpani Airport
-SLCM,BO,-11.505,-67.6847,690,Camacho Airport
+SLCM,BO,-11.50506,-67.68501,690,Camacho Airport
 SLCN,BO,-17.5947,-69.4331,13339,Charaña Airport
 SLCO,BO,-11.03911,-68.78277,889,Capitán Aníbal Arab Airport
 SLCP,BO,-16.14269,-62.0266,1620,Concepción Airport
+SLCQ,BO,-18.5222,-60.6804,1058,Chiquitos Airport
 SLCR,BO,-17.9136,-64.5178,6186,Comarapa Airport
 SLCS,BO,-20.80833,-66.40111,12640,Cerdas Airport
 SLCT,BO,-13.5145,-64.9652,656,Choreti Airport
@@ -62196,14 +62199,15 @@ SLFO,BO,-13.5548,-61.0041,560,Flor De Oro Airport
 SLFR,BO,-15.68333,-65.56667,574,Florencia Airport
 SLGM,BO,-10.88856,-65.38096,456,Guayaramerín Airport
 SLGP,BO,-18.056,-63.16317,1493,Guirapembi Airport
-SLGQ,BO,-18.5222,-60.6804,1058,Chiquitos Airport
 SLGY,BO,-10.82031,-65.34649,557,Capitán de Av. Emilio Beltrán Airport
 SLHA,BO,-13.5,-64.2,722,Cachascani Airport
 SLHC,BO,-20.3908,-64.0154,4668,Huacareta Airport
 SLHI,BO,-16.97683,-65.14557,875,Chimore Airport
 SLHJ,BO,-13.60556,-63.87944,846,Huacaraje Airport
+SLHM,BO,-19.1089,-57.82285,494,Mutun Heliport
 SLHS,BO,-19.5948,-62.5657,1437,Chacobos Airport
 SLHT,BO,-21.3385,-63.479,1486,Transierra Helipuerto
+SLHY,BO,-18.8949,-58.42217,509,Yacuses Heliport
 SLIG,BO,-13.4438,-66.506,780,Inglaterra Airport
 SLIN,BO,-15.5,-65.91666,722,Santa Catalina Airport
 SLIP,BO,-18.19306,-63.87778,5600,Samaipata Airport
