@@ -1,6 +1,6 @@
 {
   "schemaVersion": 13,
-  "generatedAtUtc": "2026-11-14T10:23:25.116175+00:00",
+  "generatedAtUtc": "2026-11-14T10:36:44.964595+00:00",
   "procedureAiracCycle": "2611",
   "navaidTypeCounts": {
     "DME": 167,
@@ -31,7 +31,11 @@
     "aerosors_vor_ndb": 7995,
     "aerosors_vor_ndbNavigationalRecords": 7995,
     "aerosors_ils": 4470,
-    "aerosors_ilsNavigationalRecords": 4470
+    "aerosors_ilsNavigationalRecords": 4470,
+    "aerosors_ge_navaids": 7995,
+    "aerosors_ge_navaidsPointRecords": 7995,
+    "aerosors_ge_airports": 20978,
+    "aerosors_ge_airportsPointRecords": 20978
   },
   "dataSources": [
     {
@@ -39,7 +43,7 @@
       "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
       "provider": "OurAirports",
       "license": "CC0 / Public Domain as stated by OurAirports",
-      "downloadedAt": "2026-11-14T10:23:20.815208+00:00",
+      "downloadedAt": "2026-11-14T10:36:38.524058+00:00",
       "sizeBytes": 12760412,
       "sha256": "5b3b48a429c8513853ff13a51a03282d1ef159ddf347f40203ff66b583574e8b",
       "recordCount": 86309
@@ -49,7 +53,7 @@
       "url": "https://davidmegginson.github.io/ourairports-data/runways.csv",
       "provider": "OurAirports",
       "license": "CC0 / Public Domain as stated by OurAirports",
-      "downloadedAt": "2026-11-14T10:23:20.815208+00:00",
+      "downloadedAt": "2026-11-14T10:36:38.524058+00:00",
       "sizeBytes": 3974694,
       "sha256": "84d66ace2234e57c39a6a1d61d02db116e45f963137446c0829bae0547456b31",
       "recordCount": 47105
@@ -59,7 +63,7 @@
       "url": "https://davidmegginson.github.io/ourairports-data/navaids.csv",
       "provider": "OurAirports",
       "license": "CC0 / Public Domain as stated by OurAirports",
-      "downloadedAt": "2026-11-14T10:23:20.815208+00:00",
+      "downloadedAt": "2026-11-14T10:36:38.524058+00:00",
       "sizeBytes": 1524931,
       "sha256": "d7292380662c33a95214945023ec0a5b13189599305fd18be739e167a97a9bd1",
       "recordCount": 11008
@@ -70,7 +74,7 @@
       "url": "https://www.aero.sors.fr/hfiles/VORNDB_Table.xlsx",
       "sourcePageUrl": "https://www.aero.sors.fr/navaids.html",
       "licenseStatus": "personal_development_test_only_derivative_redistribution_not_confirmed",
-      "downloadedAt": "2026-11-14T10:23:25.116175+00:00",
+      "downloadedAt": "2026-11-14T10:36:41.644768+00:00",
       "sourceWorkbookBytes": 449065,
       "sourceWorkbookSha256": "5eef68bf09f2a85b3b2ff447741deec0dbaf87f2d78d1866f764f941f97f2511",
       "sourceCycle": "2611-R1",
@@ -120,7 +124,7 @@
       "url": "https://www.aero.sors.fr/hfiles/ILS_Table.xlsx",
       "sourcePageUrl": "https://www.aero.sors.fr/navaids.html",
       "licenseStatus": "personal_development_test_only_derivative_redistribution_not_confirmed",
-      "downloadedAt": "2026-11-14T10:23:25.116175+00:00",
+      "downloadedAt": "2026-11-14T10:36:41.644768+00:00",
       "sourceWorkbookBytes": 286204,
       "sourceWorkbookSha256": "2d35d60403f20f6868ff99b136b2c944cdc1ceb8ebef7214a89ee8d537b62fc9",
       "sourceCycle": "2611-R1",
@@ -148,6 +152,48 @@
           ]
         }
       ]
+    },
+    {
+      "dataset": "aerosors_ge_navaids",
+      "provider": "Aero.Sors / Hervé Sors",
+      "url": "https://www.aero.sors.fr/hfiles/GENavaids.kmz",
+      "sourcePageUrl": "https://www.aero.sors.fr/GE.html",
+      "downloadedAt": "2026-11-14T10:36:44.964595+00:00",
+      "licenseStatus": "personal_development_test_only_derivative_redistribution_not_confirmed",
+      "sourceCycle": "2611-R1",
+      "sourceKmzBytes": 425385,
+      "sourceKmzSha256": "0544bf38451f49621a9a4f19511ac592fc06303091d2214025d529bc0c37c058",
+      "recordCount": 7995,
+      "pointRecordCount": 7995,
+      "metadataOnlyRecordCount": 0,
+      "sizeBytes": 1068765,
+      "sha256": "547bf5cc58fc4dfdd93fda8e39769b59756d3ce14745193c290049914f1e951b",
+      "kmlMembers": [
+        "GENavaids.kml"
+      ],
+      "placemarkCount": 7995,
+      "coordinateCount": 7995
+    },
+    {
+      "dataset": "aerosors_ge_airports",
+      "provider": "Aero.Sors / Hervé Sors",
+      "url": "https://www.aero.sors.fr/hfiles/GEAirports.kmz",
+      "sourcePageUrl": "https://www.aero.sors.fr/GE.html",
+      "downloadedAt": "2026-11-14T10:36:44.964595+00:00",
+      "licenseStatus": "personal_development_test_only_derivative_redistribution_not_confirmed",
+      "sourceCycle": "2611-R1",
+      "sourceKmzBytes": 913483,
+      "sourceKmzSha256": "5dcc57aca00a1d37c1fd9eb4b68b1887247fcdbb153d063f7c20bbf421e33365",
+      "recordCount": 20978,
+      "pointRecordCount": 20978,
+      "metadataOnlyRecordCount": 0,
+      "sizeBytes": 2687429,
+      "sha256": "01c917d87fd4be4f8f779f85e1fe42ffa84bca48ae51d301c6eaed5fc37dc727",
+      "kmlMembers": [
+        "GEAirports.kml"
+      ],
+      "placemarkCount": 20978,
+      "coordinateCount": 20978
     }
   ],
   "capabilities": {
@@ -172,7 +218,9 @@
     "flightgearNavaids": false,
     "aerosors_vor_ndb": true,
     "aerosors_ils": true,
-    "aeroSorsIlsFacilities": true
+    "aeroSorsIlsFacilities": true,
+    "aerosors_ge_navaids": true,
+    "aerosors_ge_airports": true
   },
   "procedureCoverageStatus": "FAA_US_NAS_ONLY_TEST_DATA; EUROPE_FRANCE_SOURCE_NOT_INGESTED; ASIA_NO_PUBLIC_REDISTRIBUTABLE_SOURCE_CONFIRMED",
   "procedureOperationalUse": false,
@@ -759,6 +807,72 @@
       "sourceWorkbookBytes": 286204,
       "sourceWorkbookSha256": "2d35d60403f20f6868ff99b136b2c944cdc1ceb8ebef7214a89ee8d537b62fc9",
       "sheetCount": 1
+    },
+    {
+      "id": "aerosors_ge_navaids",
+      "path": "navigation/aerosors/ge_navaids.csv",
+      "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/navigation/aerosors/ge_navaids.csv",
+      "available": true,
+      "recordCount": 7995,
+      "pointRecordCount": 7995,
+      "metadataOnlyRecordCount": 0,
+      "sizeBytes": 1068765,
+      "sha256": "547bf5cc58fc4dfdd93fda8e39769b59756d3ce14745193c290049914f1e951b",
+      "sourceProvider": "Aero.Sors / Hervé Sors",
+      "sourceUrl": "https://www.aero.sors.fr/hfiles/GENavaids.kmz",
+      "sourcePageUrl": "https://www.aero.sors.fr/GE.html",
+      "coverage": "Worldwide navaids Google Earth layer published by Aero.Sors",
+      "sourceTag": "AEROSORS_2611-R1",
+      "license": "Aero.Sors donationware; unchanged redistribution of original package permitted; derivative CSV republication permission not confirmed",
+      "licenseStatus": "personal_development_test_only_derivative_redistribution_not_confirmed",
+      "dataCycle": "2611-R1",
+      "effectiveDate": "",
+      "expiryDate": "",
+      "provenanceVerification": "Google_Earth_KML_exported; not independently cross-checked against AIP",
+      "testDownloadAvailable": true,
+      "downloadPurpose": "development_test_only",
+      "operationallyAvailable": false,
+      "status": "experimental_personal_test_only",
+      "sourceKmzBytes": 425385,
+      "sourceKmzSha256": "0544bf38451f49621a9a4f19511ac592fc06303091d2214025d529bc0c37c058",
+      "kmlMembers": [
+        "GENavaids.kml"
+      ],
+      "placemarkCount": 7995,
+      "coordinateCount": 7995
+    },
+    {
+      "id": "aerosors_ge_airports",
+      "path": "navigation/aerosors/ge_airports.csv",
+      "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/navigation/aerosors/ge_airports.csv",
+      "available": true,
+      "recordCount": 20978,
+      "pointRecordCount": 20978,
+      "metadataOnlyRecordCount": 0,
+      "sizeBytes": 2687429,
+      "sha256": "01c917d87fd4be4f8f779f85e1fe42ffa84bca48ae51d301c6eaed5fc37dc727",
+      "sourceProvider": "Aero.Sors / Hervé Sors",
+      "sourceUrl": "https://www.aero.sors.fr/hfiles/GEAirports.kmz",
+      "sourcePageUrl": "https://www.aero.sors.fr/GE.html",
+      "coverage": "Worldwide airports Google Earth layer published by Aero.Sors",
+      "sourceTag": "AEROSORS_2611-R1",
+      "license": "Aero.Sors donationware; unchanged redistribution of original package permitted; derivative CSV republication permission not confirmed",
+      "licenseStatus": "personal_development_test_only_derivative_redistribution_not_confirmed",
+      "dataCycle": "2611-R1",
+      "effectiveDate": "",
+      "expiryDate": "",
+      "provenanceVerification": "Google_Earth_KML_exported; not independently cross-checked against AIP",
+      "testDownloadAvailable": true,
+      "downloadPurpose": "development_test_only",
+      "operationallyAvailable": false,
+      "status": "experimental_personal_test_only",
+      "sourceKmzBytes": 913483,
+      "sourceKmzSha256": "5dcc57aca00a1d37c1fd9eb4b68b1887247fcdbb153d063f7c20bbf421e33365",
+      "kmlMembers": [
+        "GEAirports.kml"
+      ],
+      "placemarkCount": 20978,
+      "coordinateCount": 20978
     }
   ],
   "downloadContract": {
@@ -774,7 +888,7 @@
     "airportSource": "https://davidmegginson.github.io/ourairports-data/airports.csv",
     "runwaySource": "https://davidmegginson.github.io/ourairports-data/runways.csv",
     "license": "Public Domain / CC0 as stated by OurAirports",
-    "downloadedAtUtc": "2026-11-14T10:23:24.795837+00:00",
+    "downloadedAtUtc": "2026-11-14T10:36:41.433405+00:00",
     "matchedElevationRecords": 28488,
     "matchedAirportsWithRunways": 24050,
     "matchedAirportsWithMultipleRunways": 3874,
@@ -784,10 +898,11 @@
   "aeroSors": {
     "provider": "Aero.Sors / Hervé Sors",
     "listedCycle": "2611-R1",
-    "importedAtUtc": "2026-11-14T10:23:25.116175+00:00",
+    "importedAtUtc": "2026-11-14T10:36:41.644768+00:00",
     "purpose": "experimental_personal_development_test_only",
     "operationallyAvailable": false,
     "redistributionRights": "not_confirmed_for_derived_csv_exports",
     "notes": "Published VOR/NDB and ILS spreadsheets are exported for FlightTempo development testing. The reviewed terms permit unchanged redistribution of the original package but do not expressly grant derivative CSV republication. Do not release commercially or to users without written permission. This is not an AIP or operational dataset."
-  }
+  },
+  "aeroSorsGeospatialImportedAtUtc": "2026-11-14T10:36:44.964595+00:00"
 }
