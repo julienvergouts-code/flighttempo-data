@@ -48,6 +48,8 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+      - name: Install Aero.Sors workbook parser
+        run: python3 -m pip install -r requirements-aerosors.txt
       - name: Run IFR importer unit tests
         run: python3 -m unittest discover -s tests -v
       - name: Install French SIA procedure PDF parser
@@ -93,6 +95,8 @@ jobs:
             --optional
       - name: Enrich airport reference with OurAirports runway and elevation data
         run: python3 scripts/enrich_airport_reference.py
+      - name: Import Aero.Sors worldwide VOR/NDB and ILS tables (experimental)
+        run: python3 scripts/import_aerosors_tables.py --manifest navigation_manifest.json --optional
       - name: Verify generated datasets and manifest
         run: |
           set -e

@@ -22,6 +22,8 @@ The manifest lists the available datasets, their relative paths, download URLs, 
 | `navigation/airports/ourairports_airports.csv` | OurAirports global airport reference extract |
 | `navigation/runways/runways_parsed.csv` | Normalized runway data |
 | `navigation/navaids/navaids.csv` | OurAirports navaids |
+| `navigation/aerosors/vor_ndb.csv` | Experimental Aero.Sors worldwide VOR/NDB table; development testing only |
+| `navigation/aerosors/ils.csv` | Experimental Aero.Sors worldwide ILS table; development testing only |
 | `navigation/waypoints/flightgear_fixes.csv` | Optional IFR fixes; only when a coherent, redistributable source is supplied |
 | `navigation/navaids/flightgear_navaids.csv` | Optional IFR navaids; only when a coherent, redistributable source is supplied |
 | `navigation/airways/flightgear_airway_segments.csv` | Optional airway segments; not part of the current MVP |
@@ -47,6 +49,7 @@ The longest runway is copied into the legacy primary runway fields so older app 
 ## Updating the data
 
 - GitHub Actions refreshes the OurAirports airport, runway and navaid reference data daily.
+- GitHub Actions also imports Aero.Sors VOR/NDB and ILS spreadsheets as experimental test datasets when the source files are reachable. They are not AIRAC-validated against each national AIP and are not cleared for operational or user release.
 - The IFR importer accepts supplied compatible FIX/NAV sources only when their cycle metadata is coherent and redistribution permission is explicitly declared.
 - Airline profiles and route rules are maintained in the root CSV files and are downloaded independently of navigation data.
 - The manifest is regenerated with the dataset metadata and SHA-256 checksums.
@@ -56,6 +59,7 @@ The longest runway is copied into the legacy primary runway fields so older app 
 - OurAirports data is identified in the manifest as CC0/public-domain as stated by its provider.
 - The current FlightTempo airport-reference export has incomplete upstream provenance recorded; its manifest status explicitly says source review is required.
 - No synthetic IFR fixes, airways, SIDs, STARs or approaches are invented.
+- Aero.Sors-derived CSVs are explicitly marked development-only. The reviewed permission for unchanged package redistribution does not expressly confirm republication of derived CSVs; obtain written permission before external distribution or production use.
 - Procedure data is not considered available until source provenance, redistribution rights, AIRAC cycle and content are verified.
 
 These are aviation reference and roster-personalization datasets. They are not an approved aeronautical information publication or operational flight-planning/navigation source.

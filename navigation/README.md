@@ -60,6 +60,25 @@ Airway segments are not imported or advertised unless explicitly enabled. If ena
 
 Source navaids remain separate from \`navigation/navaids/navaids.csv\` (OurAirports). Source headers, file hashes, payload hashes, compression type, format versions, build dates and source cycle are retained in \`navigation/sources/flightgear/import_metadata.json\` and the master manifest.
 
+## Aero.Sors experimental VOR/NDB and ILS tables
+
+The build workflow downloads the two published Aero.Sors workbooks and exports:
+- `navigation/aerosors/vor_ndb.csv`
+- `navigation/aerosors/ils.csv`
+
+The importer preserves every non-empty worksheet row. It maps fields when column names are recognized and keeps the original row values in `raw_fields_json`. Coordinates are populated as decimal degrees only when the source cell is unambiguous; DMS or packed coordinate strings remain in the raw JSON rather than being guessed. Dataset metadata records the source workbook checksum, row counts and the Aero.Sors cycle label when available.
+
+**Scope:** this is the spreadsheet export only. It does not decode the full World FSXP3D BGL package and therefore does not provide the package's airport/runway records, fixes/intersections or airway segments. It does not create SIDs, STARs or approaches. The source data is simulator-oriented and is not validated against every national AIP.
+
+**Test-only status:** keep these files for FlightTempo development experiments. Reviewed Aero.Sors terms allow unchanged redistribution of the original package on free media, but explicit permission for derivative CSV republication has not been confirmed. Do not treat a public GitHub location or a development-only label as a licence grant; obtain written permission before any user-facing or commercial release.
+
+Run locally:
+
+```bash
+python3 -m pip install -r requirements-aerosors.txt
+python3 scripts/import_aerosors_tables.py
+```
+
 ## Routing architecture
 
 FlightTempo constructs its own generated en-route waypoint sequence from geolocated fixes and navaids. The initial routing engine should:
