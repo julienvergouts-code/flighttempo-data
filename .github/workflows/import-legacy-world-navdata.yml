@@ -1,0 +1,63 @@
+name: Import legacy worldwide X-Plane navigation baseline
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/import-legacy-world-navdata.yml'
+      - 'scripts/import_xplane_navdata.py'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: legacy-world-navdata
+  cancel-in-progress: false
+
+jobs:
+  import-world-navdata:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout FlightTempo data repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Checkout legacy worldwide X-Plane navigation snapshot
+        uses: actions/checkout@v4
+        with:
+          repository: ptsmonteiro/x-plane-navdata
+          ref: master
+          path: /tmp/x-plane-navdata
+          sparse-checkout: |
+            earth_fix.dat
+            earth_nav.dat
+            earth_awy.dat
+            README.md
+          sparse-checkout-cone-mode: false
+      - name: Prepare source and provenance
+        run: |
+          mkdir -p navigation/sources/flightgear
+          cp /tmp/x-plane-navdata/earth_fix.dat /tmp/x-plane-navdata/earth_nav.dat /tmp/x-plane-navdata/earth_awy.dat navigation/sources/flightgear/
+          cat > navigation/sources/flightgear/source-manifest.json <<'JSON'
+          {
+            "provider": "X-Plane default navigation data mirror (ptsmonteiro/x-plane-navdata)",
+            "sourceUrl": "https://github.com/ptsmonteiro/x-plane-navdata",
+            "license": "GPL-3.0",
+            "licenseUrl": "https://github.com/ptsmonteiro/x-plane-navdata",
+            "redistributable": true,
+            "snapshotStatus": "legacy_stale_development_baseline",
+            "snapshotRepositoryLastUpdated": "2013-12-09",
+            "notes": "Worldwide legacy X-Plane navigation snapshot. Cycle may be absent from source headers; never represent as current AIRAC or use operationally."
+          }
+          JSON
+      - name: Import global fixes, navaids including ILS, and airway segments
+        run: python3 scripts/import_xplane_navdata.py --source-dir navigation/sources/flightgear --include-airways
+      - name: Publish generated worldwide navigation CSVs
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add navigation/waypoints/flightgear_fixes.csv navigation/navaids/flightgear_navaids.csv navigation/airways/flightgear_airway_segments.csv navigation/sources/flightgear/import_metadata.json navigation_manifest.json
+          git commit -m "data(navdata): import legacy worldwide fixes navaids and airways" || echo "No changes to publish"
+          git push
