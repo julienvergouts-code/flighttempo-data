@@ -1,4 +1,4 @@
-#version,20261113
+#version,20261114
 #columns,iata,icao,timeZone,name,latitude,longitude,elevationFt,runwayPair,runwayHeadingDeg,allRunwayPairs,allRunwayHeadingsDeg,allRunwayLengthsFt,runwayCount
 AAA,NTGA,Pacific/Tahiti,Anaa Airport,-17.3526,-145.5100,10,14/32,150,14/32,150,4921,1
 AAB,YARY,Australia/Brisbane,Arrabury Airport,-26.6964,141.0487,334,16/34,-1,16/34,,3379,1
@@ -6235,7 +6235,7 @@ PUL,83Q,America/Los_Angeles,Port of Poulsbo Marina Moorage Seaplane Base,47.7340
 PUN,FZOP,Africa/Lubumbashi,Punia Airport,-1.3907,26.3481,1742,,-1,,-1,,0
 PUP,DFCP,Africa/Ouagadougou,Po Airport,11.1791,-1.1485,1050,,-1,,-1,,0
 PUQ,SCCI,America/Punta_Arenas,President Carlos Ibáñez International Airport,-53.0026,-70.8546,139,07/25,89,07/25|12/30|01/19,89|139|29,9154|7875|5504,3
-PUR,SLPR,America/La_Paz,Puerto Rico Airport,-11.1077,-67.5512,597,,-1,,-1,,0
+PUR,SLPR,America/La_Paz,Puerto Rico Airport,-11.1077,-67.5512,1262,,-1,,-1,,0
 PUS,RKPK,Asia/Seoul,Gimhae International Airport,35.1795,128.9380,6,18R/36L,174,18R/36L|18L/36R,174|174,10499|9007,2
 PUT,VOPN,Asia/Kolkata,Sri Sathya Sai Airport,14.1493,77.7911,1558,09/27,93,09/27,93,7315,1
 PUU,SKAS,America/Bogota,Tres De Mayo Airport,0.5052,-76.5008,815,01/19,9,01/19,9,5331,1
@@ -25226,7 +25226,7 @@ ZZV,KZZV,America/New_York,Zanesville Municipal Airport,39.9444,-81.8921,900,04/2
 ,SLCL,America/La_Paz,Collpani Airport,-18.8827,-66.7967,12185,,-1,,-1,,0
 ,SLCM,America/La_Paz,Camacho Airport,-11.5050,-67.6847,690,,-1,,-1,,0
 ,SLCN,America/La_Paz,Charaña Airport,-17.5947,-69.4331,13339,,-1,,-1,,0
-,SLCR,America/La_Paz,Comarapa Airport,-17.9136,-64.5178,6186,,-1,,-1,,0
+,SLCR,America/La_Paz,Comarapa Airport,-17.9136,-64.5178,813,,-1,,-1,,0
 ,SLCS,America/La_Paz,Cerdas Airport,-20.8083,-66.4011,12640,,-1,,-1,,0
 ,SLCT,America/La_Paz,Choreti Airport,-13.5145,-64.9652,656,,-1,,-1,,0
 ,SLCU,America/La_Paz,Culpina Airport,-20.8333,-64.9667,9676,,-1,,-1,,0
@@ -25237,7 +25237,7 @@ ZZV,KZZV,America/New_York,Zanesville Municipal Airport,39.9444,-81.8921,900,04/2
 ,SLDL,America/La_Paz,Dalmacia Airport,-17.4426,-62.2442,888,,-1,,-1,,0
 ,SLDN,America/La_Paz,El Desengano Airport,-14.2736,-65.4400,730,,-1,,-1,,0
 ,SLEA,America/La_Paz,El Cocal Airport,-13.5699,-66.0718,722,,-1,,-1,,0
-,SLEC,America/La_Paz,El Cairo Airport,-13.7833,-66.4000,722,,-1,,-1,,0
+,SLEC,America/La_Paz,El Cairo Airport,-13.7833,-66.4000,1185,,-1,,-1,,0
 ,SLEE,America/La_Paz,El Escondido Airport,-21.4670,-63.3528,1246,,-1,,-1,,0
 ,SLEF,America/La_Paz,El Triunfo Airport,-13.8833,-65.7667,486,,-1,,-1,,0
 ,SLEH,America/La_Paz,El Rancho Airport,-13.0500,-65.0333,722,,-1,,-1,,0
@@ -25311,10 +25311,10 @@ ZZV,KZZV,America/New_York,Zanesville Municipal Airport,39.9444,-81.8921,900,04/2
 ,SLSF,America/La_Paz,San Rafael Airport,-17.2891,-62.3040,890,,-1,,-1,,0
 ,SLSG,America/La_Paz,San Miguel De Gaser Airport,-13.9021,-66.1567,700,,-1,,-1,,0
 ,SLSH,America/La_Paz,Santa Ana De Huachi Airport,-15.4947,-67.4424,1640,,-1,,-1,,0
-,SLSJ,America/La_Paz,Salinas Airport,-19.5000,-67.3333,12027,,-1,,-1,,0
+,SLSJ,America/La_Paz,Salinas Airport,-19.5000,-67.3333,590,,-1,,-1,,0
 ,SLSK,America/La_Paz,Santa Rosa Del Sara Airport,-17.1047,-63.6084,850,,-1,,-1,,0
 ,SLSN,America/La_Paz,Sanandita Airport,-21.6500,-63.6000,3200,,-1,,-1,,0
-,SLSP,America/La_Paz,Sipuati Airport,-21.0735,-63.1095,1400,,-1,,-1,,0
+,SLSP,America/La_Paz,Sipuati Airport,-21.0735,-63.1095,1048,,-1,,-1,,0
 ,SLSQ,America/La_Paz,Santiago De Chiquitos Airport,-18.3458,-59.6048,1990,,-1,,-1,,0
 ,SLSS,America/La_Paz,Sunsas Airport,-18.4754,-58.2767,855,,-1,,-1,,0
 ,SLSU,America/La_Paz,Juana Azurduy de Padilla Air Force Base,-19.0071,-65.2887,9540,05/23,46,05/23,46,9300,1
@@ -25323,7 +25323,7 @@ ZZV,KZZV,America/New_York,Zanesville Municipal Airport,39.9444,-81.8921,900,04/2
 ,SLTC,America/La_Paz,Tres Cruces Airport,-17.3604,-62.2796,880,,-1,,-1,,0
 ,SLTE,America/La_Paz,Teoponte Airport,-15.4983,-67.8167,1400,,-1,,-1,,0
 ,SLTG,America/La_Paz,Santiago Airport,-15.2278,-65.4501,1000,,-1,,-1,,0
-,SLTL,America/La_Paz,San Cristóbal Toldos Airport,-21.1756,-67.1667,11800,,-1,,-1,,0
+,SLTL,America/La_Paz,San Cristóbal Toldos Airport,-21.1756,-67.1667,12467,12/30,-1,12/30,,8202,1
 ,SLTO,America/La_Paz,Totora Airport,-17.7982,-68.0935,12530,,-1,,-1,,0
 ,SLTU,America/La_Paz,Turco Airport,-18.1958,-68.1420,12500,,-1,,-1,,0
 ,SLTW,America/La_Paz,Tita Airport,-18.4664,-62.1120,1312,,-1,,-1,,0

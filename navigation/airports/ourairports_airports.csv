@@ -13084,7 +13084,6 @@ BO-0010,BO,-13.65781,-62.80187,,Buen Jesus Airport
 BO-0011,BO,-14.13065,-61.8209,,Tres Personas Airport
 BO-0012,BO,-21.53278,-62.97154,,Ibibobo Airport
 BO-0013,BO,-15.19003,-64.75793,534,Loreto Airport
-BO-0014,BO,-16.22692,-60.54645,,Espiritu Airstrip
 BO-0015,BO,-10.05245,-65.33933,344,Nueva Esperanza Airport
 BO-0016,BO,-21.40185,-67.59456,,Villa Alota Heliport
 BO-0017,BO,-21.26314,-67.22413,,Culpina K Heliport
@@ -16373,7 +16372,7 @@ BR-3303,BR,-7.09344,-50.42831,1247,Grupo Barcelona Airport
 BR-3304,BR,-11.01446,-37.63615,361,Fazenda Bonfim Heliport
 BR-3305,BR,-22.50759,-51.78659,1217,Fazenda Caaporã Airport
 BR-3306,BR,-4.43144,-50.52232,548,Fazenda Lajeado - Boi na Grota Airport
-BR-3307,BR,-17.50578,-49.40643,625,Pontalina de Goiás Airport
+BR-3307,BR,-17.50037,-49.40778,625,Pontalina de Goiás Airport
 BR-3308,BR,-18.50872,-44.18969,1800,Fazenda da Barra Heliport
 BR-3309,BR,-11.13591,-57.27117,890,Fazenda Piquiri 5B Airport
 BR-3310,BR,-19.10735,-51.08877,1280,Fazenda São José do Corrente Airport
@@ -31827,7 +31826,6 @@ ID-0406,ID,-3.99145,140.44502,791,Teraplu Airport
 ID-0407,ID,-4.41176,135.99873,161,Kapiraya Airstrip
 ID-0408,ID,-4.30957,138.12215,3291,Kilmit Airstrip
 ID-0411,ID,-4.37669,139.08346,4269,Pasema Airstrip
-ID-0412,ID,0.0,0.0,,Twon
 ID-AAS,ID,-3.8825,139.31093,3100,Apalapsili Airport
 ID-AGD,ID,-1.3858,133.8737,6644,Anggi Airport
 ID-AHI,ID,-7.54073,139.11092,22,Mina Wanam Airport
@@ -62169,7 +62167,7 @@ SLCN,BO,-17.5947,-69.4331,13339,Charaña Airport
 SLCO,BO,-11.03911,-68.78277,889,Capitán Aníbal Arab Airport
 SLCP,BO,-16.14269,-62.0266,1620,Concepción Airport
 SLCQ,BO,-18.5222,-60.6804,1058,Chiquitos Airport
-SLCR,BO,-17.9136,-64.5178,6186,Comarapa Airport
+SLCR,BO,-17.21247,-64.55299,813,Carrasco Airport
 SLCS,BO,-20.80833,-66.40111,12640,Cerdas Airport
 SLCT,BO,-13.5145,-64.9652,656,Choreti Airport
 SLCU,BO,-20.83333,-64.96667,9676,Culpina Airport
@@ -62177,10 +62175,12 @@ SLCV,BO,-12.5498,-66.9125,656,Cavinas Airport
 SLCX,BO,-12.37783,-68.56767,618,Chive Airport
 SLCY,BO,-17.565,-63.1747,1170,Collpa Airport
 SLDA,BO,-17.51256,-63.537,1082,Caranda Airport
+SLDF,BO,-17.94527,-62.10106,955,Doña Francisca Airstrip
 SLDL,BO,-17.4426,-62.2442,888,Dalmacia Airport
+SLDM,BO,-17.36304,-59.70144,1364,Don Mario Airport
 SLDN,BO,-14.2736,-65.44,730,El Desengano Airport
 SLEA,BO,-13.56995,-66.07184,722,El Cocal Airport
-SLEC,BO,-13.78333,-66.4,722,El Cairo Airport
+SLEC,BO,-16.03414,-61.06639,1185,El Carmen de Ruiz Airport
 SLEE,BO,-21.467,-63.3528,1246,El Escondido Airport
 SLEF,BO,-13.88333,-65.76667,486,El Triunfo Airport
 SLEH,BO,-13.05,-65.03333,722,El Rancho Airport
@@ -62217,11 +62217,13 @@ SLIX,BO,-13.76,-68.13683,725,Ixiamas Airport
 SLIY,BO,-17.79583,-67.43472,12467,Intiraymi Airport
 SLIZ,BO,-18.66383,-63.00234,1082,Izozog Airport
 SLJA,BO,-11.77283,-67.256,575,Jatata Airport
+SLJD,BO,-17.23621,-61.90642,842,San Judas Tadeo Airport
 SLJE,BO,-17.8308,-60.7431,974,San José De Chiquitos Airport
 SLJO,BO,-13.06721,-64.67521,456,San Joaquín Airport
 SLJS,BO,-13.08333,-66.16666,498,Josuani Airport
 SLJV,BO,-16.2708,-62.4703,1702,San Javier Airport
 SLLB,BO,-14.51667,-65.76667,722,Las Brizas Airport
+SLLC,BO,-17.77039,-62.80592,1050,Santa Lucia Airport
 SLLH,BO,-14.01667,-63.53333,700,Lago Huachi Airport
 SLLI,BO,-13.57383,-66.83567,540,La India Airport
 SLLJ,BO,-16.5339,-68.3006,12103,Laja Airport
@@ -62251,7 +62253,7 @@ SLPL,BO,-19.2994,-64.2941,6770,Padilla Airport
 SLPM,BO,-13.73795,-66.40933,530,Palmira Airport
 SLPN,BO,-13.98733,-61.54567,595,Porvenir Norte Airport
 SLPO,BO,-19.54333,-65.72373,12922,Capitan Nicolas Rojas Airport
-SLPR,BO,-11.10766,-67.55115,597,Puerto Rico Airport
+SLPR,BO,-17.69061,-63.19902,1262,Parai(Puerto Rico) Airport
 SLPS,BO,-18.9753,-57.8206,440,Capitán Av. Salvador Ogaya G. airport
 SLPW,BO,-20.7547,-63.2094,2238,El Porvenir Sur Airport
 SLPY,BO,-18.3335,-63.1925,1730,Piray Airport
@@ -62277,14 +62279,15 @@ SLSF,BO,-17.2891,-62.304,890,San Rafael Airport
 SLSG,BO,-13.9021,-66.1567,700,San Miguel De Gaser Airport
 SLSH,BO,-15.49472,-67.44241,1640,Santa Ana De Huachi Airport
 SLSI,BO,-16.38719,-60.96232,1354,Capitán Av. Juan Cochamanidis S. Airport
-SLSJ,BO,-19.5,-67.33334,12027,Salinas Airport
+SLSJ,BO,-10.03991,-65.96302,590,San Juan Pando Airport
 SLSK,BO,-17.10472,-63.60837,850,Santa Rosa Del Sara Airport
+SLSL,BO,-16.22692,-60.54645,950,Santa Anita de Los Robles Airport
 SLSM,BO,-14.9658,-65.6338,545,San Ignacio de Moxos Airport
 SLSN,BO,-21.65,-63.6,3200,Sanandita Airport
-SLSP,BO,-21.0735,-63.1095,1400,Sipuati Airport
+SLSP,BO,-17.55721,-59.88676,1048,San Pablo Airport
 SLSQ,BO,-18.3458,-59.6048,1990,Santiago De Chiquitos Airport
 SLSR,BO,-14.07307,-66.78739,738,Santa Rosa de Yacuma Airport
-SLSS,BO,-18.4754,-58.2767,855,Sunsas Airport
+SLSS,BO,-18.47536,-58.27646,855,Sunsas Airport
 SLSU,BO,-19.0071,-65.2887,9540,Juana Azurduy de Padilla Air Force Base
 SLSV,BO,-16.40124,-61.0452,1477,San Ignacio de Velasco Airport
 SLTA,BO,-20.3433,-63.1394,2340,Taquipirenda Airport
@@ -62293,7 +62296,7 @@ SLTE,BO,-15.49833,-67.81667,1400,Teoponte Airport
 SLTG,BO,-15.2278,-65.4501,1000,Santiago Airport
 SLTI,BO,-16.3392,-58.4019,403,San Matías Airport
 SLTJ,BO,-21.5557,-64.7013,6079,Capitan Oriel Lea Plaza Airport
-SLTL,BO,-21.1756,-67.16669,11800,San Cristóbal Toldos Airport
+SLTL,BO,-21.1756,-67.16669,12467,San Cristóbal Toldos Airport
 SLTO,BO,-17.79817,-68.0935,12530,Totora Airport
 SLTR,BO,-14.8187,-64.918,509,Teniente Av. Jorge Henrich Arauz Airport
 SLTU,BO,-18.19583,-68.142,12500,Turco Airport
