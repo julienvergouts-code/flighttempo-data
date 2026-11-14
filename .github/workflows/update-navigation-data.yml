@@ -104,7 +104,7 @@ jobs:
           test -s airports/airports.csv
           test -s airlines/airlines.csv
           test -s airlines/route_rules.csv
-          test -s navigation/airports/ourairports_airports/airports.csv
+          test -s navigation/airports/ourairports_airports.csv
           test -s navigation/navaids/navaids.csv
           test -s navigation/runways/runways_parsed.csv
           test -s navigation_manifest.json
@@ -118,7 +118,7 @@ jobs:
           assert manifest["schemaVersion"] == 13, "Unexpected manifest schema version"
           expected = {
               "airports/airports.csv": 1000,
-              "navigation/airports/ourairports_airports/airports.csv": 1000,
+              "navigation/airports/ourairports_airports.csv": 1000,
               "navigation/navaids/navaids.csv": 1000,
               "navigation/runways/runways_parsed.csv": 500,
           }
