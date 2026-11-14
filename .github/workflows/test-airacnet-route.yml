@@ -1,0 +1,27 @@
+name: AIRAC.net route-data smoke test
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test-airacnet:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Query AIRAC.net for LFPG-LANVI-EDDM test data
+        run: python3 scripts/test_airacnet_route.py --output build/airacnet-test
+      - name: Upload private-test extract as workflow artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: airacnet-lfpg-lanvi-eddm-test
+          path: build/airacnet-test/
+          retention-days: 7
