@@ -16,16 +16,16 @@ The manifest lists the available datasets, their relative paths, download URLs, 
 
 | File | Purpose |
 | --- | --- |
-| `airports.csv` | FlightTempo airport reference with IATA/ICAO, IANA timezone, coordinates, elevation, a longest-runway compatibility field, and pipe-delimited lists of all matched runway pairs, headings and lengths |
-| `airlines.csv` | Airline/operator roster profiles (currently ASL and generic commercial profile) |
-| `route_rules.csv` | Roster text/classification rules |
-| `navigation/airports/ourairports_airports.csv` | OurAirports global airport reference extract |
+| `airports/airports.csv` | FlightTempo airport reference with IATA/ICAO, IANA timezone, coordinates, elevation, a longest-runway compatibility field, and pipe-delimited lists of all matched runway pairs, headings and lengths |
+| `airlines/airlines.csv` | Airline/operator roster profiles (currently ASL and generic commercial profile) |
+| `airlines/route_rules.csv` | Roster text/classification rules |
+| `navigation/airports/ourairports_airports/airports.csv` | OurAirports global airport reference extract |
 | `navigation/runways/runways_parsed.csv` | Normalized runway data |
 | `navigation/navaids/navaids.csv` | OurAirports navaids |
 | `navigation/aerosors/vor_ndb.csv` | Experimental Aero.Sors worldwide VOR/NDB table; development testing only |
 | `navigation/aerosors/ils.csv` | Experimental Aero.Sors worldwide ILS table; development testing only |
 | `navigation/aerosors/ge_navaids.csv` | Experimental Aero.Sors Google Earth world navaids with point coordinates; development testing only |
-| `navigation/aerosors/ge_airports.csv` | Experimental Aero.Sors Google Earth world airport layer; development testing only |
+| `navigation/aerosors/ge_airports/airports.csv` | Experimental Aero.Sors Google Earth world airport layer; development testing only |
 | `navigation/waypoints/flightgear_fixes.csv` | Optional IFR fixes; only when a coherent, redistributable source is supplied |
 | `navigation/navaids/flightgear_navaids.csv` | Optional IFR navaids; only when a coherent, redistributable source is supplied |
 | `navigation/airways/flightgear_airway_segments.csv` | Optional airway segments; not part of the current MVP |
@@ -35,7 +35,7 @@ Direct downloads use the paths recorded in the manifest. Do not hard-code a futu
 
 ### Airport reference enrichment
 
-The first nine columns of `airports.csv` retain the legacy Android parser contract:
+The first nine columns of `airports/airports.csv` retain the legacy Android parser contract:
 
 `iata, icao, timeZone, name, latitude, longitude, elevationFt, runwayPair, runwayHeadingDeg`
 
@@ -47,6 +47,10 @@ The following appended columns retain all paired open runway records matched fro
 - `runwayCount`: number of matched paired open runways
 
 The longest runway is copied into the legacy primary runway fields so older app builds continue to parse the file. The extra fields are available for future multi-runway UI support. Enrichment is rebuilt from the daily OurAirports source snapshots. OurAirports releases its data to the public domain; the source provenance for the pre-existing IATA/time-zone reference fields remains under review. This dataset is community-maintained and is not guaranteed for operational use.
+
+The airport reference CSV is stored at `airports/airports.csv`. Airline profile and roster-classification CSVs are grouped under `airlines/` (`airlines/airlines.csv` and `airlines/route_rules.csv`). The downloadable paths in the manifest point to these locations; the Android app should resolve them through the manifest rather than hard-code repository paths.
+
+The first nine airport columns remain unchanged for the current Android parser. Additional columns retain OurAirports airport metadata and aligned runway-end details (width, surface, lighting, coordinates, elevations, headings and displaced thresholds). The normalized airport, runway and navaid exports also retain the original OurAirports fields under `source_*` columns. Closed or invalid source records remain in the raw snapshots under `navigation/sources/`; normalized exports apply their documented filters.
 
 ## Updating the data
 

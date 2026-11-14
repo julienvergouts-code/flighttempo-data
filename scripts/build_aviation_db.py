@@ -125,6 +125,7 @@ def write_csv(path, header, rows):
 def build_airports(records, stage):
     rows = []
     seen = set()
+    source_fields = list(records[0].keys()) if records else []
 
     for record in records:
         if record.get("type") == "closed_airport":
@@ -136,7 +137,9 @@ def build_airports(records, stage):
             or ""
         ).strip().upper()
 
-        if not ident or ident in seen:
+        source_id = str(record.get("id") or "").strip()
+        record_key = ("id", source_id) if source_id else ("ident", ident)
+        if not ident or record_key in seen:
             continue
 
         lat = number(record.get("latitude_deg"))
@@ -146,8 +149,10 @@ def build_airports(records, stage):
         if not valid_coordinates(lat, lon):
             continue
 
-        seen.add(ident)
+        seen.add(record_key)
 
+        # Keep the stable normalized columns first, then retain every original
+        # OurAirports airport field with a source_ prefix for future use.
         rows.append((
             ident,
             (record.get("iso_country") or "").strip().upper(),
@@ -155,7 +160,7 @@ def build_airports(records, stage):
             round(lon, 5),
             round(elevation) if elevation is not None else "",
             (record.get("name") or "").strip()
-        ))
+        ) + tuple(record.get(field, "") for field in source_fields))
 
     if len(rows) < MINIMUM_RECORDS["airports"]:
         raise RuntimeError(
@@ -173,7 +178,7 @@ def build_airports(records, stage):
             "longitude",
             "elevation_ft",
             "name"
-        ],
+        ] + [f"source_{field}" for field in source_fields],
         rows
     )
 
@@ -184,6 +189,7 @@ def build_navaids(records, stage):
     rows = []
     seen = set()
     type_counts = {}
+    source_fields = list(records[0].keys()) if records else []
 
     for record in records:
         ident = (record.get("ident") or "").strip().upper()
@@ -195,7 +201,10 @@ def build_navaids(records, stage):
         if not ident or not nav_type or not valid_coordinates(lat, lon):
             continue
 
-        key = (ident, nav_type, round(lat, 6), round(lon, 6))
+        source_id = str(record.get("id") or "").strip()
+        key = ("id", source_id) if source_id else (
+            "nav", ident, nav_type, round(lat, 6), round(lon, 6)
+        )
         if key in seen:
             continue
         seen.add(key)
@@ -209,7 +218,7 @@ def build_navaids(records, stage):
         slaved_variation = number(record.get("slaved_variation_deg"))
         magnetic_variation = number(record.get("magnetic_variation_deg"))
 
-        rows.append((
+        normalized = (
             ident,
             (record.get("name") or "").strip(),
             nav_type,
@@ -230,7 +239,8 @@ def build_navaids(records, stage):
             (record.get("usageType") or "").strip().upper(),
             (record.get("power") or "").strip().upper(),
             (record.get("associated_airport") or "").strip().upper()
-        ))
+        )
+        rows.append(normalized + tuple(record.get(field, "") for field in source_fields))
 
         type_counts[nav_type] = type_counts.get(nav_type, 0) + 1
 
@@ -251,15 +261,17 @@ def build_navaids(records, stage):
             "dme_latitude_deg", "dme_longitude_deg", "dme_elevation_ft",
             "iso_country", "slaved_variation_deg", "magnetic_variation_deg",
             "usage_type", "power", "associated_airport"
-        ],
+        ] + [f"source_{field}" for field in source_fields],
         rows
     )
 
     return len(rows), dict(sorted(type_counts.items()))
 
+
 def build_runways(records, stage):
     rows = []
     seen = set()
+    source_fields = list(records[0].keys()) if records else []
 
     for record in records:
         if str(record.get("closed", "")).strip() == "1":
@@ -282,20 +294,18 @@ def build_runways(records, stage):
         high_heading = number(record.get("he_heading_degT"))
 
         # Preserve the runway record, but do not publish impossible source headings.
-        # In particular, do not wrap values such as 362 degrees to 002 degrees.
         if low_heading is not None and not 0 <= low_heading <= 360:
             low_heading = None
         if high_heading is not None and not 0 <= high_heading <= 360:
             high_heading = None
 
-        key = (airport, low, high)
-
+        source_id = str(record.get("id") or "").strip()
+        key = ("id", source_id) if source_id else ("runway", airport, low, high)
         if key in seen:
             continue
-
         seen.add(key)
 
-        rows.append((
+        normalized = (
             airport,
             f"{low}/{high}" if high else low,
             low,
@@ -306,7 +316,10 @@ def build_runways(records, stage):
             round(width) if width is not None else "",
             (record.get("surface") or "").strip(),
             "1" if str(record.get("lighted", "")) == "1" else "0"
-        ))
+        )
+        # Every source field is retained, including runway-end coordinates,
+        # runway-end elevations, displaced thresholds, closure flag and source IDs.
+        rows.append(normalized + tuple(record.get(field, "") for field in source_fields))
 
     if len(rows) < MINIMUM_RECORDS["runways"]:
         raise RuntimeError(
@@ -328,7 +341,7 @@ def build_runways(records, stage):
             "width_ft",
             "surface",
             "lighted"
-        ],
+        ] + [f"source_{field}" for field in source_fields],
         rows
     )
 

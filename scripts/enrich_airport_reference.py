@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""Enrich FlightTempo's airport reference with OurAirports elevations and runway ends.
+"""Enrich FlightTempo's airport reference with the complete useful OurAirports fields.
 
 The existing first nine columns are preserved for the current Android parser.
-Additional columns retain all matched runway pairs for later multi-runway UI support.
-Source snapshots are refreshed by build_aviation_db.py before this script runs.
+New airport metadata and runway-detail columns are appended for future app use.
+The normalized source CSVs remain the authoritative full per-record exports.
 """
 import csv
 import hashlib
@@ -13,10 +13,42 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-REFERENCE = ROOT / "airports.csv"
+REFERENCE = ROOT / "airports/airports.csv"
 SOURCE_AIRPORTS = ROOT / "navigation/sources/airports.csv"
 SOURCE_RUNWAYS = ROOT / "navigation/sources/runways.csv"
 MANIFEST = ROOT / "navigation_manifest.json"
+
+AIRPORT_FIELDS = [
+    ("ourairportsId", "id"),
+    ("airportType", "type"),
+    ("continent", "continent"),
+    ("isoCountry", "iso_country"),
+    ("isoRegion", "iso_region"),
+    ("municipality", "municipality"),
+    ("scheduledService", "scheduled_service"),
+    ("gpsCode", "gps_code"),
+    ("localCode", "local_code"),
+    ("homeLink", "home_link"),
+    ("wikipediaLink", "wikipedia_link"),
+    ("keywords", "keywords"),
+]
+
+RUNWAY_FIELDS = [
+    ("allRunwaySourceIds", "id"),
+    ("allRunwayWidthsFt", "width_ft"),
+    ("allRunwaySurfaces", "surface"),
+    ("allRunwayLighted", "lighted"),
+    ("allRunwayLELatitudes", "le_latitude_deg"),
+    ("allRunwayLELongitudes", "le_longitude_deg"),
+    ("allRunwayLEElevationsFt", "le_elevation_ft"),
+    ("allRunwayLEDisplacedThresholdsFt", "le_displaced_threshold_ft"),
+    ("allRunwayLEHeadingsDegT", "le_heading_degT"),
+    ("allRunwayHELatitudes", "he_latitude_deg"),
+    ("allRunwayHELongitudes", "he_longitude_deg"),
+    ("allRunwayHEElevationsFt", "he_elevation_ft"),
+    ("allRunwayHEDisplacedThresholdsFt", "he_displaced_threshold_ft"),
+    ("allRunwayHEHeadingsDegT", "he_heading_degT"),
+]
 
 def clean(value):
     return (value or "").strip()
@@ -41,17 +73,26 @@ def sha256_file(path):
 
 def build_airport_lookups(airports):
     elevations = {}
+    metadata = {}
     for row in airports:
         ident = clean(row.get("ident")).upper()
         icao = clean(row.get("icao_code")).upper()
+        gps = clean(row.get("gps_code")).upper()
         elevation = number(row.get("elevation_ft"))
-        if elevation is None:
-            continue
-        if ident:
-            elevations.setdefault(ident, int(round(elevation)))
-        if icao:
-            elevations[icao] = int(round(elevation))
-    return elevations
+        if elevation is not None:
+            if ident:
+                elevations.setdefault(ident, int(round(elevation)))
+            if icao:
+                elevations[icao] = int(round(elevation))
+
+        details = {
+            output: clean(row.get(source))
+            for output, source in AIRPORT_FIELDS
+        }
+        for key in (icao, ident, gps):
+            if key:
+                metadata.setdefault(key, details)
+    return elevations, metadata
 
 def build_runway_lookup(runways):
     by_airport = {}
@@ -64,19 +105,19 @@ def build_runway_lookup(runways):
         high = clean(row.get("he_ident")).upper()
         length = number(row.get("length_ft"))
 
-        # Only real, paired runway records with a usable length are put into
-        # the airport's runway list. Full raw runway records remain in the
-        # separate runways dataset, including unpaired and unusual surfaces.
-        if not airport or not low or not high or length is None or length <= 0:
+        # Keep any open runway with a usable length and at least one identified
+        # end. Unpaired source records remain available in the full runway CSV.
+        if not airport or not low or length is None or length <= 0:
             continue
 
-        pair = f"{low}/{high}"
-        heading = number(row.get("le_heading_degT"))
+        pair = f"{low}/{high}" if high else low
         item = {
             "pair": pair,
-            "heading": int(round(heading)) if heading is not None and 0 <= heading <= 360 else None,
+            "heading": number(row.get("le_heading_degT")),
             "length": int(round(length)),
         }
+        for output, source in RUNWAY_FIELDS:
+            item[output] = clean(row.get(source))
         by_airport.setdefault(airport, []).append(item)
 
     for airport, items in by_airport.items():
@@ -91,6 +132,11 @@ def build_runway_lookup(runways):
         )
     return by_airport
 
+def pipe_values(items, key):
+    # Keep positional alignment between runway fields. Empty values are
+    # intentionally retained as empty tokens between pipe separators.
+    return "|".join(item.get(key, "") for item in items)
+
 def main():
     for required in (REFERENCE, SOURCE_AIRPORTS, SOURCE_RUNWAYS, MANIFEST):
         if not required.is_file():
@@ -98,7 +144,7 @@ def main():
 
     source_airports = read_rows(SOURCE_AIRPORTS)
     source_runways = read_rows(SOURCE_RUNWAYS)
-    elevations = build_airport_lookups(source_airports)
+    elevations, airport_metadata = build_airport_lookups(source_airports)
     runways = build_runway_lookup(source_runways)
 
     with REFERENCE.open("r", encoding="utf-8-sig", newline="") as handle:
@@ -124,6 +170,7 @@ def main():
     elevation_matches = 0
     runway_matches = 0
     multiple_runway_matches = 0
+    airport_metadata_matches = 0
 
     for row in records:
         iata, icao, timezone_id, name, lat, lon, old_elev, old_pair, old_heading = row
@@ -131,10 +178,14 @@ def main():
 
         elevation = elevations.get(code)
         runway_items = runways.get(code, [])
+        airport_details = airport_metadata.get(code, {})
 
         if elevation is not None:
             old_elev = str(elevation)
             elevation_matches += 1
+
+        if airport_details:
+            airport_metadata_matches += 1
 
         if runway_items:
             runway_matches += 1
@@ -143,34 +194,42 @@ def main():
 
             primary = next((r for r in runway_items if r["heading"] is not None), runway_items[0])
             old_pair = primary["pair"]
-            old_heading = str(primary["heading"]) if primary["heading"] is not None else "-1"
+            old_heading = str(int(round(primary["heading"]))) if primary["heading"] is not None and 0 <= primary["heading"] <= 360 else "-1"
             all_pairs = "|".join(r["pair"] for r in runway_items)
-            all_headings = "|".join("" if r["heading"] is None else str(r["heading"]) for r in runway_items)
+            all_headings = "|".join(
+                "" if r["heading"] is None or not 0 <= r["heading"] <= 360 else str(int(round(r["heading"])))
+                for r in runway_items
+            )
             all_lengths = "|".join(str(r["length"]) for r in runway_items)
         else:
             all_pairs = old_pair
             all_headings = old_heading
             all_lengths = ""
 
+        airport_values = [airport_details.get(output, "") for output, _ in AIRPORT_FIELDS]
+        runway_values = [pipe_values(runway_items, output) for output, _ in RUNWAY_FIELDS]
+
         updated.append([
             iata, icao, timezone_id, name, lat, lon, old_elev,
             old_pair, old_heading, all_pairs, all_headings,
             all_lengths, str(len(runway_items))
-        ])
+        ] + airport_values + runway_values)
 
     timestamp = datetime.now(timezone.utc).isoformat()
     version = datetime.now(timezone.utc).strftime("%Y%m%d")
     temp = REFERENCE.with_suffix(".csv.tmp")
 
+    header = [
+        "#columns", "iata", "icao", "timeZone", "name", "latitude",
+        "longitude", "elevationFt", "runwayPair", "runwayHeadingDeg",
+        "allRunwayPairs", "allRunwayHeadingsDeg", "allRunwayLengthsFt",
+        "runwayCount"
+    ] + [output for output, _ in AIRPORT_FIELDS] + [output for output, _ in RUNWAY_FIELDS]
+
     with temp.open("w", encoding="utf-8", newline="") as handle:
         writer = csv.writer(handle, lineterminator="\n")
         writer.writerow(["#version", version])
-        writer.writerow([
-            "#columns", "iata", "icao", "timeZone", "name", "latitude",
-            "longitude", "elevationFt", "runwayPair", "runwayHeadingDeg",
-            "allRunwayPairs", "allRunwayHeadingsDeg", "allRunwayLengthsFt",
-            "runwayCount"
-        ])
+        writer.writerow(header)
         writer.writerows(updated)
 
     temp.replace(REFERENCE)
@@ -181,22 +240,22 @@ def main():
     if dataset is None:
         dataset = {
             "id": "airport_reference",
-            "path": "airports.csv",
-            "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/airports.csv",
+            "path": "airports/airports.csv",
+            "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/airports/airports.csv",
             "available": True
         }
         datasets.append(dataset)
 
     dataset.update({
-        "path": "airports.csv",
-        "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/airports.csv",
+        "path": "airports/airports.csv",
+        "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/airports/airports.csv",
         "available": True,
         "recordCount": len(updated),
         "sizeBytes": REFERENCE.stat().st_size,
         "sha256": sha256_file(REFERENCE),
         "sourceProvider": "FlightTempo airport reference with OurAirports enrichment",
         "sourceUrl": "https://ourairports.com/data/",
-        "coverage": "Global airport reference; elevation and all paired open runways enriched where ICAO/OurAirports identifiers match",
+        "coverage": "Global airport reference; airport metadata, elevation and runway details enriched where source identifiers match",
         "license": "OurAirports enrichment is Public Domain/CC0; original IATA/time-zone reference provenance remains under review",
         "licenseStatus": "mixed_source_review_required",
         "dataCycle": "daily_source_snapshot",
@@ -209,7 +268,8 @@ def main():
         "airportReferenceRecords": len(updated),
         "airportReferenceOurAirportsElevationMatches": elevation_matches,
         "airportReferenceRunwayMatches": runway_matches,
-        "airportReferenceMultipleRunwayAirports": multiple_runway_matches
+        "airportReferenceMultipleRunwayAirports": multiple_runway_matches,
+        "airportReferenceOurAirportsMetadataMatches": airport_metadata_matches
     })
     manifest["airportReferenceEnrichment"] = {
         "provider": "OurAirports",
@@ -218,16 +278,20 @@ def main():
         "license": "Public Domain / CC0 as stated by OurAirports",
         "downloadedAtUtc": timestamp,
         "matchedElevationRecords": elevation_matches,
+        "matchedAirportMetadataRecords": airport_metadata_matches,
         "matchedAirportsWithRunways": runway_matches,
         "matchedAirportsWithMultipleRunways": multiple_runway_matches,
-        "runwaySelection": "Longest open paired runway is placed in legacy primary fields; all matched pairs/headings/lengths are retained in appended pipe-delimited columns.",
-        "limitations": "Community-maintained source data; no guarantee of accuracy or operational fitness. Full runway records remain in navigation/runways/runways_parsed.csv."
+        "airportMetadataFields": [output for output, _ in AIRPORT_FIELDS],
+        "runwayDetailFields": [output for output, _ in RUNWAY_FIELDS],
+        "runwaySelection": "All matched open runway ends with a usable length are retained in aligned pipe-delimited airport reference columns; complete individual runway records are retained in navigation/runways/runways_parsed.csv.",
+        "limitations": "Community-maintained source data; no guarantee of accuracy or operational fitness. Full source snapshots and normalized records are retained separately."
     }
 
     MANIFEST.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
     print(json.dumps({
         "airportRecords": len(updated),
         "elevationMatches": elevation_matches,
+        "airportMetadataMatches": airport_metadata_matches,
         "airportsWithRunways": runway_matches,
         "airportsWithMultipleRunways": multiple_runway_matches,
         "airportFileBytes": REFERENCE.stat().st_size,
