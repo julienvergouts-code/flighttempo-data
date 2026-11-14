@@ -19,7 +19,7 @@ The manifest lists the available datasets, their relative paths, download URLs, 
 | `airports/airports.csv` | FlightTempo airport reference with IATA/ICAO, IANA timezone, coordinates, elevation, a longest-runway compatibility field, and pipe-delimited lists of all matched runway pairs, headings and lengths |
 | `airlines/airlines.csv` | Airline/operator roster profiles (currently ASL and generic commercial profile) |
 | `airlines/route_rules.csv` | Roster text/classification rules |
-| `navigation/airports/ourairports_airports/airports.csv` | OurAirports global airport reference extract |
+| `navigation/airports/ourairports_airports.csv` | OurAirports global airport reference extract |
 | `navigation/runways/runways_parsed.csv` | Normalized runway data |
 | `navigation/navaids/navaids.csv` | OurAirports navaids |
 | `navigation/aerosors/vor_ndb.csv` | Experimental Aero.Sors worldwide VOR/NDB table; development testing only |
