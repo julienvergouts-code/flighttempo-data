@@ -138,14 +138,18 @@ def locate_source_files(source_dir: Path, include_airways=False):
 
 
 def validate_source_cycles(sources):
-    """Require one identical, explicitly declared source-cycle token."""
+    """Require matching cycle headers; preserve a clearly marked legacy snapshot if absent."""
     cycles_by_kind = {kind: src.get("data_cycle", "unknown") for kind, src in sources.items()}
-    if "unknown" in cycles_by_kind.values() or len(set(cycles_by_kind.values())) != 1:
+    values = set(cycles_by_kind.values())
+    if len(values) != 1:
         raise ValueError(
-            "All supplied IFR source headers must declare the same known data-cycle token; "
-            f"found {cycles_by_kind}. Mixed or missing cycles must not be combined."
+            "All supplied IFR source headers must declare the same data-cycle token; "
+            f"found {cycles_by_kind}. Mixed cycles must not be combined."
         )
-    return next(iter(cycles_by_kind.values()))
+    cycle = next(iter(values))
+    # Older public X-Plane exports predate explicit cycle headers. They may be
+    # used only as a visibly stale development baseline, never labelled AIRAC.
+    return "legacy-unknown-cycle" if cycle == "unknown" else cycle
 
 
 def parse_fixes(source):
