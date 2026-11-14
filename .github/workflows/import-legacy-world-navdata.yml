@@ -29,7 +29,7 @@ jobs:
         with:
           repository: ptsmonteiro/x-plane-navdata
           ref: master
-          path: /tmp/x-plane-navdata
+          path: legacy-source
           sparse-checkout: |
             earth_fix.dat
             earth_nav.dat
@@ -39,7 +39,7 @@ jobs:
       - name: Prepare source and provenance
         run: |
           mkdir -p navigation/sources/flightgear
-          cp /tmp/x-plane-navdata/earth_fix.dat /tmp/x-plane-navdata/earth_nav.dat /tmp/x-plane-navdata/earth_awy.dat navigation/sources/flightgear/
+          cp legacy-source/earth_fix.dat /tmp/x-plane-navdata/earth_nav.dat /tmp/x-plane-navdata/earth_awy.dat navigation/sources/flightgear/
           cat > navigation/sources/flightgear/source-manifest.json <<'JSON'
           {
             "provider": "X-Plane default navigation data mirror (ptsmonteiro/x-plane-navdata)",
@@ -47,6 +47,7 @@ jobs:
             "license": "GPL-3.0",
             "licenseUrl": "https://github.com/ptsmonteiro/x-plane-navdata",
             "redistributable": true,
+            "allowMixedLegacyCycles": true,
             "snapshotStatus": "legacy_stale_development_baseline",
             "snapshotRepositoryLastUpdated": "2013-12-09",
             "notes": "Worldwide legacy X-Plane navigation snapshot. Cycle may be absent from source headers; never represent as current AIRAC or use operationally."
