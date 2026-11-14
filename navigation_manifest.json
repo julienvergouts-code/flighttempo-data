@@ -1,6 +1,6 @@
 {
   "schemaVersion": 13,
-  "generatedAtUtc": "2026-11-14T04:57:07.654299+00:00",
+  "generatedAtUtc": "2026-11-14T10:23:25.116175+00:00",
   "procedureAiracCycle": "2611",
   "navaidTypeCounts": {
     "DME": 167,
@@ -27,7 +27,11 @@
     "airportReferenceRecords": 29747,
     "airportReferenceOurAirportsElevationMatches": 28488,
     "airportReferenceRunwayMatches": 24050,
-    "airportReferenceMultipleRunwayAirports": 3874
+    "airportReferenceMultipleRunwayAirports": 3874,
+    "aerosors_vor_ndb": 7995,
+    "aerosors_vor_ndbNavigationalRecords": 7995,
+    "aerosors_ils": 4470,
+    "aerosors_ilsNavigationalRecords": 4470
   },
   "dataSources": [
     {
@@ -35,7 +39,7 @@
       "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
       "provider": "OurAirports",
       "license": "CC0 / Public Domain as stated by OurAirports",
-      "downloadedAt": "2026-11-14T04:57:07.654299+00:00",
+      "downloadedAt": "2026-11-14T10:23:20.815208+00:00",
       "sizeBytes": 12760412,
       "sha256": "5b3b48a429c8513853ff13a51a03282d1ef159ddf347f40203ff66b583574e8b",
       "recordCount": 86309
@@ -45,7 +49,7 @@
       "url": "https://davidmegginson.github.io/ourairports-data/runways.csv",
       "provider": "OurAirports",
       "license": "CC0 / Public Domain as stated by OurAirports",
-      "downloadedAt": "2026-11-14T04:57:07.654299+00:00",
+      "downloadedAt": "2026-11-14T10:23:20.815208+00:00",
       "sizeBytes": 3974694,
       "sha256": "84d66ace2234e57c39a6a1d61d02db116e45f963137446c0829bae0547456b31",
       "recordCount": 47105
@@ -55,10 +59,95 @@
       "url": "https://davidmegginson.github.io/ourairports-data/navaids.csv",
       "provider": "OurAirports",
       "license": "CC0 / Public Domain as stated by OurAirports",
-      "downloadedAt": "2026-11-14T04:57:07.654299+00:00",
+      "downloadedAt": "2026-11-14T10:23:20.815208+00:00",
       "sizeBytes": 1524931,
       "sha256": "d7292380662c33a95214945023ec0a5b13189599305fd18be739e167a97a9bd1",
       "recordCount": 11008
+    },
+    {
+      "dataset": "aerosors_vor_ndb",
+      "provider": "Aero.Sors / Hervé Sors",
+      "url": "https://www.aero.sors.fr/hfiles/VORNDB_Table.xlsx",
+      "sourcePageUrl": "https://www.aero.sors.fr/navaids.html",
+      "licenseStatus": "personal_development_test_only_derivative_redistribution_not_confirmed",
+      "downloadedAt": "2026-11-14T10:23:25.116175+00:00",
+      "sourceWorkbookBytes": 449065,
+      "sourceWorkbookSha256": "5eef68bf09f2a85b3b2ff447741deec0dbaf87f2d78d1866f764f941f97f2511",
+      "sourceCycle": "2611-R1",
+      "recordCount": 7995,
+      "navigationalRecordCount": 7995,
+      "sizeBytes": 1974739,
+      "sha256": "4321ac3bcbb028c4aeecd9fc717b393a1eb6022dbc6208356dfbc3976141cc9d",
+      "sheets": [
+        {
+          "sheet": "VOR",
+          "rowsExported": 4949,
+          "headerRowNumber": 1,
+          "headers": [
+            "identifier",
+            "name",
+            "region",
+            "type",
+            "class",
+            "frequency",
+            "declination",
+            "range",
+            "column_09",
+            "current_version_2611_r1"
+          ]
+        },
+        {
+          "sheet": "NDB",
+          "rowsExported": 3046,
+          "headerRowNumber": 1,
+          "headers": [
+            "identifier",
+            "name",
+            "region",
+            "type",
+            "class",
+            "frequency",
+            "range",
+            "column_08",
+            "current_version_2611_r1"
+          ]
+        }
+      ]
+    },
+    {
+      "dataset": "aerosors_ils",
+      "provider": "Aero.Sors / Hervé Sors",
+      "url": "https://www.aero.sors.fr/hfiles/ILS_Table.xlsx",
+      "sourcePageUrl": "https://www.aero.sors.fr/navaids.html",
+      "licenseStatus": "personal_development_test_only_derivative_redistribution_not_confirmed",
+      "downloadedAt": "2026-11-14T10:23:25.116175+00:00",
+      "sourceWorkbookBytes": 286204,
+      "sourceWorkbookSha256": "2d35d60403f20f6868ff99b136b2c944cdc1ceb8ebef7214a89ee8d537b62fc9",
+      "sourceCycle": "2611-R1",
+      "recordCount": 4470,
+      "navigationalRecordCount": 4470,
+      "sizeBytes": 1162180,
+      "sha256": "25d814a50212c9a2c8ea410f322a302eec8dd1c1f4eb8bf318a62baebff4a56f",
+      "sheets": [
+        {
+          "sheet": "ILS",
+          "rowsExported": 4470,
+          "headerRowNumber": 1,
+          "headers": [
+            "airport",
+            "region",
+            "runway",
+            "identifier",
+            "type",
+            "frequency",
+            "course",
+            "gs_deg",
+            "offset",
+            "dme0_at_th",
+            "current_version_2611_r1"
+          ]
+        }
+      ]
     }
   ],
   "capabilities": {
@@ -80,7 +169,10 @@
     "rnavApproaches": false,
     "approaches": false,
     "ourairportsAirports": true,
-    "flightgearNavaids": false
+    "flightgearNavaids": false,
+    "aerosors_vor_ndb": true,
+    "aerosors_ils": true,
+    "aeroSorsIlsFacilities": true
   },
   "procedureCoverageStatus": "FAA_US_NAS_ONLY_TEST_DATA; EUROPE_FRANCE_SOURCE_NOT_INGESTED; ASIA_NO_PUBLIC_REDISTRIBUTABLE_SOURCE_CONFIRMED",
   "procedureOperationalUse": false,
@@ -515,7 +607,7 @@
       "sha256": "be974a777fe0da70bb143bedce4f05d5744c2c62ad382691937c4b35494bf3cf",
       "sourceProvider": "FAA AeroNav",
       "sourceUrl": "https://aeronav.faa.gov/Upload_313-d/cifp/CIFP_261029.zip",
-      "coverage": "United States / FAA National Airspace System \u2014 departure procedures",
+      "coverage": "United States / FAA National Airspace System — departure procedures",
       "sourceTag": "FAA_CIFP_2611",
       "license": "US Government Public Domain (FAA AeroNav)",
       "licenseStatus": "public_domain",
@@ -538,7 +630,7 @@
       "sha256": "6bf123c683e442c1a07fbc46f4f11ad45045f8322a1b2506d65f6719055c0c06",
       "sourceProvider": "FAA AeroNav",
       "sourceUrl": "https://aeronav.faa.gov/Upload_313-d/cifp/CIFP_261029.zip",
-      "coverage": "United States / FAA National Airspace System \u2014 arrival procedures",
+      "coverage": "United States / FAA National Airspace System — arrival procedures",
       "sourceTag": "FAA_CIFP_2611",
       "license": "US Government Public Domain (FAA AeroNav)",
       "licenseStatus": "public_domain",
@@ -561,7 +653,7 @@
       "sha256": "ff7b9121e79b56ff616a77e285c9cba764575fd2c58335b3281124813362d3dd",
       "sourceProvider": "FAA AeroNav",
       "sourceUrl": "https://aeronav.faa.gov/Upload_313-d/cifp/CIFP_261029.zip",
-      "coverage": "United States / FAA National Airspace System \u2014 instrument approaches",
+      "coverage": "United States / FAA National Airspace System — instrument approaches",
       "sourceTag": "FAA_CIFP_2611",
       "license": "US Government Public Domain (FAA AeroNav)",
       "licenseStatus": "public_domain",
@@ -611,6 +703,62 @@
       "effectiveDate": "",
       "expiryDate": "",
       "provenanceVerification": "not_declared"
+    },
+    {
+      "id": "aerosors_vor_ndb",
+      "path": "navigation/aerosors/vor_ndb.csv",
+      "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/navigation/aerosors/vor_ndb.csv",
+      "available": true,
+      "recordCount": 7995,
+      "navigationalRecordCount": 7995,
+      "sizeBytes": 1974739,
+      "sha256": "4321ac3bcbb028c4aeecd9fc717b393a1eb6022dbc6208356dfbc3976141cc9d",
+      "sourceProvider": "Aero.Sors / Hervé Sors",
+      "sourceUrl": "https://www.aero.sors.fr/hfiles/VORNDB_Table.xlsx",
+      "sourcePageUrl": "https://www.aero.sors.fr/navaids.html",
+      "coverage": "Worldwide VOR/NDB table published by Aero.Sors",
+      "sourceTag": "AEROSORS_2611-R1",
+      "license": "Aero.Sors donationware; unchanged redistribution of the original package is permitted, but derivative CSV republication permission has not been confirmed",
+      "licenseStatus": "personal_development_test_only_derivative_redistribution_not_confirmed",
+      "dataCycle": "2611-R1",
+      "effectiveDate": "",
+      "expiryDate": "",
+      "provenanceVerification": "workbook_exported; not independently cross-checked against AIP",
+      "testDownloadAvailable": true,
+      "downloadPurpose": "development_test_only",
+      "operationallyAvailable": false,
+      "status": "experimental_personal_test_only",
+      "sourceWorkbookBytes": 449065,
+      "sourceWorkbookSha256": "5eef68bf09f2a85b3b2ff447741deec0dbaf87f2d78d1866f764f941f97f2511",
+      "sheetCount": 2
+    },
+    {
+      "id": "aerosors_ils",
+      "path": "navigation/aerosors/ils.csv",
+      "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/navigation/aerosors/ils.csv",
+      "available": true,
+      "recordCount": 4470,
+      "navigationalRecordCount": 4470,
+      "sizeBytes": 1162180,
+      "sha256": "25d814a50212c9a2c8ea410f322a302eec8dd1c1f4eb8bf318a62baebff4a56f",
+      "sourceProvider": "Aero.Sors / Hervé Sors",
+      "sourceUrl": "https://www.aero.sors.fr/hfiles/ILS_Table.xlsx",
+      "sourcePageUrl": "https://www.aero.sors.fr/navaids.html",
+      "coverage": "Worldwide ILS table published by Aero.Sors",
+      "sourceTag": "AEROSORS_2611-R1",
+      "license": "Aero.Sors donationware; unchanged redistribution of the original package is permitted, but derivative CSV republication permission has not been confirmed",
+      "licenseStatus": "personal_development_test_only_derivative_redistribution_not_confirmed",
+      "dataCycle": "2611-R1",
+      "effectiveDate": "",
+      "expiryDate": "",
+      "provenanceVerification": "workbook_exported; not independently cross-checked against AIP",
+      "testDownloadAvailable": true,
+      "downloadPurpose": "development_test_only",
+      "operationallyAvailable": false,
+      "status": "experimental_personal_test_only",
+      "sourceWorkbookBytes": 286204,
+      "sourceWorkbookSha256": "2d35d60403f20f6868ff99b136b2c944cdc1ceb8ebef7214a89ee8d537b62fc9",
+      "sheetCount": 1
     }
   ],
   "downloadContract": {
@@ -626,11 +774,20 @@
     "airportSource": "https://davidmegginson.github.io/ourairports-data/airports.csv",
     "runwaySource": "https://davidmegginson.github.io/ourairports-data/runways.csv",
     "license": "Public Domain / CC0 as stated by OurAirports",
-    "downloadedAtUtc": "2026-11-14T04:57:10.811335+00:00",
+    "downloadedAtUtc": "2026-11-14T10:23:24.795837+00:00",
     "matchedElevationRecords": 28488,
     "matchedAirportsWithRunways": 24050,
     "matchedAirportsWithMultipleRunways": 3874,
     "runwaySelection": "Longest open paired runway is placed in legacy primary fields; all matched pairs/headings/lengths are retained in appended pipe-delimited columns.",
     "limitations": "Community-maintained source data; no guarantee of accuracy or operational fitness. Full runway records remain in navigation/runways/runways_parsed.csv."
+  },
+  "aeroSors": {
+    "provider": "Aero.Sors / Hervé Sors",
+    "listedCycle": "2611-R1",
+    "importedAtUtc": "2026-11-14T10:23:25.116175+00:00",
+    "purpose": "experimental_personal_development_test_only",
+    "operationallyAvailable": false,
+    "redistributionRights": "not_confirmed_for_derived_csv_exports",
+    "notes": "Published VOR/NDB and ILS spreadsheets are exported for FlightTempo development testing. The reviewed terms permit unchanged redistribution of the original package but do not expressly grant derivative CSV republication. Do not release commercially or to users without written permission. This is not an AIP or operational dataset."
   }
 }

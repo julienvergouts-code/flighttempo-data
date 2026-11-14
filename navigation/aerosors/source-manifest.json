@@ -1,0 +1,104 @@
+{
+  "provider": "Aero.Sors / Hervé Sors",
+  "sourceHome": "https://www.aero.sors.fr/index.html",
+  "listedCycle": "2611-R1",
+  "exportedAtUtc": "2026-11-14T10:23:25.116175+00:00",
+  "purpose": "experimental_personal_development_test_only",
+  "operationallyAvailable": false,
+  "redistributionRights": "not_confirmed_for_derived_csv_exports",
+  "datasets": {
+    "aerosors_vor_ndb": {
+      "dataset": "aerosors_vor_ndb",
+      "provider": "Aero.Sors / Hervé Sors",
+      "url": "https://www.aero.sors.fr/hfiles/VORNDB_Table.xlsx",
+      "sourcePageUrl": "https://www.aero.sors.fr/navaids.html",
+      "licenseStatus": "personal_development_test_only_derivative_redistribution_not_confirmed",
+      "downloadedAt": "2026-11-14T10:23:25.116175+00:00",
+      "sourceWorkbookBytes": 449065,
+      "sourceWorkbookSha256": "5eef68bf09f2a85b3b2ff447741deec0dbaf87f2d78d1866f764f941f97f2511",
+      "sourceCycle": "2611-R1",
+      "recordCount": 7995,
+      "navigationalRecordCount": 7995,
+      "sizeBytes": 1974739,
+      "sha256": "4321ac3bcbb028c4aeecd9fc717b393a1eb6022dbc6208356dfbc3976141cc9d",
+      "sheets": [
+        {
+          "sheet": "VOR",
+          "rowsExported": 4949,
+          "headerRowNumber": 1,
+          "headers": [
+            "identifier",
+            "name",
+            "region",
+            "type",
+            "class",
+            "frequency",
+            "declination",
+            "range",
+            "column_09",
+            "current_version_2611_r1"
+          ]
+        },
+        {
+          "sheet": "NDB",
+          "rowsExported": 3046,
+          "headerRowNumber": 1,
+          "headers": [
+            "identifier",
+            "name",
+            "region",
+            "type",
+            "class",
+            "frequency",
+            "range",
+            "column_08",
+            "current_version_2611_r1"
+          ]
+        }
+      ]
+    },
+    "aerosors_ils": {
+      "dataset": "aerosors_ils",
+      "provider": "Aero.Sors / Hervé Sors",
+      "url": "https://www.aero.sors.fr/hfiles/ILS_Table.xlsx",
+      "sourcePageUrl": "https://www.aero.sors.fr/navaids.html",
+      "licenseStatus": "personal_development_test_only_derivative_redistribution_not_confirmed",
+      "downloadedAt": "2026-11-14T10:23:25.116175+00:00",
+      "sourceWorkbookBytes": 286204,
+      "sourceWorkbookSha256": "2d35d60403f20f6868ff99b136b2c944cdc1ceb8ebef7214a89ee8d537b62fc9",
+      "sourceCycle": "2611-R1",
+      "recordCount": 4470,
+      "navigationalRecordCount": 4470,
+      "sizeBytes": 1162180,
+      "sha256": "25d814a50212c9a2c8ea410f322a302eec8dd1c1f4eb8bf318a62baebff4a56f",
+      "sheets": [
+        {
+          "sheet": "ILS",
+          "rowsExported": 4470,
+          "headerRowNumber": 1,
+          "headers": [
+            "airport",
+            "region",
+            "runway",
+            "identifier",
+            "type",
+            "frequency",
+            "course",
+            "gs_deg",
+            "offset",
+            "dme0_at_th",
+            "current_version_2611_r1"
+          ]
+        }
+      ]
+    }
+  },
+  "limitations": [
+    "Only the published VOR/NDB and ILS spreadsheets are included; the full World FSXP3D BGL package is not parsed.",
+    "Airport/runway BGL records, intersections/fixes and airway segments are not included in these two exports.",
+    "All non-empty worksheet rows are preserved in raw_fields_json; canonical fields are populated only where headers are recognized.",
+    "Coordinate values are mapped to decimal-degree fields only when the source cell is unambiguous; other coordinate formats remain in raw_fields_json.",
+    "No SIDs, STARs or approaches are created.",
+    "Not approved for operational use."
+  ]
+}
