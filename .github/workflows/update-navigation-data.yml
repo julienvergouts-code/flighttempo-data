@@ -9,9 +9,8 @@ on:
       - 'tests/**'
       - 'navigation/**'
       - 'procedures/**'
-      - 'airports.csv'
-      - 'airlines.csv'
-      - 'route_rules.csv'
+      - 'airports/**'
+      - 'airlines/**'
       - '.github/workflows/update-navigation-data.yml'
       - 'navigation_manifest.json'
   schedule:
@@ -23,9 +22,8 @@ on:
       - 'tests/**'
       - 'navigation/**'
       - 'procedures/**'
-      - 'airports.csv'
-      - 'airlines.csv'
-      - 'route_rules.csv'
+      - 'airports/**'
+      - 'airlines/**'
       - '.github/workflows/update-navigation-data.yml'
       - 'navigation_manifest.json'
 
@@ -103,10 +101,10 @@ jobs:
       - name: Verify generated datasets and manifest
         run: |
           set -e
-          test -s airports.csv
-          test -s airlines.csv
-          test -s route_rules.csv
-          test -s navigation/airports/ourairports_airports.csv
+          test -s airports/airports.csv
+          test -s airlines/airlines.csv
+          test -s airlines/route_rules.csv
+          test -s navigation/airports/ourairports_airports/airports.csv
           test -s navigation/navaids/navaids.csv
           test -s navigation/runways/runways_parsed.csv
           test -s navigation_manifest.json
@@ -119,8 +117,8 @@ jobs:
           manifest = json.loads(Path("navigation_manifest.json").read_text())
           assert manifest["schemaVersion"] == 13, "Unexpected manifest schema version"
           expected = {
-              "airports.csv": 1000,
-              "navigation/airports/ourairports_airports.csv": 1000,
+              "airports/airports.csv": 1000,
+              "navigation/airports/ourairports_airports/airports.csv": 1000,
               "navigation/navaids/navaids.csv": 1000,
               "navigation/runways/runways_parsed.csv": 500,
           }
@@ -155,12 +153,12 @@ jobs:
               assert capabilities.get(capability) is True, f"Missing required capability: {capability}"
           for metric in ("airports", "runways", "navaids"):
               assert manifest.get("statistics", {}).get(metric, 0) > 0, f"Missing statistic: {metric}"
-          profile = Path("airlines.csv").read_text(encoding="utf-8").splitlines()
+          profile = Path("airlines/airlines.csv").read_text(encoding="utf-8").splitlines()
           profile_lines = [line for line in profile if line.strip() and not line.startswith("sep=") and not line.startswith("#version")]
           assert profile_lines, "Airline profile catalogue missing"
           airline_header = next(csv.reader([profile_lines[0]], delimiter=";"))
           assert {"code", "displayName", "signOnMins", "iataCodes"}.issubset(set(airline_header)), "Airline profile schema mismatch"
-          route_lines = [line for line in Path("route_rules.csv").read_text(encoding="utf-8").splitlines() if line.strip() and not line.startswith("#version")]
+          route_lines = [line for line in Path("airlines/route_rules.csv").read_text(encoding="utf-8").splitlines() if line.strip() and not line.startswith("#version")]
           assert route_lines and route_lines[0].split(",") == ["kind", "code"], "Route rules schema mismatch"
           print("Manifest, navigation datasets and airline profile packages validated.")
           PY
@@ -172,9 +170,9 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add \
             navigation/ \
-            airports.csv \
-            airlines.csv \
-            route_rules.csv \
+            airports/airports.csv \
+            airlines/airlines.csv \
+            airlines/route_rules.csv \
             navigation_manifest.json
           if git diff --cached --quiet; then
             echo "No dataset changes detected."

@@ -513,8 +513,8 @@
   "datasets": [
     {
       "id": "airport_reference",
-      "path": "airports.csv",
-      "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/airports.csv",
+      "path": "airports/airports.csv",
+      "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/airports/airports.csv",
       "available": true,
       "recordCount": 29747,
       "sizeBytes": 2701707,
@@ -716,8 +716,8 @@
     },
     {
       "id": "airline_profiles",
-      "path": "airlines.csv",
-      "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/airlines.csv",
+      "path": "airlines/airlines.csv",
+      "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/airlines/airlines.csv",
       "available": true,
       "recordCount": 2,
       "sizeBytes": 630,
@@ -735,8 +735,8 @@
     },
     {
       "id": "route_rules",
-      "path": "route_rules.csv",
-      "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/route_rules.csv",
+      "path": "airlines/route_rules.csv",
+      "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/airlines/route_rules.csv",
       "available": true,
       "recordCount": 109,
       "sizeBytes": 1177,
