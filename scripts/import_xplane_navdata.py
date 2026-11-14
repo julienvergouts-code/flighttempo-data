@@ -137,19 +137,26 @@ def locate_source_files(source_dir: Path, include_airways=False):
     return located, missing
 
 
-def validate_source_cycles(sources):
-    """Require matching cycle headers; preserve a clearly marked legacy snapshot if absent."""
+def validate_source_cycles(sources, allow_mixed_legacy=False):
+    """Require matching cycles unless a source manifest explicitly opts into a stale mixed baseline."""
     cycles_by_kind = {kind: src.get("data_cycle", "unknown") for kind, src in sources.items()}
     values = set(cycles_by_kind.values())
     if len(values) != 1:
+        if allow_mixed_legacy:
+            return "legacy-mixed-cycle-snapshot"
         raise ValueError(
-            "All supplied IFR source headers must declare the same data-cycle token; "
+            "Mixed or missing cycles: all supplied IFR source headers must declare the same data-cycle token; "
             f"found {cycles_by_kind}. Mixed cycles must not be combined."
         )
     cycle = next(iter(values))
-    # Older public X-Plane exports predate explicit cycle headers. They may be
-    # used only as a visibly stale development baseline, never labelled AIRAC.
-    return "legacy-unknown-cycle" if cycle == "unknown" else cycle
+    if cycle == "unknown":
+        if allow_mixed_legacy:
+            return "legacy-unknown-cycle"
+        raise ValueError(
+            "Mixed or missing cycles: all supplied IFR source headers must declare a known data-cycle token; "
+            f"found {cycles_by_kind}."
+        )
+    return cycle
 
 
 def parse_fixes(source):
@@ -723,7 +730,11 @@ def import_navdata(
         return {"status": "skipped_missing_source", "missing": missing}
 
     sources = {kind: read_source_file(path, kind) for kind, path in located.items()}
-    data_cycle = validate_source_cycles(sources)
+    source_manifest = source_dir / "source-manifest.json"
+    supplied = json.loads(source_manifest.read_text(encoding="utf-8")) if source_manifest.exists() else {}
+    data_cycle = validate_source_cycles(
+        sources, allow_mixed_legacy=supplied.get("allowMixedLegacyCycles") is True
+    )
 
     fixes, rejected_fixes = parse_fixes(sources["fixes"])
     navaids, rejected_navaids = parse_navaids(sources["navaids"])
@@ -740,8 +751,6 @@ def import_navdata(
         if not airways:
             raise ValueError("Optional airway file was supplied but produced zero valid segments")
 
-    source_manifest = source_dir / "source-manifest.json"
-    supplied = json.loads(source_manifest.read_text(encoding="utf-8")) if source_manifest.exists() else {}
     provider = supplied.get("provider", "Unverified X-Plane/FlightGear-compatible source")
     licence = supplied.get("license", "")
     redistributable = supplied.get("redistributable") is True
