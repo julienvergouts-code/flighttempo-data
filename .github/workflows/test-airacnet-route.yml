@@ -2,6 +2,11 @@ name: AIRAC.net route-data smoke test
 
 on:
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/test_airacnet_route.py'
+      - '.github/workflows/test-airacnet-route.yml'
 
 permissions:
   contents: read
