@@ -170,33 +170,20 @@ def main():
     except Exception as e:
         report["errors"].append({"dataset": "airway_details", "error": str(e)})
 
-    # Airport-specific procedure index and full procedure detail (SID/STAR/APP).
-    # Keep all transitions, runway transitions, common routes and constraints.
+    # Procedure search supports type-only global listings; avoid one query per airport.
     try:
-        airport_rows = []
-        for line in (OUT / "airports.jsonl").open(encoding="utf-8"):
-            airport_rows.append(json.loads(line))
-        tasks = []
-        for airport in airport_rows:
-            icao = airport.get("icao")
-            if not icao:
-                continue
-            for kind in ("SID", "STAR", "APP"):
-                tasks.append((icao, kind))
-        def get_procedure_index(item):
-            icao, kind = item
-            payload, _ = get("/procedures", {"airport": icao, "type": kind})
-            return icao, kind, data(payload)
         indexes = []
-        detail_tasks = []
-        with concurrent.futures.ThreadPoolExecutor(max_workers=WORKERS) as pool:
-            for icao, kind, rows in pool.map(get_procedure_index, tasks):
-                for row in rows:
-                    indexes.append(row)
-                    ident = row.get("identifier")
-                    if ident:
-                        detail_tasks.append((f"/procedures/{icao}/{urllib.parse.quote(ident, safe='')}", None))
+        for kind in ("SID", "STAR", "APP"):
+            rows, meta = paged("/procedures", {"type": kind})
+            indexes.extend(rows)
+            print(f"procedure index {kind}: {len(rows)}", flush=True)
         save_dataset("procedures_index", indexes)
+        detail_tasks = []
+        for row in indexes:
+            airport = row.get("airport")
+            ident = row.get("identifier")
+            if airport and ident:
+                detail_tasks.append((f"/procedures/{airport}/{urllib.parse.quote(ident, safe='')}", None))
         details = []
         with concurrent.futures.ThreadPoolExecutor(max_workers=WORKERS) as pool:
             for result in pool.map(collect_detail, detail_tasks):
