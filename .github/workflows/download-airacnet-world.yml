@@ -34,15 +34,6 @@ jobs:
           name: flighttempo-airacnet-world-snapshot
           path: navigation/airacnet/
           retention-days: 30
-      - name: Commit downloaded world database
-        run: |
-          set -euo pipefail
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add navigation/airacnet/
-          if git diff --cached --quiet; then
-            echo "No AIRAC.net data changes."
-            exit 0
-          fi
-          git commit -m "data(navdata): add AIRAC.net worldwide development snapshot [skip ci]"
-          git push origin HEAD:main
+      # Keep AIRAC.net extracts as short-lived workflow artifacts until
+      # the provider's redistribution terms are confirmed. Do not publish
+      # third-party navigation data into this public repository.
