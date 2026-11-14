@@ -24,6 +24,8 @@ The manifest lists the available datasets, their relative paths, download URLs, 
 | `navigation/navaids/navaids.csv` | OurAirports navaids |
 | `navigation/aerosors/vor_ndb.csv` | Experimental Aero.Sors worldwide VOR/NDB table; development testing only |
 | `navigation/aerosors/ils.csv` | Experimental Aero.Sors worldwide ILS table; development testing only |
+| `navigation/aerosors/ge_navaids.csv` | Experimental Aero.Sors Google Earth world navaids with point coordinates; development testing only |
+| `navigation/aerosors/ge_airports.csv` | Experimental Aero.Sors Google Earth world airport layer; development testing only |
 | `navigation/waypoints/flightgear_fixes.csv` | Optional IFR fixes; only when a coherent, redistributable source is supplied |
 | `navigation/navaids/flightgear_navaids.csv` | Optional IFR navaids; only when a coherent, redistributable source is supplied |
 | `navigation/airways/flightgear_airway_segments.csv` | Optional airway segments; not part of the current MVP |
@@ -49,7 +51,7 @@ The longest runway is copied into the legacy primary runway fields so older app 
 ## Updating the data
 
 - GitHub Actions refreshes the OurAirports airport, runway and navaid reference data daily.
-- GitHub Actions also imports Aero.Sors VOR/NDB and ILS spreadsheets as experimental test datasets when the source files are reachable. They are not AIRAC-validated against each national AIP and are not cleared for operational or user release.
+- GitHub Actions also imports Aero.Sors VOR/NDB and ILS spreadsheets and Google Earth navaids/airport layers as experimental test datasets when the source files are reachable. They are not AIRAC-validated against each national AIP and are not cleared for operational or user release.
 - The IFR importer accepts supplied compatible FIX/NAV sources only when their cycle metadata is coherent and redistribution permission is explicitly declared.
 - Airline profiles and route rules are maintained in the root CSV files and are downloaded independently of navigation data.
 - The manifest is regenerated with the dataset metadata and SHA-256 checksums.

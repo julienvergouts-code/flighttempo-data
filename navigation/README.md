@@ -79,6 +79,22 @@ python3 -m pip install -r requirements-aerosors.txt
 python3 scripts/import_aerosors_tables.py
 ```
 
+## Aero.Sors Google Earth geospatial layers
+
+The workflow also downloads the public Google Earth KMZ layers and exports their KML Placemark data:
+- \`navigation/aerosors/ge_navaids.csv\`
+- \`navigation/aerosors/ge_airports.csv\`
+
+Every Placemark is retained. KML Point coordinates are mapped to decimal-degree latitude/longitude; other geometry or records without a Point remain metadata-only. Original ExtendedData and description text are retained in each row. Altitude follows the KML unit (metres).
+
+These layers add worldwide geographic positions to the Aero.Sors VOR/NDB and ILS workbook exports. They are still simulator/reference data, not a national AIP. They do not provide a complete IFR fix/intersection database, airway graph, SIDs, STARs or approaches. Derivative CSV republication rights are not confirmed; keep these exports for personal FlightTempo development only unless written permission is obtained.
+
+Run locally:
+
+\`\`\`bash
+python3 scripts/import_aerosors_kmz.py
+\`\`\`
+
 ## Routing architecture
 
 FlightTempo constructs its own generated en-route waypoint sequence from geolocated fixes and navaids. The initial routing engine should:
