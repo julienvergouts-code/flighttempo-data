@@ -1,0 +1,48 @@
+name: Build AIRAC.net world navigation snapshot
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/download_airacnet_world.py'
+      - '.github/workflows/download-airacnet-world.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: airacnet-world-snapshot
+  cancel-in-progress: false
+
+jobs:
+  download-world-data:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Download worldwide AIRAC datasets
+        run: python3 scripts/download_airacnet_world.py
+      - name: Upload snapshot artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: flighttempo-airacnet-world-snapshot
+          path: navigation/airacnet/
+          retention-days: 30
+      - name: Commit downloaded world database
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add navigation/airacnet/
+          if git diff --cached --quiet; then
+            echo "No AIRAC.net data changes."
+            exit 0
+          fi
+          git commit -m "data(navdata): add AIRAC.net worldwide development snapshot [skip ci]"
+          git push origin HEAD:main
