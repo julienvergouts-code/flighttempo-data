@@ -545,7 +545,7 @@ def update_manifest(manifest_path: Path, root: Path, import_meta=None):
     manifest.setdefault("schemaVersion", 13)
     datasets = [
         file_summary(
-            root, "airport_reference", "airports.csv",
+            root, "airport_reference", "airports/airports.csv",
             {
                 "provider": "FlightTempo airport reference export",
                 "license": "Upstream provenance and redistribution terms not recorded in repository",
@@ -638,11 +638,11 @@ def update_manifest(manifest_path: Path, root: Path, import_meta=None):
     # Profile packages are versioned independently from AIRAC navigation data.
     datasets.extend([
         file_summary(
-            root, "airline_profiles", "airlines.csv",
+            root, "airline_profiles", "airlines/airlines.csv",
             {"provider": "FlightTempo", "licenseStatus": "owner_authored_profile"},
         ),
         file_summary(
-            root, "route_rules", "route_rules.csv",
+            root, "route_rules", "airlines/route_rules.csv",
             {"provider": "FlightTempo", "licenseStatus": "owner_authored_profile"},
         ),
     ])
