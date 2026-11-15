@@ -1,0 +1,92 @@
+name: Update OpenAIP global FIR boundaries
+
+on:
+  schedule:
+    - cron: '41 4 * * 1'
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/update-openaip-fir-boundaries.yml'
+      - 'scripts/import_openaip_firs.py'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: flighttempo-navigation-update
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Import worldwide OpenAIP FIR/UIR polygons
+        run: python3 scripts/import_openaip_firs.py
+      - name: Add FIR boundaries and airspace filter to app manifest
+        run: |
+          python3 - <<'PY'
+          import hashlib, json
+          from pathlib import Path
+          p = Path("navigation_manifest.json")
+          m = json.loads(p.read_text())
+          datasets = [d for d in m.get("datasets", []) if d.get("id") not in {"openaip_fir_boundaries", "airspace_filter"}]
+          for dataset_id, rel, provider, purpose in [
+              ("openaip_fir_boundaries", "navigation/airspace/openaip_fir_boundaries.geojson", "OpenAIP", "development_fir_uiR_geometry_reference"),
+              ("airspace_filter", "airspace/airspace_filter.json", "EASA and OpenAIP", "route_preview_advisory_filter_only"),
+          ]:
+              raw = Path(rel).read_bytes()
+              obj = json.loads(raw)
+              count = len(obj.get("features", [])) if dataset_id == "openaip_fir_boundaries" else len(obj.get("activeAdvisories", []))
+              datasets.append({
+                  "id": dataset_id, "path": rel,
+                  "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/" + rel,
+                  "available": True, "recordCount": count, "sizeBytes": len(raw),
+                  "sha256": hashlib.sha256(raw).hexdigest(),
+                  "sourceProvider": provider,
+                  "license": "CC BY-NC 4.0" if dataset_id == "openaip_fir_boundaries" else "EASA source acknowledgement + OpenAIP CC BY-NC 4.0",
+                  "licenseStatus": "CC_BY_NC_4.0_attribution_required_non_commercial_only" if dataset_id == "openaip_fir_boundaries" else "advisory_only",
+                  "downloadPurpose": purpose, "operationallyAvailable": False,
+                  "status": "development_reference_only"
+              })
+          m["datasets"] = datasets
+          m.setdefault("capabilities", {})["firBoundaries"] = True
+          m["capabilities"]["conflictZoneAdvisories"] = True
+          m["capabilities"]["hardNoFlyFIRRestrictions"] = False
+          p.write_text(json.dumps(m, indent=2) + "\n")
+          PY
+      - name: Update root provenance catalogue
+        run: |
+          python3 - <<'PY'
+          import hashlib, json
+          from pathlib import Path
+          p = Path("manifest.json")
+          m = json.loads(p.read_text())
+          raw = Path("navigation/airspace/openaip_fir_boundaries.geojson").read_bytes()
+          m["generatedAtUtc"] = __import__("datetime").datetime.now(__import__("datetime").timezone.utc).isoformat()
+          ds = [d for d in m.get("datasets", []) if d.get("id") != "openaip-fir-boundaries"]
+          ds.append({
+              "id": "openaip-fir-boundaries",
+              "path": "navigation/airspace/openaip_fir_boundaries.geojson",
+              "source": "OpenAIP country airspace exports",
+              "airacCycle": None, "effectiveDate": None, "expiryDate": None,
+              "sha256": hashlib.sha256(raw).hexdigest(),
+              "licenceStatus": "CC_BY_NC_4.0_attribution_required_non_commercial_only",
+              "coverage": "Worldwide FIR/UIR polygons where published in OpenAIP country exports",
+              "recordCount": len(json.loads(raw).get("features", []))
+          })
+          m["datasets"] = ds
+          p.write_text(json.dumps(m, indent=2) + "\n")
+          PY
+      - name: Commit refreshed FIR boundary datasets
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add navigation/airspace airspace/airspace_filter.json navigation_manifest.json manifest.json
+          git commit -m "data(airspace): refresh worldwide OpenAIP FIR boundaries" || echo "No FIR boundary changes"
+          git pull --rebase origin main
+          git push
