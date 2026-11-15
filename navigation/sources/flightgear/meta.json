@@ -1,36 +1,73 @@
 {
   "source": "X-Plane default navigation data mirror (ptsmonteiro/x-plane-navdata)",
   "sourceUrl": "https://github.com/ptsmonteiro/x-plane-navdata",
-  "airacCycle": "2012.08",
+  "airacCycle": null,
   "sourceCycleToken": "2012.08",
   "effectiveDate": null,
   "expiryDate": null,
   "sha256": null,
-  "licenceStatus": "GPL-3.0_declared_upstream_stale_personal_development_only",
-  "licenseName": "GNU General Public License v3.0",
-  "licenseUrl": "https://www.gnu.org/licenses/gpl-3.0.html",
-  "coverage": "Worldwide legacy X-Plane base navigation snapshot; cycle/effective dates not established",
-  "files": [
+  "licenceStatus": "GPL-3.0_legacy_stale_personal_development_reference",
+  "licenseName": "GPL-3.0",
+  "recordCount": 210246,
+  "sourceFiles": [
     {
-      "path": "navigation/waypoints/flightgear_fixes.csv",
-      "sha256": "1bfd6b7fb7e10dac4f7cfdec9201e66a3ad3a1b1990e7215569dded8c6163749",
-      "sizeBytes": 11457339,
-      "recordCount": 113356
+      "kind": "fixes",
+      "fileName": "earth_fix.dat",
+      "sha256": "4b21bae65c5a23978c55768d9ac5765058e3989ac95a02712a12c37f53deb663",
+      "payloadSha256": "4b21bae65c5a23978c55768d9ac5765058e3989ac95a02712a12c37f53deb663",
+      "sizeBytes": 3287475,
+      "compression": "none",
+      "byteOrder": "I",
+      "formatVersion": "600",
+      "dataCycle": "2012.08",
+      "buildDate": "20120819",
+      "copyrightHeader": "600 Version - data cycle 2012.08, build 20120819, metadata FixXP700. License GPL v.3 - Luther Blissett http://github.com/mcantsin/x-plane-navdata"
     },
     {
-      "path": "navigation/navaids/flightgear_navaids.csv",
-      "sha256": "c6ee3a883e34b2fb1aa4d3c32bceb11b26aac6b2499bef6596aa79e63d2c68e4",
-      "sizeBytes": 8317558,
-      "recordCount": 26599
+      "kind": "navaids",
+      "fileName": "earth_nav.dat",
+      "sha256": "1968bbe7bc24a189f15a6df2bfdff4b3502856bc8487f025b86c6cbfd81b0fae",
+      "payloadSha256": "1968bbe7bc24a189f15a6df2bfdff4b3502856bc8487f025b86c6cbfd81b0fae",
+      "sizeBytes": 2002326,
+      "compression": "none",
+      "byteOrder": "I",
+      "formatVersion": "810",
+      "dataCycle": "2012.08",
+      "buildDate": "20120819",
+      "copyrightHeader": "810 Version - data cycle 2012.08, build 20120819, metadata NavXP810. License GPL v.3 - Luther Blissett http://github.com/mcantsin/x-plane-navdata"
     },
     {
-      "path": "navigation/airways/flightgear_airway_segments.csv",
-      "sha256": "91a53e0b7ea5e79c408dab124d0976d1c78d6e4faf10b949bc230035858ac24f",
-      "sizeBytes": 20439306,
-      "recordCount": 70291
+      "kind": "airways",
+      "fileName": "earth_awy.dat",
+      "sha256": "eb2c2671c2e29618c8769677e00c05ccfcd976697632cb74dfb34bfb8be96e24",
+      "payloadSha256": "eb2c2671c2e29618c8769677e00c05ccfcd976697632cb74dfb34bfb8be96e24",
+      "sizeBytes": 5154929,
+      "compression": "none",
+      "byteOrder": "I",
+      "formatVersion": "640",
+      "dataCycle": "2012.08",
+      "buildDate": "20120819",
+      "copyrightHeader": "640 Version - data cycle 2012.08, build 20120819, metadata AwyXP700. License GPL v.3 - Luther Blissett http://github.com/mcantsin/x-plane-navdata"
     }
   ],
-  "recordCounts": {
+  "files": [
+    {
+      "path": "earth_fix.dat",
+      "sha256": "4b21bae65c5a23978c55768d9ac5765058e3989ac95a02712a12c37f53deb663",
+      "sizeBytes": 3287475
+    },
+    {
+      "path": "earth_nav.dat",
+      "sha256": "1968bbe7bc24a189f15a6df2bfdff4b3502856bc8487f025b86c6cbfd81b0fae",
+      "sizeBytes": 2002326
+    },
+    {
+      "path": "earth_awy.dat",
+      "sha256": "eb2c2671c2e29618c8769677e00c05ccfcd976697632cb74dfb34bfb8be96e24",
+      "sizeBytes": 5154929
+    }
+  ],
+  "counts": {
     "fixes": 113356,
     "navaids": 26599,
     "airwaySegments": 70291,
@@ -39,11 +76,24 @@
     "unknownLevelAirwaySegments": 0,
     "rejectedFixRows": 0,
     "rejectedNavaidRows": 0,
-    "rejectedAirwayRows": 0
+    "rejectedAirwayRows": 0,
+    "facilityTypeCounts": {
+      "DME_PAIRED": 4989,
+      "DME_STANDALONE": 766,
+      "ILS_GLIDESLOPE": 3159,
+      "ILS_INNER_MARKER": 202,
+      "ILS_LOCALIZER": 3167,
+      "ILS_MIDDLE_MARKER": 1587,
+      "ILS_OUTER_MARKER": 1586,
+      "LOCALIZER_LDA_SDF": 305,
+      "NDB": 7141,
+      "VHF_NAVAID": 3697
+    },
+    "ilsFacilityCount": 10006,
+    "localizerCount": 3472,
+    "glideslopeCount": 3159,
+    "markerBeaconCount": 3375,
+    "dmeFacilityCount": 5755
   },
-  "airwayResolution": {
-    "segmentsWithAtLeastOneUnresolvedEndpoint": 0,
-    "ambiguousEndpoints": 0
-  },
-  "notes": "Imported for personal FlightTempo development and route-engine experiments only. Data snapshot is stale (upstream repository last updated 2013-12-09). Do not use operationally. GPLv3 terms apply."
+  "notes": "Legacy cycle 2012.08. Development/reference use only; never represent as current AIRAC or operational data."
 }
