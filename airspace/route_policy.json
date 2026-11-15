@@ -5,7 +5,8 @@
     "avoidActiveEasaAdvisories": true,
     "alwaysRespectVerifiedLegalRestrictions": true,
     "allowPilotOverrideOfAdvisoryAvoidance": true,
-    "allowPilotOverrideOfLegalRestrictions": false
+    "allowPilotOverrideOfLegalRestrictions": false,
+    "avoidApplicableFaaAdvisories": true
   },
   "routeGeneration": {
     "source": "world_corridor_graph.bin",
@@ -33,5 +34,17 @@
     "listedRestrictionAction": "warn_and_suggest_avoid",
     "userOverrideAllowedForVerifiedLegalRestrictions": false,
     "neverInferRestrictionsFromAirlineNationality": true
-  }
+  },
+  "userControls": [
+    {
+      "id": "avoidConflictAdvisories",
+      "label": "Avoid Conflict / Advisory FIRs",
+      "defaultEnabled": true,
+      "appliesTo": [
+        "EASA_CZIB",
+        "FAA_ADVISORY"
+      ],
+      "pilotCanOverride": true
+    }
+  ]
 }
