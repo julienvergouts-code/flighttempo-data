@@ -386,11 +386,6 @@
             193
           ],
           "geometryAvailable": true
-        },
-        {
-          "firCode": "SFAR",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
         }
       ],
       "appliesTo": [],
@@ -420,11 +415,6 @@
       "pointerOnly": true,
       "affectedFirs": [
         {
-          "firCode": "SFAR",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
           "firCode": "ZKKP",
           "geometryFeatureIds": [],
           "geometryAvailable": false
@@ -447,11 +437,6 @@
             17
           ],
           "geometryAvailable": true
-        },
-        {
-          "firCode": "SFAR",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
         }
       ],
       "appliesTo": [],
@@ -493,13 +478,6 @@
           "geometryAvailable": true
         },
         {
-          "firCode": "OIIX",
-          "geometryFeatureIds": [
-            193
-          ],
-          "geometryAvailable": true
-        },
-        {
           "firCode": "OKAC",
           "geometryFeatureIds": [],
           "geometryAvailable": false
@@ -532,29 +510,6 @@
       "restrictionType": "prohibition",
       "pointerOnly": false,
       "affectedFirs": [
-        {
-          "firCode": "UKBU",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "UKBV",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "UKDV",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "UKFV",
-          "geometryFeatureIds": [
-            2450,
-            2460
-          ],
-          "geometryAvailable": true
-        },
         {
           "firCode": "URRV",
           "geometryFeatureIds": [
@@ -589,13 +544,7 @@
       "title": "KICZ NOTAM A0028/19 — Security — Somalia Pointer NOTAM",
       "restrictionType": "pointer_only",
       "pointerOnly": true,
-      "affectedFirs": [
-        {
-          "firCode": "SFAR",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        }
-      ],
+      "affectedFirs": [],
       "appliesTo": [],
       "currentnessVerified": false,
       "currentnessStatus": "listed_on_FAA_PRN_page; live NOTAM amendments/cancellations not independently checked",
@@ -611,11 +560,6 @@
           "firCode": "OSTT",
           "geometryFeatureIds": [],
           "geometryAvailable": false
-        },
-        {
-          "firCode": "SFAR",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
         }
       ],
       "appliesTo": [],
@@ -626,9 +570,15 @@
     {
       "notamId": "A0009/18",
       "title": "KICZ NOTAM A0009/18 — Security — United States of America Advisory for Airspace Immediately Adjacent to Damascus Flight Information Region ( OSTT FIR )",
-      "restrictionType": "prohibition",
+      "restrictionType": "advisory",
       "pointerOnly": false,
-      "affectedFirs": [],
+      "affectedFirs": [
+        {
+          "firCode": "OSTT",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        }
+      ],
       "appliesTo": [
         "US_AIR_CARRIERS",
         "FAA_AIRMAN_CERTIFICATE_HOLDERS",
@@ -644,11 +594,6 @@
       "restrictionType": "pointer_only",
       "pointerOnly": true,
       "affectedFirs": [
-        {
-          "firCode": "SFAR",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
         {
           "firCode": "UKDV",
           "geometryFeatureIds": [],
@@ -715,7 +660,11 @@
       "restrictionType": "prohibition",
       "pointerOnly": false,
       "affectedFirs": [],
-      "appliesTo": [],
+      "appliesTo": [
+        "US_AIR_CARRIERS",
+        "FAA_AIRMAN_CERTIFICATE_HOLDERS",
+        "US_REGISTERED_AIRCRAFT"
+      ],
       "currentnessVerified": false,
       "currentnessStatus": "listed_on_FAA_PRN_page; live NOTAM amendments/cancellations not independently checked",
       "sourceUrl": "https://www.faa.gov/air_traffic/publications/us_restrictions/media/KICZ_A0013-19_Prohibition_NOTAM-Venezuela.pdf"
@@ -728,11 +677,6 @@
       "affectedFirs": [
         {
           "firCode": "OYSC",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "SFAR",
           "geometryFeatureIds": [],
           "geometryAvailable": false
         }
@@ -785,31 +729,80 @@
       "userOverrideAllowed": false
     },
     {
-      "notamId": "A0005/22",
+      "notamId": "A0008/22",
+      "affectedFirs": [],
+      "appliesTo": [
+        "US_AIR_CARRIERS",
+        "FAA_AIRMAN_CERTIFICATE_HOLDERS",
+        "US_REGISTERED_AIRCRAFT"
+      ],
+      "restrictionType": "advisory",
+      "pointerOnly": false,
+      "currentnessVerified": false,
+      "action": "advisory_avoid_preference",
+      "userOverrideAllowed": true
+    },
+    {
+      "notamId": "A0009/22",
+      "affectedFirs": [],
+      "appliesTo": [
+        "US_AIR_CARRIERS",
+        "FAA_AIRMAN_CERTIFICATE_HOLDERS",
+        "US_REGISTERED_AIRCRAFT"
+      ],
+      "restrictionType": "advisory",
+      "pointerOnly": false,
+      "currentnessVerified": false,
+      "action": "advisory_avoid_preference",
+      "userOverrideAllowed": true
+    },
+    {
+      "notamId": "A0016/20",
       "affectedFirs": [
         {
-          "firCode": "UKBU",
+          "firCode": "OBBB",
           "geometryFeatureIds": [],
           "geometryAvailable": false
         },
         {
-          "firCode": "UKBV",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "UKDV",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "UKFV",
+          "firCode": "OEJD",
           "geometryFeatureIds": [
-            2450,
-            2460
+            126
           ],
           "geometryAvailable": true
         },
+        {
+          "firCode": "OKAC",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "OMAE",
+          "geometryFeatureIds": [
+            42
+          ],
+          "geometryAvailable": true
+        },
+        {
+          "firCode": "OOMM",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        }
+      ],
+      "appliesTo": [
+        "US_AIR_CARRIERS",
+        "FAA_AIRMAN_CERTIFICATE_HOLDERS",
+        "US_REGISTERED_AIRCRAFT"
+      ],
+      "restrictionType": "advisory",
+      "pointerOnly": false,
+      "currentnessVerified": false,
+      "action": "advisory_avoid_preference",
+      "userOverrideAllowed": true
+    },
+    {
+      "notamId": "A0005/22",
+      "affectedFirs": [
         {
           "firCode": "URRV",
           "geometryFeatureIds": [
@@ -843,17 +836,23 @@
     },
     {
       "notamId": "A0009/18",
-      "affectedFirs": [],
+      "affectedFirs": [
+        {
+          "firCode": "OSTT",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        }
+      ],
       "appliesTo": [
         "US_AIR_CARRIERS",
         "FAA_AIRMAN_CERTIFICATE_HOLDERS",
         "US_REGISTERED_AIRCRAFT"
       ],
-      "restrictionType": "prohibition",
+      "restrictionType": "advisory",
       "pointerOnly": false,
       "currentnessVerified": false,
-      "action": "warn_and_suggest_avoid_pending_live_NOTAM_check",
-      "userOverrideAllowed": false
+      "action": "advisory_avoid_preference",
+      "userOverrideAllowed": true
     },
     {
       "notamId": "A0004/22",
@@ -892,6 +891,20 @@
           "geometryAvailable": false
         }
       ],
+      "appliesTo": [
+        "US_AIR_CARRIERS",
+        "FAA_AIRMAN_CERTIFICATE_HOLDERS",
+        "US_REGISTERED_AIRCRAFT"
+      ],
+      "restrictionType": "prohibition",
+      "pointerOnly": false,
+      "currentnessVerified": false,
+      "action": "warn_and_suggest_avoid_pending_live_NOTAM_check",
+      "userOverrideAllowed": false
+    },
+    {
+      "notamId": "A0013/19",
+      "affectedFirs": [],
       "appliesTo": [
         "US_AIR_CARRIERS",
         "FAA_AIRMAN_CERTIFICATE_HOLDERS",

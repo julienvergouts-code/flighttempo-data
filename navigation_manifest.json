@@ -923,8 +923,8 @@
       "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/airspace/faa_prn_notams.json",
       "available": true,
       "recordCount": 16,
-      "sizeBytes": 60824,
-      "sha256": "ed982eab62a0ba39ea6d90804f18b47c09af8618750ecda35c66a879f9f5c3e5",
+      "sizeBytes": 59543,
+      "sha256": "e80b3ffd98295fd9b035b01da6aaf3675b50edce8043e62b150fb820516c27de",
       "license": "FAA government source; public information",
       "status": "reference_only_currentness_unverified",
       "operationallyAvailable": false
@@ -935,8 +935,8 @@
       "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/airspace/airspace_filter.json",
       "available": true,
       "recordCount": 16,
-      "sizeBytes": 29556,
-      "sha256": "fedcf423bbfdd16e963dde4e01c37a147008b3896eda808ed6d9c1f9f92a55b9",
+      "sizeBytes": 30022,
+      "sha256": "d25f235fc47e959d8410e0955a71dfb8bf1e14bbf8eecb9d06900b007ff58403",
       "license": "EASA acknowledgement + OpenAIP CC BY-NC 4.0 + FAA reference",
       "status": "advisory_and_conditional_reference_only",
       "operationallyAvailable": false

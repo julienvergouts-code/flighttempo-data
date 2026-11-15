@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "repository": "julienvergouts-code/flighttempo-data",
-  "generatedAtUtc": "2026-11-15T10:13:02.131514+00:00",
+  "generatedAtUtc": "2026-11-15T10:14:16.142557+00:00",
   "purpose": "Personal FlightTempo development, cross-checking, route-building experiments and flight-preparation practice; not an operational navigation database.",
   "rules": {
     "datasetMetaRequired": true,
@@ -173,7 +173,7 @@
       "airacCycle": null,
       "effectiveDate": null,
       "expiryDate": null,
-      "sha256": "ed982eab62a0ba39ea6d90804f18b47c09af8618750ecda35c66a879f9f5c3e5",
+      "sha256": "e80b3ffd98295fd9b035b01da6aaf3675b50edce8043e62b150fb820516c27de",
       "licenceStatus": "FAA_public_information_reference_currentness_unverified",
       "coverage": "FAA-published international prohibition/restriction notice references",
       "recordCount": 16
