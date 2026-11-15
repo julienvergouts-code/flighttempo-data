@@ -1,0 +1,21 @@
+{
+  "source": "FlightTempo-maintained airline profiles and route rules",
+  "airacCycle": null,
+  "effectiveDate": null,
+  "expiryDate": null,
+  "sha256": null,
+  "licenceStatus": "FlightTempo_original_reference_data; airline names and trademarks remain respective owners",
+  "files": [
+    {
+      "path": "airlines.csv",
+      "sha256": null,
+      "sizeBytes": 630
+    },
+    {
+      "path": "route_rules.csv",
+      "sha256": null,
+      "sizeBytes": 1177
+    }
+  ],
+  "notes": "No AIRAC applicability. Per-file SHA-256 to be populated by the build pipeline."
+}
