@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "repository": "julienvergouts-code/flighttempo-data",
-  "generatedAtUtc": "2026-11-15T09:45:00Z",
+  "generatedAtUtc": "2026-11-15T10:00:19.943081+00:00",
   "purpose": "Personal FlightTempo development, cross-checking, route-building experiments and flight-preparation practice; not an operational navigation database.",
   "rules": {
     "datasetMetaRequired": true,
@@ -104,6 +104,18 @@
       "expiryDate": null,
       "sha256": null,
       "licenceStatus": "not_cleared_do_not_store"
+    },
+    {
+      "id": "openaip-fir-boundaries",
+      "path": "navigation/airspace/openaip_fir_boundaries.geojson",
+      "source": "OpenAIP country airspace exports",
+      "airacCycle": null,
+      "effectiveDate": null,
+      "expiryDate": null,
+      "sha256": "baddb497adf9dd33de180215ac526fef69a321b8e504feba4395430f3630a7b0",
+      "licenceStatus": "CC_BY_NC_4.0_attribution_required_non_commercial_only",
+      "coverage": "Worldwide FIR/UIR polygons where published in OpenAIP country exports",
+      "recordCount": 170
     }
   ]
 }

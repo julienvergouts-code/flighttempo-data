@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAtUtc": "2026-11-15T09:46:20.552508+00:00",
+  "generatedAtUtc": "2026-11-15T10:00:19.656359+00:00",
   "source": "EASA CZIB JSON export",
   "sourceUrl": "https://www.easa.europa.eu/en/domains/air-operations/czibs/export-json?_format=json&page=",
   "policy": {
@@ -16,130 +16,205 @@
       "name": "Airspace of Jordan",
       "country": "Jordan",
       "validUntil": "2026-11-16",
-      "explicitFirCodes": [],
-      "status": "active"
+      "affectedFirs": [],
+      "mappingMethod": "country-export polygon association; verify FIR designators and boundaries against State AIP"
     },
     {
       "sourceId": "144230",
       "name": "Airspace of Saudi Arabia",
       "country": "Saudi Arabia",
       "validUntil": "2026-11-16",
-      "explicitFirCodes": [],
-      "status": "active"
+      "affectedFirs": [
+        {
+          "firCode": null,
+          "name": "OEJD FIR",
+          "sourceCountryCodes": [
+            "SA"
+          ],
+          "geometryFeatureId": 126
+        }
+      ],
+      "mappingMethod": "country-export polygon association; verify FIR designators and boundaries against State AIP"
     },
     {
       "sourceId": "20599",
       "name": "Airspace of Syria",
       "country": "Syria",
       "validUntil": "2026-11-30",
-      "explicitFirCodes": [],
-      "status": "active"
+      "affectedFirs": [],
+      "mappingMethod": "country-export polygon association; verify FIR designators and boundaries against State AIP"
     },
     {
       "sourceId": "20589",
       "name": "Airspace of Somalia",
       "country": "Somalia",
       "validUntil": "2027-04-30",
-      "explicitFirCodes": [],
-      "status": "active"
+      "affectedFirs": [],
+      "mappingMethod": "country-export polygon association; verify FIR designators and boundaries against State AIP"
     },
     {
       "sourceId": "20585",
       "name": "Airspace of Mali",
       "country": "Mali",
       "validUntil": "2027-04-30",
-      "explicitFirCodes": [],
-      "status": "active"
+      "affectedFirs": [],
+      "mappingMethod": "country-export polygon association; verify FIR designators and boundaries against State AIP"
     },
     {
       "sourceId": "20602",
       "name": "Airspace of Yemen – Sana’a Flight Information Region",
       "country": "Yemen",
       "validUntil": "2027-04-30",
-      "explicitFirCodes": [
-        "OYSC"
-      ],
-      "status": "active"
+      "affectedFirs": [],
+      "mappingMethod": "country-export polygon association; verify FIR designators and boundaries against State AIP"
     },
     {
       "sourceId": "143861",
       "name": "Airspace of Iran",
       "country": "Iran",
       "validUntil": "2026-11-16",
-      "explicitFirCodes": [],
-      "status": "active"
+      "affectedFirs": [
+        {
+          "firCode": null,
+          "name": "TEHRAN FIR",
+          "sourceCountryCodes": [
+            "IR"
+          ],
+          "geometryFeatureId": 193
+        }
+      ],
+      "mappingMethod": "country-export polygon association; verify FIR designators and boundaries against State AIP"
     },
     {
       "sourceId": "143862",
       "name": "Airspace of Iraq",
       "country": "Iraq",
       "validUntil": "2026-11-16",
-      "explicitFirCodes": [],
-      "status": "active"
+      "affectedFirs": [],
+      "mappingMethod": "country-export polygon association; verify FIR designators and boundaries against State AIP"
     },
     {
       "sourceId": "143863",
       "name": "Airspace of Lebanon",
       "country": "Lebanon",
       "validUntil": "2026-11-16",
-      "explicitFirCodes": [],
-      "status": "active"
+      "affectedFirs": [],
+      "mappingMethod": "country-export polygon association; verify FIR designators and boundaries against State AIP"
     },
     {
       "sourceId": "143899",
       "name": "Airspace of the Persian Gulf and Gulf of Oman",
       "country": "Bahrain, Kuwait, Qatar, Oman, United Arab Emirates",
       "validUntil": "2026-11-16",
-      "explicitFirCodes": [],
-      "status": "active"
+      "affectedFirs": [
+        {
+          "firCode": null,
+          "name": "OMAE FIR",
+          "sourceCountryCodes": [
+            "AE"
+          ],
+          "geometryFeatureId": 42
+        }
+      ],
+      "mappingMethod": "country-export polygon association; verify FIR designators and boundaries against State AIP"
     },
     {
       "sourceId": "20582",
       "name": "Airspace of Libya",
       "country": "Libya",
       "validUntil": "2027-01-31",
-      "explicitFirCodes": [],
-      "status": "active"
+      "affectedFirs": [
+        {
+          "firCode": null,
+          "name": "TRIPOLI FIR",
+          "sourceCountryCodes": [
+            "LY"
+          ],
+          "geometryFeatureId": 17
+        }
+      ],
+      "mappingMethod": "country-export polygon association; verify FIR designators and boundaries against State AIP"
     },
     {
       "sourceId": "20574",
       "name": "Airspace of Afghanistan",
       "country": "Afghanistan",
       "validUntil": "2027-01-31",
-      "explicitFirCodes": [],
-      "status": "active"
+      "affectedFirs": [],
+      "mappingMethod": "country-export polygon association; verify FIR designators and boundaries against State AIP"
     },
     {
       "sourceId": "20587",
       "name": "Airspace of Pakistan – Baluchistan and Khyber Pakhtunkhwa provinces",
       "country": "Pakistan",
       "validUntil": "2027-01-31",
-      "explicitFirCodes": [],
-      "status": "active"
+      "affectedFirs": [],
+      "mappingMethod": "country-export polygon association; verify FIR designators and boundaries against State AIP"
     },
     {
       "sourceId": "136057",
       "name": "Airspace of Ukraine",
       "country": "Ukraine",
       "validUntil": "2027-01-31",
-      "explicitFirCodes": [],
-      "status": "active"
+      "affectedFirs": [],
+      "mappingMethod": "country-export polygon association; verify FIR designators and boundaries against State AIP"
     },
     {
       "sourceId": "137874",
       "name": "Airspace of Sudan",
       "country": "Sudan",
       "validUntil": "2027-01-31",
-      "explicitFirCodes": [],
-      "status": "active"
+      "affectedFirs": [],
+      "mappingMethod": "country-export polygon association; verify FIR designators and boundaries against State AIP"
     },
     {
       "sourceId": "141480",
       "name": "Airspace of the Russian Federation",
       "country": "Russia",
       "validUntil": "2027-01-31",
-      "explicitFirCodes": [],
-      "status": "active"
+      "affectedFirs": [
+        {
+          "firCode": null,
+          "name": "KALININGRAD FIR",
+          "sourceCountryCodes": [
+            "RU"
+          ],
+          "geometryFeatureId": 2310
+        },
+        {
+          "firCode": null,
+          "name": "SAMARA FIR",
+          "sourceCountryCodes": [
+            "RU"
+          ],
+          "geometryFeatureId": 2448
+        },
+        {
+          "firCode": null,
+          "name": "SIMFEROPOL FIR",
+          "sourceCountryCodes": [
+            "RU"
+          ],
+          "geometryFeatureId": 2450
+        },
+        {
+          "firCode": null,
+          "name": "ROSTOV-NA-DONU FIR",
+          "sourceCountryCodes": [
+            "RU"
+          ],
+          "geometryFeatureId": 2458
+        },
+        {
+          "firCode": null,
+          "name": "SIMFEROPOL FIR",
+          "sourceCountryCodes": [
+            "RU"
+          ],
+          "geometryFeatureId": 2460
+        }
+      ],
+      "mappingMethod": "country-export polygon association; verify FIR designators and boundaries against State AIP"
     }
   ],
   "unmappedAdvisories": [
@@ -160,7 +235,12 @@
     "141480"
   ],
   "firBoundaryDataset": {
-    "status": "not_ingested",
-    "note": "No FIR polygon is fabricated from country names or advisory centroids. A separately licensed global FIR geometry source is required."
+    "status": "available_development_reference",
+    "source": "OpenAIP",
+    "license": "CC BY-NC 4.0",
+    "attribution": "Contains data from OpenAIP (https://www.openaip.net/), licensed under CC BY-NC 4.0.",
+    "featureCount": 170,
+    "file": "navigation/airspace/openaip_fir_boundaries.geojson",
+    "note": "Community-maintained FIR/UIR geometry. Advisory-country association is a routing hint, not a legal prohibition. Verify against current State AIPs and NOTAMs."
   }
 }
