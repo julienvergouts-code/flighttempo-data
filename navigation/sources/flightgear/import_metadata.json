@@ -62,24 +62,7 @@
     "unknownLevelAirwaySegments": 0,
     "rejectedFixRows": 0,
     "rejectedNavaidRows": 0,
-    "rejectedAirwayRows": 0,
-    "facilityTypeCounts": {
-      "DME_PAIRED": 4989,
-      "DME_STANDALONE": 766,
-      "ILS_GLIDESLOPE": 3159,
-      "ILS_INNER_MARKER": 202,
-      "ILS_LOCALIZER": 3167,
-      "ILS_MIDDLE_MARKER": 1587,
-      "ILS_OUTER_MARKER": 1586,
-      "LOCALIZER_LDA_SDF": 305,
-      "NDB": 7141,
-      "VHF_NAVAID": 3697
-    },
-    "ilsFacilityCount": 10006,
-    "localizerCount": 3472,
-    "glideslopeCount": 3159,
-    "markerBeaconCount": 3375,
-    "dmeFacilityCount": 5755
+    "rejectedAirwayRows": 0
   },
   "airwayResolution": {
     "segmentsWithAtLeastOneUnresolvedEndpoint": 0,
