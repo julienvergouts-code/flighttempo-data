@@ -693,8 +693,10 @@ def update_manifest(manifest_path: Path, root: Path, import_meta=None):
     capabilities["independentWaypoints"] = datasets[4]["available"]
     capabilities["flightgearNavaids"] = datasets[5]["available"]
     capabilities["publishedAirways"] = datasets[6]["available"]
-    capabilities["airlineProfiles"] = datasets[-2]["available"]
-    capabilities["rosterClassificationRules"] = datasets[-1]["available"]
+    airline_profiles_dataset = next((d for d in datasets if d.get("path") == "airlines/airlines.csv"), {})
+    route_rules_dataset = next((d for d in datasets if d.get("path") == "airlines/route_rules.csv"), {})
+    capabilities["airlineProfiles"] = airline_profiles_dataset.get("available", False)
+    capabilities["rosterClassificationRules"] = route_rules_dataset.get("available", False)
     if import_meta:
         manifest["flightgearImport"] = {
             key: import_meta.get(key, default)
@@ -724,8 +726,8 @@ def update_manifest(manifest_path: Path, root: Path, import_meta=None):
     statistics["airwaySegments"] = datasets[6]["recordCount"] if datasets[6]["available"] else 0
     statistics["lowAirwaySegments"] = airway_counts.get("lowAirwaySegments", 0) if datasets[6]["available"] else 0
     statistics["highAirwaySegments"] = airway_counts.get("highAirwaySegments", 0) if datasets[6]["available"] else 0
-    statistics["airlineProfiles"] = datasets[-2]["recordCount"] if datasets[-2]["available"] else 0
-    statistics["routeRules"] = datasets[-1]["recordCount"] if datasets[-1]["available"] else 0
+    statistics["airlineProfiles"] = airline_profiles_dataset.get("recordCount", 0) if airline_profiles_dataset.get("available") else 0
+    statistics["routeRules"] = route_rules_dataset.get("recordCount", 0) if route_rules_dataset.get("available") else 0
 
     manifest_path.parent.mkdir(parents=True, exist_ok=True)
     temp_path = manifest_path.with_suffix(manifest_path.suffix + ".tmp")
