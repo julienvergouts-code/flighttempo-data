@@ -20,15 +20,15 @@
     },
     {
       "path": "airspace_filter.json",
-      "sha256": "4fc9934a0744e75a4407c4a14b77ff25377d2f40022eae8ddb392392c34315b5",
-      "sizeBytes": 33691,
+      "sha256": "cc5d1b87828cc87e99a8d35880a81f175648b781bdde585d9af1b4fa77f18812",
+      "sizeBytes": 35346,
       "recordCount": 16
     },
     {
       "path": "advisories/easa_safety_directives.json",
-      "sha256": "8811409aec077572233abc7eec36dc84c3395e9eb9faef2aeacff7e5f2b5b7dc",
-      "sizeBytes": 2266,
-      "recordCount": 1
+      "sha256": "7cba0609c3929db90e5d54dec133e0c4227f4d0ad7cab5e8e6e96d28be23797b",
+      "sizeBytes": 3941,
+      "recordCount": 2
     }
   ],
   "notes": "airspace_filter.json combines EASA advisory records with OpenAIP FIR geometry references. It does not contain a complete legal prohibition feed. See per-source metadata in airspace/advisories and navigation/airspace."
