@@ -14,7 +14,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: flighttempo-navigation-update
+  group: openaip-fir-import
   cancel-in-progress: false
 
 jobs:
