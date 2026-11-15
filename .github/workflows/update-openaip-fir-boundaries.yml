@@ -27,6 +27,8 @@ jobs:
         with:
           ref: main
           fetch-depth: 0
+      - name: Validate OpenAIP importer syntax
+        run: python3 -m py_compile scripts/import_openaip_firs.py
       - name: Import worldwide OpenAIP FIR/UIR polygons
         run: python3 scripts/import_openaip_firs.py
       - name: Add FIR boundaries and airspace filter to app manifest
