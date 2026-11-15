@@ -192,7 +192,7 @@
       "airacCycle": null,
       "effectiveDate": null,
       "expiryDate": null,
-      "sha256": "4fc9934a0744e75a4407c4a14b77ff25377d2f40022eae8ddb392392c34315b5",
+      "sha256": "cc5d1b87828cc87e99a8d35880a81f175648b781bdde585d9af1b4fa77f18812",
       "licenceStatus": "mixed_source_rights_EASA_acknowledgement_and_OpenAIP_CC_BY_NC_4.0",
       "coverage": "Partial route-preview advisory mapping; incomplete FIR geometry; not a legal restriction feed",
       "recordCount": 16
@@ -204,7 +204,7 @@
       "airacCycle": null,
       "effectiveDate": "2021-06-02",
       "expiryDate": null,
-      "sha256": "4d13215a8017a78b649241aaae42f6d287905bd27869a11886b612110d93995c",
+      "sha256": "7cba0609c3929db90e5d54dec133e0c4227f4d0ad7cab5e8e6e96d28be23797b",
       "licenceStatus": "EASA_metadata_summary_source_acknowledged",
       "coverage": "FIR Minsk (UMMV); distinguish NCA-supervised operators and direct EASA oversight",
       "recordCount": 2
