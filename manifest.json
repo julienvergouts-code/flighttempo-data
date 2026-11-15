@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "repository": "julienvergouts-code/flighttempo-data",
-  "generatedAtUtc": "2026-11-15T10:10:13.309235+00:00",
+  "generatedAtUtc": "2026-11-15T10:12:11.845009+00:00",
   "purpose": "Personal FlightTempo development, cross-checking, route-building experiments and flight-preparation practice; not an operational navigation database.",
   "rules": {
     "datasetMetaRequired": true,
@@ -165,6 +165,18 @@
       "licenceStatus": "CC_BY_NC_4.0_attribution_required_non_commercial_only",
       "coverage": "Worldwide FIR/UIR polygons where published in OpenAIP country exports",
       "recordCount": 170
+    },
+    {
+      "id": "faa-prn-notams",
+      "path": "airspace/faa_prn_notams.json",
+      "source": "FAA PRN KICZ NOTAM index",
+      "airacCycle": null,
+      "effectiveDate": null,
+      "expiryDate": null,
+      "sha256": "5a0d8d19984409d46da3b008931963a780386fdac0fdee5399e0c58ffc68c8ba",
+      "licenceStatus": "FAA_public_information_reference_currentness_unverified",
+      "coverage": "FAA-published international prohibition/restriction notice references",
+      "recordCount": 16
     }
   ]
 }

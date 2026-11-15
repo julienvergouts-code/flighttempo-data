@@ -25,5 +25,13 @@
     "This policy is for offline route-preview experiments, not operational flight planning.",
     "The legacy airway graph is stale and its routes may be incomplete.",
     "FIR boundary geometry and EASA advisory mapping are community/reference data and must be verified against current State AIPs and NOTAMs."
-  ]
+  ],
+  "officialRestrictions": {
+    "faaSource": "FAA PRN KICZ NOTAM index",
+    "matchApplicabilityScopeBeforeApplying": true,
+    "requireLiveNotamVerificationBeforeHardBlock": true,
+    "listedRestrictionAction": "warn_and_suggest_avoid",
+    "userOverrideAllowedForVerifiedLegalRestrictions": false,
+    "neverInferRestrictionsFromAirlineNationality": true
+  }
 }

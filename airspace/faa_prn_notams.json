@@ -1,0 +1,2148 @@
+{
+  "schemaVersion": 1,
+  "provider": "FAA",
+  "dataset": "Prohibitions, Restrictions and Notices (PRN) — KICZ NOTAM references",
+  "sourcePage": "https://www.faa.gov/air_traffic/publications/us_restrictions/index.cfm",
+  "generatedAtUtc": "2026-11-15T10:12:11.765214+00:00",
+  "currentnessWarning": "The FAA PRN page is an official index, not a live NOTAM cancellation/status API. Do not hard-block a route solely from this file without checking the current NOTAM and applicability.",
+  "records": [
+    {
+      "notamId": "A0029/21",
+      "title": "KICZ NOTAM A0029/21 — Security — United States of America Prohibition Against Certain Flights in the Kabul Flight Information Region ( OAKX )",
+      "pdfUrl": "https://www.faa.gov/air_traffic/publications/us_restrictions/media/KICZ_A0029-21_NOTAM-Afghanistan_KABUL_FIR.pdf",
+      "pdfSha256": "07df096122f2bdc646f5f5d317b8483a74f0d2baa789705569123f432be3c652",
+      "pdfSizeBytes": 411110,
+      "downloadStatus": "downloaded",
+      "restrictionType": "prohibition",
+      "pointerOnly": false,
+      "affectedFirs": [
+        {
+          "firCode": "ALTI",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "ATIN",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "ATIO",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "DECI",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "DEVI",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "DIAT",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "EMER",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "EXTE",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "FLIG",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "FROM",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "GENC",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "IMME",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "INFO",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "IRED",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "IRIN",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "KABU",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "OAKX",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "OPER",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "REGI",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "REQU",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "RMAT",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "SION",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "SITU",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "THAT",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "THIS",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "TUDE",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        }
+      ],
+      "appliesTo": [
+        "US_AIR_CARRIERS",
+        "FAA_AIRMAN_CERTIFICATE_HOLDERS",
+        "US_REGISTERED_AIRCRAFT"
+      ],
+      "applicabilityText": ". THIS NOTAM DOES NOT APPLY TO THE UNITED STATES DEPARTMENT OF \nDEFENSE. IT DOES  APPLY TO: ALL U.S. AIR CARRIERS AND COMMERCIAL OPERATORS; ALL \nPERSONS EXERCISING THE PRIVILEGES OF AN AIRMAN CERTIFICATE ISSUED BY THE FAA, EXCEPT \nWHEN SUCH PERSONS ARE OPERATING U.S.-REGISTERED AIRCRAFT FOR A FOREIGN AIR \nCARRIER; AND ALL OPERATORS OF AIRCRAFT REGISTERED IN THE UNITED STATES, EXCEPT \nWHEN THE OPERATOR OF SUCH AIRCRAFT IS A FOREIGN AIR CARRIER.",
+      "permittedOperationsText": ". THIS NOTAM DOES NOT PROHIBIT PERSONS DESCRIBED IN \nPARAGRAPH A (APPLICABILITY) ABOVE FROM CONDUCTING FLIGHT OPERATIONS IN THE \nABOVE-NAMED AREA WHEN SUCH OPERATIONS ARE AUTHORIZED EITHER BY ANOTHER \nAGENCY OF THE UNITED STATES GOVERNMENT WITH THE APPROVAL OF THE FAA OR BY A \nDEVIATION, EXEMPTION, OR OTHER AUTHORIZATION ISSUED BY THE FAA ADMINISTRATOR. \nOPERATORS MUST CALL THE FAA WASHINGTON OPERATIONS CENTER AT 202-267-3333 TO \nINITIATE COORDINATION FOR FAA AUTHORIZATION TO CONDUCT OPERATIONS.  \nC. ALLOWANCES.  USE OF JET ROUTES P500-G500 IS AUTHORIZED FOR TRANSITING \nOVERFLIGHTS.",
+      "exceptionsText": "",
+      "validityText": [
+        "EXCEPT AS PROVIDED IN PARAGRAPH B (PERMITTED OPERATIONS) AND PARAGRAPH C",
+        "B. PERMITTED OPERATIONS. THIS NOTAM DOES NOT PROHIBIT PERSONS DESCRIBED IN",
+        "SFC – FL999, 30 AUG 19:55 2021 UNTIL PERM. CREATED: 30 AUG 19:59 2021"
+      ],
+      "permanentUntilCancelledText": true,
+      "currentnessVerified": false,
+      "currentnessStatus": "listed_on_FAA_PRN_page; live NOTAM amendments/cancellations not independently checked",
+      "rawPdfText": "KICZ A0029/21 - SECURITY.. UNITED STATES OF AMERICA FLIGHT PROHIBITION \nAGAINST CERTAIN FLIGHTS IN THE KABUL FLIGHT INFORMATION REGION \n(OAKX) \nSECURITY..UNITED STATES OF AMERICA PROHIBITION AGAINST CERTAIN FLIGHTS IN THE KABUL \nFLIGHT INFORMATION REGION (OAKX)  \nTHOSE PERSONS DESCRIBED IN PARAGRAPH A (APPLICABILITY) BELOW ARE PROHIBITED FROM \nOPERATING AT ALL ALTITUDES IN THE KABUL FLIGHT INFORMATION REGION (FIR)(OAKX), \nEXCEPT AS PROVIDED IN PARAGRAPH B (PERMITTED OPERATIONS) AND PARAGRAPH C \n(ALLOWANCES) BELOW, DUE TO THE RISK POSED BY EXTREMIST/MILITANT ACTIVITY, LACK OF \nRISK MITIGATION CAPABILITIES, AND DISRUPTIONS TO AIR TRAFFIC SERVICES. \nA. APPLICABILITY. THIS NOTAM DOES NOT APPLY TO THE UNITED STATES DEPARTMENT OF \nDEFENSE. IT DOES  APPLY TO: ALL U.S. AIR CARRIERS AND COMMERCIAL OPERATORS; ALL \nPERSONS EXERCISING THE PRIVILEGES OF AN AIRMAN CERTIFICATE ISSUED BY THE FAA, EXCEPT \nWHEN SUCH PERSONS ARE OPERATING U.S.-REGISTERED AIRCRAFT FOR A FOREIGN AIR \nCARRIER; AND ALL OPERATORS OF AIRCRAFT REGISTERED IN THE UNITED STATES, EXCEPT \nWHEN THE OPERATOR OF SUCH AIRCRAFT IS A FOREIGN AIR CARRIER. \nB. PERMITTED OPERATIONS. THIS NOTAM DOES NOT PROHIBIT PERSONS DESCRIBED IN \nPARAGRAPH A (APPLICABILITY) ABOVE FROM CONDUCTING FLIGHT OPERATIONS IN THE \nABOVE-NAMED AREA WHEN SUCH OPERATIONS ARE AUTHORIZED EITHER BY ANOTHER \nAGENCY OF THE UNITED STATES GOVERNMENT WITH THE APPROVAL OF THE FAA OR BY A \nDEVIATION, EXEMPTION, OR OTHER AUTHORIZATION ISSUED BY THE FAA ADMINISTRATOR. \nOPERATORS MUST CALL THE FAA WASHINGTON OPERATIONS CENTER AT 202-267-3333 TO \nINITIATE COORDINATION FOR FAA AUTHORIZATION TO CONDUCT OPERATIONS.  \nC. ALLOWANCES.  USE OF JET ROUTES P500-G500 IS AUTHORIZED FOR TRANSITING \nOVERFLIGHTS. \nD. EMERGENCY SITUATIONS. IN AN EMERGENCY REQUIRING IMMEDIATE DECISION AND \nACTION FOR THE SAFETY OF THE FLIGHT, THE PILOT IN COMMAND OF AN AIRCRAFT MAY \nDEVIATE FROM THIS NOTAM TO THE EXTENT REQUIRED BY THAT EMERGENCY. \nTHIS NOTAM IS AN EMERGENCY ORDER ISSUED UNDER 49 USC 40113(A), 44701(A)(5), AND \n46105(C). \nADDITIONAL INFORMATION IS PROVIDED AT: \nHTTPS://WWW.FAA.GOV/AIR_TRAFFIC/PUBLICATIONS/US_RESTRICTIONS/ \nSFC – FL999, 30 AUG 19:55 2021 UNTIL PERM. CREATED: 30 AUG 19:59 2021"
+    },
+    {
+      "notamId": "A0003/22",
+      "title": "KICZ NOTAM A0003/22 — Security — United States of America Prohibition Against Certain Flights in the Minsk Flight Information Region ( FIR ) ( UMMV )",
+      "pdfUrl": "https://www.faa.gov/air_traffic/publications/us_restrictions/media/KICZ_A0003-22_Prohibitory_NOTAM-Belarus_MINSK_FIR_(UMMV)_(2022024_1930Z).pdf",
+      "pdfSha256": "f5a07afb04d17782f20a1695d15b34af5d8d33dc191e0889dec46fe87be9aebd",
+      "pdfSizeBytes": 407924,
+      "downloadStatus": "downloaded",
+      "restrictionType": "prohibition",
+      "pointerOnly": false,
+      "affectedFirs": [
+        {
+          "firCode": "ACTI",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "ALTI",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "ATIN",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "ATIO",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "DECI",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "DIAT",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "EMER",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "EXTE",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "FLIG",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "GENC",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "IMME",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "INFO",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "IRED",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "IRIN",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "MINS",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "OPER",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "REGI",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "REQU",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "RMAT",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "SION",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "SITU",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "THAT",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "TUDE",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "UMMV",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        }
+      ],
+      "appliesTo": [
+        "US_AIR_CARRIERS",
+        "FAA_AIRMAN_CERTIFICATE_HOLDERS",
+        "US_REGISTERED_AIRCRAFT"
+      ],
+      "applicabilityText": ". THIS NOTAM APPLIES TO: ALL U.S. AIR CARRIERS AND COMMERCIAL OPERATORS; ALL \nPERSONS EXERCISING THE PRIVILEGES OF AN AIRMAN CERTIFICATE ISSUED BY THE FAA, EXCEPT SUCH \nPERSONS OPERATING U.S.-REGISTERED AIRCRAFT FOR A FOREIGN AIR CARRIER; AND ALL OPERATORS OF \nCIVIL AIRCRAFT REGISTERED IN THE UNITED STATES, EXCEPT WHEN THE OPERATOR OF SUCH AIRCRAFT \nIS A FOREIGN AIR CARRIER.",
+      "permittedOperationsText": ". THIS NOTAM DOES NOT PROHIBIT PERSONS DESCRIBED IN PARAGRAPH A \n(APPLICABILITY) ABOVE FROM CONDUCTING FLIGHT OPERATIONS IN THE ABOVE-NAMED AREA WHEN \nSUCH OPERATIONS ARE AUTHORIZED EITHER BY ANOTHER AGENCY OF THE UNITED STATES \nGOVERNMENT WITH THE APPROVAL OF THE FAA OR BY A DEVIATION, EXEMPTION, OR OTHER \nAUTHORIZATION ISSUED BY THE FAA ADMINISTRATOR. OPERATORS MUST CALL THE FAA WASHINGTON \nOPERATIONS CENTER AT 202-267-3333 TO INITIATE COORDINATION FOR FAA AUTHORIZATION TO \nCONDUCT OPERATIONS.  \nC. EMERGENCY SITUATIONS. IN AN EMERGENCY REQUIRING IMMEDIATE DECISION AND ACTION FOR \nTHE SAFETY OF THE FLIGHT, THE PILOT IN COMMAND OF AN AIRCRAFT MAY DEVIATE FROM THIS \nNOTAM TO THE EXTENT REQUIRED BY THAT EMERGENCY. \nTHIS NOTAM IS AN EMERGENCY ORDER ISSUED UNDER 49 USC 40113(A), 44701(A)(5), AND 46105(C). \nADDITIONAL INFORMATION IS PROVIDED AT: \nHTTPS://WWW.FAA.GOV/AIR_TRAFFIC/PUBLICATIONS/US_RESTRICTIONS/ \nSFC—FL999: 24 FEB 19:30 2022 UNTIL PERM. CREATED: 24 FEB 19:30 2022",
+      "exceptionsText": "",
+      "validityText": [
+        "B. PERMITTED OPERATIONS. THIS NOTAM DOES NOT PROHIBIT PERSONS DESCRIBED IN PARAGRAPH A",
+        "SFC—FL999: 24 FEB 19:30 2022 UNTIL PERM. CREATED: 24 FEB 19:30 2022"
+      ],
+      "permanentUntilCancelledText": true,
+      "currentnessVerified": false,
+      "currentnessStatus": "listed_on_FAA_PRN_page; live NOTAM amendments/cancellations not independently checked",
+      "rawPdfText": "KICZ A0003/22 SECURITY.. - UNITED STATES OF AMERICA PROHIBITION AGAINST CERTAIN FLIGHTS IN \nTHE MINSK FLIGHT INFORMATION REGION (FIR) (UMMV). \nTHOSE PERSONS DESCRIBED IN PARAGRAPH A (APPLICABILITY) BELOW ARE PROHIBITED FROM \nOPERATING AT ALL ALTITUDES IN THE MINSK FLIGHT INFORMATION REGION (FIR) (UMMV) DUE TO \nPOTENTIAL SAFETY-OF-FLIGHT RISKS ASSOCIATED WITH ONGOING HOSTILITIES. \nA. APPLICABILITY. THIS NOTAM APPLIES TO: ALL U.S. AIR CARRIERS AND COMMERCIAL OPERATORS; ALL \nPERSONS EXERCISING THE PRIVILEGES OF AN AIRMAN CERTIFICATE ISSUED BY THE FAA, EXCEPT SUCH \nPERSONS OPERATING U.S.-REGISTERED AIRCRAFT FOR A FOREIGN AIR CARRIER; AND ALL OPERATORS OF \nCIVIL AIRCRAFT REGISTERED IN THE UNITED STATES, EXCEPT WHEN THE OPERATOR OF SUCH AIRCRAFT \nIS A FOREIGN AIR CARRIER.  \nB. PERMITTED OPERATIONS. THIS NOTAM DOES NOT PROHIBIT PERSONS DESCRIBED IN PARAGRAPH A \n(APPLICABILITY) ABOVE FROM CONDUCTING FLIGHT OPERATIONS IN THE ABOVE-NAMED AREA WHEN \nSUCH OPERATIONS ARE AUTHORIZED EITHER BY ANOTHER AGENCY OF THE UNITED STATES \nGOVERNMENT WITH THE APPROVAL OF THE FAA OR BY A DEVIATION, EXEMPTION, OR OTHER \nAUTHORIZATION ISSUED BY THE FAA ADMINISTRATOR. OPERATORS MUST CALL THE FAA WASHINGTON \nOPERATIONS CENTER AT 202-267-3333 TO INITIATE COORDINATION FOR FAA AUTHORIZATION TO \nCONDUCT OPERATIONS.  \nC. EMERGENCY SITUATIONS. IN AN EMERGENCY REQUIRING IMMEDIATE DECISION AND ACTION FOR \nTHE SAFETY OF THE FLIGHT, THE PILOT IN COMMAND OF AN AIRCRAFT MAY DEVIATE FROM THIS \nNOTAM TO THE EXTENT REQUIRED BY THAT EMERGENCY. \nTHIS NOTAM IS AN EMERGENCY ORDER ISSUED UNDER 49 USC 40113(A), 44701(A)(5), AND 46105(C). \nADDITIONAL INFORMATION IS PROVIDED AT: \nHTTPS://WWW.FAA.GOV/AIR_TRAFFIC/PUBLICATIONS/US_RESTRICTIONS/ \nSFC—FL999: 24 FEB 19:30 2022 UNTIL PERM. CREATED: 24 FEB 19:30 2022"
+    },
+    {
+      "notamId": "A0050/20",
+      "title": "KICZ NOTAM A0050/20 — Security — Iran Pointer NOTAM",
+      "pdfUrl": "https://www.faa.gov/air_traffic/publications/us_restrictions/media/KICZ_Pointer_NOTAM_A0050-20_Iran_SFAR_117.pdf",
+      "pdfSha256": "af27b75c82e93f976de33890da79135c9a1cc2eefbe2c7843bb50e3a5449acce",
+      "pdfSizeBytes": 330023,
+      "downloadStatus": "downloaded",
+      "restrictionType": "pointer_only",
+      "pointerOnly": true,
+      "affectedFirs": [
+        {
+          "firCode": "AGAI",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "CERT",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "FLIG",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "INFO",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "OIIX",
+          "geometryFeatureIds": [
+            193
+          ],
+          "geometryAvailable": true
+        },
+        {
+          "firCode": "REGI",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "RMAT",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "SFAR",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "TEHR",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        }
+      ],
+      "appliesTo": [],
+      "applicabilityText": "",
+      "permittedOperationsText": "",
+      "exceptionsText": "",
+      "validityText": [
+        "SFC - UNL, 29 OCT 10:40 2020 UNTIL 31 OCT 23:59 2022. CREATED: 29 OCT 10:38 2020"
+      ],
+      "permanentUntilCancelledText": false,
+      "currentnessVerified": false,
+      "currentnessStatus": "listed_on_FAA_PRN_page; live NOTAM amendments/cancellations not independently checked",
+      "rawPdfText": "KICZ A0050/20 - SECURITY.. UNITED STATES OF AMERICA FLIGHT PROHIBITION \nAGAINST CERTAIN FLIGHTS IN THE TEHRAN FLIGHT INFORMATION REGION (FIR) \n(OIIX). \n14 CFR 91.1617 SPECIAL FEDERAL AVIATION REGULATION (SFAR) NO. 117 — PROHIBITION \nAGAINST CERTAIN FLIGHTS IN THE TEHRAN FLIGHT INFORMATION REGION (FIR) (OIIX) WAS \nPUBLISHED IN THE FEDERAL REGISTER AND EFFECTIVE ON 29 OCT 2020.  \nADDITIONAL INFORMATION IS PROVIDED AT: \nHTTPS://WWW.FAA.GOV/AIR_TRAFFIC/PUBLICATIONS/US_RESTRICTIONS/ \nSFC - UNL, 29 OCT 10:40 2020 UNTIL 31 OCT 23:59 2022. CREATED: 29 OCT 10:38 2020"
+    },
+    {
+      "notamId": "A0008/22",
+      "title": "KICZ NOTAM A0008/22 — Security — United States of America Advisory for Kenya",
+      "pdfUrl": "https://www.faa.gov/air_traffic/publications/us_restrictions/media/KICZ_A0008-22_USA_ADVISORY_FOR_KENYA_(20220228_1430Z).pdf",
+      "pdfSha256": "6cd024a108bc1bf3251cf4973a7d70ebe54bfffcac838342da2165d19c1a49f9",
+      "pdfSizeBytes": 407762,
+      "downloadStatus": "downloaded",
+      "restrictionType": "advisory",
+      "pointerOnly": false,
+      "affectedFirs": [
+        {
+          "firCode": "AIRC",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "ANTI",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "ARMS",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "AVIA",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "CAPA",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "CIVI",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "EMIS",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "ENCO",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "EXTR",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "FIRE",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "FROM",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "INDI",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "MILI",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "MORT",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "RAFT",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "RECT",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "ROCK",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "SMAL",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "SUCH",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "TANT",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "TION",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "UNTE",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "WEAP",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        }
+      ],
+      "appliesTo": [
+        "US_AIR_CARRIERS",
+        "FAA_AIRMAN_CERTIFICATE_HOLDERS",
+        "US_REGISTERED_AIRCRAFT"
+      ],
+      "applicabilityText": ". THIS NOTAM APPLIES TO:  ALL U.S. AIR CARRIERS AND COMMERCIAL OPERATORS; \nALL PERSONS EXERCISING THE PRIVILEGES OF AN AIRMAN CERTIFICATE ISSUED BY THE FAA, EXCEPT \nSUCH PERSONS OPERATING U.S.-REGISTERED AIRCRAFT FOR A FOREIGN AIR CARRIER; AND ALL \nOPERATORS OF CIVIL AIRCRAFT REGISTERED IN THE UNITED STATES, EXCEPT WHERE THE OPERATOR OF \nSUCH AIRCRAFT IS A FOREIGN AIR CARRIER.   \nB. PLANNING. THOSE PERSONS DESCRIBED IN PARAGRAPH A (APPLICABILITY) PLANNING TO FLY INTO, \nOUT OF, WITHIN, OR OVER THE ABOVE-NAMED AREA AT ALTITUDES BELOW FL260 ARE STRONGLY \nREMINDED TO REVIEW CURRENT SECURITY/THREAT INFORMATION AND NOTAMS; COMPLY WITH ALL \nAPPLICABLE FAA REGULATIONS, OPERATIONS SPECIFICATIONS, MANAGEMENT SPECIFICATIONS, AND \nLETTERS OF AUTHORIZATION, INCLUDING UPDATING B450; AND, TO THE MAXIMUM EXTENT POSSIBLE, \nPROVIDE AT LEAST 72-HOUR ADVANCE NOTICE OF PLANNED FLIGHTS TO THE FAA AT FAA-\nWATCH@FAA.GOV WITH SPECIFIC FLIGHT DETAILS.  \nC. OPERATIONS. EXERCISE CAUTION DURING FLIGHT OPERATIONS DUE TO THE POSSIBILITY OF ATTACKS \nON CIVIL AVIATION BY EXTREMISTS/MILITANTS. AIRCRAFT MAY ENCOUNTER FIRE FROM SMALL ARMS; \nINDIRECT FIRE WEAPONS, SUCH AS MORTARS AND ROCKETS; AND ANTI-AIRCRAFT-CAPABLE WEAPONS, \nINCLUDING MAN-PORTABLE AIR DEFENSE SYSTEMS (MANPADS). SUCH WEAPONS COULD TARGET \nAIRCRAFT AT LOW ALTITUDES, INCLUDING DURING THE ARRIVAL AND DEPARTURE PHASES OF FLIGHT, \nAND/OR TARGET AIRPORTS AND AIRCRAFT ON THE GROUND, ESPECIALLY AT AIRPORTS LOCATED EAST \nOF 40 DEGREES EAST LONGITUDE.  \nTHOSE PERSONS DESCRIBED IN PARAGRAPH A (APPLICABILITY) MUST REPORT SAFETY AND/OR SECURITY \nINCIDENTS TO THE FAA AT +1 202-267-3333. \nINFORMATION IS PROVIDED AT: \nHTTPS://WWW.FAA.GOV/AIR_TRAFFIC/PUBLICATIONS/US_RESTRICTIONS/ \nSFC—FL259: 26 FEB 12:20 2022 UNTIL 26 FEB 2023 23:59. CREATED: 26 FEB 12:20 2022",
+      "permittedOperationsText": "",
+      "exceptionsText": "",
+      "validityText": [
+        "SFC—FL259: 26 FEB 12:20 2022 UNTIL 26 FEB 2023 23:59. CREATED: 26 FEB 12:20 2022"
+      ],
+      "permanentUntilCancelledText": false,
+      "currentnessVerified": false,
+      "currentnessStatus": "listed_on_FAA_PRN_page; live NOTAM amendments/cancellations not independently checked",
+      "rawPdfText": "KICZ A0008/22 UNITED STATES OF AMERICA ADVISORY FOR KENYA. \nTHOSE PERSONS DESCRIBED IN PARAGRAPH A (APPLICABILITY) BELOW ARE ADVISED TO EXERCISE \nCAUTION WHEN FLYING INTO, OUT OF, WITHIN, OR OVER THE TERRITORY AND AIRSPACE OF KENYA \nEAST OF 40 DEGREES EAST LONGITUDE AT ALTITUDES BELOW FLIGHT LEVEL (FL) 260 DUE TO THE \nPOSSIBILITY OF EXTREMIST/MILITANT ACTIVITY.  \nA. APPLICABILITY. THIS NOTAM APPLIES TO:  ALL U.S. AIR CARRIERS AND COMMERCIAL OPERATORS; \nALL PERSONS EXERCISING THE PRIVILEGES OF AN AIRMAN CERTIFICATE ISSUED BY THE FAA, EXCEPT \nSUCH PERSONS OPERATING U.S.-REGISTERED AIRCRAFT FOR A FOREIGN AIR CARRIER; AND ALL \nOPERATORS OF CIVIL AIRCRAFT REGISTERED IN THE UNITED STATES, EXCEPT WHERE THE OPERATOR OF \nSUCH AIRCRAFT IS A FOREIGN AIR CARRIER.   \nB. PLANNING. THOSE PERSONS DESCRIBED IN PARAGRAPH A (APPLICABILITY) PLANNING TO FLY INTO, \nOUT OF, WITHIN, OR OVER THE ABOVE-NAMED AREA AT ALTITUDES BELOW FL260 ARE STRONGLY \nREMINDED TO REVIEW CURRENT SECURITY/THREAT INFORMATION AND NOTAMS; COMPLY WITH ALL \nAPPLICABLE FAA REGULATIONS, OPERATIONS SPECIFICATIONS, MANAGEMENT SPECIFICATIONS, AND \nLETTERS OF AUTHORIZATION, INCLUDING UPDATING B450; AND, TO THE MAXIMUM EXTENT POSSIBLE, \nPROVIDE AT LEAST 72-HOUR ADVANCE NOTICE OF PLANNED FLIGHTS TO THE FAA AT FAA-\nWATCH@FAA.GOV WITH SPECIFIC FLIGHT DETAILS.  \nC. OPERATIONS. EXERCISE CAUTION DURING FLIGHT OPERATIONS DUE TO THE POSSIBILITY OF ATTACKS \nON CIVIL AVIATION BY EXTREMISTS/MILITANTS. AIRCRAFT MAY ENCOUNTER FIRE FROM SMALL ARMS; \nINDIRECT FIRE WEAPONS, SUCH AS MORTARS AND ROCKETS; AND ANTI-AIRCRAFT-CAPABLE WEAPONS, \nINCLUDING MAN-PORTABLE AIR DEFENSE SYSTEMS (MANPADS). SUCH WEAPONS COULD TARGET \nAIRCRAFT AT LOW ALTITUDES, INCLUDING DURING THE ARRIVAL AND DEPARTURE PHASES OF FLIGHT, \nAND/OR TARGET AIRPORTS AND AIRCRAFT ON THE GROUND, ESPECIALLY AT AIRPORTS LOCATED EAST \nOF 40 DEGREES EAST LONGITUDE.  \nTHOSE PERSONS DESCRIBED IN PARAGRAPH A (APPLICABILITY) MUST REPORT SAFETY AND/OR SECURITY \nINCIDENTS TO THE FAA AT +1 202-267-3333. \nINFORMATION IS PROVIDED AT: \nHTTPS://WWW.FAA.GOV/AIR_TRAFFIC/PUBLICATIONS/US_RESTRICTIONS/ \nSFC—FL259: 26 FEB 12:20 2022 UNTIL 26 FEB 2023 23:59. CREATED: 26 FEB 12:20 2022"
+    },
+    {
+      "notamId": "A0045/20",
+      "title": "KICZ NOTAM A0045/20 — Security — North Korea Pointer NOTAM",
+      "pdfUrl": "https://www.faa.gov/air_traffic/publications/us_restrictions/media/KICZ_Pointer_NOTAM_A0045-20_Pyongyang_SFAR_79.pdf",
+      "pdfSha256": "6850aff2bb4cf7d08340e7349a64161a865145df0b862ad57072d558976260aa",
+      "pdfSizeBytes": 331087,
+      "downloadStatus": "downloaded",
+      "restrictionType": "pointer_only",
+      "pointerOnly": true,
+      "affectedFirs": [
+        {
+          "firCode": "AGAI",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "CERT",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "FLIG",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "GYAN",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "INFO",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "PYON",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "REGI",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "RMAT",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "SFAR",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "ZKKP",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        }
+      ],
+      "appliesTo": [],
+      "applicabilityText": "",
+      "permittedOperationsText": "",
+      "exceptionsText": "",
+      "validityText": [
+        "08 SEP 12:48 2020 UNTIL 18 SEP 23:59 2023. CREATED 08 SEP 12:51 2020"
+      ],
+      "permanentUntilCancelledText": false,
+      "currentnessVerified": false,
+      "currentnessStatus": "listed_on_FAA_PRN_page; live NOTAM amendments/cancellations not independently checked",
+      "rawPdfText": "A0045/20 - SECURITY.. UNITED STATES OF AMERICA PROHIBITION AGAINST \nCERTAIN FLIGHTS IN THE PYONGYANG FLIGHT INFORMATION REGION (FIR) \n(ZKKP)   \n14 CFR 91.1615 SPECIAL FEDERAL AVIATION REGULATION (SFAR) NO. 79— PROHIBITION \nAGAINST CERTAIN FLIGHTS IN THE PYONGYANG FLIGHT INFORMATION REGION (FIR) (ZKKP) \nWAS PUBLISHED IN THE FEDERAL REGISTER ON 08 SEP 2020 AND WAS EFFECTIVE \nIMMEDIATELY.   \nADDITIONAL INFORMATION IS PROVIDED AT: \nHTTPS://WWW.FAA.GOV/AIR_TRAFFIC/PUBLICATIONS/US_RESTRICTIONS/ \n \n \n08 SEP 12:48 2020 UNTIL 18 SEP 23:59 2023. CREATED 08 SEP 12:51 2020"
+    },
+    {
+      "notamId": "A0042/20",
+      "title": "KICZ NOTAM A0042/20 — Security — Libya Pointer NOTAM",
+      "pdfUrl": "https://www.faa.gov/air_traffic/publications/us_restrictions/media/KICZ_Pointer_NOTAM_A0042-20_Libya-SFAR_112.pdf",
+      "pdfSha256": "224ae9f24c3673169e8a537ea2549aef7febdb22ad40477f02730fd196fd8acd",
+      "pdfSizeBytes": 178132,
+      "downloadStatus": "downloaded",
+      "restrictionType": "pointer_only",
+      "pointerOnly": true,
+      "affectedFirs": [
+        {
+          "firCode": "AGAI",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "CERT",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "FLIG",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "HLLL",
+          "geometryFeatureIds": [
+            17
+          ],
+          "geometryAvailable": true
+        },
+        {
+          "firCode": "INFO",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "REGI",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "RMAT",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "SFAR",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "TRIP",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        }
+      ],
+      "appliesTo": [],
+      "applicabilityText": "",
+      "permittedOperationsText": "",
+      "exceptionsText": "",
+      "validityText": [
+        "SFC - UNL; 27 JUL 15:33 2020 UNTIL PERM. CREATED 27 JUL 15:51 2020"
+      ],
+      "permanentUntilCancelledText": true,
+      "currentnessVerified": false,
+      "currentnessStatus": "listed_on_FAA_PRN_page; live NOTAM amendments/cancellations not independently checked",
+      "rawPdfText": "A0042/20 - SECURITY.. UNITED STATES OF AMERICA PROHIBITION AGAINST \nCERTAIN FLIGHTS IN THE TRIPOLI FLIGHT INFORMATION REGION (FIR) (HLLL)   \n14 CFR 91.1603 SPECIAL FEDERAL AVIATION REGULATION (SFAR) NO. 112— PROHIBITION \nAGAINST CERTAIN FLIGHTS IN THE TRIPOLI FLIGHT INFORMATION REGION (FIR) (HLLL) WAS \nPUBLISHED IN THE FEDERAL REGISTER ON 27 JUL 2020 AND WAS EFFECTIVE IMMEDIATELY.   \nADDITIONAL INFORMATION IS PROVIDED AT: \nHTTPS://WWW.FAA.GOV/AIR_TRAFFIC/PUBLICATIONS/US_RESTRICTIONS/ \n \n \nSFC - UNL; 27 JUL 15:33 2020 UNTIL PERM. CREATED 27 JUL 15:51 2020"
+    },
+    {
+      "notamId": "A0009/22",
+      "title": "KICZ NOTAM A0009/22 — Security — United States of America Advisory for Mali",
+      "pdfUrl": "https://www.faa.gov/air_traffic/publications/us_restrictions/media/KICZ_A0009-22_USA_ADVISORY_FOR_MALI_(20220228_1430Z).pdf",
+      "pdfSha256": "c41bdddf54a05517543eb9b0af344c4311c5ce87e205282dec40bfd0a14f94c5",
+      "pdfSizeBytes": 407242,
+      "downloadStatus": "downloaded",
+      "restrictionType": "advisory",
+      "pointerOnly": false,
+      "affectedFirs": [
+        {
+          "firCode": "ARMS",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "ENCO",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "FIRE",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "FROM",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "INDI",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "MORT",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "RECT",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "ROCK",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "SMAL",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "SUCH",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "UNTE",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "WEAP",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        }
+      ],
+      "appliesTo": [
+        "US_AIR_CARRIERS",
+        "FAA_AIRMAN_CERTIFICATE_HOLDERS",
+        "US_REGISTERED_AIRCRAFT"
+      ],
+      "applicabilityText": ". THIS NOTAM APPLIES TO: ALL U.S. AIR CARRIERS AND COMMERCIAL OPERATORS; ALL \nPERSONS EXERCISING THE PRIVILEGES OF AN AIRMAN CERTIFICATE ISSUED BY THE FAA, EXCEPT SUCH \nPERSONS OPERATING U.S.-REGISTERED AIRCRAFT FOR A FOREIGN AIR CARRIER; AND ALL OPERATORS OF \nCIVIL AIRCRAFT REGISTERED IN THE UNITED STATES, EXCEPT WHERE THE OPERATOR OF SUCH AIRCRAFT \nIS A FOREIGN AIR CARRIER. \nB. PLANNING. THOSE PERSONS DESCRIBED IN PARAGRAPH A (APPLICABILITY) PLANNING TO FLY INTO, \nOUT OF, WITHIN, OR OVER THE ABOVE-NAMED AREA AT ALTITUDES BELOW FL260 ARE STRONGLY \nREMINDED TO REVIEW CURRENT SECURITY/THREAT INFORMATION AND NOTAMS; COMPLY WITH ALL \nAPPLICABLE FAA REGULATIONS, OPERATIONS SPECIFICATIONS, MANAGEMENT SPECIFICATIONS, AND \nLETTERS OF AUTHORIZATION, INCLUDING UPDATING B450; AND, TO THE MAXIMUM EXTENT POSSIBLE, \nPROVIDE AT LEAST 72-HOUR ADVANCE NOTICE OF PLANNED FLIGHTS TO THE FAA AT FAA-\nWATCH@FAA.GOV WITH SPECIFIC FLIGHT DETAILS.  \nC. OPERATIONS. EXERCISE CAUTION DURING FLIGHT OPERATIONS DUE TO ONGOING FIGHTING AND \nTHE POSSIBILITY OF ATTACKS ON CIVIL AVIATION BY EXTREMISTS/MILITANTS. AIRCRAFT MAY \nENCOUNTER FIRE FROM SMALL ARMS; INDIRECT FIRE WEAPONS, SUCH AS MORTARS AND ROCKETS; \nAND ANTI-AIRCRAFT-CAPABLE WEAPONS, INCLUDING MAN-PORTABLE AIR DEFENSE SYSTEMS \n(MANPADS). SUCH WEAPONS COULD TARGET AIRCRAFT AT LOW ALTITUDES, INCLUDING DURING THE \nARRIVAL AND DEPARTURE PHASES OF FLIGHT, AND/OR AIRPORTS AND AIRCRAFT ON THE GROUND.  \nTHOSE PERSONS DESCRIBED IN PARAGRAPH A (APPLICABILITY) MUST REPORT SAFETY AND/OR SECURITY \nINCIDENTS TO THE FAA AT +1 202-267-3333.  \nINFORMATION IS PROVIDED AT: \nHTTPS://WWW.FAA.GOV/AIR_TRAFFIC/PUBLICATIONS/US_RESTRICTIONS/ \nSFC—FL259: 26 FEB 12:22 2022 UNTIL 26 FEB 2023 23:59. CREATED: 26 FEB 12:22 2022",
+      "permittedOperationsText": "",
+      "exceptionsText": "",
+      "validityText": [
+        "SFC—FL259: 26 FEB 12:22 2022 UNTIL 26 FEB 2023 23:59. CREATED: 26 FEB 12:22 2022"
+      ],
+      "permanentUntilCancelledText": false,
+      "currentnessVerified": false,
+      "currentnessStatus": "listed_on_FAA_PRN_page; live NOTAM amendments/cancellations not independently checked",
+      "rawPdfText": "KICZ A0009/22 UNITED STATES OF AMERICA ADVISORY FOR MALI. \nTHOSE PERSONS DESCRIBED IN PARAGRAPH A (APPLICABILITY) BELOW SHOULD EXERCISE CAUTION \nWHEN FLYING INTO, OUT OF, WITHIN, OR OVER THE TERRITORY AND AIRSPACE OF MALI AT ALTITUDES \nBELOW FLIGHT LEVEL (FL) 260 DUE TO A CONTINUING FRAGILE SECURITY SITUATION, INCLUDING \nONGOING FIGHTING AND EXTREMIST/MILITANT ACTIVITY.  \nA. APPLICABILITY. THIS NOTAM APPLIES TO: ALL U.S. AIR CARRIERS AND COMMERCIAL OPERATORS; ALL \nPERSONS EXERCISING THE PRIVILEGES OF AN AIRMAN CERTIFICATE ISSUED BY THE FAA, EXCEPT SUCH \nPERSONS OPERATING U.S.-REGISTERED AIRCRAFT FOR A FOREIGN AIR CARRIER; AND ALL OPERATORS OF \nCIVIL AIRCRAFT REGISTERED IN THE UNITED STATES, EXCEPT WHERE THE OPERATOR OF SUCH AIRCRAFT \nIS A FOREIGN AIR CARRIER. \nB. PLANNING. THOSE PERSONS DESCRIBED IN PARAGRAPH A (APPLICABILITY) PLANNING TO FLY INTO, \nOUT OF, WITHIN, OR OVER THE ABOVE-NAMED AREA AT ALTITUDES BELOW FL260 ARE STRONGLY \nREMINDED TO REVIEW CURRENT SECURITY/THREAT INFORMATION AND NOTAMS; COMPLY WITH ALL \nAPPLICABLE FAA REGULATIONS, OPERATIONS SPECIFICATIONS, MANAGEMENT SPECIFICATIONS, AND \nLETTERS OF AUTHORIZATION, INCLUDING UPDATING B450; AND, TO THE MAXIMUM EXTENT POSSIBLE, \nPROVIDE AT LEAST 72-HOUR ADVANCE NOTICE OF PLANNED FLIGHTS TO THE FAA AT FAA-\nWATCH@FAA.GOV WITH SPECIFIC FLIGHT DETAILS.  \nC. OPERATIONS. EXERCISE CAUTION DURING FLIGHT OPERATIONS DUE TO ONGOING FIGHTING AND \nTHE POSSIBILITY OF ATTACKS ON CIVIL AVIATION BY EXTREMISTS/MILITANTS. AIRCRAFT MAY \nENCOUNTER FIRE FROM SMALL ARMS; INDIRECT FIRE WEAPONS, SUCH AS MORTARS AND ROCKETS; \nAND ANTI-AIRCRAFT-CAPABLE WEAPONS, INCLUDING MAN-PORTABLE AIR DEFENSE SYSTEMS \n(MANPADS). SUCH WEAPONS COULD TARGET AIRCRAFT AT LOW ALTITUDES, INCLUDING DURING THE \nARRIVAL AND DEPARTURE PHASES OF FLIGHT, AND/OR AIRPORTS AND AIRCRAFT ON THE GROUND.  \nTHOSE PERSONS DESCRIBED IN PARAGRAPH A (APPLICABILITY) MUST REPORT SAFETY AND/OR SECURITY \nINCIDENTS TO THE FAA AT +1 202-267-3333.  \nINFORMATION IS PROVIDED AT: \nHTTPS://WWW.FAA.GOV/AIR_TRAFFIC/PUBLICATIONS/US_RESTRICTIONS/ \nSFC—FL259: 26 FEB 12:22 2022 UNTIL 26 FEB 2023 23:59. CREATED: 26 FEB 12:22 2022"
+    },
+    {
+      "notamId": "A0016/20",
+      "title": "KICZ NOTAM A0016/20 — Security — United States of America Advisory for Overwater Airspace Above the Persian Gulf and the Gulf of Oman",
+      "pdfUrl": "https://www.faa.gov/air_traffic/publications/us_restrictions/media/KICZ_A0016-20_Advisory_NOTAM-Persian_Gulf_and_Gulf_of_Oman.pdf",
+      "pdfSha256": "616a75aceac8a3c978d0ec01daf07d4a2401bd53b7e87152870f0010bdca74bc",
+      "pdfSizeBytes": 181572,
+      "downloadStatus": "downloaded",
+      "restrictionType": "advisory",
+      "pointerOnly": false,
+      "affectedFirs": [
+        {
+          "firCode": "ATED",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "ATES",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "ATIO",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "AVIA",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "AVOI",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "BAHR",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "BOUN",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "CIVI",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "CONT",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "DARY",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "EFFE",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "ELEV",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "EMIR",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "EVER",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "FLIG",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "FURT",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "INFO",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "INUE",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "JEDD",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "KUWA",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "MILI",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "MUSC",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "NEAR",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "OBBB",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "OEJD",
+          "geometryFeatureIds": [
+            126
+          ],
+          "geometryAvailable": true
+        },
+        {
+          "firCode": "OIIX",
+          "geometryFeatureIds": [
+            193
+          ],
+          "geometryAvailable": true
+        },
+        {
+          "firCode": "OKAC",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "OMAE",
+          "geometryFeatureIds": [
+            42
+          ],
+          "geometryAvailable": true
+        },
+        {
+          "firCode": "OOMM",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "OPER",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "REGI",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "REMA",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "RMAT",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "ROUT",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "TARY",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "TEHR",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "TION",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "UNTI",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "WHEN",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        }
+      ],
+      "appliesTo": [
+        "US_AIR_CARRIERS",
+        "FAA_AIRMAN_CERTIFICATE_HOLDERS",
+        "US_REGISTERED_AIRCRAFT"
+      ],
+      "applicabilityText": ". THIS NOTAM APPLIES TO: ALL U.S. AIR CARRIERS AND COMMERCIAL OPERATORS; \nALL PERSONS EXERCISING THE PRIVILEGES OF AN AIRMAN CERTIFICATE ISSUED BY THE FAA, EXCEPT \nSUCH PERSONS OPERATING U.S.-REGISTERED AIRCRAFT FOR A FOREIGN AIR CARRIER; AND ALL \nOPERATORS OF AIRCRAFT REGISTERED IN THE UNITED STATES, EXCEPT WHERE THE OPERATOR OF \nSUCH AIRCRAFT IS A FOREIGN AIR CARRIER.  \nB. PLANNING. THOSE PERSONS DESCRIBED IN PARAGRAPH A PLANNING TO OPERATE IN THE ABOVE-\nNAMED AREA MUST REVIEW CURRENT SECURITY/THREAT INFORMATION AND NOTAMS AND \nCOMPLY WITH ALL APPLICABLE FAA REGULATIONS, OPERATIONS SPECIFICATIONS, MANAGEMENT \nSPECIFICATIONS, AND LETTERS OF AUTHORIZATION, INCLUDING UPDATING B450.  \nC. OPERATIONS.  AVOID AIR ROUTES NEAREST TO THE TEHRAN FIR (OIIX) BOUNDARY, WHENEVER \nPOSSIBLE, TO REDUCE THE RISK OF MISCALCULATION OR MISIDENTIFICATION BY AIR DEFENSE \nSYSTEMS.  ADDITIONALLY, AIRCRAFT OPERATING IN THE ABOVE-NAMED AREA MAY ENCOUNTER \nINADVERTENT GPS INTERFERENCE AND OTHER COMMUNICATIONS JAMMING, WHICH COULD OCCUR \nWITH LITTLE OR NO WARNING.  THOSE PERSONS DESCRIBED IN PARAGRAPH A MUST REPORT SAFETY \nAND/OR SECURITY INCIDENTS TO THE FAA AT +1 202-267-3333.   \nADDITIONAL INFORMATION IS PROVIDED AT: \nHTTPS://WWW.FAA.GOV/AIR_TRAFFIC/PUBLICATIONS/US_RESTRICTIONS/ \nSFC – UNL; 17 FEB 19:54 2020 UNTIL PERM. CREATED: 14 FEB 20:20 2020",
+      "permittedOperationsText": "",
+      "exceptionsText": "",
+      "validityText": [
+        "U.S. CIVIL AVIATION OPERATIONS IN THE TEHRAN FIR (OIIX), REMAINS IN EFFECT UNTIL FURTHER",
+        "SFC – UNL; 17 FEB 19:54 2020 UNTIL PERM. CREATED: 14 FEB 20:20 2020"
+      ],
+      "permanentUntilCancelledText": true,
+      "currentnessVerified": false,
+      "currentnessStatus": "listed_on_FAA_PRN_page; live NOTAM amendments/cancellations not independently checked",
+      "rawPdfText": "KICZ A0016/20 - SECURITY.. UNITED STATES OF AMERICA ADVISORY FOR \nOVERWATER AIRSPACE ABOVE THE PERSIAN GULF AND THE GULF OF OMAN.   \nTHOSE PERSONS DESCRIBED IN PARAGRAPH A BELOW SHOULD EXERCISE CAUTION WHEN \nOPERATING IN OVERWATER AIRSPACE ABOVE THE PERSIAN GULF AND THE GULF OF OMAN IN THE \nKUWAIT FLIGHT INFORMATION REGION (FIR) (OKAC), JEDDAH FIR (OEJD), BAHRAIN FIR (OBBB), \nEMIRATES FIR (OMAE), AND MUSCAT FIR (OOMM) DUE TO CONTINUED ELEVATED MILITARY \nPOSTURING AND  POLITICAL TENSIONS IN THE REGION. NOTAM KICZ A0002/20, WHICH PROHIBITS \nU.S. CIVIL AVIATION OPERATIONS IN THE TEHRAN FIR (OIIX), REMAINS IN EFFECT UNTIL FURTHER \nNOTICE. \nA. APPLICABILITY. THIS NOTAM APPLIES TO: ALL U.S. AIR CARRIERS AND COMMERCIAL OPERATORS; \nALL PERSONS EXERCISING THE PRIVILEGES OF AN AIRMAN CERTIFICATE ISSUED BY THE FAA, EXCEPT \nSUCH PERSONS OPERATING U.S.-REGISTERED AIRCRAFT FOR A FOREIGN AIR CARRIER; AND ALL \nOPERATORS OF AIRCRAFT REGISTERED IN THE UNITED STATES, EXCEPT WHERE THE OPERATOR OF \nSUCH AIRCRAFT IS A FOREIGN AIR CARRIER.  \nB. PLANNING. THOSE PERSONS DESCRIBED IN PARAGRAPH A PLANNING TO OPERATE IN THE ABOVE-\nNAMED AREA MUST REVIEW CURRENT SECURITY/THREAT INFORMATION AND NOTAMS AND \nCOMPLY WITH ALL APPLICABLE FAA REGULATIONS, OPERATIONS SPECIFICATIONS, MANAGEMENT \nSPECIFICATIONS, AND LETTERS OF AUTHORIZATION, INCLUDING UPDATING B450.  \nC. OPERATIONS.  AVOID AIR ROUTES NEAREST TO THE TEHRAN FIR (OIIX) BOUNDARY, WHENEVER \nPOSSIBLE, TO REDUCE THE RISK OF MISCALCULATION OR MISIDENTIFICATION BY AIR DEFENSE \nSYSTEMS.  ADDITIONALLY, AIRCRAFT OPERATING IN THE ABOVE-NAMED AREA MAY ENCOUNTER \nINADVERTENT GPS INTERFERENCE AND OTHER COMMUNICATIONS JAMMING, WHICH COULD OCCUR \nWITH LITTLE OR NO WARNING.  THOSE PERSONS DESCRIBED IN PARAGRAPH A MUST REPORT SAFETY \nAND/OR SECURITY INCIDENTS TO THE FAA AT +1 202-267-3333.   \nADDITIONAL INFORMATION IS PROVIDED AT: \nHTTPS://WWW.FAA.GOV/AIR_TRAFFIC/PUBLICATIONS/US_RESTRICTIONS/ \nSFC – UNL; 17 FEB 19:54 2020 UNTIL PERM. CREATED: 14 FEB 20:20 2020"
+    },
+    {
+      "notamId": "A0005/22",
+      "title": "KICZ NOTAM A0005/22 — Security — United States of America Prohibition Against Certain Flights in the specified areas of the Moscow ( UUWV ), Samara ( UWWW ) and Rostov-Na Donu ( URRV ) Flight Information Regions ( FIR )",
+      "pdfUrl": "https://www.faa.gov/air_traffic/publications/us_restrictions/media/KICZ_A0005-22_Prohibitory_NOTAM-Russia_MOSCOW_SAMARA_and_ROSTOV_FIRs_(20220224_1930Z).pdf",
+      "pdfSha256": "77b8e53893098081e287bf136f6cba3c77d450765bde2ec6bb744688d93863b8",
+      "pdfSizeBytes": 409067,
+      "downloadStatus": "downloaded",
+      "restrictionType": "prohibition",
+      "pointerOnly": false,
+      "affectedFirs": [
+        {
+          "firCode": "ACTI",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "AIRS",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "ALTI",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "AREA",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "ASSO",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "ATIN",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "ATIO",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "BOUN",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "CIAT",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "DARI",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "DECI",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "DIAT",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "DNIP",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "DONU",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "EMER",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "EROP",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "EXTE",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "FIRS",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "FLIG",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "GENC",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "IFIE",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "IMME",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "INCL",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "INFO",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "IRED",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "IRIN",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "KYIV",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "LATE",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "LIMI",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "MOSC",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "OPER",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "PACE",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "PORT",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "REGI",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "REQU",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "RISK",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "RMAT",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "ROST",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "SAFE",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "SAMA",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "SIMF",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "SION",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "SITU",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "SPEC",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "THAT",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "TUDE",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "UDES",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "UKBU",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "UKBV",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "UKDV",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "UKFV",
+          "geometryFeatureIds": [
+            2450,
+            2460
+          ],
+          "geometryAvailable": true
+        },
+        {
+          "firCode": "UPPE",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "URRV",
+          "geometryFeatureIds": [
+            2458
+          ],
+          "geometryAvailable": true
+        },
+        {
+          "firCode": "UUWV",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "UWWW",
+          "geometryFeatureIds": [
+            2448
+          ],
+          "geometryAvailable": true
+        },
+        {
+          "firCode": "WITH",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        }
+      ],
+      "appliesTo": [
+        "US_AIR_CARRIERS",
+        "FAA_AIRMAN_CERTIFICATE_HOLDERS",
+        "US_REGISTERED_AIRCRAFT"
+      ],
+      "applicabilityText": ". THIS NOTAM APPLIES TO: ALL U.S. AIR CARRIERS AND COMMERCIAL OPERATORS; ALL \nPERSONS EXERCISING THE PRIVILEGES OF AN AIRMAN CERTIFICATE ISSUED BY THE FAA, EXCEPT SUCH \nPERSONS OPERATING U.S.-REGISTERED AIRCRAFT FOR A FOREIGN AIR CARRIER; AND ALL OPERATORS OF \nCIVIL AIRCRAFT REGISTERED IN THE UNITED STATES, EXCEPT WHEN THE OPERATOR OF SUCH AIRCRAFT \nIS A FOREIGN AIR CARRIER.",
+      "permittedOperationsText": ". THIS NOTAM DOES NOT PROHIBIT PERSONS DESCRIBED IN PARAGRAPH A \n(APPLICABILITY) ABOVE FROM CONDUCTING FLIGHT OPERATIONS IN THE ABOVE-NAMED AREA WHEN \nSUCH OPERATIONS ARE AUTHORIZED EITHER BY ANOTHER AGENCY OF THE UNITED STATES \nGOVERNMENT WITH THE APPROVAL OF THE FAA OR BY A DEVIATION, EXEMPTION, OR OTHER \nAUTHORIZATION ISSUED BY THE FAA ADMINISTRATOR. OPERATORS MUST CALL THE FAA WASHINGTON \nOPERATIONS CENTER AT 202-267-3333 TO INITIATE COORDINATION FOR FAA AUTHORIZATION TO \nCONDUCT OPERATIONS.  \nC. EMERGENCY SITUATIONS. IN AN EMERGENCY REQUIRING IMMEDIATE DECISION AND ACTION FOR \nTHE SAFETY OF THE FLIGHT, THE PILOT IN COMMAND OF AN AIRCRAFT MAY DEVIATE FROM THIS \nNOTAM TO THE EXTENT REQUIRED BY THAT EMERGENCY. \nTHIS NOTAM IS AN EMERGENCY ORDER ISSUED UNDER 49 USC 40113(A), 44701(A)(5), AND 46105(C). \nADDITIONAL INFORMATION IS PROVIDED AT: \nHTTPS://WWW.FAA.GOV/AIR_TRAFFIC/PUBLICATIONS/US_RESTRICTIONS/ \nSFC—FL999: 24 FEB 19:30 2022 UNTIL PERM. CREATED: 24 FEB 19:30 2022",
+      "exceptionsText": "",
+      "validityText": [
+        "B. PERMITTED OPERATIONS. THIS NOTAM DOES NOT PROHIBIT PERSONS DESCRIBED IN PARAGRAPH A",
+        "SFC—FL999: 24 FEB 19:30 2022 UNTIL PERM. CREATED: 24 FEB 19:30 2022"
+      ],
+      "permanentUntilCancelledText": true,
+      "currentnessVerified": false,
+      "currentnessStatus": "listed_on_FAA_PRN_page; live NOTAM amendments/cancellations not independently checked",
+      "rawPdfText": "KICZ A0005/22 SECURITY.. - UNITED STATES OF AMERICA PROHIBITION AGAINST CERTAIN FLIGHTS IN \nSPECIFIED AREAS OF THE MOSCOW (UUWV), SAMARA (UWWW) AND ROSTOV-NA DONU FIR (URRV) \nFLIGHT INFORMATION REGIONS. \nTHOSE PERSONS DESCRIBED IN PARAGRAPH A (APPLICABILITY) BELOW ARE PROHIBITED FROM \nOPERATING AT ALL ALTITUDES IN THE MOSCOW FLIGHT INFORMATION REGION (FIR) (UUWV), THE \nSAMARA FIR (UWWW), AND THE ROSTOV-NA DONU FIR (URRV) WITHIN 160NM OF THE BOUNDARIES \nWITH THE DNIPRO FIR (UKDV), THE SIMFEROPOL FIR (UKFV), AND THE KYIV FIR (UKBV) (INCLUDES THAT \nPORTION OF THE KYIV UPPER INFORMATION REGION (UIR) (UKBU) AIRSPACE WITHIN THE LATERAL \nLIMITS OF THE UKDV, UKFV, AND UKBV FIRS) DUE TO SAFETY-OF FLIGHT RISKS ASSOCIATED WITH \nONGOING HOSTILITIES. \nA. APPLICABILITY. THIS NOTAM APPLIES TO: ALL U.S. AIR CARRIERS AND COMMERCIAL OPERATORS; ALL \nPERSONS EXERCISING THE PRIVILEGES OF AN AIRMAN CERTIFICATE ISSUED BY THE FAA, EXCEPT SUCH \nPERSONS OPERATING U.S.-REGISTERED AIRCRAFT FOR A FOREIGN AIR CARRIER; AND ALL OPERATORS OF \nCIVIL AIRCRAFT REGISTERED IN THE UNITED STATES, EXCEPT WHEN THE OPERATOR OF SUCH AIRCRAFT \nIS A FOREIGN AIR CARRIER. \nB. PERMITTED OPERATIONS. THIS NOTAM DOES NOT PROHIBIT PERSONS DESCRIBED IN PARAGRAPH A \n(APPLICABILITY) ABOVE FROM CONDUCTING FLIGHT OPERATIONS IN THE ABOVE-NAMED AREA WHEN \nSUCH OPERATIONS ARE AUTHORIZED EITHER BY ANOTHER AGENCY OF THE UNITED STATES \nGOVERNMENT WITH THE APPROVAL OF THE FAA OR BY A DEVIATION, EXEMPTION, OR OTHER \nAUTHORIZATION ISSUED BY THE FAA ADMINISTRATOR. OPERATORS MUST CALL THE FAA WASHINGTON \nOPERATIONS CENTER AT 202-267-3333 TO INITIATE COORDINATION FOR FAA AUTHORIZATION TO \nCONDUCT OPERATIONS.  \nC. EMERGENCY SITUATIONS. IN AN EMERGENCY REQUIRING IMMEDIATE DECISION AND ACTION FOR \nTHE SAFETY OF THE FLIGHT, THE PILOT IN COMMAND OF AN AIRCRAFT MAY DEVIATE FROM THIS \nNOTAM TO THE EXTENT REQUIRED BY THAT EMERGENCY. \nTHIS NOTAM IS AN EMERGENCY ORDER ISSUED UNDER 49 USC 40113(A), 44701(A)(5), AND 46105(C). \nADDITIONAL INFORMATION IS PROVIDED AT: \nHTTPS://WWW.FAA.GOV/AIR_TRAFFIC/PUBLICATIONS/US_RESTRICTIONS/ \nSFC—FL999: 24 FEB 19:30 2022 UNTIL PERM. CREATED: 24 FEB 19:30 2022"
+    },
+    {
+      "notamId": "A0028/19",
+      "title": "KICZ NOTAM A0028/19 — Security — Somalia Pointer NOTAM",
+      "pdfUrl": "https://www.faa.gov/air_traffic/publications/us_restrictions/media/KICZ_Pointer_NOTAM_A0028-19_Somalia_FIR_SFAR_107.pdf",
+      "pdfSha256": "445372446c61a62c4b8114bbdef1f795b922dc11e926ea805db5a08b7f13290d",
+      "pdfSizeBytes": 177659,
+      "downloadStatus": "downloaded",
+      "restrictionType": "pointer_only",
+      "pointerOnly": true,
+      "affectedFirs": [
+        {
+          "firCode": "SFAR",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        }
+      ],
+      "appliesTo": [],
+      "applicabilityText": "",
+      "permittedOperationsText": "",
+      "exceptionsText": "",
+      "validityText": [
+        "SFC – 259; 11 DEC 13:00 2019 UNTIL 07 JAN 23:59 2023. CREATED 11 DEC 12:57 2019"
+      ],
+      "permanentUntilCancelledText": false,
+      "currentnessVerified": false,
+      "currentnessStatus": "listed_on_FAA_PRN_page; live NOTAM amendments/cancellations not independently checked",
+      "rawPdfText": "A0028/19 - SECURITY..UNITED STATES OF AMERICA FLIGHT PROHIBITION \nAGAINST CERTAIN FLIGHTS IN THE TERRITORY AND AIRSPACE OF SOMALIA  \n14 CFR 91.1613 SPECIAL FEDERAL AVIATION REGULATION (SFAR) NO. 107— PROHIBITION AGAINST \nCERTAIN FLIGHTS IN THE TERRITORY AND AIRSPACE OF SOMALIA WAS PUBLISHED IN THE FEDERAL \nREGISTER ON 11 DEC 2019 AND WAS EFFECTIVE IMMEDIATELY.  \nADDITIONAL INFORMATION IS PROVIDED AT: \nHTTPS://WWW.FAA.GOV/AIR_TRAFFIC/PUBLICATIONS/US_RESTRICTIONS/  \nSFC – 259; 11 DEC 13:00 2019 UNTIL 07 JAN 23:59 2023. CREATED 11 DEC 12:57 2019"
+    },
+    {
+      "notamId": "A0053/20",
+      "title": "KICZ NOTAM A0053/20 — Security — Damascus Pointer NOTAM",
+      "pdfUrl": "https://www.faa.gov/air_traffic/publications/us_restrictions/media/KICZ_Pointer_NOTAM_A0053-20_Syria-SFAR_114.pdf",
+      "pdfSha256": "269b25dd2164c06c4228fa36484cc634c6ae7ec0201b9267e9e418197ccf4549",
+      "pdfSizeBytes": 178670,
+      "downloadStatus": "downloaded",
+      "restrictionType": "pointer_only",
+      "pointerOnly": true,
+      "affectedFirs": [
+        {
+          "firCode": "AGAI",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "CERT",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "DAMA",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "FLIG",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "INFO",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "OSTT",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "REGI",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "RMAT",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "SCUS",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "SFAR",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        }
+      ],
+      "appliesTo": [],
+      "applicabilityText": "",
+      "permittedOperationsText": "",
+      "exceptionsText": "",
+      "validityText": [
+        "SFC – UNL, 27 NOV 11:18 2020 UNTIL 30 DEC 23:59 2023 ESTIMATED. CREATED: 27 NOV 11:23"
+      ],
+      "permanentUntilCancelledText": false,
+      "currentnessVerified": false,
+      "currentnessStatus": "listed_on_FAA_PRN_page; live NOTAM amendments/cancellations not independently checked",
+      "rawPdfText": "A0053/20 - SECURITY.. UNITED STATES OF AMERICA FLIGHT PROHIBITION \nAGAINST CERTAIN FLIGHTS IN THE DAMASCUS FLIGHT INFORMATION REGION \n(FIR) (OSTT)   \n14 CFR 91.1609 SPECIAL FEDERAL AVIATION REGULATION (SFAR) NO. 114— PROHIBITION \nAGAINST CERTAIN FLIGHTS IN THE DAMASCUS FLIGHT INFORMATION REGION (FIR) (OSTT) WAS \nPUBLISHED IN THE FEDERAL REGISTER ON 27 NOV 2020 AND WAS EFFECTIVE IMMEDIATELY.   \nADDITIONAL INFORMATION IS PROVIDED AT: \nHTTPS://WWW.FAA.GOV/AIR_TRAFFIC/PUBLICATIONS/US_RESTRICTIONS/ \n \n \nSFC – UNL, 27 NOV 11:18 2020 UNTIL 30 DEC 23:59 2023 ESTIMATED. CREATED: 27 NOV 11:23 \n2020"
+    },
+    {
+      "notamId": "A0009/18",
+      "title": "KICZ NOTAM A0009/18 — Security — United States of America Advisory for Airspace Immediately Adjacent to Damascus Flight Information Region ( OSTT FIR )",
+      "pdfUrl": "https://www.faa.gov/air_traffic/publications/us_restrictions/media/KICZ_Advisory_NOTAM_A0009-18-Syria.pdf",
+      "pdfSha256": "190f2f3e8291a61405d2236c152fc49c2324b917af38416af95c733859f367c1",
+      "pdfSizeBytes": 181982,
+      "downloadStatus": "downloaded",
+      "restrictionType": "prohibition",
+      "pointerOnly": false,
+      "affectedFirs": [
+        {
+          "firCode": "ACTI",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "ADJA",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "AGAI",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "AIRS",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "AROU",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "CAUT",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "CENT",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "CERT",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "CISE",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "DAMA",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "EXER",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "FLIG",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "FROM",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "HEIG",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "HTEN",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "IBIT",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "ICAL",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "INFO",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "INTO",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "ITOR",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "LATI",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "MILE",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "MILI",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "MUST",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "NAUT",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "OSTT",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "PACE",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "PROH",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "REGI",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "REGU",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "REVI",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "RMAT",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "SCUS",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "SHOU",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "STRA",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "SYRI",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "TARY",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "TERR",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "VITY",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "WITH",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "YING",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        }
+      ],
+      "appliesTo": [
+        "US_AIR_CARRIERS",
+        "FAA_AIRMAN_CERTIFICATE_HOLDERS",
+        "US_REGISTERED_AIRCRAFT"
+      ],
+      "applicabilityText": ". THIS NOTAM APPLIES TO: ALL U.S. AIR CARRIERS AND COMMERCIAL \nOPERATORS; ALL PERSONS EXERCISING THE PRIVILEGES OF AN AIRMAN CERTIFICATE ISSUED BY \nTHE FAA, EXCEPT SUCH PERSONS OPERATING U.S.-REGISTERED AIRCRAFT FOR A FOREIGN AIR \nCARRIER; AND ALL OPERATORS OF AIRCRAFT REGISTERED IN THE UNITED STATES, EXCEPT \nWHERE THE OPERATOR OF SUCH AIRCRAFT IS A FOREIGN AIR CARRIER.  \nB. PLANNING. THOSE PERSONS DESCRIBED IN PARAGRAPH A PLANNING TO OPERATE WITHIN \n200 NAUTICAL MILES OF THE OSTT FIR  SHOULD EXERCISE CAUTION AND MUST REVIEW \nCURRENT SECURITY/THREAT INFORMATION AND NOTAMS AND COMPLY WITH ALL APPLICABLE \nFAA REGULATIONS, OPERATIONS SPECIFICATIONS, MANAGEMENT SPECIFICATIONS, AND \nLETTERS OF AUTHORIZATION, INCLUDING UPDATING B450.  \nC. OPERATIONS. EXERCISE CAUTION DURING FLIGHT OPERATIONS IN THE ABOVE NAMED AREA \nDUE TO HEIGHTENED MILITARY ACTIVITY IN OR AROUND SYRIA AND THE POTENTIAL RISK TO \nU.S. CIVIL AVIATION IN THE REGION.  THOSE PERSONS DESCRIBED IN PARAGRAPH A MUST \nREPORT ANY SAFETY/SECURITY INCIDENTS TO THE FAA AT ASH-AXE-CITE-WATCH@FAA.GOV OR \n+1 202-267-3333 or 1-844-412-1794.   \nADDITIONAL INFORMATION IS PROVIDED AT: \nHTTPS://WWW.FAA.GOV/AIR_TRAFFIC/PUBLICATIONS/US_RESTRICTIONS/  \nSFC – UNL; 14 APR 00:16 2018 UNTIL PERM. CREATED: 14 APR 01:04 2018",
+      "permittedOperationsText": "",
+      "exceptionsText": "",
+      "validityText": [
+        "SFC – UNL; 14 APR 00:16 2018 UNTIL PERM. CREATED: 14 APR 01:04 2018"
+      ],
+      "permanentUntilCancelledText": true,
+      "currentnessVerified": false,
+      "currentnessStatus": "listed_on_FAA_PRN_page; live NOTAM amendments/cancellations not independently checked",
+      "rawPdfText": "KICZ A0009/18 - SECURITY..UNITED STATES OF AMERICA ADVISORY FOR \nAIRSPACE IMMEDIATELY ADJACENT TO DAMASCUS FLIGHT INFORMATION \nREGION (OSTT FIR)   \nTHOSE PERSONS DESCRIBED IN PARAGRAPH A BELOW ARE ADVISED TO EXERCISE CAUTION \nWHEN OPERATING IN THE AIRSPACE WITHIN 200 NAUTICAL MILES OF THE DAMASCUS FLIGHT \nINFORMATION REGION (OSTT FIR) DUE TO HEIGHTENED MILITARY ACTIVITY IN OR AROUND \nSYRIA.  THIS MILITARY ACTIVITY MIGHT INCLUDE GPS INTERFERENCE, COMMUNICATIONS \nJAMMING, AND POSSIBLE ERRANT LONG-RANGE SURFACE-TO-AIR MISSILES ORIGINATING \nFROM SYRIAN TERRITORY, WITHIN THE OSTT FIR, AND STRAYING INTO ADJACENT AIRSPACE, \nTHAT COULD POSE AN INADVERTENT RISK TO U.S. CIVIL AVIATION OPERATING IN THIS REGION. \nTITLE 14, CODE OF FEDERAL REGULATIONS, SECTION 91.1609, SPECIAL FEDERAL AVIATION \nREGULATION NO. 114—PROHIBITION AGAINST CERTAIN FLIGHTS IN THE DAMASCUS FIR \nREMAINS IN EFFECT. \nA. APPLICABILITY. THIS NOTAM APPLIES TO: ALL U.S. AIR CARRIERS AND COMMERCIAL \nOPERATORS; ALL PERSONS EXERCISING THE PRIVILEGES OF AN AIRMAN CERTIFICATE ISSUED BY \nTHE FAA, EXCEPT SUCH PERSONS OPERATING U.S.-REGISTERED AIRCRAFT FOR A FOREIGN AIR \nCARRIER; AND ALL OPERATORS OF AIRCRAFT REGISTERED IN THE UNITED STATES, EXCEPT \nWHERE THE OPERATOR OF SUCH AIRCRAFT IS A FOREIGN AIR CARRIER.  \nB. PLANNING. THOSE PERSONS DESCRIBED IN PARAGRAPH A PLANNING TO OPERATE WITHIN \n200 NAUTICAL MILES OF THE OSTT FIR  SHOULD EXERCISE CAUTION AND MUST REVIEW \nCURRENT SECURITY/THREAT INFORMATION AND NOTAMS AND COMPLY WITH ALL APPLICABLE \nFAA REGULATIONS, OPERATIONS SPECIFICATIONS, MANAGEMENT SPECIFICATIONS, AND \nLETTERS OF AUTHORIZATION, INCLUDING UPDATING B450.  \nC. OPERATIONS. EXERCISE CAUTION DURING FLIGHT OPERATIONS IN THE ABOVE NAMED AREA \nDUE TO HEIGHTENED MILITARY ACTIVITY IN OR AROUND SYRIA AND THE POTENTIAL RISK TO \nU.S. CIVIL AVIATION IN THE REGION.  THOSE PERSONS DESCRIBED IN PARAGRAPH A MUST \nREPORT ANY SAFETY/SECURITY INCIDENTS TO THE FAA AT ASH-AXE-CITE-WATCH@FAA.GOV OR \n+1 202-267-3333 or 1-844-412-1794.   \nADDITIONAL INFORMATION IS PROVIDED AT: \nHTTPS://WWW.FAA.GOV/AIR_TRAFFIC/PUBLICATIONS/US_RESTRICTIONS/  \nSFC – UNL; 14 APR 00:16 2018 UNTIL PERM. CREATED: 14 APR 01:04 2018"
+    },
+    {
+      "notamId": "A0030/21",
+      "title": "KICZ NOTAM A0030/21 — Security — Ukraine Pointer NOTAM",
+      "pdfUrl": "https://www.faa.gov/air_traffic/publications/us_restrictions/media/KICZ_Pointer_NOTAM_A0030-21_Ukraine_SFAR_113_(20211006-1430Z).pdf",
+      "pdfSha256": "520142e5a7cd95a0f816f0cd3308b560e13c1cf2c9ffad538e852168d98944df",
+      "pdfSizeBytes": 405340,
+      "downloadStatus": "downloaded",
+      "restrictionType": "pointer_only",
+      "pointerOnly": true,
+      "affectedFirs": [
+        {
+          "firCode": "AGAI",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "CERT",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "DNIP",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "FLIG",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "INFO",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "REGI",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "RMAT",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "SFAR",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "UKDV",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        }
+      ],
+      "appliesTo": [],
+      "applicabilityText": "",
+      "permittedOperationsText": "",
+      "exceptionsText": "",
+      "validityText": [
+        "SFC - UNL; 6 OCT 14:25 2021 UNTIL 27 OCT 23:59 2023. CREATED 6 OCT 14:25 2021"
+      ],
+      "permanentUntilCancelledText": false,
+      "currentnessVerified": false,
+      "currentnessStatus": "listed_on_FAA_PRN_page; live NOTAM amendments/cancellations not independently checked",
+      "rawPdfText": "A0030/21 - SECURITY.. UNITED STATES OF AMERICA FLIGHT PROHIBITION \nAGAINST CERTAIN FLIGHTS IN THE DNIPRO (UKDV) FLIGHT INFORMATION \nREGION (FIR)  \n14 CFR 91.1607 SPECIAL FEDERAL AVIATION REGULATION (SFAR) NO. 113— PROHIBITION \nAGAINST CERTAIN FLIGHTS IN THE DNIPRO (UKDV) FLIGHT INFORMATION REGION (FIR) WAS \nPUBLISHED IN THE FEDERAL REGISTER ON 6 OCT 2021 AND WAS EFFECTIVE IMMEDIATELY. \nADDITIONAL INFORMATION IS PROVIDED AT: \nHTTPS://WWW.FAA.GOV/AIR_TRAFFIC/PUBLICATIONS/US_RESTRICTIONS/ \n \nSFC - UNL; 6 OCT 14:25 2021 UNTIL 27 OCT 23:59 2023. CREATED 6 OCT 14:25 2021"
+    },
+    {
+      "notamId": "A0004/22",
+      "title": "KICZ NOTAM A0004/22 — Security — United States of America Prohibition Against Certain Flights in the Lviv ( UKLV ), Kyiv ( UKBV ), Dnipro ( UKDV ), Simferopol ( UKFV ), and Odesa ( UKOV ) Flight Information Regions ( FIR ), as well as, the Kyiv Upper Information Region ( UIR ) ( UKBU )",
+      "pdfUrl": "https://www.faa.gov/air_traffic/publications/us_restrictions/media/KICZ_A0004-22_Prohibitory_NOTAM-Ukraine_all_FIRs_and_UIR_(2022024_1930Z).pdf",
+      "pdfSha256": "91700a23f6de2dcc8f4892a2fc7cc8c1eedfee12cc0451e6c8b6aa202815cbc9",
+      "pdfSizeBytes": 408396,
+      "downloadStatus": "downloaded",
+      "restrictionType": "prohibition",
+      "pointerOnly": false,
+      "affectedFirs": [
+        {
+          "firCode": "ACTI",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "ALTI",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "ASSO",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "ATIN",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "ATIO",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "CIAT",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "DECI",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "DIAT",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "DNIP",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "EMER",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "EROP",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "EXTE",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "FLIG",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "GENC",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "IMME",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "INFO",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "IRED",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "IRIN",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "KYIV",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "LVIV",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "ODES",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "ONGO",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "OPER",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "REGI",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "REQU",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "RISK",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "RMAT",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "SAFE",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "SIMF",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "SION",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "SITU",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "THAT",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "TUDE",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "UKBU",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "UKBV",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "UKDV",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "UKFV",
+          "geometryFeatureIds": [
+            2450,
+            2460
+          ],
+          "geometryAvailable": true
+        },
+        {
+          "firCode": "UKLV",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "UKOV",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "UPPE",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "WELL",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "WITH",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        }
+      ],
+      "appliesTo": [
+        "US_AIR_CARRIERS",
+        "FAA_AIRMAN_CERTIFICATE_HOLDERS",
+        "US_REGISTERED_AIRCRAFT"
+      ],
+      "applicabilityText": ". THIS NOTAM APPLIES TO: ALL U.S. AIR CARRIERS AND COMMERCIAL OPERATORS; ALL \nPERSONS EXERCISING THE PRIVILEGES OF AN AIRMAN CERTIFICATE ISSUED BY THE FAA, EXCEPT SUCH \nPERSONS OPERATING U.S.-REGISTERED AIRCRAFT FOR A FOREIGN AIR CARRIER; AND ALL OPERATORS OF \nCIVIL AIRCRAFT REGISTERED IN THE UNITED STATES, EXCEPT WHEN THE OPERATOR OF SUCH AIRCRAFT \nIS A FOREIGN AIR CARRIER.",
+      "permittedOperationsText": ". THIS NOTAM DOES NOT PROHIBIT PERSONS DESCRIBED IN PARAGRAPH A \n(APPLICABILITY) ABOVE FROM CONDUCTING FLIGHT OPERATIONS IN THE ABOVE-NAMED AREA WHEN \nSUCH OPERATIONS ARE AUTHORIZED EITHER BY ANOTHER AGENCY OF THE UNITED STATES \nGOVERNMENT WITH THE APPROVAL OF THE FAA OR BY A DEVIATION, EXEMPTION, OR OTHER \nAUTHORIZATION ISSUED BY THE FAA ADMINISTRATOR. OPERATORS MUST CALL THE FAA WASHINGTON \nOPERATIONS CENTER AT 202-267-3333 TO INITIATE COORDINATION FOR FAA AUTHORIZATION TO \nCONDUCT OPERATIONS.  \nC. EMERGENCY SITUATIONS. IN AN EMERGENCY REQUIRING IMMEDIATE DECISION AND ACTION FOR \nTHE SAFETY OF THE FLIGHT, THE PILOT IN COMMAND OF AN AIRCRAFT MAY DEVIATE FROM THIS \nNOTAM TO THE EXTENT REQUIRED BY THAT EMERGENCY. \nTHIS NOTAM IS AN EMERGENCY ORDER ISSUED UNDER 49 USC 40113(A), 44701(A)(5), AND 46105(C). \nADDITIONAL INFORMATION IS PROVIDED AT: \nHTTPS://WWW.FAA.GOV/AIR_TRAFFIC/PUBLICATIONS/US_RESTRICTIONS/ \nSFC—FL999: 24 FEB 19:30 2022 UNTIL PERM. CREATED: 24 FEB 19:30 2022",
+      "exceptionsText": "",
+      "validityText": [
+        "B. PERMITTED OPERATIONS. THIS NOTAM DOES NOT PROHIBIT PERSONS DESCRIBED IN PARAGRAPH A",
+        "SFC—FL999: 24 FEB 19:30 2022 UNTIL PERM. CREATED: 24 FEB 19:30 2022"
+      ],
+      "permanentUntilCancelledText": true,
+      "currentnessVerified": false,
+      "currentnessStatus": "listed_on_FAA_PRN_page; live NOTAM amendments/cancellations not independently checked",
+      "rawPdfText": "KICZ A0004/22 SECURITY..UNITED STATES OF AMERICA PROHIBITION AGAINST CERTAIN FLIGHTS IN \nTHE LVIV (UKLV), KYIV (UKBV), DNIPRO (UKDV), SIMFEROPOL (UKFV), AND ODESA (UKOV) FLIGHT \nINFORMATION REGIONS, AS WELL AS, THE KYIV UPPER INFORMATION REGION (UIR) (UKBU) \nTHOSE PERSONS DESCRIBED IN PARAGRAPH A (APPLICABILITY) BELOW ARE PROHIBITED FROM \nOPERATING AT ALL ALTITUDES IN THE LVIV FLIGHT INFORMATION REGION (FIR) (UKLV), KYIV FIR (UKBV), \nDNIPRO FIR (UKDV), SIMFEROPOL FIR (UKFV), AND ODESA FIR (UKOV), AS WELL AS THE KYIV UPPER \nINFORMATION REGION (UIR) (UKBU), DUE TO SAFETY-OF-FLIGHT RISKS ASSOCIATED WITH ONGOING \nHOSTILITIES. \nA. APPLICABILITY. THIS NOTAM APPLIES TO: ALL U.S. AIR CARRIERS AND COMMERCIAL OPERATORS; ALL \nPERSONS EXERCISING THE PRIVILEGES OF AN AIRMAN CERTIFICATE ISSUED BY THE FAA, EXCEPT SUCH \nPERSONS OPERATING U.S.-REGISTERED AIRCRAFT FOR A FOREIGN AIR CARRIER; AND ALL OPERATORS OF \nCIVIL AIRCRAFT REGISTERED IN THE UNITED STATES, EXCEPT WHEN THE OPERATOR OF SUCH AIRCRAFT \nIS A FOREIGN AIR CARRIER.  \nB. PERMITTED OPERATIONS. THIS NOTAM DOES NOT PROHIBIT PERSONS DESCRIBED IN PARAGRAPH A \n(APPLICABILITY) ABOVE FROM CONDUCTING FLIGHT OPERATIONS IN THE ABOVE-NAMED AREA WHEN \nSUCH OPERATIONS ARE AUTHORIZED EITHER BY ANOTHER AGENCY OF THE UNITED STATES \nGOVERNMENT WITH THE APPROVAL OF THE FAA OR BY A DEVIATION, EXEMPTION, OR OTHER \nAUTHORIZATION ISSUED BY THE FAA ADMINISTRATOR. OPERATORS MUST CALL THE FAA WASHINGTON \nOPERATIONS CENTER AT 202-267-3333 TO INITIATE COORDINATION FOR FAA AUTHORIZATION TO \nCONDUCT OPERATIONS.  \nC. EMERGENCY SITUATIONS. IN AN EMERGENCY REQUIRING IMMEDIATE DECISION AND ACTION FOR \nTHE SAFETY OF THE FLIGHT, THE PILOT IN COMMAND OF AN AIRCRAFT MAY DEVIATE FROM THIS \nNOTAM TO THE EXTENT REQUIRED BY THAT EMERGENCY. \nTHIS NOTAM IS AN EMERGENCY ORDER ISSUED UNDER 49 USC 40113(A), 44701(A)(5), AND 46105(C). \nADDITIONAL INFORMATION IS PROVIDED AT: \nHTTPS://WWW.FAA.GOV/AIR_TRAFFIC/PUBLICATIONS/US_RESTRICTIONS/ \nSFC—FL999: 24 FEB 19:30 2022 UNTIL PERM. CREATED: 24 FEB 19:30 2022"
+    },
+    {
+      "notamId": "A0013/19",
+      "title": "KICZ NOTAM A0013/19 — Security — United States of America Prohibition for Venezuela",
+      "pdfUrl": "https://www.faa.gov/air_traffic/publications/us_restrictions/media/KICZ_A0013-19_Prohibition_NOTAM-Venezuela.pdf",
+      "pdfSha256": "e3e88761b657ac4097182cd445f723d876dd2e4cfb62684fabd45455ae0f3f53",
+      "pdfSizeBytes": 182274,
+      "downloadStatus": "downloaded",
+      "restrictionType": "prohibition",
+      "pointerOnly": false,
+      "affectedFirs": [
+        {
+          "firCode": "ACTI",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "ATIO",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "DECI",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "DIAT",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "EMER",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "EXTE",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "GENC",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "IMME",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "IRED",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "IRES",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "REQU",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "SION",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "SITU",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "THAT",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        }
+      ],
+      "appliesTo": [],
+      "applicabilityText": "",
+      "permittedOperationsText": ". THIS NOTAM DOES NOT PROHIBIT PERSONS DESCRIBED IN PARAGRAPH \nA (APPLICABILITY) FROM CONDUCTING FLIGHT OPERATIONS IN THE ABOVE-NAMED AREA WHEN \nSUCH OPERATIONS ARE AUTHORIZED EITHER BY ANOTHER AGENCY OF THE UNITED STATES \nGOVERNMENT WITH THE APPROVAL OF THE FAA OR BY A DEVIATION, EXEMPTION, OR OTHER \nAUTHORIZATION ISSUED BY THE FAA ADMINISTRATOR. OPERATORS MUST CALL THE FAA \nWASHINGTON OPERATIONS CENTER AT 202-267-3333 TO INITIATE COORDINATION FOR FAA \nAUTHORIZATION TO CONDUCT OPERATIONS. \nC. ALLOWANCES. PERSONS DESCRIBED IN PARAGRAPH A ABOVE WHO ARE IN THE TERRITORY AND \nAIRSPACE OF VENEZUELA AT THE TIME THIS NOTAM IS ISSUED MAY DEPART THE TERRITORY AND \nAIRSPACE OF VENEZUELA BY THE MOST EXPEDITIOUS POSSIBLE ROUTE WITHIN 48 HOURS FROM THE \nTIME THIS NOTAM IS ISSUED, IF THE PILOT IN COMMAND DETERMINES THAT THE OPERATION CAN \nBE CONDUCTED SAFELY.",
+      "exceptionsText": "",
+      "validityText": [
+        "260 BY THE PERSONS DESCRIBED IN PARAGRAPH A BELOW ARE PROHIBITED UNTIL FURTHER ADVISED",
+        "B. PERMITTED OPERATIONS. THIS NOTAM DOES NOT PROHIBIT PERSONS DESCRIBED IN PARAGRAPH",
+        "SFC – FL259; 01 MAY 00:25 2019 UNTIL PERM. CREATED: 01 MAY 00:28 2019"
+      ],
+      "permanentUntilCancelledText": true,
+      "currentnessVerified": false,
+      "currentnessStatus": "listed_on_FAA_PRN_page; live NOTAM amendments/cancellations not independently checked",
+      "rawPdfText": "KICZ A0013/19 - SECURITY..UNITED STATES OF AMERICA PROHIBITION FOR \nVENEZUELA  \nALL FLIGHT OPERATIONS IN THE TERRITORY AND AIRSPACE OF VENEZUELA AT ALTITUDES BELOW FL \n260 BY THE PERSONS DESCRIBED IN PARAGRAPH A BELOW ARE PROHIBITED UNTIL FURTHER ADVISED \nDUE TO INCREASING POLITICAL INSTABILITY AND TENSIONS IN VENEZUELA AND THE ASSOCIATED \nINADVERTENT RISK TO FLIGHT OPERATIONS. \nA.  APPLICABILITY. THIS NOTAM APPLIES TO: ALL U.S. AIR CARRIERS AND COMMERCIAL OPERATORS; \nALL PERSONS EXERCISING THE PRIVILEGES OF AN AIRMAN CERTIFICATE ISSUED BY THE FAA, EXCEPT \nSUCH PERSONS OPERATING U.S.‐REGISTERED AIRCRAFT FOR A FOREIGN AIR CARRIER; AND ALL \nOPERATORS OF AIRCRAFT REGISTERED IN THE UNITED STATES, EXCEPT WHERE THE OPERATOR OF \nSUCH AIRCRAFT IS A FOREIGN AIR CARRIER. \nB. PERMITTED OPERATIONS. THIS NOTAM DOES NOT PROHIBIT PERSONS DESCRIBED IN PARAGRAPH \nA (APPLICABILITY) FROM CONDUCTING FLIGHT OPERATIONS IN THE ABOVE-NAMED AREA WHEN \nSUCH OPERATIONS ARE AUTHORIZED EITHER BY ANOTHER AGENCY OF THE UNITED STATES \nGOVERNMENT WITH THE APPROVAL OF THE FAA OR BY A DEVIATION, EXEMPTION, OR OTHER \nAUTHORIZATION ISSUED BY THE FAA ADMINISTRATOR. OPERATORS MUST CALL THE FAA \nWASHINGTON OPERATIONS CENTER AT 202-267-3333 TO INITIATE COORDINATION FOR FAA \nAUTHORIZATION TO CONDUCT OPERATIONS. \nC. ALLOWANCES. PERSONS DESCRIBED IN PARAGRAPH A ABOVE WHO ARE IN THE TERRITORY AND \nAIRSPACE OF VENEZUELA AT THE TIME THIS NOTAM IS ISSUED MAY DEPART THE TERRITORY AND \nAIRSPACE OF VENEZUELA BY THE MOST EXPEDITIOUS POSSIBLE ROUTE WITHIN 48 HOURS FROM THE \nTIME THIS NOTAM IS ISSUED, IF THE PILOT IN COMMAND DETERMINES THAT THE OPERATION CAN \nBE CONDUCTED SAFELY. \nD. EMERGENCY SITUATIONS. IN AN EMERGENCY THAT REQUIRES IMMEDIATE DECISION AND ACTION \nFOR THE SAFETY OF THE FLIGHT, THE PILOT IN COMMAND OF AN AIRCRAFT MAY DEVIATE FROM THIS \nNOTAM TO THE EXTENT REQUIRED BY THAT EMERGENCY. \nTHIS NOTAM IS AN EMERGENCY ORDER ISSUED UNDER 49 USC 40113(A) AND 46105(C). \nSFC – FL259; 01 MAY 00:25 2019 UNTIL PERM. CREATED: 01 MAY 00:28 2019"
+    },
+    {
+      "notamId": "A0038/21",
+      "title": "KICZ NOTAM A0038/21 — Security — Yemen Pointer NOTAM",
+      "pdfUrl": "https://www.faa.gov/air_traffic/publications/us_restrictions/media/KICZ_Yemen-Sanaa_NOTAM_A0038-21_Plain_Text_20211207_2100Z.pdf",
+      "pdfSha256": "5d94bdd293e3ef4a3f5e423ed5b50daea811bdd592dc302aed0d4a91eac35194",
+      "pdfSizeBytes": 406565,
+      "downloadStatus": "downloaded",
+      "restrictionType": "pointer_only",
+      "pointerOnly": true,
+      "affectedFirs": [
+        {
+          "firCode": "AREA",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "CERT",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "FLIG",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "IFIE",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "INFO",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "OYSC",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "REGI",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "RMAT",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "SANA",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "SFAR",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "SPEC",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        }
+      ],
+      "appliesTo": [],
+      "applicabilityText": "",
+      "permittedOperationsText": "",
+      "exceptionsText": "",
+      "validityText": [
+        "SFC – UNL; 07 DEC 19:15 2021 UNTIL 07 JAN 23:59 2025. CREATED 07 DEC 19:15 2021"
+      ],
+      "permanentUntilCancelledText": false,
+      "currentnessVerified": false,
+      "currentnessStatus": "listed_on_FAA_PRN_page; live NOTAM amendments/cancellations not independently checked",
+      "rawPdfText": "KICZ A0038/21 - SECURITY..UNITED STATES OF AMERICA FLIGHT PROHIBITION \nAGAINST CERTAIN FLIGHTS IN SPECIFIED AREAS OF THE SANAA FLIGHT \nINFORMATION REGION (FIR) (OYSC)  \n14 CFR 91.1611 SPECIAL FEDERAL AVIATION REGULATION (SFAR) NO. 115— PROHIBITION AGAINST \nCERTAIN FLIGHTS IN SPECIFIED AREAS OF THE SANAA FLIGHT INFORMATION REGION (FIR) (OYSC) WAS \nPUBLISHED IN THE FEDERAL REGISTER ON 11 DEC 2019 AND WAS EFFECTIVE IMMEDIATELY.  \nADDITIONAL INFORMATION IS PROVIDED AT: \nHTTPS://WWW.FAA.GOV/AIR_TRAFFIC/PUBLICATIONS/US_RESTRICTIONS/  \nSFC – UNL; 07 DEC 19:15 2021 UNTIL 07 JAN 23:59 2025. CREATED 07 DEC 19:15 2021"
+    }
+  ],
+  "sfarReferences": [
+    {
+      "title": "Special Federal Aviation Regulation ( SFAR ) 117 — Prohibition Against Certain Flights in the Tehran Flight Information Region ( FIR ) ( OIIX )",
+      "url": "https://www.federalregister.gov/documents/2022/09/20/2022-20316/extension-of-the-prohibition-against-certain-flights-in-the-tehran-flight-information-region-fir"
+    },
+    {
+      "title": "Special Federal Aviation Regulation ( SFAR ) 77 — Prohibition Against Certain Flights in the Baghdad Flight Information Region ( FIR ) ( ORBB )",
+      "url": "https://www.federalregister.gov/documents/2022/09/20/2022-20318/extension-of-the-prohibition-against-certain-flights-in-the-baghdad-flight-information-region-fir"
+    },
+    {
+      "title": "Special Federal Aviation Regulation ( SFAR ) 79 — Prohibition Against Certain Flights in the Pyongyang Flight Information Region ( FIR ) ( ZKKP )",
+      "url": "https://www.federalregister.gov/documents/2020/09/08/2020-19057/extension-of-the-prohibition-against-certain-flights-in-the-pyongyang-flight-information-region-fir"
+    },
+    {
+      "title": "Special Federal Aviation Regulation ( SFAR ) 112 — Prohibition Against Certain Flights in the Tripoli Flight Information Region ( FIR ) ( HLLL )",
+      "url": "https://www.federalregister.gov/documents/2020/07/27/2020-14721/prohibition-against-certain-flights-in-the-tripoli-flight-information-region-fir-hlll"
+    },
+    {
+      "title": "Special Federal Aviation Regulation ( SFAR ) 107 — Prohibition Against Certain Flights in the Territory and Airspace of Somalia",
+      "url": "https://www.federalregister.gov/documents/2019/12/11/2019-26597/extension-of-the-prohibition-against-certain-flights-in-the-territory-and-airspace-of-somalia"
+    },
+    {
+      "title": "Special Federal Aviation Regulation ( SFAR ) 114 — Prohibition Against Certain Flights in the Damascus Flight Information Region ( FIR ) ( OSTT )",
+      "url": "https://www.federalregister.gov/documents/2020/11/27/2020-25970/extension-of-the-prohibition-against-certain-flights-in-the-damascus-flight-information-region-fir"
+    },
+    {
+      "title": "Special Federal Aviation Regulation ( SFAR ) 113 — Prohibition Against Certain Flights in Specified Areas of the Dnipropetrovsk Flight Information Region ( FIR ) ( UKDV )",
+      "url": "https://www.faa.gov/air_traffic/publications/us_restrictions/media/Dnipro_SFAR_2021-21797-1.pdf"
+    }
+  ]
+}
