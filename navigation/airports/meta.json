@@ -3,7 +3,7 @@
   "airacCycle": null,
   "effectiveDate": null,
   "expiryDate": null,
-  "sha256": "aa5d3ebadde95f8bf4d9b574f0cf85c2285fbe2ba40fb3f9d82681070cf7d05d",
+  "sha256": "865a95d3678d1b2a55b1cb39aca073772d6aa9db18d6538d20e6c1336596f550",
   "licenceStatus": "CC0_public_domain_as_stated_by_provider",
   "sourceUrl": "https://davidmegginson.github.io/ourairports-data/airports.csv",
   "licenseName": "CC0 / Public Domain",
@@ -11,9 +11,9 @@
   "files": [
     {
       "path": "ourairports_airports.csv",
-      "sha256": "aa5d3ebadde95f8bf4d9b574f0cf85c2285fbe2ba40fb3f9d82681070cf7d05d",
+      "sha256": "865a95d3678d1b2a55b1cb39aca073772d6aa9db18d6538d20e6c1336596f550",
       "sizeBytes": 15903592
     }
   ],
-  "notes": "Source snapshot downloaded 2026-11-15. Not AIRAC-cycle data."
+  "notes": "Normalized OurAirports snapshot downloaded 2026-11-15. Not AIRAC-cycle data."
 }
