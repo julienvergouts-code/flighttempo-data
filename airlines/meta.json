@@ -8,14 +8,14 @@
   "files": [
     {
       "path": "airlines.csv",
-      "sha256": null,
+      "sha256": "3357c8fe4d0a78d33b955e5bf2749bac88953d9cc865c6b5268069406bcb66ad",
       "sizeBytes": 630
     },
     {
       "path": "route_rules.csv",
-      "sha256": null,
+      "sha256": "f5deb5ea849076cc5fa4e43204c439cb46b6c6f7192730f1b9fcb607acf61127",
       "sizeBytes": 1177
     }
   ],
-  "notes": "No AIRAC applicability. Per-file SHA-256 to be populated by build pipeline."
+  "notes": "No AIRAC applicability."
 }
