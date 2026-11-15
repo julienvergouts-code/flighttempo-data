@@ -23,7 +23,7 @@
     },
     {
       "path": "easa_safety_directives.json",
-      "sha256": "4d13215a8017a78b649241aaae42f6d287905bd27869a11886b612110d93995c",
+      "sha256": "7cba0609c3929db90e5d54dec133e0c4227f4d0ad7cab5e8e6e96d28be23797b",
       "sizeBytes": 3941,
       "recordCount": 2,
       "licenseStatus": "EASA_metadata_summary_source_acknowledged",
