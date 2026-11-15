@@ -76,11 +76,51 @@ jobs:
           PY
       - name: Verify EASA Russia and Minsk advisory coverage
         run: python3 tests/test_easa_airspace_coverage.py
+      - name: Refresh repository provenance checksums
+        run: |
+          python3 - <<'PY'
+          import datetime, hashlib, json
+          from pathlib import Path
+          def record(path):
+              raw = Path(path).read_bytes()
+              return hashlib.sha256(raw).hexdigest(), len(raw)
+          files = {
+              "easa-czibs": "airspace/advisories/easa_czibs.json",
+              "airspace-filter": "airspace/airspace_filter.json",
+              "easa-safety-directive-minsk": "airspace/advisories/easa_safety_directives.json",
+          }
+          root_path = Path("manifest.json")
+          root = json.loads(root_path.read_text())
+          for item in root.get("datasets", []):
+              rel = files.get(item.get("id"))
+              if rel:
+                  digest, size = record(rel)
+                  item["sha256"] = digest
+                  if item.get("id") == "airspace-filter":
+                      item["recordCount"] = len(json.loads(Path(rel).read_text()).get("activeAdvisories", []))
+          root["generatedAtUtc"] = datetime.datetime.now(datetime.timezone.utc).isoformat()
+          root_path.write_text(json.dumps(root, indent=2) + "\\n")
+          meta_path = Path("airspace/advisories/meta.json")
+          meta = json.loads(meta_path.read_text())
+          digest, size = record(files["easa-czibs"])
+          meta["sha256"] = digest
+          for item in meta.get("files", []):
+              rel = "airspace/advisories/" + item.get("path", "")
+              if rel in files.values():
+                  item["sha256"], item["sizeBytes"] = record(rel)
+          meta_path.write_text(json.dumps(meta, indent=2) + "\\n")
+          air_path = Path("airspace/meta.json")
+          air = json.loads(air_path.read_text())
+          for item in air.get("files", []):
+              if item.get("path") == "airspace_filter.json":
+                  item["sha256"], item["sizeBytes"] = record(files["airspace-filter"])
+          air_path.write_text(json.dumps(air, indent=2) + "\\n")
+          PY
       - name: Commit refreshed advisory datasets
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add airspace/advisories airspace/airspace_filter.json navigation_manifest.json
+          git add airspace/advisories airspace/airspace_filter.json navigation_manifest.json manifest.json airspace/meta.json
           git commit -m "data(airspace): refresh official EASA conflict-zone advisories" || echo "No advisory changes"
           git pull --rebase origin main
           git push
