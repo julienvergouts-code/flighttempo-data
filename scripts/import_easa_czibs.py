@@ -216,6 +216,21 @@ def normalize():
                             "reason": fir.get("geometryReason", "FIR geometry is not available.")
                         })
             filter_data["missingFIRGeometry"] = missing_geometry
+            filter_data["geometryReviewRequired"] = [
+                {
+                    "sourceId": advisory.get("sourceId"),
+                    "firCode": fir.get("firCode"),
+                    "reason": fir.get("geometryNote")
+                }
+                for advisory in filter_data["activeAdvisories"]
+                for fir in advisory.get("affectedFirs", [])
+                if fir.get("firCode") == "UWWW"
+            ]
+            filter_data["geometryCoverageStatus"] = (
+                "INCOMPLETE: required Russian and Minsk FIR geometry is missing or requires clipping; "
+                "missing polygons must never be interpreted as unrestricted airspace."
+            )
+            filter_data["policy"]["missingGeometryHandling"] = "unknown_not_clear"
     FILTER.parent.mkdir(parents=True, exist_ok=True)
     FILTER.write_text(json.dumps(filter_data, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     print(f"EASA CZIB import: {len(all_rows)} total; {len(active)} active; {len(filter_data['unmappedAdvisories'])} active advisories not mapped to explicit FIR codes")
