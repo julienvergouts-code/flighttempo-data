@@ -65,6 +65,18 @@ def fetch_country(cc):
     return cc, data, None
 
 
+def fir_code(properties):
+    for key in ("designator", "icaoCode", "code", "ident"):
+        value = str(properties.get(key) or "").strip().upper()
+        if re.fullmatch(r"[A-Z]{4}", value):
+            return value
+    name = str(properties.get("name") or "").upper()
+    match = re.search(r"\\b([A-Z]{4})\\s+(?:FIR|UIR)\\b", name)
+    if not match:
+        match = re.search(r"\\b(?:FIR|UIR)\\s+([A-Z]{4})\\b", name)
+    return match.group(1) if match else None
+
+
 def is_fir(feature):
     props = feature.get("properties") or {}
     value = props.get("type")
@@ -100,6 +112,7 @@ def main():
                     props = dict(feature.get("properties") or {})
                     props["flightTempoSourceCountry"] = country.upper()
                     props["flightTempoSourceUrl"] = BASE.format(cc=country)
+                    props["flightTempoFirCode"] = fir_code(props)
                     found.append({
                         "type": "Feature",
                         "id": feature.get("id"),
@@ -118,7 +131,7 @@ def main():
     unique = {}
     for feature in found:
         props = feature["properties"]
-        code = props.get("designator") or props.get("icaoCode") or props.get("code") or feature.get("id")
+        code = props.get("flightTempoFirCode") or fir_code(props) or feature.get("id")
         key = (str(code), json.dumps(feature["geometry"], sort_keys=True, separators=(",", ":")))
         if key not in unique:
             unique[key] = feature
@@ -180,7 +193,8 @@ def main():
         "note": "Community-maintained FIR/UIR geometry. Advisory-country association is a routing hint, not a legal prohibition. Verify against current State AIPs and NOTAMs."
     }
     filter_data["activeAdvisories"] = advisories
-    filter_data["generatedAtUtc"] = datetime.now(timezone.utc).isoformat()
+    filter_data["unmappedAdvisories"] = [x["sourceId"] for x in advisories if not x.get("affectedFirs")]
+    filter_data["generatedAtUtc" = datetime.now(timezone.utc).isoformat()
     FILTER_FILE.write_text(json.dumps(filter_data, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
     import hashlib
