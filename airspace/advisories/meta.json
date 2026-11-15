@@ -20,7 +20,14 @@
       "sha256": null,
       "sizeBytes": 14243,
       "recordCount": null
+    },
+    {
+      "path": "easa_safety_directives.json",
+      "sha256": "8811409aec077572233abc7eec36dc84c3395e9eb9faef2aeacff7e5f2b5b7dc",
+      "sizeBytes": 2266,
+      "recordCount": 1
     }
   ],
-  "notes": "Active and withdrawn EASA CZIB records. Advisory only, not a NOTAM, legal determination or operational risk assessment."
+  "notes": "Active and withdrawn EASA CZIB records. Advisory only, not a NOTAM, legal determination or operational risk assessment.",
+  "safetyDirectiveCount": 1
 }
