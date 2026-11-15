@@ -1,0 +1,29 @@
+name: Validate EASA airspace advisory mapping
+
+on:
+  pull_request:
+    paths:
+      - "airspace/**"
+      - "scripts/import_easa_czibs.py"
+      - "scripts/import_openaip_firs.py"
+      - "tests/test_easa_airspace_coverage.py"
+      - "navigation_manifest.json"
+  push:
+    branches:
+      - "fix/easa-russia-minsk-advisory-coverage"
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+      - name: Compile airspace importers
+        run: python3 -m py_compile scripts/import_easa_czibs.py scripts/import_openaip_firs.py
+      - name: Verify EASA Russia and Minsk coverage
+        run: python3 tests/test_easa_airspace_coverage.py
