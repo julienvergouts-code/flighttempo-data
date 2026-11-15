@@ -107,6 +107,7 @@ jobs:
               ('world_corridor_graph', 'navigation/graph/world_corridor_graph.bin', 'legacy_global_graph_test_only', 'GPL-3.0'),
               ('easa_czibs', 'airspace/advisories/easa_czibs.json', 'advisory_reference_not_operational', 'EASA source acknowledgement'),
               ('airspace_filter', 'airspace/airspace_filter.json', 'route_preview_advisory_filter_only', 'EASA source acknowledgement + OpenAIP CC BY-NC 4.0'),
+              ('route_policy', 'airspace/route_policy.json', 'route_preview_policy', 'FlightTempo original configuration'),
               ('openaip_fir_boundaries', 'navigation/airspace/openaip_fir_boundaries.geojson', 'development_reference_only', 'CC BY-NC 4.0'),
           ]
           for dataset_id, rel, status, license_name in items:
@@ -122,6 +123,8 @@ jobs:
                   count = len(obj.get('records', []))
               elif dataset_id == 'airspace_filter':
                   count = len(obj.get('activeAdvisories', []))
+              elif dataset_id == 'route_policy':
+                  count = 1
               else:
                   count = len(json.loads(raw).get('features', []))
               datasets.append({
