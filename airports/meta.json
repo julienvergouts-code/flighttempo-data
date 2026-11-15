@@ -3,14 +3,14 @@
   "airacCycle": null,
   "effectiveDate": null,
   "expiryDate": null,
-  "sha256": null,
+  "sha256": "876510c9a7ed8e6469d2648db172275484a8747938c5140e2e78341fe9280c11",
   "licenceStatus": "mixed_provenance_under_review_not_assumed_CC0",
   "files": [
     {
       "path": "airports.csv",
-      "sha256": null,
+      "sha256": "876510c9a7ed8e6469d2648db172275484a8747938c5140e2e78341fe9280c11",
       "sizeBytes": 7125012
     }
   ],
-  "notes": "Legacy app-facing airport table. See navigation/airports for OurAirports source extract."
+  "notes": "Legacy app-facing airport table. See navigation/airports for the OurAirports source extract."
 }
