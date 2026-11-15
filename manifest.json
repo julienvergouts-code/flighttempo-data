@@ -204,10 +204,10 @@
       "airacCycle": null,
       "effectiveDate": "2021-06-02",
       "expiryDate": null,
-      "sha256": "8811409aec077572233abc7eec36dc84c3395e9eb9faef2aeacff7e5f2b5b7dc",
+      "sha256": "4d13215a8017a78b649241aaae42f6d287905bd27869a11886b612110d93995c",
       "licenceStatus": "EASA_metadata_summary_source_acknowledged",
-      "coverage": "FIR Minsk (UMMV); NCA/operator scope must be verified",
-      "recordCount": 1
+      "coverage": "FIR Minsk (UMMV); distinguish NCA-supervised operators and direct EASA oversight",
+      "recordCount": 2
     }
   ]
 }
