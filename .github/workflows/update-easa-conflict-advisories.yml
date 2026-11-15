@@ -57,8 +57,8 @@ jobs:
                   "sizeBytes": len(raw), "sha256": hashlib.sha256(raw).hexdigest(),
                   "sourceProvider": "European Union Aviation Safety Agency (EASA)",
                   "sourceUrl": ("https://ad.easa.europa.eu/ad/SD-2021-02" if dataset_id == "easa_safety_directives" else "https://www.easa.europa.eu/en/domains/air-operations/czibs"),
-                  "license": "EASA website copyright notice: reproduction authorised provided source is acknowledged",
-                  "licenseStatus": "reproduction_authorised_with_source_acknowledgement",
+                  "license": ("EASA source acknowledged; metadata summary only, original directive linked and not redistributed" if dataset_id == "easa_safety_directives" else "EASA website copyright notice: reproduction authorised provided source is acknowledged"),
+                  "licenseStatus": ("EASA_metadata_summary_source_acknowledged" if dataset_id == "easa_safety_directives" else "reproduction_authorised_with_source_acknowledgement"),
                   "dataCycle": "not_applicable", "downloadPurpose": purpose,
                   "operationallyAvailable": False,
                   "status": ("reference_only_operator_scope_verify" if dataset_id == "easa_safety_directives" else "advisory_reference_not_operational")
