@@ -13,6 +13,11 @@ on:
       - 'airlines/**'
       - '.github/workflows/update-navigation-data.yml'
       - 'navigation_manifest.json'
+      - '!navigation_manifest.json'
+      - '!navigation/airspace/**'
+      - '!scripts/import_openaip_firs.py'
+      - '!scripts/import_easa_czibs.py'
+      - '!scripts/import_faa_prn.py'
   schedule:
     - cron: '15 4 * * *'
   workflow_dispatch:
