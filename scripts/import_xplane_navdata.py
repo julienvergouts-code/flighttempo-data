@@ -326,13 +326,16 @@ def parse_airways(source, fixes, navaids):
             from_ident, to_ident = fields[0], fields[3]
             from_lat, from_lon = number(fields[1]), number(fields[2])
             to_lat, to_lon = number(fields[4]), number(fields[5])
-            direction = fields[6]
+            # AWY640 field 6 is the airway level class (1=low, 2=high),
+            # not a direction code. The legacy format has no one-way flag.
+            level = fields[6]
             minimum_fl, maximum_fl = number(fields[7]), number(fields[8])
             airway_names = " ".join(fields[9:]).strip()
             if (
                 not from_ident or not to_ident
                 or not valid_coordinates(from_lat, from_lon)
                 or not valid_coordinates(to_lat, to_lon)
+                or level not in {"1", "2"}
                 or minimum_fl is None or maximum_fl is None
                 or minimum_fl < 0 or maximum_fl < minimum_fl
                 or not airway_names
@@ -356,10 +359,10 @@ def parse_airways(source, fixes, navaids):
                 "to_latitude": f"{to_lat:.8f}",
                 "to_longitude": f"{to_lon:.8f}",
                 "to_resolution": "source_coordinates",
-                "direction_restriction": direction,
-                "direction_semantics": "legacy_code_unmapped",
-                "level_code": "",
-                "level_classification": "unknown",
+                "direction_restriction": "B",
+                "direction_semantics": "bidirectional_legacy_format",
+                "level_code": level,
+                "level_classification": "low" if level == "1" else "high",
                 "minimum_altitude_hundreds_ft": minimum_fl,
                 "maximum_altitude_hundreds_ft": maximum_fl,
                 "minimum_altitude_ft": round(minimum_fl * 100),
