@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "repository": "julienvergouts-code/flighttempo-data",
-  "generatedAtUtc": "2026-11-15T10:23:29.856515+00:00",
+  "generatedAtUtc": "2026-11-15T10:35:00Z",
   "purpose": "Personal FlightTempo development, cross-checking, route-building experiments and flight-preparation practice; not an operational navigation database.",
   "rules": {
     "datasetMetaRequired": true,
@@ -84,26 +84,6 @@
       "sha256": "ff7b9121e79b56ff616a77e285c9cba764575fd2c58335b3281124813362d3dd",
       "licenceStatus": "US_government_public_domain_review_FAA_terms_and_error_notification",
       "coverage": "United States NAS only"
-    },
-    {
-      "id": "openaip",
-      "path": null,
-      "source": "OpenAIP",
-      "airacCycle": null,
-      "effectiveDate": null,
-      "expiryDate": null,
-      "sha256": null,
-      "licenceStatus": "not_imported_CC_BY_NC_4.0_attribution_required"
-    },
-    {
-      "id": "airacnet",
-      "path": null,
-      "source": "airac.net",
-      "airacCycle": null,
-      "effectiveDate": null,
-      "expiryDate": null,
-      "sha256": null,
-      "licenceStatus": "not_cleared_do_not_store"
     },
     {
       "id": "world-corridor-graph",
