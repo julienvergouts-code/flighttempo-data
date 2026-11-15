@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "repository": "julienvergouts-code/flighttempo-data",
-  "generatedAtUtc": "2026-11-15T10:05:05.667857+00:00",
+  "generatedAtUtc": "2026-11-15T10:06:06.576605+00:00",
   "purpose": "Personal FlightTempo development, cross-checking, route-building experiments and flight-preparation practice; not an operational navigation database.",
   "rules": {
     "datasetMetaRequired": true,
@@ -161,7 +161,7 @@
       "airacCycle": null,
       "effectiveDate": null,
       "expiryDate": null,
-      "sha256": "ccdd2aad24f02632cbb30a74f60f5f232fa0379aa5911c3f053c5f2fcb825e0a",
+      "sha256": "3a59944d2b057b4b3232016291c6f43fb71c1bcde9b5e24af6678ea6db6a0b7d",
       "licenceStatus": "CC_BY_NC_4.0_attribution_required_non_commercial_only",
       "coverage": "Worldwide FIR/UIR polygons where published in OpenAIP country exports",
       "recordCount": 170
