@@ -1,0 +1,10 @@
+{
+  "source": "No verified IFR fixes dataset ingested",
+  "airacCycle": null,
+  "effectiveDate": null,
+  "expiryDate": null,
+  "sha256": null,
+  "licenceStatus": "not_available_empty_placeholder",
+  "recordCount": 0,
+  "notes": "The placeholder waypoints.csv is empty. No fixes are invented."
+}
