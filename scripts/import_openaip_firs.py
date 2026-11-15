@@ -71,7 +71,7 @@ def fir_code(properties):
         if re.fullmatch(r"[A-Z]{4}", value):
             return value
     name = str(properties.get("name") or "").upper()
-    match = re.search(r"\\b([A-Z]{4})\\s+(?:FIR|UIR)\\b", name)
+    match = re.search(r"\b([A-Z]{4})\\s+(?:FIR|UIR)\\b", name)
     if not match:
         match = re.search(r"\\b(?:FIR|UIR)\\s+([A-Z]{4})\\b", name)
     return match.group(1) if match else None
@@ -166,7 +166,7 @@ def main():
             source_countries = set(feature["properties"].get("flightTempoSourceCountries", []))
             if source_countries & wanted:
                 props = feature["properties"]
-                code = props.get("designator") or props.get("icaoCode") or props.get("code")
+                code = props.get("flightTempoFirCode") or fir_code(props)
                 affected.append({
                     "firCode": code,
                     "name": props.get("name"),
