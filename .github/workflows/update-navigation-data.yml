@@ -399,7 +399,8 @@ jobs:
             airports/airports.csv \
             airlines/airlines.csv \
             airlines/route_rules.csv \
-            navigation_manifest.json
+            navigation_manifest.json \
+            manifest.json
           if git diff --cached --quiet; then
             echo "No dataset changes detected."
             exit 0
