@@ -236,7 +236,10 @@
     "aerosors_ils": true,
     "aeroSorsIlsFacilities": true,
     "aerosors_ge_navaids": true,
-    "aerosors_ge_airports": true
+    "aerosors_ge_airports": true,
+    "easaSafetyDirectives": true,
+    "airspaceGeometryComplete": false,
+    "russiaCzibFirsEnumerated": true
   },
   "procedureCoverageStatus": "FAA_US_NAS_ONLY_TEST_DATA; EUROPE_FRANCE_SOURCE_NOT_INGESTED; ASIA_NO_PUBLIC_REDISTRIBUTABLE_SOURCE_CONFIRMED",
   "procedureOperationalUse": false,
@@ -793,18 +796,6 @@
       "operationallyAvailable": false
     },
     {
-      "id": "airspace_filter",
-      "path": "airspace/airspace_filter.json",
-      "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/airspace/airspace_filter.json",
-      "available": true,
-      "recordCount": 16,
-      "sizeBytes": 30022,
-      "sha256": "d25f235fc47e959d8410e0955a71dfb8bf1e14bbf8eecb9d06900b007ff58403",
-      "status": "route_preview_advisory_filter_only",
-      "license": "EASA source acknowledgement + OpenAIP CC BY-NC 4.0",
-      "operationallyAvailable": false
-    },
-    {
       "id": "route_policy",
       "path": "airspace/route_policy.json",
       "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/airspace/route_policy.json",
@@ -961,6 +952,33 @@
       ],
       "placemarkCount": 20978,
       "coordinateCount": 20978
+    },
+    {
+      "id": "easa_safety_directives",
+      "path": "airspace/advisories/easa_safety_directives.json",
+      "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/airspace/advisories/easa_safety_directives.json",
+      "available": true,
+      "recordCount": 1,
+      "sizeBytes": 2266,
+      "sha256": "8811409aec077572233abc7eec36dc84c3395e9eb9faef2aeacff7e5f2b5b7dc",
+      "status": "reference_only_operator_scope_verify",
+      "license": "EASA source acknowledgement",
+      "operationallyAvailable": false,
+      "sourceProvider": "European Union Aviation Safety Agency (EASA)",
+      "sourceUrl": "https://ad.easa.europa.eu/ad/SD-2021-02",
+      "licenseStatus": "reproduction_authorised_with_source_acknowledgement",
+      "dataCycle": "not_applicable",
+      "effectiveDate": "2021-06-02",
+      "expiryDate": "",
+      "provenanceVerification": "checked_against_EASA_Safety_Publications_Tool_2026-11-15",
+      "downloadPurpose": "safety_directive_reference_only"
+    },
+    {
+      "sha256": "86a65e60487a350344dc9cadcd567a2b61e8e58fbb7d2c52a27de06d17a83b66",
+      "sizeBytes": 33621,
+      "recordCount": 16,
+      "status": "route_preview_advisory_filter_incomplete_geometry",
+      "downloadPurpose": "route_preview_advisory_filter_only"
     }
   ],
   "downloadContract": {
