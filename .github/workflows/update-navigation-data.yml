@@ -15,6 +15,19 @@ on:
       - 'navigation_manifest.json'
       - '!navigation_manifest.json'
       - '!navigation/airspace/**'
+      - '!navigation/graph/**'
+      - '!navigation/sources/flightgear/**'
+      - '!navigation/waypoints/flightgear_fixes.csv'
+      - '!navigation/navaids/flightgear_navaids.csv'
+      - '!navigation/airways/flightgear_airway_segments.csv'
+      - '!airspace/**'
+      - '!scripts/import_openaip_firs.py'
+      - '!scripts/import_easa_czibs.py'
+      - '!scripts/import_faa_prn.py'
+      - '!scripts/import_xplane_navdata.py'
+      - '!scripts/build_world_corridor_graph.py'
+      - '!navigation_manifest.json'
+      - '!navigation/airspace/**'
       - '!scripts/import_openaip_firs.py'
       - '!scripts/import_easa_czibs.py'
       - '!scripts/import_faa_prn.py'
@@ -31,12 +44,25 @@ on:
       - 'airlines/**'
       - '.github/workflows/update-navigation-data.yml'
       - 'navigation_manifest.json'
+      - '!navigation_manifest.json'
+      - '!navigation/airspace/**'
+      - '!navigation/graph/**'
+      - '!navigation/sources/flightgear/**'
+      - '!navigation/waypoints/flightgear_fixes.csv'
+      - '!navigation/navaids/flightgear_navaids.csv'
+      - '!navigation/airways/flightgear_airway_segments.csv'
+      - '!airspace/**'
+      - '!scripts/import_openaip_firs.py'
+      - '!scripts/import_easa_czibs.py'
+      - '!scripts/import_faa_prn.py'
+      - '!scripts/import_xplane_navdata.py'
+      - '!scripts/build_world_corridor_graph.py'
 
 permissions:
   contents: write
 
 concurrency:
-  group: flighttempo-navigation-update
+  group: openaip-fir-import
   cancel-in-progress: false
 
 jobs:
