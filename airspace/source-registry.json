@@ -64,6 +64,21 @@
       "refresh": "not_imported",
       "purpose": "Secondary cross-check only",
       "status": "not_official_primary_source_not_ingested"
+    },
+    {
+      "id": "EASA_SD_MINSK",
+      "provider": "European Union Aviation Safety Agency",
+      "source": "https://ad.easa.europa.eu/blob/EASA_SD_2021_02.pdf/SD_SD-2021-02_1",
+      "relatedSources": [
+        "https://ad.easa.europa.eu/blob/EASA_SD_2021_03.pdf/SD_SD-2021-03_1",
+        "https://www.easa.europa.eu/en/newsroom-and-events/news/easa-issues-safety-information-bulletin-operations-belarus-airspace",
+        "https://www.easa.europa.eu/en/domains/air-operations/czibs/czib-2022-01r14"
+      ],
+      "format": "PDF and official EASA publication pages",
+      "refresh": "manual_review; verify national NCA implementation and current NOTAM",
+      "purpose": "Operator-specific safety directives and advisory references for FIR Minsk (UMMV)",
+      "status": "separate_operator_specific_safety_layer; not_a_CZIB_or_universal_no_fly_polygon",
+      "notes": "SD 2021-02 addresses EASA Member State NCAs; SD 2021-03 applies to operators for which EASA issued the AOC and acts as competent authority. Both contain an exception for unforeseen circumstances where necessary for safe operation. Source geometry is not included."
     }
   ]
 }
