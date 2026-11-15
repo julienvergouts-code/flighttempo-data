@@ -187,12 +187,27 @@ jobs:
               path = Path(dataset["path"])
               assert path.is_file(), f"Manifest points to missing file: {path}"
               assert path.stat().st_size == dataset["sizeBytes"], f"Size mismatch: {path}"
-              assert hashlib.sha256(path.read_bytes()).hexdigest() == dataset["sha256"]
-              with path.open(encoding="utf-8", newline="") as handle:
-                  rows = [row for row in csv.reader(handle)
-                          if row and not row[0].strip().lower().startswith(("sep=", "#version"))]
-                  count = max(0, len(rows) - 1)
-              assert count == dataset["recordCount"], f"Record count mismatch: {path}"
+              digest = hashlib.sha256(path.read_bytes()).hexdigest()
+              assert digest == dataset["sha256"]
+              if path.suffix == ".bin":
+                  meta = json.loads(path.with_name("meta.json").read_text(encoding="utf-8"))
+                  count = meta["edgeCount"]
+                  assert count == dataset["recordCount"], f"Graph edge count mismatch: {path}"
+                  assert meta["sha256"] == digest, f"Graph metadata checksum mismatch: {path}"
+              elif path.suffix == ".geojson":
+                  obj = json.loads(path.read_text(encoding="utf-8"))
+                  count = len(obj.get("features", []))
+                  assert count == dataset["recordCount"], f"GeoJSON feature count mismatch: {path}"
+              elif path.suffix == ".json":
+                  obj = json.loads(path.read_text(encoding="utf-8"))
+                  count = len(obj.get("records", obj.get("activeAdvisories", [])))
+                  assert count == dataset["recordCount"], f"JSON record count mismatch: {path}"
+              else:
+                  with path.open(encoding="utf-8", newline="") as handle:
+                      rows = [row for row in csv.reader(handle)
+                              if row and not row[0].strip().lower().startswith(("sep=", "#version"))]
+                      count = max(0, len(rows) - 1)
+                  assert count == dataset["recordCount"], f"Record count mismatch: {path}"
               print(f"{dataset['id']}: {count} records; {path.stat().st_size} bytes")
           capabilities = manifest.get("capabilities", {})
           for capability in ("airports", "ourairportsAirports", "runways", "navaids", "vor", "dme", "ndb", "airlineProfiles", "rosterClassificationRules"):
