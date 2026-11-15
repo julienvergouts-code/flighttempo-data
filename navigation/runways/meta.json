@@ -15,5 +15,5 @@
       "sizeBytes": 5224744
     }
   ],
-  "notes": "Upstream source snapshot downloaded 2026-11-15. The source raw checksum is 4b53733f63b740517291d3c73cccbc6c4356a2d31334a9cafb8c73ff92d2a673; normalized CSV checksum must be calculated separately."
+  "notes": "Upstream source snapshot downloaded 2026-11-15. Source raw checksum 4b53733f63b740517291d3c73cccbc6c4356a2d31334a9cafb8c73ff92d2a673; normalized output checksum pending."
 }
