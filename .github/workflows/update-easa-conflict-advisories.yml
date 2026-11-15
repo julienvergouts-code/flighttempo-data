@@ -74,6 +74,8 @@ jobs:
           m["capabilities"]["russiaCzibFirsEnumerated"] = True
           p.write_text(json.dumps(m, indent=2) + "\n")
           PY
+      - name: Verify EASA Russia and Minsk advisory coverage
+        run: python3 tests/test_easa_airspace_coverage.py
       - name: Commit refreshed advisory datasets
         run: |
           git config user.name "github-actions[bot]"
