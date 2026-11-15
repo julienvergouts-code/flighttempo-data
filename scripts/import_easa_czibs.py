@@ -115,7 +115,7 @@ def normalize():
     }
     FILTER.parent.mkdir(parents=True, exist_ok=True)
     FILTER.write_text(json.dumps(filter_data, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
-    print(f"EASA CZIB import: {len(all_rows)} total; {len(active)} active; {len(result['unmappedAdvisories'])} active advisories not mapped to explicit FIR codes")
+    print(f"EASA CZIB import: {len(all_rows)} total; {len(active)} active; {len(filter_data['unmappedAdvisories'])} active advisories not mapped to explicit FIR codes")
 
 
 if __name__ == "__main__":
