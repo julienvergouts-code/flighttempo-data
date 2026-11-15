@@ -175,6 +175,161 @@ def build_russia_advisory_mapping(item, features):
 
 
 def build_active_firs(advisories):
+    active_firs = []
+    seen_firs = set()
+    for advisory in advisories:
+        # An incomplete or unvalidated advisory set is not safe to treat as a
+        # complete avoidance polygon set. Keep its scope in the advisory
+        # record but do not activate partial geometries in the route layer.
+        if advisory.get("routeAvoidanceReady") is False:
+            continue
+        for fir in advisory.get("affectedFirs", []):
+            key = (fir.get("firCode"), fir.get("geometryFeatureId"))
+            if key in seen_firs:
+                continue
+            seen_firs.add(key)
+            active_firs.append({
+                "firCode": fir.get("firCode"),
+                "name": fir.get("name"),
+                "geometryFeatureId": fir.get("geometryFeatureId"),
+                "geometryAvailable": fir.get("geometryAvailable", fir.get("geometryFeatureId") is not None),
+                "sourceAdvisoryId": advisory.get("sourceId"),
+                "country": advisory.get("country"),
+                "validUntil": advisory.get("validUntil"),
+                "classification": "EASA_advisory_not_legal_prohibition",
+            })
+        for code in (advisory.get("explicitFirCodes") or []):
+            key = (code, None)
+            if key not in seen_firs:
+                seen_firs.add(key)
+                active_firs.append({
+                    "firCode": code, "name": None, "geometryFeatureId": None,
+                    "geometryAvailable": False, "sourceAdvisoryId": advisory.get("sourceId"),
+                    "country": advisory.get("country"), "validUntil": advisory.get("validUntil"),
+                    "classification": "EASA_advisory_not_legal_prohibition",
+                })
+    return active_firs
+
+
+def main():
+    codes = country_codes()
+    found = []
+    missing = []
+    errors = []
+    with concurrent.futures.ThreadPoolExecutor(max_workers=8) as pool:
+        futures = {pool.submit(fetch_country, cc): cc for cc in codes}
+        for future in concurrent.futures.as_completed(futures):
+            cc = futures[future]
+            try:
+                country, data, status = future.result()
+                if status:
+                    missing.append(country)
+                    continue
+                for feature in data["features"]:
+                    if not is_fir(feature):
+                        continue
+                    geometry = feature.get("geometry")
+                    if not geometry or geometry.get("type") not in {"Polygon", "MultiPolygon"}:
+                        continue
+                    props = dict(feature.get("properties") or {})
+                    props["flightTempoSourceCountry"] = country.upper()
+                    props["flightTempoSourceUrl"] = BASE.format(cc=country)
+                    props["flightTempoFirCode"] = fir_code(props)
+                    found.append({
+                        "type": "Feature",
+                        "id": feature.get("id"),
+                        "geometry": geometry,
+                        "properties": props,
+                    })
+            except Exception as exc:
+                errors.append({"country": cc, "error": str(exc)})
+
+    if errors:
+        raise RuntimeError("OpenAIP export download errors: " + json.dumps(errors[:20]))
+    if not found:
+        raise RuntimeError("No FIR/UIR polygons downloaded from OpenAIP country exports")
+
+    # Deduplicate copies of the same FIR returned in neighbouring country packs.
+    unique = {}
+    for feature in found:
+        props = feature["properties"]
+        code = props.get("flightTempoFirCode") or fir_code(props) or feature.get("id")
+        key = (str(code), json.dumps(feature["geometry"], sort_keys=True, separators=(",", ":")))
+        if key not in unique:
+            unique[key] = feature
+        else:
+            old = unique[key]["properties"].setdefault("flightTempoSourceCountries", [])
+            country = props.get("flightTempoSourceCountry")
+            if country and country not in old:
+                old.append(country)
+        unique[key]["properties"].setdefault("flightTempoSourceCountries", [props.get("flightTempoSourceCountry")])
+
+    features = list(unique.values())
+    OUT_DIR.mkdir(parents=True, exist_ok=True)
+    geo = {
+        "type": "FeatureCollection",
+        "name": "FlightTempo OpenAIP FIR and UIR boundaries",
+        "attribution": ATTRIBUTION,
+        "features": features,
+    }
+    OUT_GEOJSON.write_text(json.dumps(geo, separators=(",", ":"), ensure_ascii=False) + "\n", encoding="utf-8")
+
+    # Map EASA advisories to the FIR/UIR features delivered in the relevant
+    # country exports. These are advisory overlaps, not legal prohibitions.
+    easa = json.loads(EASA_FILE.read_text(encoding="utf-8"))
+    advisories = []
+    for item in easa.get("records", []):
+        if item.get("effectiveStatus") != "active":
+            continue
+
+        # The Russian bulletin names five FIRs and a 60E limit. Do not use
+        # country-export matching here: it incorrectly attaches unrelated FIRs
+        # (e.g. Kaliningrad and Simferopol) and misses the actual five-FIR scope.
+        if str(item.get("sourceId")) == "141480":
+            mapped = build_russia_advisory_mapping(item, features)
+            advisories.append({
+                "sourceId": item.get("sourceId"),
+                "name": item.get("name"),
+                "country": item.get("country"),
+                "validUntil": item.get("validUntil"),
+                **mapped,
+            })
+            continue
+
+        country_names = [x.strip() for x in (item.get("country") or "").split(",") if x.strip()]
+        wanted = {code for name in country_names for code in EASA_COUNTRY_CODES.get(name, [])}
+        affected = []
+        for feature in features:
+            source_countries = set(feature["properties"].get("flightTempoSourceCountries", []))
+            if source_countries & wanted:
+                props = feature["properties"]
+                code = props.get("flightTempoFirCode") or fir_code(props)
+                affected.append({
+                    "firCode": code,
+                    "name": props.get("name"),
+                    "sourceCountryCodes": sorted(source_countries),
+                    "geometryFeatureId": feature.get("id"),
+                })
+        advisories.append({
+            "sourceId": item.get("sourceId"),
+            "name": item.get("name"),
+            "country": item.get("country"),
+            "validUntil": item.get("validUntil"),
+            "affectedFirs": affected,
+            "mappingMethod": "country-export polygon association; verify FIR designators and boundaries against State AIP",
+        })
+
+    filter_data = json.loads(FILTER_FILE.read_text(encoding="utf-8"))
+    filter_data["firBoundaryDataset"] = {
+        "status": "available_development_reference",
+        "source": "OpenAIP",
+        "license": LICENSE,
+        "attribution": ATTRIBUTION,
+        "featureCount": len(features),
+        "file": "navigation/airspace/openaip_fir_boundaries.geojson",
+        "note": "Community-maintained FIR/UIR geometry. Advisory-country association is a routing hint, not a legal prohibition. Verify against current State AIPs and NOTAMs."
+    }
+    filter_data["activeAdvisories"] = advisories
     active_firs = build_active_firs(advisories)
     filter_data["activeFirs"] = active_firs
     filter_data["unmappedAdvisories"] = [x["sourceId"] for x in advisories if not x.get("affectedFirs") and not x.get("explicitFirCodes")]
