@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "repository": "julienvergouts-code/flighttempo-data",
-  "generatedAtUtc": "2026-11-15T09:36:00Z",
+  "generatedAtUtc": "2026-11-15T09:45:00Z",
   "purpose": "Personal FlightTempo development, cross-checking, route-building experiments and flight-preparation practice; not an operational navigation database.",
   "rules": {
     "datasetMetaRequired": true,
@@ -87,7 +87,7 @@
     },
     {
       "id": "openaip",
-      "path": "navigation/openaip",
+      "path": null,
       "source": "OpenAIP",
       "airacCycle": null,
       "effectiveDate": null,
