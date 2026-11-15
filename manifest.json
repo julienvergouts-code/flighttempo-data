@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "repository": "julienvergouts-code/flighttempo-data",
-  "generatedAtUtc": "2026-11-15T10:00:19.943081+00:00",
+  "generatedAtUtc": "2026-11-15T10:12:00Z",
   "purpose": "Personal FlightTempo development, cross-checking, route-building experiments and flight-preparation practice; not an operational navigation database.",
   "rules": {
     "datasetMetaRequired": true,
@@ -116,6 +116,55 @@
       "licenceStatus": "CC_BY_NC_4.0_attribution_required_non_commercial_only",
       "coverage": "Worldwide FIR/UIR polygons where published in OpenAIP country exports",
       "recordCount": 170
+    },
+    {
+      "id": "world-corridor-graph",
+      "path": "navigation/graph/world_corridor_graph.bin",
+      "source": "Legacy X-Plane navigation data mirror (ptsmonteiro/x-plane-navdata) plus FlightTempo airport connectors",
+      "airacCycle": null,
+      "sourceCycleToken": "2012.08",
+      "effectiveDate": null,
+      "expiryDate": null,
+      "sha256": "bf2ce08daae0df7818d9afea17765a92f7ddf3369ffc2842bfa2ebfda3f56b39",
+      "licenceStatus": "GPL-3.0_derived_data_stale_personal_development_only",
+      "coverage": "Worldwide airway graph and airport connectors",
+      "recordCount": 156701
+    },
+    {
+      "id": "easa-czibs",
+      "path": "airspace/advisories/easa_czibs.json",
+      "source": "EASA CZIB JSON export",
+      "airacCycle": null,
+      "effectiveDate": null,
+      "expiryDate": null,
+      "sha256": "64a9016bf0644f2a1772a371313827e66b8079fc4b2ee7ebd00fe23ff62c19d0",
+      "licenceStatus": "EASA_reproduction_authorised_with_source_acknowledgement",
+      "coverage": "EASA active and withdrawn conflict-zone advisories",
+      "recordCount": 34
+    },
+    {
+      "id": "airspace-filter",
+      "path": "airspace/airspace_filter.json",
+      "source": "EASA CZIB advisories and OpenAIP FIR/UIR reference geometry",
+      "airacCycle": null,
+      "effectiveDate": null,
+      "expiryDate": null,
+      "sha256": "129af7e3cb17063766b67830691f21d5e74ff2daf40c8427b7a19e4eb33ee5ff",
+      "licenceStatus": "mixed_source_rights_EASA_acknowledgement_and_OpenAIP_CC_BY_NC_4.0",
+      "coverage": "Route-preview advisory mapping; not a legal restriction feed",
+      "recordCount": 16
+    },
+    {
+      "id": "route-policy",
+      "path": "airspace/route_policy.json",
+      "source": "FlightTempo original configuration",
+      "airacCycle": null,
+      "effectiveDate": null,
+      "expiryDate": null,
+      "sha256": "009b2c1a3f0f86ab9c91bf380b32c5a147ad2f5fb2f2fceb1b056e316531cd7d",
+      "licenceStatus": "FlightTempo_original_configuration",
+      "coverage": "Route preview policy",
+      "recordCount": 1
     }
   ]
 }
