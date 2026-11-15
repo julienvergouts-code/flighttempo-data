@@ -24,6 +24,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+
       - name: Checkout legacy worldwide X-Plane navigation snapshot
         uses: actions/checkout@v4
         with:
@@ -36,29 +37,73 @@ jobs:
             earth_awy.dat
             README.md
           sparse-checkout-cone-mode: false
+
       - name: Prepare source and provenance
         run: |
           mkdir -p navigation/sources/flightgear
-          cp legacy-source/earth_fix.dat /tmp/x-plane-navdata/earth_nav.dat /tmp/x-plane-navdata/earth_awy.dat navigation/sources/flightgear/
+          cp legacy-source/earth_fix.dat legacy-source/earth_nav.dat legacy-source/earth_awy.dat navigation/sources/flightgear/
+          cp legacy-source/README.md navigation/sources/flightgear/UPSTREAM_README.md
           cat > navigation/sources/flightgear/source-manifest.json <<'JSON'
           {
             "provider": "X-Plane default navigation data mirror (ptsmonteiro/x-plane-navdata)",
             "sourceUrl": "https://github.com/ptsmonteiro/x-plane-navdata",
             "license": "GPL-3.0",
-            "licenseUrl": "https://github.com/ptsmonteiro/x-plane-navdata",
+            "licenseUrl": "https://www.gnu.org/licenses/gpl-3.0.html",
             "redistributable": true,
             "allowMixedLegacyCycles": true,
             "snapshotStatus": "legacy_stale_development_baseline",
-            "snapshotRepositoryLastUpdated": "2013-12-09",
-            "notes": "Worldwide legacy X-Plane navigation snapshot. Cycle may be absent from source headers; never represent as current AIRAC or use operationally."
+            "repositoryLastUpdated": "2013-12-09",
+            "provenanceVerification": "upstream_README_explicitly_states_GPLv3; original data attribution retained",
+            "notes": "Worldwide legacy X-Plane navigation snapshot. Its data is stale and must never be represented as current AIRAC or used operationally. GPLv3 obligations apply to redistribution of this dataset and derivatives."
           }
           JSON
+
       - name: Import global fixes, navaids including ILS, and airway segments
         run: python3 scripts/import_xplane_navdata.py --source-dir navigation/sources/flightgear --include-airways
-      - name: Publish generated worldwide navigation CSVs
+
+      - name: Record source-specific metadata
+        run: |
+          python3 - <<'PY'
+          import csv, hashlib, json
+          from pathlib import Path
+          root = Path(".")
+          source_dir = root / "navigation/sources/flightgear"
+          import_meta = json.loads((source_dir / "import_metadata.json").read_text())
+          files = []
+          for rel in [
+              "navigation/waypoints/flightgear_fixes.csv",
+              "navigation/navaids/flightgear_navaids.csv",
+              "navigation/airways/flightgear_airway_segments.csv",
+          ]:
+              p = root / rel
+              raw = p.read_bytes()
+              with p.open(encoding="utf-8", newline="") as f:
+                  count = max(0, sum(1 for _ in csv.reader(f)) - 1)
+              files.append({"path": rel, "sha256": hashlib.sha256(raw).hexdigest(), "sizeBytes": len(raw), "recordCount": count})
+          meta = {
+              "source": import_meta.get("provider"),
+              "sourceUrl": import_meta.get("sourceUrl"),
+              "airacCycle": None if import_meta.get("dataCycle") in (None, "", "unknown", "legacy-unknown-cycle") else import_meta.get("dataCycle"),
+              "sourceCycleToken": import_meta.get("dataCycle"),
+              "effectiveDate": None,
+              "expiryDate": None,
+              "sha256": None,
+              "licenceStatus": "GPL-3.0_declared_upstream_stale_personal_development_only",
+              "licenseName": "GNU General Public License v3.0",
+              "licenseUrl": "https://www.gnu.org/licenses/gpl-3.0.html",
+              "coverage": "Worldwide legacy X-Plane base navigation snapshot; cycle/effective dates not established",
+              "files": files,
+              "recordCounts": import_meta.get("counts", {}),
+              "airwayResolution": import_meta.get("airwayResolution", {}),
+              "notes": "Imported for personal FlightTempo development and route-engine experiments only. Data snapshot is stale (upstream repository last updated 2013-12-09). Do not use operationally. GPLv3 terms apply."
+          }
+          (root / "navigation/sources/flightgear/meta.json").write_text(json.dumps(meta, indent=2) + "\n")
+          PY
+
+      - name: Publish generated worldwide navigation CSVs and metadata
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add navigation/waypoints/flightgear_fixes.csv navigation/navaids/flightgear_navaids.csv navigation/airways/flightgear_airway_segments.csv navigation/sources/flightgear/import_metadata.json navigation_manifest.json
+          git add navigation/sources/flightgear navigation/waypoints/flightgear_fixes.csv navigation/navaids/flightgear_navaids.csv navigation/airways/flightgear_airway_segments.csv navigation_manifest.json
           git commit -m "data(navdata): import legacy worldwide fixes navaids and airways" || echo "No changes to publish"
           git push
