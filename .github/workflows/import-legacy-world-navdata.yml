@@ -12,7 +12,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: legacy-world-navdata
+  group: flighttempo-navigation-update
   cancel-in-progress: false
 
 jobs:
@@ -139,4 +139,5 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add navigation/sources/flightgear navigation/waypoints/flightgear_fixes.csv navigation/navaids/flightgear_navaids.csv navigation/airways/flightgear_airway_segments.csv navigation/graph navigation_manifest.json
           git commit -m "data(navdata): import legacy worldwide fixes navaids and airways" || echo "No changes to publish"
+          git pull --rebase origin main
           git push
