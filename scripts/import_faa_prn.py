@@ -279,6 +279,18 @@ def main() -> None:
     FILTER.write_text(json.dumps(filter_data, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
     policy = json.loads(POLICY.read_text(encoding="utf-8")) if POLICY.is_file() else {}
+    policy.setdefault("defaultBehavior", {})
+    policy["defaultBehavior"]["avoidActiveEasaAdvisories"] = True
+    policy["defaultBehavior"]["avoidApplicableFaaAdvisories"] = True
+    policy["userControls"] = [
+        {
+            "id": "avoidConflictAdvisories",
+            "label": "Avoid Conflict / Advisory FIRs",
+            "defaultEnabled": True,
+            "appliesTo": ["EASA_CZIB", "FAA_ADVISORY"],
+            "pilotCanOverride": True
+        }
+    ]
     policy.setdefault("officialRestrictions", {})
     policy["officialRestrictions"].update({
         "faaSource": "FAA PRN KICZ NOTAM index",
