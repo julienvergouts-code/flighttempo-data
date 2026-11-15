@@ -23,13 +23,13 @@
     },
     {
       "path": "easa_safety_directives.json",
-      "sha256": "8811409aec077572233abc7eec36dc84c3395e9eb9faef2aeacff7e5f2b5b7dc",
-      "sizeBytes": 2266,
-      "recordCount": 1,
+      "sha256": "4d13215a8017a78b649241aaae42f6d287905bd27869a11886b612110d93995c",
+      "sizeBytes": 3941,
+      "recordCount": 2,
       "licenseStatus": "EASA_metadata_summary_source_acknowledged",
       "note": "Metadata summary only; official directive linked, not redistributed."
     }
   ],
   "notes": "Active and withdrawn EASA CZIB records. Advisory only, not a NOTAM, legal determination or operational risk assessment.",
-  "safetyDirectiveCount": 1
+  "safetyDirectiveCount": 2
 }
