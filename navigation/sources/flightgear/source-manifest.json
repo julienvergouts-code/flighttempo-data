@@ -1,0 +1,12 @@
+{
+  "provider": "X-Plane default navigation data mirror (ptsmonteiro/x-plane-navdata)",
+  "sourceUrl": "https://github.com/ptsmonteiro/x-plane-navdata",
+  "license": "GPL-3.0",
+  "licenseUrl": "https://www.gnu.org/licenses/gpl-3.0.html",
+  "redistributable": true,
+  "allowMixedLegacyCycles": true,
+  "snapshotStatus": "legacy_stale_development_baseline",
+  "repositoryLastUpdated": "2013-12-09",
+  "provenanceVerification": "upstream_README_explicitly_states_GPLv3; original data attribution retained",
+  "notes": "Worldwide legacy X-Plane navigation snapshot. Its data is stale and must never be represented as current AIRAC or used operationally. GPLv3 obligations apply to redistribution of this dataset and derivatives."
+}

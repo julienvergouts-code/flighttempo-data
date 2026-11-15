@@ -1,0 +1,71 @@
+{
+  "provider": "X-Plane default navigation data mirror (ptsmonteiro/x-plane-navdata)",
+  "sourceUrl": "https://github.com/ptsmonteiro/x-plane-navdata",
+  "license": "GPL-3.0",
+  "licenseStatus": "declared_redistributable_check_required",
+  "redistributable": true,
+  "licenseUrl": "https://www.gnu.org/licenses/gpl-3.0.html",
+  "dataCycle": "2012.08",
+  "formatVersions": {
+    "fixes": "600",
+    "navaids": "810",
+    "airways": "640"
+  },
+  "airwaysIncluded": true,
+  "files": [
+    {
+      "kind": "fixes",
+      "fileName": "earth_fix.dat",
+      "sha256": "4b21bae65c5a23978c55768d9ac5765058e3989ac95a02712a12c37f53deb663",
+      "payloadSha256": "4b21bae65c5a23978c55768d9ac5765058e3989ac95a02712a12c37f53deb663",
+      "sizeBytes": 3287475,
+      "compression": "none",
+      "byteOrder": "I",
+      "formatVersion": "600",
+      "dataCycle": "2012.08",
+      "buildDate": "20120819",
+      "copyrightHeader": "600 Version - data cycle 2012.08, build 20120819, metadata FixXP700. License GPL v.3 - Luther Blissett http://github.com/mcantsin/x-plane-navdata"
+    },
+    {
+      "kind": "navaids",
+      "fileName": "earth_nav.dat",
+      "sha256": "1968bbe7bc24a189f15a6df2bfdff4b3502856bc8487f025b86c6cbfd81b0fae",
+      "payloadSha256": "1968bbe7bc24a189f15a6df2bfdff4b3502856bc8487f025b86c6cbfd81b0fae",
+      "sizeBytes": 2002326,
+      "compression": "none",
+      "byteOrder": "I",
+      "formatVersion": "810",
+      "dataCycle": "2012.08",
+      "buildDate": "20120819",
+      "copyrightHeader": "810 Version - data cycle 2012.08, build 20120819, metadata NavXP810. License GPL v.3 - Luther Blissett http://github.com/mcantsin/x-plane-navdata"
+    },
+    {
+      "kind": "airways",
+      "fileName": "earth_awy.dat",
+      "sha256": "eb2c2671c2e29618c8769677e00c05ccfcd976697632cb74dfb34bfb8be96e24",
+      "payloadSha256": "eb2c2671c2e29618c8769677e00c05ccfcd976697632cb74dfb34bfb8be96e24",
+      "sizeBytes": 5154929,
+      "compression": "none",
+      "byteOrder": "I",
+      "formatVersion": "640",
+      "dataCycle": "2012.08",
+      "buildDate": "20120819",
+      "copyrightHeader": "640 Version - data cycle 2012.08, build 20120819, metadata AwyXP700. License GPL v.3 - Luther Blissett http://github.com/mcantsin/x-plane-navdata"
+    }
+  ],
+  "counts": {
+    "fixes": 113356,
+    "navaids": 26599,
+    "airwaySegments": 70291,
+    "lowAirwaySegments": 0,
+    "highAirwaySegments": 0,
+    "unknownLevelAirwaySegments": 70291,
+    "rejectedFixRows": 0,
+    "rejectedNavaidRows": 0,
+    "rejectedAirwayRows": 0
+  },
+  "airwayResolution": {
+    "segmentsWithAtLeastOneUnresolvedEndpoint": 0,
+    "ambiguousEndpoints": 0
+  }
+}

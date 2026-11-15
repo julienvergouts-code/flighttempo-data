@@ -1,9 +1,49 @@
 {
-  "source": "No source files currently ingested; reserved for user-supplied compatible FIX/NAV/AWY data",
-  "airacCycle": null,
+  "source": "X-Plane default navigation data mirror (ptsmonteiro/x-plane-navdata)",
+  "sourceUrl": "https://github.com/ptsmonteiro/x-plane-navdata",
+  "airacCycle": "2012.08",
+  "sourceCycleToken": "2012.08",
   "effectiveDate": null,
   "expiryDate": null,
   "sha256": null,
-  "licenceStatus": "not_imported_source_rights_and_matching_cycle_required",
-  "notes": "Do not populate from the unlicensed legacy X-Plane mirror. Importer requires explicit source and redistribution declaration."
+  "licenceStatus": "GPL-3.0_declared_upstream_stale_personal_development_only",
+  "licenseName": "GNU General Public License v3.0",
+  "licenseUrl": "https://www.gnu.org/licenses/gpl-3.0.html",
+  "coverage": "Worldwide legacy X-Plane base navigation snapshot; cycle/effective dates not established",
+  "files": [
+    {
+      "path": "navigation/waypoints/flightgear_fixes.csv",
+      "sha256": "1bfd6b7fb7e10dac4f7cfdec9201e66a3ad3a1b1990e7215569dded8c6163749",
+      "sizeBytes": 11457339,
+      "recordCount": 113356
+    },
+    {
+      "path": "navigation/navaids/flightgear_navaids.csv",
+      "sha256": "c6ee3a883e34b2fb1aa4d3c32bceb11b26aac6b2499bef6596aa79e63d2c68e4",
+      "sizeBytes": 8317558,
+      "recordCount": 26599
+    },
+    {
+      "path": "navigation/airways/flightgear_airway_segments.csv",
+      "sha256": "93dd6e3afc8ae453ac151c83c28ad1c4c7e79839abd26f5b1befe3cef8994728",
+      "sizeBytes": 20125046,
+      "recordCount": 70291
+    }
+  ],
+  "recordCounts": {
+    "fixes": 113356,
+    "navaids": 26599,
+    "airwaySegments": 70291,
+    "lowAirwaySegments": 0,
+    "highAirwaySegments": 0,
+    "unknownLevelAirwaySegments": 70291,
+    "rejectedFixRows": 0,
+    "rejectedNavaidRows": 0,
+    "rejectedAirwayRows": 0
+  },
+  "airwayResolution": {
+    "segmentsWithAtLeastOneUnresolvedEndpoint": 0,
+    "ambiguousEndpoints": 0
+  },
+  "notes": "Imported for personal FlightTempo development and route-engine experiments only. Data snapshot is stale (upstream repository last updated 2013-12-09). Do not use operationally. GPLv3 terms apply."
 }
