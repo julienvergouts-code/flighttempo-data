@@ -64,6 +64,36 @@ jobs:
       - name: Import global fixes, navaids including ILS, and airway segments
         run: python3 scripts/import_xplane_navdata.py --source-dir navigation/sources/flightgear --include-airways
 
+      - name: Build compact worldwide airport-to-airway graph
+        run: python3 scripts/build_world_corridor_graph.py
+
+      - name: Add graph to app download manifest
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          p = Path('navigation_manifest.json')
+          m = json.loads(p.read_text())
+          meta = json.loads(Path('navigation/graph/meta.json').read_text())
+          rel = 'navigation/graph/world_corridor_graph.bin'
+          record = {
+              'id': 'world_corridor_graph', 'path': rel,
+              'downloadUrl': 'https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/' + rel,
+              'available': True, 'recordCount': meta['edgeCount'],
+              'sizeBytes': meta['sizeBytes'], 'sha256': meta['sha256'],
+              'sourceProvider': meta['source'], 'license': 'GPL-3.0',
+              'licenseStatus': meta['licenceStatus'], 'dataCycle': meta['sourceCycleToken'],
+              'downloadPurpose': 'development_route_preview_only', 'operationallyAvailable': False,
+              'status': 'legacy_global_graph_test_only', 'nodeCount': meta['nodeCount']
+          }
+          ds = [d for d in m.get('datasets', []) if d.get('id') != 'world_corridor_graph']
+          ds.append(record)
+          m['datasets'] = ds
+          m.setdefault('capabilities', {})['worldCorridorGraph'] = True
+          m['capabilities']['operationalRoutePlanning'] = False
+          p.write_text(json.dumps(m, indent=2) + '\\n')
+          PY
+
       - name: Record source-specific metadata
         run: |
           python3 - <<'PY'
@@ -107,6 +137,6 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add navigation/sources/flightgear navigation/waypoints/flightgear_fixes.csv navigation/navaids/flightgear_navaids.csv navigation/airways/flightgear_airway_segments.csv navigation_manifest.json
+          git add navigation/sources/flightgear navigation/waypoints/flightgear_fixes.csv navigation/navaids/flightgear_navaids.csv navigation/airways/flightgear_airway_segments.csv navigation/graph navigation_manifest.json
           git commit -m "data(navdata): import legacy worldwide fixes navaids and airways" || echo "No changes to publish"
           git push
