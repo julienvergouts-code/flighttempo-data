@@ -1,0 +1,9 @@
+{
+  "source": "No source files currently ingested; reserved for user-supplied compatible FIX/NAV/AWY data",
+  "airacCycle": null,
+  "effectiveDate": null,
+  "expiryDate": null,
+  "sha256": null,
+  "licenceStatus": "not_imported_source_rights_and_matching_cycle_required",
+  "notes": "Do not populate from the unlicensed legacy X-Plane mirror. Importer requires explicit source and redistribution declaration."
+}
