@@ -98,6 +98,8 @@ jobs:
                   item["sha256"] = digest
                   if item.get("id") == "airspace-filter":
                       item["recordCount"] = len(json.loads(Path(rel).read_text()).get("activeAdvisories", []))
+                  if item.get("id") == "easa-safety-directive-minsk":
+                      item["recordCount"] = len(json.loads(Path(rel).read_text()).get("records", []))
           root["generatedAtUtc"] = datetime.datetime.now(datetime.timezone.utc).isoformat()
           root_path.write_text(json.dumps(root, indent=2) + "\n")
           meta_path = Path("airspace/advisories/meta.json")
@@ -108,6 +110,9 @@ jobs:
               rel = "airspace/advisories/" + item.get("path", "")
               if rel in files.values():
                   item["sha256"], item["sizeBytes"] = record(rel)
+                  if rel.endswith("easa_safety_directives.json"):
+                      item["recordCount"] = len(json.loads(Path(rel).read_text()).get("records", []))
+          meta["safetyDirectiveCount"] = len(json.loads(Path(files["easa-safety-directive-minsk"]).read_text()).get("records", []))
           meta_path.write_text(json.dumps(meta, indent=2) + "\n")
           air_path = Path("airspace/meta.json")
           air = json.loads(air_path.read_text())
