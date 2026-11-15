@@ -90,7 +90,7 @@ def read_source_file(path: Path, kind: str):
     version = version_match.group(1)
     allowed = {
         "fixes": {"600", "1101", "1200"},
-        "navaids": {"1100", "1150", "1200"},
+        "navaids": {"810", "1100", "1150", "1200"},
         # XP AWY1101 uses a 1100 data-file header; older regional datasets
         # may use the legacy 640 layout.
         "airways": {"640", "1100"},
@@ -219,7 +219,9 @@ def parse_navaids(source):
     """XPNAV: facility code, position, elevation, frequency and facility identity."""
     rows, rejected = [], 0
     for line_number, raw, fields in source["records"]:
-        if len(fields) < 10:
+        legacy_810 = source.get("format_version") == "810"
+        minimum_fields = 9 if legacy_810 else 10
+        if len(fields) < minimum_fields:
             rejected += 1
             continue
         try:
@@ -231,10 +233,18 @@ def parse_navaids(source):
         if not valid_coordinates(lat, lon):
             rejected += 1
             continue
-        ident, area, region = fields[7:10]
         runway_based = row_code in {4, 5, 6, 7, 8, 9, 14, 15, 16}
-        runway = fields[10] if runway_based and len(fields) > 10 else ""
-        name_start = 11 if runway_based else 10
+        if legacy_810:
+            # XPNAV810 predates terminal-area and region fields:
+            # row, lat, lon, elevation, frequency, range, variation, ident, [runway], name...
+            ident = fields[7]
+            area = region = ""
+            runway = fields[8] if runway_based and len(fields) > 8 else ""
+            name_start = 9 if runway_based else 8
+        else:
+            ident, area, region = fields[7:10]
+            runway = fields[10] if runway_based and len(fields) > 10 else ""
+            name_start = 11 if runway_based else 10
         name = " ".join(fields[name_start:]).strip()
         elevation = number(fields[3])
         frequency = number(fields[4])
@@ -259,7 +269,7 @@ def parse_navaids(source):
             "ident": ident.upper(),
             "terminal_area": area.upper(),
             "region_code": region.upper(),
-            "scope": "enroute" if area.upper() == "ENRT" else "terminal",
+            "scope": ("enroute" if area.upper() == "ENRT" else "terminal") if area else "unknown",
             "latitude": f"{lat:.8f}",
             "longitude": f"{lon:.8f}",
             "elevation_ft": elevation if elevation is not None else "",
