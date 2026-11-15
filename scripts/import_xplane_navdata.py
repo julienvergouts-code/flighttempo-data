@@ -667,6 +667,14 @@ def update_manifest(manifest_path: Path, root: Path, import_meta=None):
             {"provider": "FlightTempo", "licenseStatus": "owner_authored_profile"},
         ),
     ])
+    # Preserve separately maintained machine-readable airspace/advisory packages
+    # when this navigation importer rebuilds the core airport/IFR dataset list.
+    preserved_external = [
+        item for item in manifest.get("datasets", [])
+        if item.get("id") in {"easa_czibs", "airspace_filter"}
+    ]
+    existing_ids = {item.get("id") for item in datasets}
+    datasets.extend(item for item in preserved_external if item.get("id") not in existing_ids)
     manifest["datasets"] = datasets
     manifest["downloadContract"] = {
         "version": 1,
