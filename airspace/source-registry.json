@@ -37,6 +37,33 @@
       "refresh": "requires_access",
       "purpose": "Live NOTAM amendments and cancellation verification",
       "status": "not_connected_access_required"
+    },
+    {
+      "id": "EUROCONTROL_NM_B2B",
+      "provider": "EUROCONTROL Network Manager",
+      "source": "https://www.eurocontrol.int/network-manager",
+      "format": "B2B web services",
+      "refresh": "access_required",
+      "purpose": "Network restrictions, flow measures and operational advisories",
+      "status": "not_connected_credentials_or_subscription_access_required"
+    },
+    {
+      "id": "EUROCONTROL_CDA_FIR_UIR",
+      "provider": "EUROCONTROL",
+      "source": "https://ext.eurocontrol.int/arcgis/rest/services/CDA/firUir/MapServer",
+      "format": "ArcGIS REST / GeoJSON",
+      "refresh": "on_demand",
+      "purpose": "Potential FIR/UIR geometry enrichment",
+      "status": "not_republished_license_not_confirmed"
+    },
+    {
+      "id": "SAFEAIRSPACE_OPSGROUP",
+      "provider": "OPSGROUP / SafeAirspace",
+      "source": "https://safeairspace.net/",
+      "format": "Website and compiled conflict-zone references",
+      "refresh": "not_imported",
+      "purpose": "Secondary cross-check only",
+      "status": "not_official_primary_source_not_ingested"
     }
   ]
-}\n
+}
