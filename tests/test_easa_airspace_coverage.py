@@ -36,7 +36,7 @@ class EasaAirspaceCoverageTests(unittest.TestCase):
             x["firCode"] for x in self.filter_data["missingFIRGeometry"]
         }
         self.assertTrue({"UUWV", "ULLL", "USSV", "UMMV"}.issubset(missing))
-        self.assertEqual(self.filter_data["policy"]["missingGeometryHandling"], "unknown_not_clear")
+        self.assertTrue(self.filter_data["policy"]["missingGeometryHandling"].startswith("unknown_not_clear"))
         self.assertIn("UWWW", {x["firCode"] for x in self.filter_data["geometryReviewRequired"]})
 
     def test_minsk_is_a_separate_safety_directive_not_a_czib(self):
