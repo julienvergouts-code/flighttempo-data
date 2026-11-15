@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "sources": [
+    {
+      "id": "EASA_CZIB",
+      "provider": "European Union Aviation Safety Agency",
+      "source": "https://www.easa.europa.eu/en/domains/air-operations/czibs/export-json?_format=json&page=",
+      "format": "JSON",
+      "refresh": "daily",
+      "purpose": "Conflict-zone advisories",
+      "status": "imported"
+    },
+    {
+      "id": "OPENAIP_FIR",
+      "provider": "OpenAIP",
+      "source": "https://storage.openaip.net/openaip-system-exports/{country}_asp.geojson",
+      "format": "GeoJSON",
+      "license": "CC BY-NC 4.0",
+      "refresh": "weekly",
+      "purpose": "FIR/UIR polygon reference",
+      "status": "partial_coverage_non_commercial"
+    },
+    {
+      "id": "FAA_PRN_KICZ",
+      "provider": "FAA",
+      "source": "https://www.faa.gov/air_traffic/publications/us_restrictions/index.cfm",
+      "format": "HTML index + linked PDF",
+      "refresh": "daily",
+      "purpose": "KICZ NOTAM and SFAR references",
+      "status": "imported_currentness_unverified"
+    },
+    {
+      "id": "FAA_NMS",
+      "provider": "FAA",
+      "source": "https://www.faa.gov/air_traffic/technology/swim",
+      "format": "API",
+      "refresh": "requires_access",
+      "purpose": "Live NOTAM amendments and cancellation verification",
+      "status": "not_connected_access_required"
+    }
+  ]
+}\n
