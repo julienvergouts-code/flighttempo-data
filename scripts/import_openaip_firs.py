@@ -73,7 +73,7 @@ def fir_code(properties):
     name = str(properties.get("name") or "").upper()
     match = re.search(r"\b([A-Z]{4})\\s+(?:FIR|UIR)\\b", name)
     if not match:
-        match = re.search(r"\\b(?:FIR|UIR)\\s+([A-Z]{4})\\b", name)
+        match = re.search(r"\b(?:FIR|UIR)\s+([A-Z]{4})\b", name)
     return match.group(1) if match else None
 
 
