@@ -205,7 +205,7 @@
       "effectiveDate": "2021-06-02",
       "expiryDate": null,
       "sha256": "8811409aec077572233abc7eec36dc84c3395e9eb9faef2aeacff7e5f2b5b7dc",
-      "licenceStatus": "EASA_reproduction_authorised_with_source_acknowledgement",
+      "licenceStatus": "EASA_metadata_summary_source_acknowledged",
       "coverage": "FIR Minsk (UMMV); NCA/operator scope must be verified",
       "recordCount": 1
     }
