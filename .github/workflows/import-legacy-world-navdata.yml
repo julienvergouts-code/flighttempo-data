@@ -1,11 +1,6 @@
 name: Import legacy worldwide X-Plane navigation baseline
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - '.github/workflows/import-legacy-world-navdata.yml'
-      - 'scripts/import_xplane_navdata.py'
   workflow_dispatch:
 
 permissions:
