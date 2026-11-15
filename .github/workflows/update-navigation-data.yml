@@ -124,6 +124,136 @@ jobs:
             --source-dir navigation/sources/flightgear \
             --manifest navigation_manifest.json \
             --optional --include-airways
+      - name: Record legacy global IFR facility types and source provenance
+        run: |
+          python3 - <<'PY'
+          import csv, hashlib, json
+          from collections import Counter
+          from datetime import datetime, timezone
+          from pathlib import Path
+
+          root = Path(".")
+          import_path = root / "navigation/sources/flightgear/import_metadata.json"
+          nav_path = root / "navigation_manifest.json"
+          root_manifest_path = root / "manifest.json"
+          if import_path.is_file():
+              source = json.loads(import_path.read_text())
+              nav = json.loads(nav_path.read_text())
+              counts = source.setdefault("counts", {})
+              navaid_csv = root / "navigation/navaids/flightgear_navaids.csv"
+              facility_counts = Counter()
+              if navaid_csv.is_file():
+                  with navaid_csv.open(encoding="utf-8", newline="") as handle:
+                      for row in csv.DictReader(handle):
+                          facility_counts[row.get("facility_type", "UNKNOWN") or "UNKNOWN"] += 1
+              counts["facilityTypeCounts"] = dict(sorted(facility_counts.items()))
+              counts["ilsFacilityCount"] = sum(v for k, v in facility_counts.items() if k.startswith("ILS_") or k == "LOCALIZER_LDA_SDF")
+              counts["localizerCount"] = facility_counts.get("ILS_LOCALIZER", 0) + facility_counts.get("LOCALIZER_LDA_SDF", 0)
+              counts["glideslopeCount"] = facility_counts.get("ILS_GLIDESLOPE", 0)
+              counts["markerBeaconCount"] = sum(facility_counts.get(k, 0) for k in ("ILS_OUTER_MARKER", "ILS_MIDDLE_MARKER", "ILS_INNER_MARKER"))
+              counts["dmeFacilityCount"] = facility_counts.get("DME_PAIRED", 0) + facility_counts.get("DME_STANDALONE", 0)
+              import_path.write_text(json.dumps(source, indent=2) + "\n")
+
+              datasets = {d.get("path"): d for d in nav.get("datasets", [])}
+              def dataset(path):
+                  if path not in datasets:
+                      raise RuntimeError(f"Missing app manifest dataset: {path}")
+                  return datasets[path]
+              fixes = dataset("navigation/waypoints/flightgear_fixes.csv")
+              navaids = dataset("navigation/navaids/flightgear_navaids.csv")
+              airways = dataset("navigation/airways/flightgear_airway_segments.csv")
+              cycle = source.get("dataCycle")
+              provider = source.get("provider", "Legacy X-Plane navigation data mirror")
+              license_name = source.get("license", "GPL-3.0")
+
+              nav.setdefault("statistics", {})["flightgearIlsFacilities"] = counts["ilsFacilityCount"]
+              nav["statistics"]["flightgearLocalizerFacilities"] = counts["localizerCount"]
+              nav["statistics"]["flightgearGlideslopeFacilities"] = counts["glideslopeCount"]
+              nav["statistics"]["flightgearMarkerBeacons"] = counts["markerBeaconCount"]
+              nav["statistics"]["flightgearDmeFacilities"] = counts["dmeFacilityCount"]
+              nav.setdefault("capabilities", {})["legacyGlobalFixes"] = fixes.get("recordCount", 0) > 0
+              nav["capabilities"]["legacyGlobalNavaids"] = navaids.get("recordCount", 0) > 0
+              nav["capabilities"]["legacyGlobalAirways"] = airways.get("recordCount", 0) > 0
+              nav["capabilities"]["legacyGlobalIlsFacilities"] = counts["ilsFacilityCount"] > 0
+              nav["capabilities"]["worldCorridorGraph"] = (root / "navigation/graph/world_corridor_graph.bin").is_file()
+
+              (root / "navigation/waypoints/meta.json").write_text(json.dumps({
+                  "source": provider, "sourceUrl": source.get("sourceUrl"),
+                  "airacCycle": None, "sourceCycleToken": cycle,
+                  "effectiveDate": None, "expiryDate": None,
+                  "sha256": fixes.get("sha256"),
+                  "licenceStatus": "GPL-3.0_legacy_stale_personal_development_reference",
+                  "licenseName": license_name, "recordCount": fixes.get("recordCount"),
+                  "coverage": "Worldwide legacy IFR fixes; stale cycle; not operational",
+                  "files": [{"path": "flightgear_fixes.csv", "sha256": fixes.get("sha256"), "sizeBytes": fixes.get("sizeBytes"), "recordCount": fixes.get("recordCount")}],
+                  "notes": "Source cycle is preserved exactly and is not claimed to be a current AIRAC."
+              }, indent=2) + "\n")
+
+              (root / "navigation/airways/meta.json").write_text(json.dumps({
+                  "source": provider, "sourceUrl": source.get("sourceUrl"),
+                  "airacCycle": None, "sourceCycleToken": cycle,
+                  "effectiveDate": None, "expiryDate": None,
+                  "sha256": airways.get("sha256"),
+                  "licenceStatus": "GPL-3.0_legacy_stale_personal_development_reference",
+                  "licenseName": license_name, "recordCount": airways.get("recordCount"),
+                  "lowAirwaySegments": counts.get("lowAirwaySegments"),
+                  "highAirwaySegments": counts.get("highAirwaySegments"),
+                  "coverage": "Worldwide legacy airway segments; stale cycle; not operational",
+                  "files": [{"path": "flightgear_airway_segments.csv", "sha256": airways.get("sha256"), "sizeBytes": airways.get("sizeBytes"), "recordCount": airways.get("recordCount")}],
+                  "notes": "Low/high airway classification is retained from the source AWY640 level field."
+              }, indent=2) + "\n")
+
+              navaid_meta_path = root / "navigation/navaids/meta.json"
+              navaid_meta = json.loads(navaid_meta_path.read_text())
+              navaid_meta.update({
+                  "source": "Mixed sources; per-file source and licence apply",
+                  "airacCycle": None, "sourceCycleToken": cycle,
+                  "sha256": None,
+                  "licenceStatus": "mixed_per_file_CC0_and_GPL3",
+                  "files": [
+                      {"path": "navaids.csv", "sha256": datasets["navigation/navaids/navaids.csv"].get("sha256"), "sizeBytes": datasets["navigation/navaids/navaids.csv"].get("sizeBytes"), "recordCount": datasets["navigation/navaids/navaids.csv"].get("recordCount"), "source": "OurAirports", "license": "CC0 / Public Domain"},
+                      {"path": "flightgear_navaids.csv", "sha256": navaids.get("sha256"), "sizeBytes": navaids.get("sizeBytes"), "recordCount": navaids.get("recordCount"), "source": provider, "sourceCycleToken": cycle, "license": license_name}
+                  ]
+              })
+              navaid_meta_path.write_text(json.dumps(navaid_meta, indent=2) + "\n")
+
+              source_meta = {
+                  "source": provider, "sourceUrl": source.get("sourceUrl"),
+                  "airacCycle": None, "sourceCycleToken": cycle,
+                  "effectiveDate": None, "expiryDate": None,
+                  "sha256": None, "licenceStatus": "GPL-3.0_legacy_stale_personal_development_reference",
+                  "licenseName": license_name, "recordCount": counts.get("fixes", 0) + counts.get("navaids", 0) + counts.get("airwaySegments", 0),
+                  "sourceFiles": source.get("files", []),
+                  "files": [
+                      {"path": "earth_fix.dat", "sha256": source.get("files", [{}])[0].get("sha256"), "sizeBytes": source.get("files", [{}])[0].get("sizeBytes")},
+                      {"path": "earth_nav.dat", "sha256": source.get("files", [{}, {}])[1].get("sha256"), "sizeBytes": source.get("files", [{}, {}])[1].get("sizeBytes")},
+                      {"path": "earth_awy.dat", "sha256": source.get("files", [{}, {}, {}])[2].get("sha256"), "sizeBytes": source.get("files", [{}, {}, {}])[2].get("sizeBytes")}
+                  ],
+                  "counts": counts,
+                  "notes": "Legacy cycle 2012.08. Development/reference use only; never represent as current AIRAC or operational data."
+              }
+              (root / "navigation/sources/flightgear/meta.json").write_text(json.dumps(source_meta, indent=2) + "\n")
+
+              root_manifest = json.loads(root_manifest_path.read_text())
+              root_datasets = [d for d in root_manifest.get("datasets", []) if d.get("id") not in {"legacy-global-ifr-fixes", "legacy-global-ifr-navaids", "legacy-global-airways"}]
+              for dataset_id, item, coverage in (
+                  ("legacy-global-ifr-fixes", fixes, "Worldwide legacy IFR fixes"),
+                  ("legacy-global-ifr-navaids", navaids, "Worldwide legacy navaids including ILS facilities"),
+                  ("legacy-global-airways", airways, "Worldwide legacy low/high airway segments")
+              ):
+                  root_datasets.append({
+                      "id": dataset_id, "path": item["path"], "source": provider,
+                      "airacCycle": None, "sourceCycleToken": cycle,
+                      "effectiveDate": None, "expiryDate": None,
+                      "sha256": item.get("sha256"),
+                      "licenceStatus": "GPL-3.0_legacy_stale_personal_development_reference",
+                      "coverage": coverage, "recordCount": item.get("recordCount")
+                  })
+              root_manifest["datasets"] = root_datasets
+              root_manifest["generatedAtUtc"] = datetime.now(timezone.utc).isoformat()
+              root_manifest_path.write_text(json.dumps(root_manifest, indent=2) + "\n")
+              nav_path.write_text(json.dumps(nav, indent=2) + "\n")
+          PY
       - name: Build world corridor graph
         run: python3 scripts/build_world_corridor_graph.py
       - name: Register graph and airspace datasets in manifest
