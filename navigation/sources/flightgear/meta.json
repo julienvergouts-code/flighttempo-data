@@ -25,8 +25,8 @@
     },
     {
       "path": "navigation/airways/flightgear_airway_segments.csv",
-      "sha256": "93dd6e3afc8ae453ac151c83c28ad1c4c7e79839abd26f5b1befe3cef8994728",
-      "sizeBytes": 20125046,
+      "sha256": "91a53e0b7ea5e79c408dab124d0976d1c78d6e4faf10b949bc230035858ac24f",
+      "sizeBytes": 20439306,
       "recordCount": 70291
     }
   ],
@@ -34,9 +34,9 @@
     "fixes": 113356,
     "navaids": 26599,
     "airwaySegments": 70291,
-    "lowAirwaySegments": 0,
-    "highAirwaySegments": 0,
-    "unknownLevelAirwaySegments": 70291,
+    "lowAirwaySegments": 37195,
+    "highAirwaySegments": 33096,
+    "unknownLevelAirwaySegments": 0,
     "rejectedFixRows": 0,
     "rejectedNavaidRows": 0,
     "rejectedAirwayRows": 0

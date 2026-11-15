@@ -8,9 +8,10 @@
   "dataCycle": "2012.08",
   "formatVersions": {
     "fixes": "600",
-    "navaids": "810"
+    "navaids": "810",
+    "airways": "640"
   },
-  "airwaysIncluded": false,
+  "airwaysIncluded": true,
   "files": [
     {
       "kind": "fixes",
@@ -37,14 +38,27 @@
       "dataCycle": "2012.08",
       "buildDate": "20120819",
       "copyrightHeader": "810 Version - data cycle 2012.08, build 20120819, metadata NavXP810. License GPL v.3 - Luther Blissett http://github.com/mcantsin/x-plane-navdata"
+    },
+    {
+      "kind": "airways",
+      "fileName": "earth_awy.dat",
+      "sha256": "eb2c2671c2e29618c8769677e00c05ccfcd976697632cb74dfb34bfb8be96e24",
+      "payloadSha256": "eb2c2671c2e29618c8769677e00c05ccfcd976697632cb74dfb34bfb8be96e24",
+      "sizeBytes": 5154929,
+      "compression": "none",
+      "byteOrder": "I",
+      "formatVersion": "640",
+      "dataCycle": "2012.08",
+      "buildDate": "20120819",
+      "copyrightHeader": "640 Version - data cycle 2012.08, build 20120819, metadata AwyXP700. License GPL v.3 - Luther Blissett http://github.com/mcantsin/x-plane-navdata"
     }
   ],
   "counts": {
     "fixes": 113356,
     "navaids": 26599,
-    "airwaySegments": 0,
-    "lowAirwaySegments": 0,
-    "highAirwaySegments": 0,
+    "airwaySegments": 70291,
+    "lowAirwaySegments": 37195,
+    "highAirwaySegments": 33096,
     "unknownLevelAirwaySegments": 0,
     "rejectedFixRows": 0,
     "rejectedNavaidRows": 0,

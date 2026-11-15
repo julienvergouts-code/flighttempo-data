@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "format": "FlightTempo World Corridor Graph",
+  "file": "world_corridor_graph.bin",
+  "magic": "FTWG",
+  "formatVersion": 1,
+  "byteOrder": "little_endian",
+  "headerStruct": "<4sHHIIII",
+  "nodeStruct": "<iiIHH",
+  "edgeStruct": "<IIIHBBII",
+  "nodeCount": 30130,
+  "airwayNodeCount": 30130,
+  "airportNodeCount": 0,
+  "airwayEdgeCount": 70291,
+  "airportConnectorEdgeCount": 0,
+  "edgeCount": 70291,
+  "lowAirwayEdgeCount": 37195,
+  "highAirwayEdgeCount": 33096,
+  "source": "ptsmonteiro/x-plane-navdata legacy AWY640, with FlightTempo OurAirports airport connectors",
+  "sourceCycleToken": "2012.08",
+  "airacCycle": null,
+  "licenceStatus": "GPL-3.0_derived_data; source attribution and full GPL notice retained",
+  "sha256": "9d6a6b4ea9dbc9dc9778687f552f4d80e873cc74c8e1c4e8edcdd825bf750cd8",
+  "sizeBytes": 2614392,
+  "generatedAtUtc": "2026-11-15T09:52:20.652472+00:00",
+  "connectorPolicy": {
+    "maxDistanceNm": 150.0,
+    "connectorsPerAirport": 3,
+    "meaning": "Generated direct links from airport reference coordinates to nearby airway graph nodes; not published SID/STAR procedure geometry."
+  },
+  "limitations": [
+    "Legacy snapshot from 2012.08; not current AIRAC.",
+    "AWY640 has no one-way direction field; airway edges are treated as bidirectional for route-preview only.",
+    "No vertical airspace, FIR restriction, NOTAM or operator-rule checks are embedded in this graph.",
+    "Airport connectors are synthetic graph links and must never be displayed as published procedures or ATC clearances.",
+    "The graph is for development route previews only, not operational flight planning or navigation."
+  ]
+}
