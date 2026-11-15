@@ -65,12 +65,36 @@ def fetch_country(cc):
     return cc, data, None
 
 
+FIR_NAME_TO_CODE = {
+    "TEHRAN FIR": "OIIX", "TRIPOLI FIR": "HLLL",
+    "KALININGRAD FIR": "UMKK", "SAMARA FIR": "UWWW",
+    "SIMFEROPOL FIR": "UKFV", "ROSTOV-NA-DONU FIR": "URRV",
+    "MOSCOW FIR": "UUWV", "ST PETERSBURG FIR": "ULLL",
+    "KYIV FIR": "UKBV", "DNIPRO FIR": "UKDV",
+    "LVIV FIR": "UKLV", "ODESA FIR": "UKOV",
+    "KHARTOUM FIR": "HSSS", "NIAMEY FIR": "DRRR",
+    "KABUL FIR": "OAKX", "MOGADISHU FIR": "HCSM",
+    "DAMASCUS FIR": "OSTT", "BAGHDAD FIR": "ORBB",
+    "SANAA FIR": "OYSC", "SANA'A FIR": "OYSC",
+    "AMMAN FIR": "OJAC", "BEIRUT FIR": "OLBB",
+    "BAHRAIN FIR": "OBBB", "KUWAIT FIR": "OKAC",
+    "DOHA FIR": "OTDF", "MUSCAT FIR": "OOMM",
+    "EMIRATES FIR": "OMAE", "JEDDAH FIR": "OEJD",
+    "ISLAMABAD FIR": "OPIS", "KARACHI FIR": "OPKR",
+    "LAHORE FIR": "OPLR", "PYONGYANG FIR": "ZKKP",
+}
+
+
 def fir_code(properties):
     for key in ("designator", "icaoCode", "code", "ident"):
         value = str(properties.get(key) or "").strip().upper()
         if len(value) == 4 and value.isalpha():
             return value
-    tokens = str(properties.get("name") or "").upper().replace("/", " ").split()
+    raw_name = str(properties.get("name") or "").upper().replace("/", " ").strip()
+    for known_name, code in FIR_NAME_TO_CODE.items():
+        if known_name in raw_name:
+            return code
+    tokens = raw_name.split()
     for index, token in enumerate(tokens):
         if token in {"FIR", "UIR"} and index + 1 < len(tokens):
             candidate = tokens[index + 1]
@@ -197,7 +221,36 @@ def main():
         "note": "Community-maintained FIR/UIR geometry. Advisory-country association is a routing hint, not a legal prohibition. Verify against current State AIPs and NOTAMs."
     }
     filter_data["activeAdvisories"] = advisories
-    filter_data["unmappedAdvisories"] = [x["sourceId"] for x in advisories if not x.get("affectedFirs")]
+    active_firs = []
+    seen_firs = set()
+    for advisory in advisories:
+        for fir in advisory.get("affectedFirs", []):
+            key = (fir.get("firCode"), fir.get("geometryFeatureId"))
+            if key in seen_firs:
+                continue
+            seen_firs.add(key)
+            active_firs.append({
+                "firCode": fir.get("firCode"),
+                "name": fir.get("name"),
+                "geometryFeatureId": fir.get("geometryFeatureId"),
+                "geometryAvailable": fir.get("geometryFeatureId") is not None,
+                "sourceAdvisoryId": advisory.get("sourceId"),
+                "country": advisory.get("country"),
+                "validUntil": advisory.get("validUntil"),
+                "classification": "EASA_advisory_not_legal_prohibition"
+            })
+        for code in (advisory.get("explicitFirCodes") or []):
+            key = (code, None)
+            if key not in seen_firs:
+                seen_firs.add(key)
+                active_firs.append({
+                    "firCode": code, "name": None, "geometryFeatureId": None,
+                    "geometryAvailable": False, "sourceAdvisoryId": advisory.get("sourceId"),
+                    "country": advisory.get("country"), "validUntil": advisory.get("validUntil"),
+                    "classification": "EASA_advisory_not_legal_prohibition"
+                })
+    filter_data["activeFirs"] = active_firs
+    filter_data["unmappedAdvisories"] = [x["sourceId"] for x in advisories if not x.get("affectedFirs") and not x.get("explicitFirCodes")]
     filter_data["generatedAtUtc"] = datetime.now(timezone.utc).isoformat()
     FILTER_FILE.write_text(json.dumps(filter_data, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
