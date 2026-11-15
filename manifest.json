@@ -1,0 +1,109 @@
+{
+  "schemaVersion": 1,
+  "repository": "julienvergouts-code/flighttempo-data",
+  "generatedAtUtc": "2026-11-15T09:36:00Z",
+  "purpose": "Personal FlightTempo development, cross-checking, route-building experiments and flight-preparation practice; not an operational navigation database.",
+  "rules": {
+    "datasetMetaRequired": true,
+    "requiredMetaFields": [
+      "source",
+      "airacCycle",
+      "effectiveDate",
+      "expiryDate",
+      "sha256",
+      "licenceStatus"
+    ],
+    "missingRegionalProcedures": "remain_missing_never_invent",
+    "openAipAttribution": "Contains data from OpenAIP (https://www.openaip.net/), licensed under CC BY-NC 4.0.",
+    "airacNetStorage": "blocked_until_licence_clarified",
+    "aerosors": "experimental_private_development_only_derivative_redistribution_not_confirmed"
+  },
+  "datasets": [
+    {
+      "id": "ourairports-global-airports",
+      "path": "navigation/airports",
+      "source": "OurAirports",
+      "airacCycle": null,
+      "effectiveDate": null,
+      "expiryDate": null,
+      "sha256": "see_meta_json",
+      "licenceStatus": "CC0_public_domain_as_stated_by_provider",
+      "coverage": "Worldwide airports"
+    },
+    {
+      "id": "ourairports-runways",
+      "path": "navigation/runways",
+      "source": "OurAirports",
+      "airacCycle": null,
+      "effectiveDate": null,
+      "expiryDate": null,
+      "sha256": "see_meta_json",
+      "licenceStatus": "CC0_public_domain_as_stated_by_provider",
+      "coverage": "Worldwide runways"
+    },
+    {
+      "id": "ourairports-navaids",
+      "path": "navigation/navaids",
+      "source": "OurAirports",
+      "airacCycle": null,
+      "effectiveDate": null,
+      "expiryDate": null,
+      "sha256": "see_meta_json",
+      "licenceStatus": "CC0_public_domain_as_stated_by_provider",
+      "coverage": "Worldwide source navaids"
+    },
+    {
+      "id": "faa-cifp-sids",
+      "path": "procedures/sids",
+      "source": "FAA AeroNav CIFP",
+      "airacCycle": "2611",
+      "effectiveDate": "2026-10-29",
+      "expiryDate": "2026-11-25",
+      "sha256": "be974a777fe0da70bb143bedce4f05d5744c2c62ad382691937c4b35494bf3cf",
+      "licenceStatus": "US_government_public_domain_review_FAA_terms_and_error_notification",
+      "coverage": "United States NAS only"
+    },
+    {
+      "id": "faa-cifp-stars",
+      "path": "procedures/stars",
+      "source": "FAA AeroNav CIFP",
+      "airacCycle": "2611",
+      "effectiveDate": "2026-10-29",
+      "expiryDate": "2026-11-25",
+      "sha256": "6bf123c683e442c1a07fbc46f4f11ad45045f8322a1b2506d65f6719055c0c06",
+      "licenceStatus": "US_government_public_domain_review_FAA_terms_and_error_notification",
+      "coverage": "United States NAS only"
+    },
+    {
+      "id": "faa-cifp-approaches",
+      "path": "procedures/approaches",
+      "source": "FAA AeroNav CIFP",
+      "airacCycle": "2611",
+      "effectiveDate": "2026-10-29",
+      "expiryDate": "2026-11-25",
+      "sha256": "ff7b9121e79b56ff616a77e285c9cba764575fd2c58335b3281124813362d3dd",
+      "licenceStatus": "US_government_public_domain_review_FAA_terms_and_error_notification",
+      "coverage": "United States NAS only"
+    },
+    {
+      "id": "openaip",
+      "path": "navigation/openaip",
+      "source": "OpenAIP",
+      "airacCycle": null,
+      "effectiveDate": null,
+      "expiryDate": null,
+      "sha256": null,
+      "licenceStatus": "not_imported_CC_BY_NC_4.0_attribution_required"
+    },
+    {
+      "id": "airacnet",
+      "path": null,
+      "source": "airac.net",
+      "airacCycle": null,
+      "effectiveDate": null,
+      "expiryDate": null,
+      "sha256": null,
+      "licenceStatus": "not_cleared_do_not_store"
+    }
+  ]
+}
