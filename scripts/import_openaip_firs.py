@@ -34,6 +34,8 @@ EASA_COUNTRY_CODES = {
     "Afghanistan": ["AF"], "Pakistan": ["PK"], "Ukraine": ["UA"],
     "Sudan": ["SD"], "Russia": ["RU"],
 }
+RUSSIA_CZIB_FIR_CODES = {"UUWV", "URRV", "ULLL", "USSV", "UWWW"}
+
 
 
 def country_codes():
@@ -68,6 +70,7 @@ def fetch_country(cc):
 FIR_NAME_TO_CODE = {
     "TEHRAN FIR": "OIIX", "TRIPOLI FIR": "HLLL",
     "KALININGRAD FIR": "UMKK", "SAMARA FIR": "UWWW",
+    "YEKATERINBURG FIR": "USSV", "YEKATARINBURG FIR": "USSV",
     "SIMFEROPOL FIR": "UKFV", "ROSTOV-NA-DONU FIR": "URRV",
     "MOSCOW FIR": "UUWV", "ST PETERSBURG FIR": "ULLL",
     "KYIV FIR": "UKBV", "DNIPRO FIR": "UKDV",
@@ -190,24 +193,45 @@ def main():
         country_names = [x.strip() for x in (item.get("country") or "").split(",") if x.strip()]
         wanted = {code for name in country_names for code in EASA_COUNTRY_CODES.get(name, [])}
         affected = []
+        explicit_fir_codes = list(item.get("explicitFirCodes") or [])
+        is_russia_czib = item.get("sourceId") == "141480" or "russian federation" in str(item.get("name", "")).lower()
         for feature in features:
             source_countries = set(feature["properties"].get("flightTempoSourceCountries", []))
-            if source_countries & wanted:
-                props = feature["properties"]
-                code = props.get("flightTempoFirCode") or fir_code(props)
-                affected.append({
-                    "firCode": code,
-                    "name": props.get("name"),
-                    "sourceCountryCodes": sorted(source_countries),
-                    "geometryFeatureId": feature.get("id"),
-                })
+            if not (source_countries & wanted):
+                continue
+            props = feature["properties"]
+            code = props.get("flightTempoFirCode") or fir_code(props)
+            # The Russian CZIB names exactly five FIRs. Do not associate every
+            # polygon in the Russian country export (for example UMKK/UKFV).
+            if is_russia_czib and code not in RUSSIA_CZIB_FIR_CODES:
+                continue
+            if explicit_fir_codes and code not in set(explicit_fir_codes):
+                continue
+            geometry_note = (
+                "OpenAIP UWWW geometry extends east of 60E and is not clipped to the EASA CZIB limit."
+                if code == "UWWW" and is_russia_czib else
+                "Community-maintained OpenAIP FIR reference geometry; verify against current State AIP."
+            )
+            affected.append({
+                "firCode": code,
+                "name": props.get("name"),
+                "sourceCountryCodes": sorted(source_countries),
+                "geometryFeatureId": feature.get("id"),
+                "geometrySource": "OpenAIP",
+                "geometryNote": geometry_note,
+            })
         advisories.append({
             "sourceId": item.get("sourceId"),
             "name": item.get("name"),
             "country": item.get("country"),
             "validUntil": item.get("validUntil"),
+            "explicitFirCodes": explicit_fir_codes,
             "affectedFirs": affected,
-            "mappingMethod": "country-export polygon association; verify FIR designators and boundaries against State AIP",
+            "mappingMethod": (
+                "Official EASA detail page FIR list matched by exact ICAO designator; OpenAIP geometry is partial and requires review."
+                if is_russia_czib else
+                "country-export polygon association; verify FIR designators and boundaries against State AIP"
+            ),
         })
 
     filter_data = json.loads(FILTER_FILE.read_text(encoding="utf-8"))
@@ -239,7 +263,13 @@ def main():
                 "validUntil": advisory.get("validUntil"),
                 "classification": "EASA_advisory_not_legal_prohibition"
             })
+        geometry_codes = {
+            fir.get("firCode") for fir in advisory.get("affectedFirs", [])
+            if fir.get("geometryFeatureId") is not None
+        }
         for code in (advisory.get("explicitFirCodes") or []):
+            if code in geometry_codes:
+                continue
             key = (code, None)
             if key not in seen_firs:
                 seen_firs.add(key)
@@ -247,10 +277,38 @@ def main():
                     "firCode": code, "name": None, "geometryFeatureId": None,
                     "geometryAvailable": False, "sourceAdvisoryId": advisory.get("sourceId"),
                     "country": advisory.get("country"), "validUntil": advisory.get("validUntil"),
-                    "classification": "EASA_advisory_not_legal_prohibition"
+                    "classification": "EASA_advisory_not_legal_prohibition",
+                    "geometryNote": "No matching FIR polygon is present in the imported boundary dataset."
                 })
     filter_data["activeFirs"] = active_firs
     filter_data["unmappedAdvisories"] = [x["sourceId"] for x in advisories if not x.get("affectedFirs") and not x.get("explicitFirCodes")]
+    available_geometry_codes = {x.get("firCode") for x in active_firs if x.get("geometryFeatureId") is not None}
+    missing_geometry = []
+    geometry_review = []
+    for advisory in advisories:
+        for code in advisory.get("explicitFirCodes", []):
+            if code not in available_geometry_codes:
+                missing_geometry.append({
+                    "sourceId": advisory.get("sourceId"), "instrumentType": "EASA_CZIB",
+                    "firCode": code,
+                    "reason": "No matching FIR polygon is present in the imported OpenAIP boundary dataset."
+                })
+        for fir in advisory.get("affectedFirs", []):
+            if fir.get("firCode") == "UWWW":
+                geometry_review.append({
+                    "sourceId": advisory.get("sourceId"), "firCode": "UWWW",
+                    "reason": "OpenAIP Samara FIR polygon extends east of 60E; clip before representing the exact EASA CZIB footprint."
+                })
+    for directive in filter_data.get("safetyDirectives", []):
+        for fir in directive.get("affectedFirs", []):
+            if not fir.get("geometryAvailable", False):
+                missing_geometry.append({
+                    "sourceId": directive.get("sourceId"), "instrumentType": "EASA_SAFETY_DIRECTIVE",
+                    "firCode": fir.get("firCode"),
+                    "reason": fir.get("geometryReason", "FIR geometry is not available.")
+                })
+    filter_data["missingFIRGeometry"] = missing_geometry
+    filter_data["geometryReviewRequired"] = geometry_review
     filter_data["generatedAtUtc"] = datetime.now(timezone.utc).isoformat()
     FILTER_FILE.write_text(json.dumps(filter_data, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
