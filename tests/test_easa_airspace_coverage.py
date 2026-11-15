@@ -44,14 +44,18 @@ class EasaAirspaceCoverageTests(unittest.TestCase):
         self.assertEqual(directive["instrumentType"], "EASA Safety Directive")
         self.assertEqual(directive["affectedFirs"][0]["firCode"], "UMMV")
         self.assertFalse(directive["affectedFirs"][0]["geometryAvailable"])
-        self.assertFalse(any(x.get("sourceId") == "SD-2021-02" for x in self.filter_data["activeAdvisories"]))
+        self.assertEqual(len(self.directives["records"]), 2)
+        direct_easa = next(x for x in self.directives["records"] if x["sourceId"] == "SD-2021-03")
+        self.assertIn("EASA has issued the AOC", direct_easa["applicability"][0])
+        self.assertIn("direct_easa_competent_authority", direct_easa["routePreviewTreatment"])
+        self.assertFalse(any(x.get("sourceId") in {"SD-2021-02", "SD-2021-03"} for x in self.filter_data["activeAdvisories"]))
 
     def test_app_manifest_exposes_directive_as_reference_only(self):
         dataset = next(x for x in self.manifest["datasets"] if x["id"] == "easa_safety_directives")
         path = ROOT / dataset["path"]
         self.assertTrue(dataset["available"])
         self.assertFalse(dataset["operationallyAvailable"])
-        self.assertEqual(dataset["recordCount"], 1)
+        self.assertEqual(dataset["recordCount"], 2)
         self.assertEqual(dataset["sha256"], hashlib.sha256(path.read_bytes()).hexdigest())
 
     def test_airspace_filter_checksum_matches_app_manifest(self):
