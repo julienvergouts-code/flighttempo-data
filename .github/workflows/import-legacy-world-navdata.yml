@@ -23,6 +23,7 @@ jobs:
       - name: Checkout FlightTempo data repository
         uses: actions/checkout@v4
         with:
+          ref: main
           fetch-depth: 0
 
       - name: Checkout legacy worldwide X-Plane navigation snapshot
