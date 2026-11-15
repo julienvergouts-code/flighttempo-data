@@ -1,0 +1,10 @@
+{
+  "source": "No verified airway source ingested",
+  "airacCycle": null,
+  "effectiveDate": null,
+  "expiryDate": null,
+  "sha256": null,
+  "licenceStatus": "not_available_empty_placeholder",
+  "recordCount": 0,
+  "notes": "No airway graph is currently available. Do not infer or generate airway segments."
+}
