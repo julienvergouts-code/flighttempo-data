@@ -58,6 +58,9 @@ jobs:
           }
           JSON
 
+      - name: Run navigation importer tests
+        run: python3 -m unittest discover -s tests -v
+
       - name: Import global fixes, navaids including ILS, and airway segments
         run: python3 scripts/import_xplane_navdata.py --source-dir navigation/sources/flightgear --include-airways
 
