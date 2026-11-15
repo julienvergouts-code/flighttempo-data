@@ -198,7 +198,7 @@ def main():
     }
     filter_data["activeAdvisories"] = advisories
     filter_data["unmappedAdvisories"] = [x["sourceId"] for x in advisories if not x.get("affectedFirs")]
-    filter_data["generatedAtUtc" = datetime.now(timezone.utc).isoformat()
+    filter_data["generatedAtUtc"] = datetime.now(timezone.utc).isoformat()
     FILTER_FILE.write_text(json.dumps(filter_data, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
     import hashlib
