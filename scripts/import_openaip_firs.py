@@ -146,6 +146,9 @@ def build_russia_advisory_mapping(item, features):
     affected = []
     for code, name in RUSSIA_CZIB_2025_01_R3_FIRS:
         feature = by_code.get(code)
+        props = (feature.get("properties") or {}) if feature else {}
+        verified = props.get("flightTempoVerifiedAgainstStateAip") is True
+        clipped = props.get("flightTempoClippedAt60E") is True
         affected.append({
             "firCode": code,
             "name": name,
@@ -153,12 +156,22 @@ def build_russia_advisory_mapping(item, features):
             "geometryFeatureId": feature.get("id") if feature else None,
             "geometryAvailable": feature is not None,
             "geometrySource": "OpenAIP CC BY-NC 4.0 development reference" if feature else None,
-            "geometryVerifiedAgainstStateAip": False,
-            "geometryStatus": "candidate_openAIP_unverified" if feature else "missing_in_current_OpenAIP_export",
+            "geometryVerifiedAgainstStateAip": verified,
+            "geometryClippedTo60E": clipped,
+            "geometryStatus": (
+                "state_aip_verified" if verified and clipped
+                else "candidate_openAIP_unverified" if feature
+                else "missing_in_current_OpenAIP_export"
+            ),
             "requiresLongitudeClipAt60E": True,
         })
 
-    complete = all(x["geometryAvailable"] and x["geometryVerifiedAgainstStateAip"] for x in affected)
+    complete = all(
+        x["geometryAvailable"]
+        and x["geometryVerifiedAgainstStateAip"]
+        and x["geometryClippedTo60E"]
+        for x in affected
+    )
     return {
         "affectedAirspace": {
             "territory": "Russian Federation",
