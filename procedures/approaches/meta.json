@@ -1,0 +1,20 @@
+{
+  "source": "FAA AeroNav CIFP",
+  "airacCycle": "2611",
+  "effectiveDate": "2026-10-29",
+  "expiryDate": "2026-11-25",
+  "sha256": "ff7b9121e79b56ff616a77e285c9cba764575fd2c58335b3281124813362d3dd",
+  "licenceStatus": "US_government_public_domain_review_FAA_terms_and_error_notification",
+  "sourceUrl": "https://aeronav.faa.gov/Upload_313-d/cifp/CIFP_261029.zip",
+  "licenseName": "US Government work / public domain",
+  "coverage": "United States NAS only; no European coverage",
+  "recordCount": 114966,
+  "files": [
+    {
+      "path": "approaches.csv",
+      "sha256": "ff7b9121e79b56ff616a77e285c9cba764575fd2c58335b3281124813362d3dd",
+      "sizeBytes": 5608604
+    }
+  ],
+  "notes": "FAA CIFP cycle 2611. Includes FAA NAS approach records only."
+}
