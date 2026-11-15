@@ -1,0 +1,19 @@
+{
+  "source": "OurAirports",
+  "airacCycle": null,
+  "effectiveDate": null,
+  "expiryDate": null,
+  "sha256": null,
+  "licenceStatus": "CC0_public_domain_as_stated_by_provider",
+  "sourceUrl": "https://davidmegginson.github.io/ourairports-data/runways.csv",
+  "licenseName": "CC0 / Public Domain",
+  "recordCount": 47122,
+  "files": [
+    {
+      "path": "runways_parsed.csv",
+      "sha256": null,
+      "sizeBytes": 5224744
+    }
+  ],
+  "notes": "Upstream source snapshot downloaded 2026-11-15. The source raw checksum is 4b53733f63b740517291d3c73cccbc6c4356a2d31334a9cafb8c73ff92d2a673; normalized CSV checksum must be calculated separately."
+}
