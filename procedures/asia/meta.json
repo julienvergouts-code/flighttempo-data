@@ -1,0 +1,11 @@
+{
+  "source": "No regional Asian IFR procedure dataset ingested",
+  "airacCycle": null,
+  "effectiveDate": null,
+  "expiryDate": null,
+  "sha256": null,
+  "licenceStatus": "missing_not_ingested",
+  "coverage": "Asia",
+  "recordCount": 0,
+  "notes": "Missing SIDs, STARs and approaches remain missing. Do not infer or generate them."
+}
