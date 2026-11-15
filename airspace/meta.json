@@ -1,0 +1,23 @@
+{
+  "source": "FlightTempo route policy and machine-readable conflict-zone advisory datasets",
+  "airacCycle": null,
+  "effectiveDate": null,
+  "expiryDate": null,
+  "sha256": null,
+  "licenceStatus": "mixed_source_rights_per_file_metadata_applies",
+  "files": [
+    {
+      "path": "airspace_filter.json",
+      "sha256": "129af7e3cb17063766b67830691f21d5e74ff2daf40c8427b7a19e4eb33ee5ff",
+      "sizeBytes": 7733,
+      "recordCount": 16
+    },
+    {
+      "path": "route_policy.json",
+      "sha256": "009b2c1a3f0f86ab9c91bf380b32c5a147ad2f5fb2f2fceb1b056e316531cd7d",
+      "sizeBytes": 1411,
+      "recordCount": 1
+    }
+  ],
+  "notes": "airspace_filter.json combines EASA advisory records with OpenAIP FIR geometry references. It does not contain a complete legal prohibition feed. See per-source metadata in airspace/advisories and navigation/airspace."
+}
