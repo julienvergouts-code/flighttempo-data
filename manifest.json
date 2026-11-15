@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "repository": "julienvergouts-code/flighttempo-data",
-  "generatedAtUtc": "2026-11-15T10:12:00Z",
+  "generatedAtUtc": "2026-11-15T10:05:05.667857+00:00",
   "purpose": "Personal FlightTempo development, cross-checking, route-building experiments and flight-preparation practice; not an operational navigation database.",
   "rules": {
     "datasetMetaRequired": true,
@@ -106,18 +106,6 @@
       "licenceStatus": "not_cleared_do_not_store"
     },
     {
-      "id": "openaip-fir-boundaries",
-      "path": "navigation/airspace/openaip_fir_boundaries.geojson",
-      "source": "OpenAIP country airspace exports",
-      "airacCycle": null,
-      "effectiveDate": null,
-      "expiryDate": null,
-      "sha256": "baddb497adf9dd33de180215ac526fef69a321b8e504feba4395430f3630a7b0",
-      "licenceStatus": "CC_BY_NC_4.0_attribution_required_non_commercial_only",
-      "coverage": "Worldwide FIR/UIR polygons where published in OpenAIP country exports",
-      "recordCount": 170
-    },
-    {
       "id": "world-corridor-graph",
       "path": "navigation/graph/world_corridor_graph.bin",
       "source": "Legacy X-Plane navigation data mirror (ptsmonteiro/x-plane-navdata) plus FlightTempo airport connectors",
@@ -165,6 +153,18 @@
       "licenceStatus": "FlightTempo_original_configuration",
       "coverage": "Route preview policy",
       "recordCount": 1
+    },
+    {
+      "id": "openaip-fir-boundaries",
+      "path": "navigation/airspace/openaip_fir_boundaries.geojson",
+      "source": "OpenAIP country airspace exports",
+      "airacCycle": null,
+      "effectiveDate": null,
+      "expiryDate": null,
+      "sha256": "ccdd2aad24f02632cbb30a74f60f5f232fa0379aa5911c3f053c5f2fcb825e0a",
+      "licenceStatus": "CC_BY_NC_4.0_attribution_required_non_commercial_only",
+      "coverage": "Worldwide FIR/UIR polygons where published in OpenAIP country exports",
+      "recordCount": 170
     }
   ]
 }

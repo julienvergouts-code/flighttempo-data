@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAtUtc": "2026-11-15T10:00:19.656359+00:00",
+  "generatedAtUtc": "2026-11-15T10:05:05.422999+00:00",
   "source": "EASA CZIB JSON export",
   "sourceUrl": "https://www.easa.europa.eu/en/domains/air-operations/czibs/export-json?_format=json&page=",
   "policy": {
@@ -26,7 +26,7 @@
       "validUntil": "2026-11-16",
       "affectedFirs": [
         {
-          "firCode": null,
+          "firCode": "OEJD",
           "name": "OEJD FIR",
           "sourceCountryCodes": [
             "SA"
@@ -108,7 +108,7 @@
       "validUntil": "2026-11-16",
       "affectedFirs": [
         {
-          "firCode": null,
+          "firCode": "OMAE",
           "name": "OMAE FIR",
           "sourceCountryCodes": [
             "AE"
@@ -219,20 +219,16 @@
   ],
   "unmappedAdvisories": [
     "143944",
-    "144230",
     "20599",
     "20589",
     "20585",
-    "143861",
+    "20602",
     "143862",
     "143863",
-    "143899",
-    "20582",
     "20574",
     "20587",
     "136057",
-    "137874",
-    "141480"
+    "137874"
   ],
   "firBoundaryDataset": {
     "status": "available_development_reference",
