@@ -317,9 +317,8 @@ def parse_airways(source, fixes, navaids):
     for line_number, raw, fields in source["records"]:
         if source.get("format_version") == "640":
             # Legacy AWY 640 stores the endpoint coordinates in each segment,
-            # but has no endpoint region/type or low/high level classification.
-            # Preserve the supplied coordinates and raw direction code without
-            # pretending that these fields were resolved from typed fixes.
+            # but has no endpoint region/type or one-way direction field.
+            # Preserve supplied coordinates and source low/high level class.
             if len(fields) < 10:
                 rejected += 1
                 continue
