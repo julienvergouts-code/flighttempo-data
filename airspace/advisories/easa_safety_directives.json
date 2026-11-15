@@ -32,6 +32,33 @@
       "routePreviewTreatment": "operator_scope_dependent_avoidance; do_not_mark_as_universal_hard_no_fly",
       "sourceUrl": "https://ad.easa.europa.eu/ad/SD-2021-02",
       "sourcePdfUrl": "https://ad.easa.europa.eu/blob/EASA_SD_2021_02.pdf/SD_SD-2021-02_1"
+    },
+    {
+      "sourceId": "SD-2021-03",
+      "title": "Operations in FIR Minsk (UMMV) by aircraft operators for which EASA acts as competent authority",
+      "instrumentType": "EASA Safety Directive",
+      "statusAtReview": "published; EASA Safety Publications Tool lists supersedure as not applicable",
+      "issuedDate": "2021-06-02",
+      "effectiveDate": "2021-06-02",
+      "validUntil": null,
+      "supersedure": "None",
+      "applicability": [
+        "Aircraft operators conducting operations under Commission Regulation (EU) 965/2012 in respect of which EASA has issued the AOC and acts as the competent authority."
+      ],
+      "requiredCorrectiveAction": "Operators to whom the directive applies shall not conduct operations in FIR Minsk (UMMV), unless use of that airspace is deemed necessary to ensure safe operation in case of unforeseen circumstances. The directive required implementation within a maximum of 2 days from its effective date.",
+      "exception": "Use of FIR Minsk may be necessary to ensure safe operation in case of unforeseen circumstances.",
+      "affectedFirs": [
+        {
+          "firCode": "UMMV",
+          "name": "MINSK FIR",
+          "geometryAvailable": false,
+          "geometryReason": "No Minsk FIR polygon is present in the current FlightTempo OpenAIP boundary export. Do not fabricate a polygon."
+        }
+      ],
+      "routePreviewTreatment": "direct_easa_competent_authority_operator_scope; avoid_for_applicable_operators_only",
+      "sourceUrl": "https://ad.easa.europa.eu/ad/SD-2021-03",
+      "sourcePdfUrl": "https://ad.easa.europa.eu/blob/EASA_SD_2021_03.pdf/SD_SD-2021-03_1"
     }
-  ]
+  ],
+  "recordCount": 2
 }
