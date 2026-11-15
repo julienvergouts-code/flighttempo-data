@@ -1,0 +1,11 @@
+{
+  "source": "No regional European IFR procedure dataset ingested; France is a candidate source but not imported",
+  "airacCycle": null,
+  "effectiveDate": null,
+  "expiryDate": null,
+  "sha256": null,
+  "licenceStatus": "missing_not_ingested",
+  "coverage": "Europe",
+  "recordCount": 0,
+  "notes": "Missing SIDs, STARs and approaches remain missing. Do not infer or generate them."
+}
