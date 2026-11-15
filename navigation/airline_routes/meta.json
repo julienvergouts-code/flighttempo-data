@@ -1,0 +1,16 @@
+{
+  "source": "OpenFlights routes.dat (original download provenance and terms not revalidated)",
+  "airacCycle": null,
+  "effectiveDate": null,
+  "expiryDate": null,
+  "sha256": null,
+  "licenceStatus": "development_reference_only_source_terms_not_revalidated",
+  "files": [
+    {
+      "path": "routes.dat",
+      "sha256": null,
+      "sizeBytes": 2377148
+    }
+  ],
+  "notes": "Airline route network is not navigation procedure data."
+}
