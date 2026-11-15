@@ -1,0 +1,30 @@
+name: Test Russia and Belarus advisory mapping
+
+on:
+  pull_request:
+    paths:
+      - 'scripts/import_easa_czibs.py'
+      - 'scripts/import_openaip_firs.py'
+      - 'tests/test_airspace_advisory_mapping.py'
+      - '.github/workflows/test-airspace-advisory-mapping.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/import_easa_czibs.py'
+      - 'scripts/import_openaip_firs.py'
+      - 'tests/test_airspace_advisory_mapping.py'
+      - '.github/workflows/test-airspace-advisory-mapping.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Run advisory mapping tests
+        run: python3 -m unittest discover -s tests -p 'test_airspace_advisory_mapping.py'
