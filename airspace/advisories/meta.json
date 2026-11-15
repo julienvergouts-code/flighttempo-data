@@ -4,15 +4,15 @@
   "airacCycle": null,
   "effectiveDate": null,
   "expiryDate": null,
-  "sha256": "8a90df7bdda9b278076989750b1443e814455c19b121b3616ca328d17c571644",
+  "sha256": "91a4f4b07098e25c63d0eb686ad67b0897e8cba5938f17402a27419316a0589e",
   "licenceStatus": "EASA_reproduction_authorised_with_source_acknowledgement",
   "attribution": "Source: European Union Aviation Safety Agency (EASA), Conflict Zone Information Bulletins.",
   "recordCount": 34,
   "files": [
     {
       "path": "easa_czibs.json",
-      "sha256": "64a9016bf0644f2a1772a371313827e66b8079fc4b2ee7ebd00fe23ff62c19d0",
-      "sizeBytes": 18480,
+      "sha256": "91a4f4b07098e25c63d0eb686ad67b0897e8cba5938f17402a27419316a0589e",
+      "sizeBytes": 18566,
       "recordCount": 34
     },
     {
