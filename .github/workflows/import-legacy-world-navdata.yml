@@ -91,7 +91,7 @@ jobs:
           m['datasets'] = ds
           m.setdefault('capabilities', {})['worldCorridorGraph'] = True
           m['capabilities']['operationalRoutePlanning'] = False
-          p.write_text(json.dumps(m, indent=2) + "\\n")
+          p.write_text(json.dumps(m, indent=2) + "\n")
           PY
 
       - name: Record source-specific metadata
