@@ -3,7 +3,7 @@
   "provider": "FAA",
   "dataset": "Prohibitions, Restrictions and Notices (PRN) — KICZ NOTAM references",
   "sourcePage": "https://www.faa.gov/air_traffic/publications/us_restrictions/index.cfm",
-  "generatedAtUtc": "2026-11-15T10:12:11.765214+00:00",
+  "generatedAtUtc": "2026-11-15T10:13:02.128039+00:00",
   "currentnessWarning": "The FAA PRN page is an official index, not a live NOTAM cancellation/status API. Do not hard-block a route solely from this file without checking the current NOTAM and applicability.",
   "records": [
     {
@@ -17,132 +17,7 @@
       "pointerOnly": false,
       "affectedFirs": [
         {
-          "firCode": "ALTI",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "ATIN",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "ATIO",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "DECI",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "DEVI",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "DIAT",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "EMER",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "EXTE",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "FLIG",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "FROM",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "GENC",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "IMME",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "INFO",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "IRED",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "IRIN",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "KABU",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
           "firCode": "OAKX",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "OPER",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "REGI",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "REQU",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "RMAT",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "SION",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "SITU",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "THAT",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "THIS",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "TUDE",
           "geometryFeatureIds": [],
           "geometryAvailable": false
         }
@@ -175,121 +50,6 @@
       "restrictionType": "prohibition",
       "pointerOnly": false,
       "affectedFirs": [
-        {
-          "firCode": "ACTI",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "ALTI",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "ATIN",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "ATIO",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "DECI",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "DIAT",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "EMER",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "EXTE",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "FLIG",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "GENC",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "IMME",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "INFO",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "IRED",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "IRIN",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "MINS",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "OPER",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "REGI",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "REQU",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "RMAT",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "SION",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "SITU",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "THAT",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "TUDE",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
         {
           "firCode": "UMMV",
           "geometryFeatureIds": [],
@@ -324,26 +84,6 @@
       "pointerOnly": true,
       "affectedFirs": [
         {
-          "firCode": "AGAI",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "CERT",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "FLIG",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "INFO",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
           "firCode": "OIIX",
           "geometryFeatureIds": [
             193
@@ -351,22 +91,7 @@
           "geometryAvailable": true
         },
         {
-          "firCode": "REGI",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "RMAT",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
           "firCode": "SFAR",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "TEHR",
           "geometryFeatureIds": [],
           "geometryAvailable": false
         }
@@ -392,123 +117,7 @@
       "downloadStatus": "downloaded",
       "restrictionType": "advisory",
       "pointerOnly": false,
-      "affectedFirs": [
-        {
-          "firCode": "AIRC",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "ANTI",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "ARMS",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "AVIA",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "CAPA",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "CIVI",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "EMIS",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "ENCO",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "EXTR",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "FIRE",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "FROM",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "INDI",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "MILI",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "MORT",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "RAFT",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "RECT",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "ROCK",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "SMAL",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "SUCH",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "TANT",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "TION",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "UNTE",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "WEAP",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        }
-      ],
+      "affectedFirs": [],
       "appliesTo": [
         "US_AIR_CARRIERS",
         "FAA_AIRMAN_CERTIFICATE_HOLDERS",
@@ -535,46 +144,6 @@
       "restrictionType": "pointer_only",
       "pointerOnly": true,
       "affectedFirs": [
-        {
-          "firCode": "AGAI",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "CERT",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "FLIG",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "GYAN",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "INFO",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "PYON",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "REGI",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "RMAT",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
         {
           "firCode": "SFAR",
           "geometryFeatureIds": [],
@@ -609,21 +178,6 @@
       "pointerOnly": true,
       "affectedFirs": [
         {
-          "firCode": "AGAI",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "CERT",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "FLIG",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
           "firCode": "HLLL",
           "geometryFeatureIds": [
             17
@@ -631,27 +185,7 @@
           "geometryAvailable": true
         },
         {
-          "firCode": "INFO",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "REGI",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "RMAT",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
           "firCode": "SFAR",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "TRIP",
           "geometryFeatureIds": [],
           "geometryAvailable": false
         }
@@ -677,68 +211,7 @@
       "downloadStatus": "downloaded",
       "restrictionType": "advisory",
       "pointerOnly": false,
-      "affectedFirs": [
-        {
-          "firCode": "ARMS",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "ENCO",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "FIRE",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "FROM",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "INDI",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "MORT",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "RECT",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "ROCK",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "SMAL",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "SUCH",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "UNTE",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "WEAP",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        }
-      ],
+      "affectedFirs": [],
       "appliesTo": [
         "US_AIR_CARRIERS",
         "FAA_AIRMAN_CERTIFICATE_HOLDERS",
@@ -765,121 +238,6 @@
       "restrictionType": "advisory",
       "pointerOnly": false,
       "affectedFirs": [
-        {
-          "firCode": "ATED",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "ATES",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "ATIO",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "AVIA",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "AVOI",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "BAHR",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "BOUN",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "CIVI",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "CONT",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "DARY",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "EFFE",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "ELEV",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "EMIR",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "EVER",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "FLIG",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "FURT",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "INFO",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "INUE",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "JEDD",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "KUWA",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "MILI",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "MUSC",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "NEAR",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
         {
           "firCode": "OBBB",
           "geometryFeatureIds": [],
@@ -915,56 +273,6 @@
           "firCode": "OOMM",
           "geometryFeatureIds": [],
           "geometryAvailable": false
-        },
-        {
-          "firCode": "OPER",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "REGI",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "REMA",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "RMAT",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "ROUT",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "TARY",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "TEHR",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "TION",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "UNTI",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "WHEN",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
         }
       ],
       "appliesTo": [
@@ -995,241 +303,6 @@
       "pointerOnly": false,
       "affectedFirs": [
         {
-          "firCode": "ACTI",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "AIRS",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "ALTI",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "AREA",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "ASSO",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "ATIN",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "ATIO",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "BOUN",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "CIAT",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "DARI",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "DECI",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "DIAT",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "DNIP",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "DONU",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "EMER",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "EROP",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "EXTE",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "FIRS",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "FLIG",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "GENC",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "IFIE",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "IMME",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "INCL",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "INFO",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "IRED",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "IRIN",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "KYIV",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "LATE",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "LIMI",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "MOSC",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "OPER",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "PACE",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "PORT",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "REGI",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "REQU",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "RISK",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "RMAT",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "ROST",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "SAFE",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "SAMA",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "SIMF",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "SION",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "SITU",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "SPEC",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "THAT",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "TUDE",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "UDES",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
           "firCode": "UKBU",
           "geometryFeatureIds": [],
           "geometryAvailable": false
@@ -1253,11 +326,6 @@
           "geometryAvailable": true
         },
         {
-          "firCode": "UPPE",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
           "firCode": "URRV",
           "geometryFeatureIds": [
             2458
@@ -1275,11 +343,6 @@
             2448
           ],
           "geometryAvailable": true
-        },
-        {
-          "firCode": "WITH",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
         }
       ],
       "appliesTo": [
@@ -1338,47 +401,7 @@
       "pointerOnly": true,
       "affectedFirs": [
         {
-          "firCode": "AGAI",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "CERT",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "DAMA",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "FLIG",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "INFO",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
           "firCode": "OSTT",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "REGI",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "RMAT",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "SCUS",
           "geometryFeatureIds": [],
           "geometryAvailable": false
         },
@@ -1409,213 +432,7 @@
       "downloadStatus": "downloaded",
       "restrictionType": "prohibition",
       "pointerOnly": false,
-      "affectedFirs": [
-        {
-          "firCode": "ACTI",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "ADJA",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "AGAI",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "AIRS",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "AROU",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "CAUT",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "CENT",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "CERT",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "CISE",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "DAMA",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "EXER",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "FLIG",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "FROM",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "HEIG",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "HTEN",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "IBIT",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "ICAL",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "INFO",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "INTO",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "ITOR",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "LATI",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "MILE",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "MILI",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "MUST",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "NAUT",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "OSTT",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "PACE",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "PROH",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "REGI",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "REGU",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "REVI",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "RMAT",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "SCUS",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "SHOU",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "STRA",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "SYRI",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "TARY",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "TERR",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "VITY",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "WITH",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "YING",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        }
-      ],
+      "affectedFirs": [],
       "appliesTo": [
         "US_AIR_CARRIERS",
         "FAA_AIRMAN_CERTIFICATE_HOLDERS",
@@ -1642,41 +459,6 @@
       "restrictionType": "pointer_only",
       "pointerOnly": true,
       "affectedFirs": [
-        {
-          "firCode": "AGAI",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "CERT",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "DNIP",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "FLIG",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "INFO",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "REGI",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "RMAT",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
         {
           "firCode": "SFAR",
           "geometryFeatureIds": [],
@@ -1711,171 +493,6 @@
       "pointerOnly": false,
       "affectedFirs": [
         {
-          "firCode": "ACTI",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "ALTI",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "ASSO",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "ATIN",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "ATIO",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "CIAT",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "DECI",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "DIAT",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "DNIP",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "EMER",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "EROP",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "EXTE",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "FLIG",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "GENC",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "IMME",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "INFO",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "IRED",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "IRIN",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "KYIV",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "LVIV",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "ODES",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "ONGO",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "OPER",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "REGI",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "REQU",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "RISK",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "RMAT",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "SAFE",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "SIMF",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "SION",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "SITU",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "THAT",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "TUDE",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
           "firCode": "UKBU",
           "geometryFeatureIds": [],
           "geometryAvailable": false
@@ -1907,21 +524,6 @@
           "firCode": "UKOV",
           "geometryFeatureIds": [],
           "geometryAvailable": false
-        },
-        {
-          "firCode": "UPPE",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "WELL",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "WITH",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
         }
       ],
       "appliesTo": [
@@ -1950,78 +552,7 @@
       "downloadStatus": "downloaded",
       "restrictionType": "prohibition",
       "pointerOnly": false,
-      "affectedFirs": [
-        {
-          "firCode": "ACTI",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "ATIO",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "DECI",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "DIAT",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "EMER",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "EXTE",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "GENC",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "IMME",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "IRED",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "IRES",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "REQU",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "SION",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "SITU",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "THAT",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        }
-      ],
+      "affectedFirs": [],
       "appliesTo": [],
       "applicabilityText": "",
       "permittedOperationsText": ". THIS NOTAM DOES NOT PROHIBIT PERSONS DESCRIBED IN PARAGRAPH \nA (APPLICABILITY) FROM CONDUCTING FLIGHT OPERATIONS IN THE ABOVE-NAMED AREA WHEN \nSUCH OPERATIONS ARE AUTHORIZED EITHER BY ANOTHER AGENCY OF THE UNITED STATES \nGOVERNMENT WITH THE APPROVAL OF THE FAA OR BY A DEVIATION, EXEMPTION, OR OTHER \nAUTHORIZATION ISSUED BY THE FAA ADMINISTRATOR. OPERATORS MUST CALL THE FAA \nWASHINGTON OPERATIONS CENTER AT 202-267-3333 TO INITIATE COORDINATION FOR FAA \nAUTHORIZATION TO CONDUCT OPERATIONS. \nC. ALLOWANCES. PERSONS DESCRIBED IN PARAGRAPH A ABOVE WHO ARE IN THE TERRITORY AND \nAIRSPACE OF VENEZUELA AT THE TIME THIS NOTAM IS ISSUED MAY DEPART THE TERRITORY AND \nAIRSPACE OF VENEZUELA BY THE MOST EXPEDITIOUS POSSIBLE ROUTE WITHIN 48 HOURS FROM THE \nTIME THIS NOTAM IS ISSUED, IF THE PILOT IN COMMAND DETERMINES THAT THE OPERATION CAN \nBE CONDUCTED SAFELY.",
@@ -2047,57 +578,12 @@
       "pointerOnly": true,
       "affectedFirs": [
         {
-          "firCode": "AREA",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "CERT",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "FLIG",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "IFIE",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "INFO",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
           "firCode": "OYSC",
           "geometryFeatureIds": [],
           "geometryAvailable": false
         },
         {
-          "firCode": "REGI",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "RMAT",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "SANA",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
           "firCode": "SFAR",
-          "geometryFeatureIds": [],
-          "geometryAvailable": false
-        },
-        {
-          "firCode": "SPEC",
           "geometryFeatureIds": [],
           "geometryAvailable": false
         }
