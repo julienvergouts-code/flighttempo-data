@@ -1,10 +1,24 @@
 {
-  "source": "No verified airway source ingested",
+  "source": "X-Plane default navigation data mirror (ptsmonteiro/x-plane-navdata)",
+  "sourceUrl": "https://github.com/ptsmonteiro/x-plane-navdata",
   "airacCycle": null,
+  "sourceCycleToken": "2012.08",
   "effectiveDate": null,
   "expiryDate": null,
-  "sha256": null,
-  "licenceStatus": "not_available_empty_placeholder",
-  "recordCount": 0,
-  "notes": "No airway graph is currently available. Do not infer or generate airway segments."
+  "sha256": "91a53e0b7ea5e79c408dab124d0976d1c78d6e4faf10b949bc230035858ac24f",
+  "licenceStatus": "GPL-3.0_legacy_stale_personal_development_reference",
+  "licenseName": "GPL-3.0",
+  "recordCount": 70291,
+  "lowAirwaySegments": 37195,
+  "highAirwaySegments": 33096,
+  "coverage": "Worldwide legacy airway segments; stale cycle; not operational",
+  "files": [
+    {
+      "path": "flightgear_airway_segments.csv",
+      "sha256": "91a53e0b7ea5e79c408dab124d0976d1c78d6e4faf10b949bc230035858ac24f",
+      "sizeBytes": 20439306,
+      "recordCount": 70291
+    }
+  ],
+  "notes": "Low/high airway classification is retained from the source AWY640 level field."
 }

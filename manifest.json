@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "repository": "julienvergouts-code/flighttempo-data",
-  "generatedAtUtc": "2026-11-15T10:15:10.356846+00:00",
+  "generatedAtUtc": "2026-11-15T10:17:17.157219+00:00",
   "purpose": "Personal FlightTempo development, cross-checking, route-building experiments and flight-preparation practice; not an operational navigation database.",
   "rules": {
     "datasetMetaRequired": true,
@@ -177,6 +177,45 @@
       "licenceStatus": "FAA_public_information_reference_currentness_unverified",
       "coverage": "FAA-published international prohibition/restriction notice references",
       "recordCount": 16
+    },
+    {
+      "id": "legacy-global-ifr-fixes",
+      "path": "navigation/waypoints/flightgear_fixes.csv",
+      "source": "X-Plane default navigation data mirror (ptsmonteiro/x-plane-navdata)",
+      "airacCycle": null,
+      "sourceCycleToken": "2012.08",
+      "effectiveDate": null,
+      "expiryDate": null,
+      "sha256": "1bfd6b7fb7e10dac4f7cfdec9201e66a3ad3a1b1990e7215569dded8c6163749",
+      "licenceStatus": "GPL-3.0_legacy_stale_personal_development_reference",
+      "coverage": "Worldwide legacy IFR fixes",
+      "recordCount": 113356
+    },
+    {
+      "id": "legacy-global-ifr-navaids",
+      "path": "navigation/navaids/flightgear_navaids.csv",
+      "source": "X-Plane default navigation data mirror (ptsmonteiro/x-plane-navdata)",
+      "airacCycle": null,
+      "sourceCycleToken": "2012.08",
+      "effectiveDate": null,
+      "expiryDate": null,
+      "sha256": "c6ee3a883e34b2fb1aa4d3c32bceb11b26aac6b2499bef6596aa79e63d2c68e4",
+      "licenceStatus": "GPL-3.0_legacy_stale_personal_development_reference",
+      "coverage": "Worldwide legacy navaids including ILS facilities",
+      "recordCount": 26599
+    },
+    {
+      "id": "legacy-global-airways",
+      "path": "navigation/airways/flightgear_airway_segments.csv",
+      "source": "X-Plane default navigation data mirror (ptsmonteiro/x-plane-navdata)",
+      "airacCycle": null,
+      "sourceCycleToken": "2012.08",
+      "effectiveDate": null,
+      "expiryDate": null,
+      "sha256": "91a53e0b7ea5e79c408dab124d0976d1c78d6e4faf10b949bc230035858ac24f",
+      "licenceStatus": "GPL-3.0_legacy_stale_personal_development_reference",
+      "coverage": "Worldwide legacy low/high airway segments",
+      "recordCount": 70291
     }
   ]
 }

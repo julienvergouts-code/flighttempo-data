@@ -1,10 +1,22 @@
 {
-  "source": "No verified IFR fixes dataset ingested",
+  "source": "X-Plane default navigation data mirror (ptsmonteiro/x-plane-navdata)",
+  "sourceUrl": "https://github.com/ptsmonteiro/x-plane-navdata",
   "airacCycle": null,
+  "sourceCycleToken": "2012.08",
   "effectiveDate": null,
   "expiryDate": null,
-  "sha256": null,
-  "licenceStatus": "not_available_empty_placeholder",
-  "recordCount": 0,
-  "notes": "The placeholder waypoints.csv is empty. No fixes are invented."
+  "sha256": "1bfd6b7fb7e10dac4f7cfdec9201e66a3ad3a1b1990e7215569dded8c6163749",
+  "licenceStatus": "GPL-3.0_legacy_stale_personal_development_reference",
+  "licenseName": "GPL-3.0",
+  "recordCount": 113356,
+  "coverage": "Worldwide legacy IFR fixes; stale cycle; not operational",
+  "files": [
+    {
+      "path": "flightgear_fixes.csv",
+      "sha256": "1bfd6b7fb7e10dac4f7cfdec9201e66a3ad3a1b1990e7215569dded8c6163749",
+      "sizeBytes": 11457339,
+      "recordCount": 113356
+    }
+  ],
+  "notes": "Source cycle is preserved exactly and is not claimed to be a current AIRAC."
 }
