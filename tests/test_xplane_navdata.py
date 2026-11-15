@@ -127,6 +127,22 @@ class XPlaneNavdataTests(unittest.TestCase):
         self.assertEqual(navaids[2]["scope"], "terminal")
         self.assertEqual(navaids[2]["runway_ident"], "25")
 
+    def test_legacy_xpnav810_parser_keeps_unknown_region_and_ils_fields(self):
+        navaids, rejected = parse_navaids(source([
+            "2 57.08382000 9.68009300 0 398 25 0.0 GL AALBORG NDB",
+            "3 50.30000000 4.40000000 350 11340 130 2.5 VOR1 TEST VOR",
+            "4 50.50000000 4.60000000 200 11030 25 180.0 IABC 25 ILS CAT I",
+        ], "earth_nav.dat", version="810"))
+        self.assertEqual(rejected, 0)
+        self.assertEqual([n["facility_type"] for n in navaids],
+                         ["NDB", "VHF_NAVAID", "ILS_LOCALIZER"])
+        self.assertEqual(navaids[0]["ident"], "GL")
+        self.assertEqual(navaids[0]["name"], "AALBORG NDB")
+        self.assertEqual(navaids[0]["scope"], "unknown")
+        self.assertEqual(navaids[2]["ident"], "IABC")
+        self.assertEqual(navaids[2]["runway_ident"], "25")
+        self.assertEqual(navaids[2]["name"], "ILS CAT I")
+
     def test_airway_type_direction_level_altitude_and_coordinates(self):
         fixes, _ = parse_fixes(source([
             "50.10000000 4.20000000 FIX01 ENRT EB 4530263",
