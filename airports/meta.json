@@ -12,5 +12,5 @@
       "sizeBytes": 7125012
     }
   ],
-  "notes": "Legacy app-facing airport table. See navigation/airports for the OurAirports source extract."
+  "notes": "Legacy app-facing airport table. See navigation/airports for OurAirports source extract."
 }
