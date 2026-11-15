@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAtUtc": "2026-11-15T10:10:12.918115+00:00",
+  "generatedAtUtc": "2026-11-15T21:35:46.474Z",
   "source": "EASA CZIB JSON export",
   "sourceUrl": "https://www.easa.europa.eu/en/domains/air-operations/czibs/export-json?_format=json&page=",
   "policy": {
@@ -174,28 +174,17 @@
       "validUntil": "2027-01-31",
       "affectedFirs": [
         {
-          "firCode": "UMKK",
-          "name": "KALININGRAD FIR",
+          "firCode": "UUWV",
+          "name": "MOSCOW FIR",
           "sourceCountryCodes": [
             "RU"
           ],
-          "geometryFeatureId": 2310
-        },
-        {
-          "firCode": "UWWW",
-          "name": "SAMARA FIR",
-          "sourceCountryCodes": [
-            "RU"
-          ],
-          "geometryFeatureId": 2448
-        },
-        {
-          "firCode": "UKFV",
-          "name": "SIMFEROPOL FIR",
-          "sourceCountryCodes": [
-            "RU"
-          ],
-          "geometryFeatureId": 2450
+          "geometryFeatureId": null,
+          "geometryAvailable": false,
+          "geometrySource": null,
+          "geometryVerifiedAgainstStateAip": false,
+          "geometryStatus": "missing_in_current_OpenAIP_export",
+          "requiresLongitudeClipAt60E": true
         },
         {
           "firCode": "URRV",
@@ -203,18 +192,63 @@
           "sourceCountryCodes": [
             "RU"
           ],
-          "geometryFeatureId": 2458
+          "geometryFeatureId": 2458,
+          "geometryAvailable": true,
+          "geometrySource": "OpenAIP CC BY-NC 4.0 development reference",
+          "geometryVerifiedAgainstStateAip": false,
+          "geometryStatus": "candidate_openAIP_unverified",
+          "requiresLongitudeClipAt60E": true
         },
         {
-          "firCode": "UKFV",
-          "name": "SIMFEROPOL FIR",
+          "firCode": "ULLL",
+          "name": "SANKT-PETERSBURG FIR",
           "sourceCountryCodes": [
             "RU"
           ],
-          "geometryFeatureId": 2460
+          "geometryFeatureId": null,
+          "geometryAvailable": false,
+          "geometrySource": null,
+          "geometryVerifiedAgainstStateAip": false,
+          "geometryStatus": "missing_in_current_OpenAIP_export",
+          "requiresLongitudeClipAt60E": true
+        },
+        {
+          "firCode": "USSV",
+          "name": "YEKATERINBURG FIR",
+          "sourceCountryCodes": [
+            "RU"
+          ],
+          "geometryFeatureId": null,
+          "geometryAvailable": false,
+          "geometrySource": null,
+          "geometryVerifiedAgainstStateAip": false,
+          "geometryStatus": "missing_in_current_OpenAIP_export",
+          "requiresLongitudeClipAt60E": true
+        },
+        {
+          "firCode": "UWWW",
+          "name": "SAMARA FIR",
+          "sourceCountryCodes": [
+            "RU"
+          ],
+          "geometryFeatureId": 2448,
+          "geometryAvailable": true,
+          "geometrySource": "OpenAIP CC BY-NC 4.0 development reference",
+          "geometryVerifiedAgainstStateAip": false,
+          "geometryStatus": "candidate_openAIP_unverified",
+          "requiresLongitudeClipAt60E": true
         }
       ],
-      "mappingMethod": "country-export polygon association; verify FIR designators and boundaries against State AIP"
+      "mappingMethod": "explicit_fir_list_from_EASA_CZIB_2025-01_R3; candidate OpenAIP polygons are community reference geometry only; no country-export association or synthetic boundary is used",
+      "affectedAirspace": {
+        "territory": "Russian Federation",
+        "longitudeLimitDegreesEast": 60,
+        "longitudeRelationship": "west_of",
+        "verticalScope": "all_altitudes_and_flight_levels",
+        "sourceText": "All altitudes / flight levels in the airspace of the Russian Federation west of longitude 60° East."
+      },
+      "geometryCoverageComplete": false,
+      "routeAvoidanceReady": false
     }
   ],
   "unmappedAdvisories": [
@@ -277,56 +311,6 @@
       "geometryAvailable": true,
       "sourceAdvisoryId": "20582",
       "country": "Libya",
-      "validUntil": "2027-01-31",
-      "classification": "EASA_advisory_not_legal_prohibition"
-    },
-    {
-      "firCode": "UMKK",
-      "name": "KALININGRAD FIR",
-      "geometryFeatureId": 2310,
-      "geometryAvailable": true,
-      "sourceAdvisoryId": "141480",
-      "country": "Russia",
-      "validUntil": "2027-01-31",
-      "classification": "EASA_advisory_not_legal_prohibition"
-    },
-    {
-      "firCode": "UWWW",
-      "name": "SAMARA FIR",
-      "geometryFeatureId": 2448,
-      "geometryAvailable": true,
-      "sourceAdvisoryId": "141480",
-      "country": "Russia",
-      "validUntil": "2027-01-31",
-      "classification": "EASA_advisory_not_legal_prohibition"
-    },
-    {
-      "firCode": "UKFV",
-      "name": "SIMFEROPOL FIR",
-      "geometryFeatureId": 2450,
-      "geometryAvailable": true,
-      "sourceAdvisoryId": "141480",
-      "country": "Russia",
-      "validUntil": "2027-01-31",
-      "classification": "EASA_advisory_not_legal_prohibition"
-    },
-    {
-      "firCode": "URRV",
-      "name": "ROSTOV-NA-DONU FIR",
-      "geometryFeatureId": 2458,
-      "geometryAvailable": true,
-      "sourceAdvisoryId": "141480",
-      "country": "Russia",
-      "validUntil": "2027-01-31",
-      "classification": "EASA_advisory_not_legal_prohibition"
-    },
-    {
-      "firCode": "UKFV",
-      "name": "SIMFEROPOL FIR",
-      "geometryFeatureId": 2460,
-      "geometryAvailable": true,
-      "sourceAdvisoryId": "141480",
-      "country": "Russia",
       "validUntil": "2027-01-31",
       "classification": "EASA_advisory_not_legal_prohibition"
     }
@@ -924,5 +908,85 @@
     "recordCount": 16,
     "sfarReferenceCount": 7
   },
-  "hardNoFlyFirs": []
+  "hardNoFlyFirs": [],
+  "incompleteGeometryAdvisories": [
+    "141480"
+  ],
+  "operatorSpecificAdvisories": [
+    {
+      "sourceId": "EASA_SD_2021_02",
+      "documentNumber": "2021-02",
+      "sourceType": "EASA_Safety_Directive",
+      "issuedDate": "2021-06-02",
+      "subject": "Operations in FIR Minsk (UMMV)",
+      "affectedFirs": [
+        {
+          "firCode": "UMMV",
+          "name": "MINSK FIR",
+          "geometryFeatureId": null,
+          "geometryAvailable": false,
+          "geometryStatus": "no_source_verified_geometry_in_current_dataset"
+        }
+      ],
+      "appliesTo": "EASA Member States' NCAs responsible for oversight of operators whose principal place of business is in that Member State; national implementation must be checked.",
+      "requiredAction": "NCAs should ensure applicable operators do not conduct operations in FIR Minsk (UMMV).",
+      "exception": "Use of the airspace where deemed necessary to ensure safe operation in case of unforeseen circumstances.",
+      "validityText": "Pending finalisation of the international investigation, or until further notice.",
+      "currentnessStatus": "No supersedure is listed in the published directive; verify the applicable NCA implementation and current NOTAM before applying to a particular operator.",
+      "currentnessVerified": false,
+      "routeAvoidanceReady": false,
+      "userOverrideAllowed": false,
+      "sourceUrl": "https://ad.easa.europa.eu/blob/EASA_SD_2021_02.pdf/SD_SD-2021-02_1"
+    },
+    {
+      "sourceId": "EASA_SD_2021_03",
+      "documentNumber": "2021-03",
+      "sourceType": "EASA_Safety_Directive",
+      "issuedDate": "2021-06-02",
+      "subject": "Operations in FIR Minsk (UMMV) by operators for which EASA acts as competent authority",
+      "affectedFirs": [
+        {
+          "firCode": "UMMV",
+          "name": "MINSK FIR",
+          "geometryFeatureId": null,
+          "geometryAvailable": false,
+          "geometryStatus": "no_source_verified_geometry_in_current_dataset"
+        }
+      ],
+      "appliesTo": "Operators conducting Regulation (EU) 965/2012 air operations for which EASA issued the AOC and acts as competent authority.",
+      "requiredAction": "Applicable operators shall not conduct operations in FIR Minsk (UMMV).",
+      "exception": "Use of the airspace where deemed necessary to ensure safe operation in case of unforeseen circumstances.",
+      "validityText": "Pending finalisation of the international investigation, or until further notice.",
+      "currentnessStatus": "The directive states it is mandatory for persons for whom EASA acts as competent authority; verify current revision/status before operational reliance.",
+      "currentnessVerified": false,
+      "routeAvoidanceReady": false,
+      "userOverrideAllowed": false,
+      "sourceUrl": "https://ad.easa.europa.eu/blob/EASA_SD_2021_03.pdf/SD_SD-2021-03_1"
+    },
+    {
+      "sourceId": "EASA_SIB_2021_10",
+      "documentNumber": "2021-10",
+      "sourceType": "EASA_Safety_Information_Bulletin",
+      "issuedDate": "2021-05-25",
+      "subject": "Operations in FIR Minsk (UMMV)",
+      "affectedFirs": [
+        {
+          "firCode": "UMMV",
+          "name": "MINSK FIR",
+          "geometryFeatureId": null,
+          "geometryAvailable": false,
+          "geometryStatus": "no_source_verified_geometry_in_current_dataset"
+        }
+      ],
+      "appliesTo": "Operators with principal place of business in an EASA Member State and EASA-authorised third-country operators when operating to, from or within the EU, as described by EASA.",
+      "requiredAction": "EASA advises applicable operators to avoid operations in FIR Minsk (UMMV).",
+      "exception": "Avoidance does not apply where use is deemed necessary to ensure safe operation in case of unforeseen circumstances.",
+      "validityText": "Check the current EASA publication, operator risk assessment and State implementation.",
+      "currentnessStatus": "Advisory reference; verify current applicability and State/operator notices.",
+      "currentnessVerified": false,
+      "routeAvoidanceReady": false,
+      "userOverrideAllowed": true,
+      "sourceUrl": "https://www.easa.europa.eu/en/newsroom-and-events/news/easa-issues-safety-information-bulletin-operations-belarus-airspace"
+    }
+  ]
 }
