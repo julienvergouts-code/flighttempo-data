@@ -136,7 +136,7 @@ jobs:
           m['capabilities']['conflictZoneAdvisories'] = Path('airspace/advisories/easa_czibs.json').is_file()
           m['capabilities']['firBoundaries'] = Path('navigation/airspace/openaip_fir_boundaries.geojson').is_file()
           m['capabilities']['hardNoFlyFIRRestrictions'] = False
-          p.write_text(json.dumps(m, indent=2) + '\\n')
+          p.write_text(json.dumps(m, indent=2) + "\n")
           PY
       - name: Enrich airport reference with OurAirports runway and elevation data
         run: python3 scripts/enrich_airport_reference.py
