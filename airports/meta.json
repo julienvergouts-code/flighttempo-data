@@ -1,0 +1,16 @@
+{
+  "source": "Mixed legacy FlightTempo airport reference; upstream provenance of some fields remains under review",
+  "airacCycle": null,
+  "effectiveDate": null,
+  "expiryDate": null,
+  "sha256": null,
+  "licenceStatus": "mixed_provenance_under_review_not_assumed_CC0",
+  "files": [
+    {
+      "path": "airports.csv",
+      "sha256": null,
+      "sizeBytes": 7125012
+    }
+  ],
+  "notes": "Legacy app-facing airport table. See navigation/airports for the OurAirports source extract."
+}
