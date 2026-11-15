@@ -92,7 +92,52 @@ jobs:
           python3 scripts/import_xplane_navdata.py \
             --source-dir navigation/sources/flightgear \
             --manifest navigation_manifest.json \
-            --optional
+            --optional --include-airways
+      - name: Build world corridor graph
+        run: python3 scripts/build_world_corridor_graph.py
+      - name: Register graph and airspace datasets in manifest
+        run: |
+          python3 - <<'PY'
+          import hashlib, json
+          from pathlib import Path
+          p = Path('navigation_manifest.json')
+          m = json.loads(p.read_text())
+          datasets = [d for d in m.get('datasets', []) if d.get('id') not in {'world_corridor_graph', 'easa_czibs', 'airspace_filter', 'openaip_fir_boundaries'}]
+          items = [
+              ('world_corridor_graph', 'navigation/graph/world_corridor_graph.bin', 'legacy_global_graph_test_only', 'GPL-3.0'),
+              ('easa_czibs', 'airspace/advisories/easa_czibs.json', 'advisory_reference_not_operational', 'EASA source acknowledgement'),
+              ('airspace_filter', 'airspace/airspace_filter.json', 'route_preview_advisory_filter_only', 'EASA source acknowledgement + OpenAIP CC BY-NC 4.0'),
+              ('openaip_fir_boundaries', 'navigation/airspace/openaip_fir_boundaries.geojson', 'development_reference_only', 'CC BY-NC 4.0'),
+          ]
+          for dataset_id, rel, status, license_name in items:
+              f = Path(rel)
+              if not f.is_file():
+                  continue
+              raw = f.read_bytes()
+              obj = json.loads(raw) if f.suffix == '.json' else None
+              if dataset_id == 'world_corridor_graph':
+                  meta = json.loads(Path('navigation/graph/meta.json').read_text())
+                  count = meta['edgeCount']
+              elif dataset_id == 'easa_czibs':
+                  count = len(obj.get('records', []))
+              elif dataset_id == 'airspace_filter':
+                  count = len(obj.get('activeAdvisories', []))
+              else:
+                  count = len(json.loads(raw).get('features', []))
+              datasets.append({
+                  'id': dataset_id, 'path': rel,
+                  'downloadUrl': 'https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/' + rel,
+                  'available': True, 'recordCount': count, 'sizeBytes': len(raw),
+                  'sha256': hashlib.sha256(raw).hexdigest(), 'status': status,
+                  'license': license_name, 'operationallyAvailable': False
+              })
+          m['datasets'] = datasets
+          m.setdefault('capabilities', {})['worldCorridorGraph'] = Path('navigation/graph/world_corridor_graph.bin').is_file()
+          m['capabilities']['conflictZoneAdvisories'] = Path('airspace/advisories/easa_czibs.json').is_file()
+          m['capabilities']['firBoundaries'] = Path('navigation/airspace/openaip_fir_boundaries.geojson').is_file()
+          m['capabilities']['hardNoFlyFIRRestrictions'] = False
+          p.write_text(json.dumps(m, indent=2) + '\\n')
+          PY
       - name: Enrich airport reference with OurAirports runway and elevation data
         run: python3 scripts/enrich_airport_reference.py
       - name: Import Aero.Sors worldwide VOR/NDB and ILS tables (experimental)
