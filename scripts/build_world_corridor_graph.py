@@ -14,6 +14,7 @@ from __future__ import annotations
 import argparse
 import csv
 import hashlib
+import heapq
 import json
 import math
 import struct
@@ -109,6 +110,63 @@ def read_airports(path):
     return airports
 
 
+def route_smoke_test(start_icao, end_icao, airport_node_ids, node_rows, edge_rows, strings):
+    start = airport_node_ids.get(start_icao)
+    goal = airport_node_ids.get(end_icao)
+    if start is None or goal is None:
+        return {"from": start_icao, "to": end_icao, "status": "airport_not_in_graph"}
+
+    adjacency = defaultdict(list)
+    for edge in edge_rows:
+        a, b, name_off, name_len, level, kind, min_alt, max_alt = edge
+        a_lat, a_lon = node_rows[a][0] / 1e7, node_rows[a][1] / 1e7
+        b_lat, b_lon = node_rows[b][0] / 1e7, node_rows[b][1] / 1e7
+        distance = haversine_nm(a_lat, a_lon, b_lat, b_lon)
+        name = strings[name_off:name_off + name_len].decode("utf-8", errors="replace")
+        adjacency[a].append((b, distance, name, kind))
+        adjacency[b].append((a, distance, name, kind))
+
+    goal_lat, goal_lon = node_rows[goal][0] / 1e7, node_rows[goal][1] / 1e7
+    def heuristic(node_id):
+        lat, lon = node_rows[node_id][0] / 1e7, node_rows[node_id][1] / 1e7
+        return haversine_nm(lat, lon, goal_lat, goal_lon)
+
+    queue = [(heuristic(start), 0.0, start)]
+    best = {start: 0.0}
+    previous = {}
+    expanded = 0
+    while queue and expanded < 300000:
+        _, cost, current = heapq.heappop(queue)
+        if cost != best.get(current):
+            continue
+        if current == goal:
+            names = []
+            cursor = goal
+            while cursor != start:
+                parent, name, kind = previous[cursor]
+                if kind == 0 and name and name not in names:
+                    names.append(name)
+                cursor = parent
+            names.reverse()
+            return {
+                "from": start_icao, "to": end_icao, "status": "path_found",
+                "distanceNm": round(cost, 1), "nodeCount": len(previous) + 1,
+                "airwayNames": names[:100], "expandedNodes": expanded
+            }
+        expanded += 1
+        for neighbour, distance, name, kind in adjacency.get(current, []):
+            candidate = cost + distance
+            if candidate < best.get(neighbour, float("inf")):
+                best[neighbour] = candidate
+                previous[neighbour] = (current, name, kind)
+                heapq.heappush(queue, (candidate + heuristic(neighbour), candidate, neighbour))
+    return {
+        "from": start_icao, "to": end_icao,
+        "status": "no_path" if not queue else "search_limit_reached",
+        "expandedNodes": expanded
+    }
+
+
 def build_graph(segments, airports):
     # Airway nodes are keyed by exact source coordinates, so adjacent legacy
     # segments sharing a coordinate join even when identifiers are homonyms.
@@ -192,6 +250,11 @@ def build_graph(segments, airports):
         f.write(strings)
 
     raw = OUT_BIN.read_bytes()
+    smoke_tests = [
+        route_smoke_test("EBBR", "RJAA", airport_node_ids, node_rows, edge_rows, strings),
+        route_smoke_test("EBBR", "EDDM", airport_node_ids, node_rows, edge_rows, strings),
+        route_smoke_test("LFPG", "EDDM", airport_node_ids, node_rows, edge_rows, strings),
+    ]
     meta = {
         "schemaVersion": 1,
         "format": "FlightTempo World Corridor Graph",
@@ -217,6 +280,7 @@ def build_graph(segments, airports):
         "sha256": hashlib.sha256(raw).hexdigest(),
         "sizeBytes": len(raw),
         "generatedAtUtc": datetime.now(timezone.utc).isoformat(),
+        "routeSmokeTests": smoke_tests,
         "connectorPolicy": {
             "maxDistanceNm": CONNECTOR_RADIUS_NM,
             "connectorsPerAirport": CONNECTORS_PER_AIRPORT,
