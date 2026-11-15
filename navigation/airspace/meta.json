@@ -4,7 +4,7 @@
   "airacCycle": null,
   "effectiveDate": null,
   "expiryDate": null,
-  "sha256": "3a59944d2b057b4b3232016291c6f43fb71c1bcde9b5e24af6678ea6db6a0b7d",
+  "sha256": "9a7c6d92328bc8a62fe4680e21baaf0e2fd4b286ccc681f326e1b1b078e0c559",
   "licenceStatus": "CC_BY_NC_4.0_attribution_required_non_commercial_only",
   "licenseName": "CC BY-NC 4.0",
   "attribution": "Contains data from OpenAIP (https://www.openaip.net/), licensed under CC BY-NC 4.0.",
@@ -132,8 +132,8 @@
   "files": [
     {
       "path": "openaip_fir_boundaries.geojson",
-      "sha256": "3a59944d2b057b4b3232016291c6f43fb71c1bcde9b5e24af6678ea6db6a0b7d",
-      "sizeBytes": 2955077,
+      "sha256": "9a7c6d92328bc8a62fe4680e21baaf0e2fd4b286ccc681f326e1b1b078e0c559",
+      "sizeBytes": 2955091,
       "recordCount": 170
     }
   ],
