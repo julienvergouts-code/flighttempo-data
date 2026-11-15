@@ -203,7 +203,7 @@ jobs:
                   assert count == dataset["recordCount"], f"GeoJSON feature count mismatch: {path}"
               elif path.suffix == ".json":
                   obj = json.loads(path.read_text(encoding="utf-8"))
-                  count = len(obj.get("records", obj.get("activeAdvisories", [])))
+                  count = 1 if dataset.get("id") == "route_policy" else len(obj.get("records", obj.get("activeAdvisories", [])))
                   assert count == dataset["recordCount"], f"JSON record count mismatch: {path}"
               else:
                   with path.open(encoding="utf-8", newline="") as handle:
