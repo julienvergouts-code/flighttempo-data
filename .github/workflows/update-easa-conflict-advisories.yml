@@ -46,21 +46,22 @@ jobs:
           for dataset_id, rel, purpose in [
               ("easa_czibs", "airspace/advisories/easa_czibs.json", "advisory_reference_only"),
               ("airspace_filter", "airspace/airspace_filter.json", "route_preview_advisory_filter_only"),
+              ("easa_safety_directives", "airspace/advisories/easa_safety_directives.json", "safety_directive_reference_only"),
           ]:
               raw = Path(rel).read_bytes()
               record = {
                   "id": dataset_id, "path": rel,
                   "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/" + rel,
                   "available": True,
-                  "recordCount": len(json.loads(raw).get("records", [])) if dataset_id == "easa_czibs" else len(json.loads(raw).get("activeAdvisories", [])),
+                  "recordCount": (len(json.loads(raw).get("records", [])) if dataset_id in {"easa_czibs", "easa_safety_directives"} else len(json.loads(raw).get("activeAdvisories", []))),
                   "sizeBytes": len(raw), "sha256": hashlib.sha256(raw).hexdigest(),
                   "sourceProvider": "European Union Aviation Safety Agency (EASA)",
-                  "sourceUrl": "https://www.easa.europa.eu/en/domains/air-operations/czibs",
+                  "sourceUrl": ("https://ad.easa.europa.eu/ad/SD-2021-02" if dataset_id == "easa_safety_directives" else "https://www.easa.europa.eu/en/domains/air-operations/czibs"),
                   "license": "EASA website copyright notice: reproduction authorised provided source is acknowledged",
                   "licenseStatus": "reproduction_authorised_with_source_acknowledgement",
                   "dataCycle": "not_applicable", "downloadPurpose": purpose,
                   "operationallyAvailable": False,
-                  "status": "advisory_reference_not_operational"
+                  "status": ("reference_only_operator_scope_verify" if dataset_id == "easa_safety_directives" else "advisory_reference_not_operational")
               }
               datasets = [d for d in datasets if d.get("id") != dataset_id]
               datasets.append(record)
@@ -68,6 +69,9 @@ jobs:
           m.setdefault("capabilities", {})["conflictZoneAdvisories"] = True
           m["capabilities"]["airspaceFilterAdvisoryOnly"] = True
           m["capabilities"]["hardNoFlyFIRRestrictions"] = False
+          m["capabilities"]["easaSafetyDirectives"] = True
+          m["capabilities"]["airspaceGeometryComplete"] = False
+          m["capabilities"]["russiaCzibFirsEnumerated"] = True
           p.write_text(json.dumps(m, indent=2) + "\n")
           PY
       - name: Commit refreshed advisory datasets
