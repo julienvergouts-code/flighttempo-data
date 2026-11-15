@@ -1,0 +1,9 @@
+{
+  "source": "Mixed upstream snapshots used to build normalized navigation tables",
+  "airacCycle": null,
+  "effectiveDate": null,
+  "expiryDate": null,
+  "sha256": null,
+  "licenceStatus": "per_source_metadata_required",
+  "notes": "Each source file requires its own provenance and licence declaration. This directory is not a single licensed dataset."
+}
