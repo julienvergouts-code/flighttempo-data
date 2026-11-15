@@ -14,6 +14,74 @@ OUTPUT = ROOT / "airspace/advisories/easa_czibs.json"
 FILTER = ROOT / "airspace/airspace_filter.json"
 SOURCE_URL = "https://www.easa.europa.eu/en/domains/air-operations/czibs/export-json?_format=json&page="
 
+# Belarus is not an EASA CZIB entry. Keep the published Safety Directives and SIB
+# in a separate operator-specific layer, with their actual applicability scopes.
+BELARUS_OPERATOR_SPECIFIC_ADVISORIES = [
+    {
+        "sourceId": "EASA_SD_2021_02",
+        "documentNumber": "2021-02",
+        "sourceType": "EASA_Safety_Directive",
+        "issuedDate": "2021-06-02",
+        "subject": "Operations in FIR Minsk (UMMV)",
+        "affectedFirs": [{
+            "firCode": "UMMV", "name": "MINSK FIR",
+            "geometryFeatureId": None, "geometryAvailable": False,
+            "geometryStatus": "no_source_verified_geometry_in_current_dataset"
+        }],
+        "appliesTo": "EASA Member States' NCAs responsible for oversight of operators whose principal place of business is in that Member State; national implementation must be checked.",
+        "requiredAction": "NCAs should ensure applicable operators do not conduct operations in FIR Minsk (UMMV).",
+        "exception": "Use of the airspace where deemed necessary to ensure safe operation in case of unforeseen circumstances.",
+        "validityText": "Pending finalisation of the international investigation, or until further notice.",
+        "currentnessStatus": "No supersedure is listed in the published directive; verify the applicable NCA implementation and current NOTAM before applying to a particular operator.",
+        "currentnessVerified": False,
+        "routeAvoidanceReady": False,
+        "userOverrideAllowed": False,
+        "sourceUrl": "https://ad.easa.europa.eu/blob/EASA_SD_2021_02.pdf/SD_SD-2021-02_1"
+    },
+    {
+        "sourceId": "EASA_SD_2021_03",
+        "documentNumber": "2021-03",
+        "sourceType": "EASA_Safety_Directive",
+        "issuedDate": "2021-06-02",
+        "subject": "Operations in FIR Minsk (UMMV) by operators for which EASA acts as competent authority",
+        "affectedFirs": [{
+            "firCode": "UMMV", "name": "MINSK FIR",
+            "geometryFeatureId": None, "geometryAvailable": False,
+            "geometryStatus": "no_source_verified_geometry_in_current_dataset"
+        }],
+        "appliesTo": "Operators conducting Regulation (EU) 965/2012 air operations for which EASA issued the AOC and acts as competent authority.",
+        "requiredAction": "Applicable operators shall not conduct operations in FIR Minsk (UMMV).",
+        "exception": "Use of the airspace where deemed necessary to ensure safe operation in case of unforeseen circumstances.",
+        "validityText": "Pending finalisation of the international investigation, or until further notice.",
+        "currentnessStatus": "The directive states it is mandatory for persons for whom EASA acts as competent authority; verify current revision/status before operational reliance.",
+        "currentnessVerified": False,
+        "routeAvoidanceReady": False,
+        "userOverrideAllowed": False,
+        "sourceUrl": "https://ad.easa.europa.eu/blob/EASA_SD_2021_03.pdf/SD_SD-2021-03_1"
+    },
+    {
+        "sourceId": "EASA_SIB_2021_10",
+        "documentNumber": "2021-10",
+        "sourceType": "EASA_Safety_Information_Bulletin",
+        "issuedDate": "2021-05-25",
+        "subject": "Operations in FIR Minsk (UMMV)",
+        "affectedFirs": [{
+            "firCode": "UMMV", "name": "MINSK FIR",
+            "geometryFeatureId": None, "geometryAvailable": False,
+            "geometryStatus": "no_source_verified_geometry_in_current_dataset"
+        }],
+        "appliesTo": "Operators with principal place of business in an EASA Member State and EASA-authorised third-country operators when operating to, from or within the EU, as described by EASA.",
+        "requiredAction": "EASA advises applicable operators to avoid operations in FIR Minsk (UMMV).",
+        "exception": "Avoidance does not apply where use is deemed necessary to ensure safe operation in case of unforeseen circumstances.",
+        "validityText": "Check the current EASA publication, operator risk assessment and State implementation.",
+        "currentnessStatus": "Advisory reference; verify current applicability and State/operator notices.",
+        "currentnessVerified": False,
+        "routeAvoidanceReady": False,
+        "userOverrideAllowed": True,
+        "sourceUrl": "https://www.easa.europa.eu/en/newsroom-and-events/news/easa-issues-safety-information-bulletin-operations-belarus-airspace"
+    }
+]
+
 
 def clean_html(value: str) -> str:
     value = re.sub(r"<[^>]+>", " ", value or "")
@@ -134,11 +202,18 @@ def normalize():
             for item in filter_data["activeAdvisories"]:
                 prior = previous_by_id.get(str(item.get("sourceId")))
                 if prior:
-                    item["affectedFirs"] = prior.get("affectedFirs", [])
-                    item["mappingMethod"] = prior.get("mappingMethod", "")
+                    for key in (
+                        "affectedFirs", "mappingMethod", "affectedAirspace",
+                        "geometryCoverageComplete", "routeAvoidanceReady",
+                    ):
+                        if key in prior:
+                            item[key] = prior[key]
             active_firs = []
             seen_firs = set()
             for advisory in filter_data["activeAdvisories"]:
+                # Do not activate partial or unvalidated advisory geometry.
+                if advisory.get("routeAvoidanceReady") is False:
+                    continue
                 for fir in advisory.get("affectedFirs", []):
                     key = (fir.get("firCode"), fir.get("geometryFeatureId"))
                     if key in seen_firs:
@@ -167,6 +242,11 @@ def normalize():
                 x["sourceId"] for x in filter_data["activeAdvisories"]
                 if not x.get("explicitFirCodes") and not x.get("affectedFirs")
             ]
+    filter_data["operatorSpecificAdvisories"] = BELARUS_OPERATOR_SPECIFIC_ADVISORIES
+    filter_data["incompleteGeometryAdvisories"] = [
+        x["sourceId"] for x in filter_data.get("activeAdvisories", [])
+        if x.get("routeAvoidanceReady") is False
+    ]
     FILTER.parent.mkdir(parents=True, exist_ok=True)
     FILTER.write_text(json.dumps(filter_data, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     print(f"EASA CZIB import: {len(all_rows)} total; {len(active)} active; {len(filter_data['unmappedAdvisories'])} active advisories not mapped to explicit FIR codes")
