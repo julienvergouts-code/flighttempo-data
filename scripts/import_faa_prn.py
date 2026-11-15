@@ -61,15 +61,18 @@ def fetch_bytes(url: str) -> bytes:
 
 
 def section(text: str, start_marker: str, stop_markers: tuple[str, ...]) -> str:
-    upper = text.upper()
-    start = upper.find(start_marker.upper())
+    # Normalize whitespace for section detection, but return readable source text.
+    normalized = re.sub(r"\s+", " ", text)
+    upper = normalized.upper()
+    start_text = re.sub(r"\s+", " ", start_marker).upper()
+    start = upper.find(start_text)
     if start < 0:
         return ""
-    start += len(start_marker)
-    ends = [upper.find(marker.upper(), start) for marker in stop_markers]
+    start += len(start_text)
+    ends = [upper.find(re.sub(r"\s+", " ", marker).upper(), start) for marker in stop_markers]
     ends = [position for position in ends if position >= 0]
-    end = min(ends) if ends else len(text)
-    return text[start:end].strip()
+    end = min(ends) if ends else len(normalized)
+    return normalized[start:end].strip()
 
 
 def extract_pdf_text(payload: bytes) -> str:
@@ -99,9 +102,19 @@ def parse_notice(link: dict, base_url: str, geometry_by_code: dict) -> dict:
         match = re.search(r"\b(A\d{4}/\d{2})\b", combined)
     notam_id = match.group(1) if match else None
 
-    # FIR/UIR identifiers in FAA KICZ notices are explicitly parenthesized.
-    # Do not harvest arbitrary four-letter words from prose lines mentioning FIR.
-    fir_codes = set(re.findall(r"\(\s*([A-Z]{4})\s*\)", combined))
+    # Prefer FIR codes explicitly named in the FAA page title. If the title
+    # has none, inspect only the notice's opening affected-area text, before
+    # any cross-reference to a different KICZ NOTAM.
+    title_upper = title.upper()
+    fir_codes = set(re.findall(r"\(\s*([A-Z]{4})\s*\)", title_upper))
+    fir_codes.update(re.findall(r"\b([A-Z]{4})\s+(?:FIR|UIR)\b", title_upper))
+    if not fir_codes:
+        affected_text = text.upper().split("NOTAM KICZ", 1)[0][:3500]
+        for line in affected_text.splitlines():
+            if "FIR" in line or "UIR" in line:
+                fir_codes.update(re.findall(r"\(\s*([A-Z]{4})\s*\)", line))
+                fir_codes.update(re.findall(r"\b([A-Z]{4})\s+(?:FIR|UIR)\b", line))
+    fir_codes.discard("SFAR")
     fir_codes = sorted(fir_codes)
 
     applicability = section(
@@ -128,12 +141,13 @@ def parse_notice(link: dict, base_url: str, geometry_by_code: dict) -> dict:
     if "U.S. PERSONS" in scope or "UNITED STATES PERSONS" in scope:
         scope_tags.append("US_PERSONS")
 
-    pointer_only = "POINTER NOTAM" in combined
+    headline = (title + " " + text[:350]).upper()
+    pointer_only = "POINTER NOTAM" in headline
     if pointer_only:
         restriction_type = "pointer_only"
-    elif "PROHIBITION" in combined or "PROHIBITED FROM OPERATING" in combined:
+    elif "PROHIBITION" in headline or "PROHIBITED" in headline:
         restriction_type = "prohibition"
-    elif "ADVISORY" in combined:
+    elif "ADVISORY" in headline:
         restriction_type = "advisory"
     else:
         restriction_type = "reference"
@@ -244,11 +258,15 @@ def main() -> None:
             "restrictionType": record["restrictionType"],
             "pointerOnly": record["pointerOnly"],
             "currentnessVerified": False,
-            "action": "warn_and_suggest_avoid_pending_live_NOTAM_check",
-            "userOverrideAllowed": False
+            "action": (
+                "warn_and_suggest_avoid_pending_live_NOTAM_check"
+                if record["restrictionType"] == "prohibition"
+                else "advisory_avoid_preference"
+            ),
+            "userOverrideAllowed": record["restrictionType"] == "advisory"
         }
         for record in records
-        if record["restrictionType"] == "prohibition" and not record["pointerOnly"] and record["appliesTo"]
+        if record["restrictionType"] in {"prohibition", "advisory"} and not record["pointerOnly"] and record["appliesTo"]
     ]
     filter_data["faaRestrictionSource"] = {
         "provider": "FAA",
