@@ -68,13 +68,17 @@ def fetch_country(cc):
 def fir_code(properties):
     for key in ("designator", "icaoCode", "code", "ident"):
         value = str(properties.get(key) or "").strip().upper()
-        if re.fullmatch(r"[A-Z]{4}", value):
+        if len(value) == 4 and value.isalpha():
             return value
-    name = str(properties.get("name") or "").upper()
-    match = re.search(r"\b([A-Z]{4})\\s+(?:FIR|UIR)\\b", name)
-    if not match:
-        match = re.search(r"\b(?:FIR|UIR)\s+([A-Z]{4})\b", name)
-    return match.group(1) if match else None
+    tokens = str(properties.get("name") or "").upper().replace("/", " ").split()
+    for index, token in enumerate(tokens):
+        if token in {"FIR", "UIR"} and index + 1 < len(tokens):
+            candidate = tokens[index + 1]
+            if len(candidate) == 4 and candidate.isalpha():
+                return candidate
+        if len(token) == 4 and token.isalpha() and index + 1 < len(tokens) and tokens[index + 1] in {"FIR", "UIR"}:
+            return token
+    return None
 
 
 def is_fir(feature):
