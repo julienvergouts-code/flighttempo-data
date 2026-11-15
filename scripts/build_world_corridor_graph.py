@@ -88,7 +88,10 @@ def read_airways(path):
 def read_airports(path):
     airports = []
     with path.open(encoding="utf-8-sig", newline="") as f:
-        reader = csv.DictReader(f)
+        # FlightTempo CSVs may begin with a #version directive; skip it so
+        # DictReader sees the actual column header.
+        lines = (line for line in f if not line.lstrip().startswith("#version") and not line.lstrip().lower().startswith("sep="))
+        reader = csv.DictReader(lines)
         for row in reader:
             icao = (row.get("icao") or "").strip().upper()
             try:
