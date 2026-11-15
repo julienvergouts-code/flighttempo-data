@@ -1,0 +1,66 @@
+name: Update FAA PRN KICZ NOTAM references
+
+on:
+  schedule:
+    - cron: '17 6 * * *'
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/update-faa-prn-notams.yml'
+      - 'scripts/import_faa_prn.py'
+      - 'requirements-airspace.txt'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: openaip-fir-import
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install PDF parser
+        run: python -m pip install -r requirements-airspace.txt
+      - name: Validate importer
+        run: python -m py_compile scripts/import_faa_prn.py
+      - name: Import FAA KICZ and SFAR references
+        run: python scripts/import_faa_prn.py
+      - name: Validate output manifests
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          for path in [
+              "airspace/faa_prn_notams.json",
+              "airspace/airspace_filter.json",
+              "airspace/route_policy.json",
+              "airspace/meta.json",
+              "navigation_manifest.json",
+              "manifest.json",
+          ]:
+              json.loads(Path(path).read_text(encoding="utf-8"))
+              print("valid:", path)
+          data = json.loads(Path("airspace/faa_prn_notams.json").read_text())
+          assert data["records"], "FAA PRN page returned no KICZ records"
+          print("KICZ records:", len(data["records"]))
+          PY
+      - name: Commit FAA airspace reference data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add airspace LICENSES/FAA_NOTAM.md
+          git add navigation_manifest.json manifest.json
+          git commit -m "data(airspace): refresh FAA PRN KICZ references" || echo "No FAA PRN changes"
+          git pull --rebase origin main
+          git push
