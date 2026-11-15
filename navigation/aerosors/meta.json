@@ -1,0 +1,31 @@
+{
+  "source": "Aero.Sors / Hervé Sors",
+  "airacCycle": "2611-R1",
+  "effectiveDate": null,
+  "expiryDate": null,
+  "sha256": null,
+  "licenceStatus": "personal_development_experimental_only_derivative_CSV_redistribution_not_confirmed",
+  "files": [
+    {
+      "path": "vor_ndb.csv",
+      "sha256": "4321ac3bcbb028c4aeecd9fc717b393a1eb6022dbc6208356dfbc3976141cc9d",
+      "sizeBytes": 1974739
+    },
+    {
+      "path": "ils.csv",
+      "sha256": "25d814a50212c9a2c8ea410f322a302eec8dd1c1f4eb8bf318a62baebff4a56f",
+      "sizeBytes": 1162180
+    },
+    {
+      "path": "ge_navaids.csv",
+      "sha256": "547bf5cc58fc4dfdd93fda8e39769b59756d3ce14745193c290049914f1e951b",
+      "sizeBytes": 1068765
+    },
+    {
+      "path": "ge_airports.csv",
+      "sha256": "01c917d87fd4be4f8f779f85e1fe42ffa84bca48ae51d301c6eaed5fc37dc727",
+      "sizeBytes": 2687429
+    }
+  ],
+  "notes": "Simulator/reference data, not validated against national AIPs. Keep isolated from verified navigation datasets."
+}
