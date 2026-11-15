@@ -17,5 +17,5 @@
       "sizeBytes": 1177
     }
   ],
-  "notes": "No AIRAC applicability. Per-file SHA-256 to be populated by the build pipeline."
+  "notes": "No AIRAC applicability. Per-file SHA-256 to be populated by build pipeline."
 }
