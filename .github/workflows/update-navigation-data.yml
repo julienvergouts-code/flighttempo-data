@@ -20,6 +20,7 @@ on:
       - '!navigation/waypoints/flightgear_fixes.csv'
       - '!navigation/navaids/flightgear_navaids.csv'
       - '!navigation/airways/flightgear_airway_segments.csv'
+      - '!navigation/README.md'
       - '!airspace/**'
       - '!scripts/import_openaip_firs.py'
       - '!scripts/import_easa_czibs.py'
