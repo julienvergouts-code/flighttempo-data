@@ -111,18 +111,6 @@
       "recordCount": 34
     },
     {
-      "id": "airspace-filter",
-      "path": "airspace/airspace_filter.json",
-      "source": "EASA CZIB advisories and OpenAIP FIR/UIR reference geometry",
-      "airacCycle": null,
-      "effectiveDate": null,
-      "expiryDate": null,
-      "sha256": "129af7e3cb17063766b67830691f21d5e74ff2daf40c8427b7a19e4eb33ee5ff",
-      "licenceStatus": "mixed_source_rights_EASA_acknowledgement_and_OpenAIP_CC_BY_NC_4.0",
-      "coverage": "Route-preview advisory mapping; not a legal restriction feed",
-      "recordCount": 16
-    },
-    {
       "id": "route-policy",
       "path": "airspace/route_policy.json",
       "source": "FlightTempo original configuration",
@@ -196,6 +184,30 @@
       "licenceStatus": "GPL-3.0_legacy_stale_personal_development_reference",
       "coverage": "Worldwide legacy low/high airway segments",
       "recordCount": 70291
+    },
+    {
+      "id": "airspace-filter",
+      "path": "airspace/airspace_filter.json",
+      "source": "EASA CZIB advisories, EASA Safety Directives and OpenAIP FIR/UIR reference geometry",
+      "airacCycle": null,
+      "effectiveDate": null,
+      "expiryDate": null,
+      "sha256": "86a65e60487a350344dc9cadcd567a2b61e8e58fbb7d2c52a27de06d17a83b66",
+      "licenceStatus": "mixed_source_rights_EASA_acknowledgement_and_OpenAIP_CC_BY_NC_4.0",
+      "coverage": "Partial route-preview advisory mapping; incomplete FIR geometry; not a legal restriction feed",
+      "recordCount": 16
+    },
+    {
+      "id": "easa-safety-directive-minsk",
+      "path": "airspace/advisories/easa_safety_directives.json",
+      "source": "EASA Safety Directive SD-2021-02",
+      "airacCycle": null,
+      "effectiveDate": "2021-06-02",
+      "expiryDate": null,
+      "sha256": "8811409aec077572233abc7eec36dc84c3395e9eb9faef2aeacff7e5f2b5b7dc",
+      "licenceStatus": "EASA_reproduction_authorised_with_source_acknowledgement",
+      "coverage": "FIR Minsk (UMMV); NCA/operator scope must be verified",
+      "recordCount": 1
     }
   ]
 }
