@@ -116,7 +116,7 @@ def read_airports(path):
     return airports
 
 
-def route_smoke_test(start_icao, end_icao, airport_node_ids, node_rows, edge_rows, strings):
+def route_smoke_test(start_icao, end_icao, altitude_ft, airport_node_ids, node_rows, edge_rows, strings):
     start = airport_node_ids.get(start_icao)
     goal = airport_node_ids.get(end_icao)
     if start is None or goal is None:
@@ -129,6 +129,8 @@ def route_smoke_test(start_icao, end_icao, airport_node_ids, node_rows, edge_row
         b_lat, b_lon = node_rows[b][0] / 1e7, node_rows[b][1] / 1e7
         distance = haversine_nm(a_lat, a_lon, b_lat, b_lon)
         name = strings[name_off:name_off + name_len].decode("utf-8", errors="replace")
+        if kind == 0 and ((min_alt and altitude_ft < min_alt) or (max_alt and altitude_ft > max_alt)):
+            continue
         adjacency[a].append((b, distance, name, kind))
         adjacency[b].append((a, distance, name, kind))
 
@@ -148,15 +150,17 @@ def route_smoke_test(start_icao, end_icao, airport_node_ids, node_rows, edge_row
         if current == goal:
             names = []
             cursor = goal
+            path_nodes = 1
             while cursor != start:
                 parent, name, kind = previous[cursor]
                 if kind == 0 and name and name not in names:
                     names.append(name)
                 cursor = parent
+                path_nodes += 1
             names.reverse()
             return {
                 "from": start_icao, "to": end_icao, "status": "path_found",
-                "distanceNm": round(cost, 1), "nodeCount": len(previous) + 1,
+                "altitudeFt": altitude_ft, "distanceNm": round(cost, 1), "nodeCount": path_nodes,
                 "airwayNames": names[:100], "expandedNodes": expanded
             }
         expanded += 1
@@ -167,7 +171,7 @@ def route_smoke_test(start_icao, end_icao, airport_node_ids, node_rows, edge_row
                 previous[neighbour] = (current, name, kind)
                 heapq.heappush(queue, (candidate + heuristic(neighbour), candidate, neighbour))
     return {
-        "from": start_icao, "to": end_icao,
+        "from": start_icao, "to": end_icao, "altitudeFt": altitude_ft,
         "status": "no_path" if not queue else "search_limit_reached",
         "expandedNodes": expanded
     }
@@ -257,9 +261,9 @@ def build_graph(segments, airports):
 
     raw = OUT_BIN.read_bytes()
     smoke_tests = [
-        route_smoke_test("EBBR", "RJAA", airport_node_ids, node_rows, edge_rows, strings),
-        route_smoke_test("EBBR", "EDDM", airport_node_ids, node_rows, edge_rows, strings),
-        route_smoke_test("LFPG", "EDDM", airport_node_ids, node_rows, edge_rows, strings),
+        route_smoke_test("EBBR", "RJAA", 35000, airport_node_ids, node_rows, edge_rows, strings),
+        route_smoke_test("EBBR", "EDDM", 25000, airport_node_ids, node_rows, edge_rows, strings),
+        route_smoke_test("LFPG", "EDDM", 25000, airport_node_ids, node_rows, edge_rows, strings),
     ]
     meta = {
         "schemaVersion": 1,
