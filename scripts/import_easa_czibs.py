@@ -13,6 +13,8 @@ SOURCE = ROOT / "airspace/advisories/easa_czibs_source.json"
 OUTPUT = ROOT / "airspace/advisories/easa_czibs.json"
 FILTER = ROOT / "airspace/airspace_filter.json"
 SOURCE_URL = "https://www.easa.europa.eu/en/domains/air-operations/czibs/export-json?_format=json&page="
+RUSSIA_CZIB_FIR_CODES = ["UUWV", "URRV", "ULLL", "USSV", "UWWW"]
+SAFETY_DIRECTIVES = ROOT / "airspace/advisories/easa_safety_directives.json"
 
 
 def clean_html(value: str) -> str:
@@ -48,9 +50,15 @@ def normalize():
             effective_status = "expired_pending_source_update"
 
         name = clean_html(item.get("name", ""))
-        # Only encode an FIR association when the official advisory title itself
-        # names the FIR. Do not infer FIRs from country names or draw boundaries.
-        fir_codes = ["OYSC"] if "sana" in name.lower() and "flight information region" in name.lower() else []
+        # FIR scope is taken from the authoritative advisory detail page, not
+        # inferred from every polygon in a country's export. The Russia CZIB
+        # explicitly lists these five FIRs west of 60E.
+        if "russian federation" in name.lower():
+            fir_codes = list(RUSSIA_CZIB_FIR_CODES)
+        elif "sana" in name.lower() and "flight information region" in name.lower():
+            fir_codes = ["OYSC"]
+        else:
+            fir_codes = []
         coords = item.get("coordinates") or ""
         all_rows.append({
             "sourceId": str(item.get("Nid", "")),
@@ -134,7 +142,13 @@ def normalize():
             for item in filter_data["activeAdvisories"]:
                 prior = previous_by_id.get(str(item.get("sourceId")))
                 if prior:
-                    item["affectedFirs"] = prior.get("affectedFirs", [])
+                    prior_affected = prior.get("affectedFirs", [])
+                    if item.get("name") == "Airspace of the Russian Federation":
+                        prior_affected = [
+                            fir for fir in prior_affected
+                            if fir.get("firCode") in RUSSIA_CZIB_FIR_CODES
+                        ]
+                    item["affectedFirs"] = prior_affected
                     item["mappingMethod"] = prior.get("mappingMethod", "")
             active_firs = []
             seen_firs = set()
@@ -152,7 +166,13 @@ def normalize():
                         "country": advisory.get("country"), "validUntil": advisory.get("validUntil"),
                         "classification": "EASA_advisory_not_legal_prohibition"
                     })
+                geometry_codes = {
+                    fir.get("firCode") for fir in advisory.get("affectedFirs", [])
+                    if fir.get("geometryFeatureId") is not None
+                }
                 for code in (advisory.get("explicitFirCodes") or []):
+                    if code in geometry_codes:
+                        continue
                     key = (code, None)
                     if key not in seen_firs:
                         seen_firs.add(key)
@@ -167,6 +187,35 @@ def normalize():
                 x["sourceId"] for x in filter_data["activeAdvisories"]
                 if not x.get("explicitFirCodes") and not x.get("affectedFirs")
             ]
+            if SAFETY_DIRECTIVES.is_file():
+                directive_rows = json.loads(SAFETY_DIRECTIVES.read_text(encoding="utf-8")).get("records", [])
+                filter_data["safetyDirectives"] = directive_rows
+            else:
+                filter_data["safetyDirectives"] = []
+            geometry_codes = {
+                fir.get("firCode") for fir in active_firs
+                if fir.get("geometryFeatureId") is not None
+            }
+            missing_geometry = []
+            for advisory in filter_data["activeAdvisories"]:
+                for code in (advisory.get("explicitFirCodes") or []):
+                    if code not in geometry_codes:
+                        missing_geometry.append({
+                            "sourceId": advisory.get("sourceId"),
+                            "instrumentType": "EASA_CZIB",
+                            "firCode": code,
+                            "reason": "No matching FIR polygon is present in the imported boundary dataset."
+                        })
+            for directive in filter_data["safetyDirectives"]:
+                for fir in directive.get("affectedFirs", []):
+                    if not fir.get("geometryAvailable", False):
+                        missing_geometry.append({
+                            "sourceId": directive.get("sourceId"),
+                            "instrumentType": "EASA_SAFETY_DIRECTIVE",
+                            "firCode": fir.get("firCode"),
+                            "reason": fir.get("geometryReason", "FIR geometry is not available.")
+                        })
+            filter_data["missingFIRGeometry"] = missing_geometry
     FILTER.parent.mkdir(parents=True, exist_ok=True)
     FILTER.write_text(json.dumps(filter_data, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     print(f"EASA CZIB import: {len(all_rows)} total; {len(active)} active; {len(filter_data['unmappedAdvisories'])} active advisories not mapped to explicit FIR codes")
