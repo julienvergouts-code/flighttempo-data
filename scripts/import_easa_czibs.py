@@ -113,6 +113,30 @@ def normalize():
             "note": "No FIR polygon is fabricated from country names or advisory centroids. A separately licensed global FIR geometry source is required."
         }
     }
+    # Preserve the separately imported FIR geometry and country-to-FIR mapping
+    # when the daily EASA feed refresh runs.
+    if FILTER.is_file():
+        try:
+            previous_filter = json.loads(FILTER.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            previous_filter = {}
+        previous_firs = previous_filter.get("firBoundaryDataset")
+        if isinstance(previous_firs, dict) and previous_firs.get("status") == "available_development_reference":
+            filter_data["firBoundaryDataset"] = previous_firs
+            previous_by_id = {
+                str(x.get("sourceId")): x
+                for x in previous_filter.get("activeAdvisories", [])
+                if isinstance(x, dict)
+            }
+            for item in filter_data["activeAdvisories"]:
+                prior = previous_by_id.get(str(item.get("sourceId")))
+                if prior:
+                    item["affectedFirs"] = prior.get("affectedFirs", [])
+                    item["mappingMethod"] = prior.get("mappingMethod", "")
+            filter_data["unmappedAdvisories"] = [
+                x["sourceId"] for x in filter_data["activeAdvisories"]
+                if not x.get("explicitFirCodes") and not x.get("affectedFirs")
+            ]
     FILTER.parent.mkdir(parents=True, exist_ok=True)
     FILTER.write_text(json.dumps(filter_data, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     print(f"EASA CZIB import: {len(all_rows)} total; {len(active)} active; {len(filter_data['unmappedAdvisories'])} active advisories not mapped to explicit FIR codes")
