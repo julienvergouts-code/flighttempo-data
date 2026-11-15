@@ -19,6 +19,7 @@ OUT_GEOJSON = OUT_DIR / "openaip_fir_boundaries.geojson"
 OUT_META = OUT_DIR / "meta.json"
 EASA_FILE = ROOT / "airspace/advisories/easa_czibs.json"
 FILTER_FILE = ROOT / "airspace/airspace_filter.json"
+DIRECTIVES_FILE = ROOT / "airspace/advisories/easa_safety_directives.json"
 BASE = "https://storage.openaip.net/openaip-system-exports/{cc}_asp.geojson"
 LICENSE = "CC BY-NC 4.0"
 ATTRIBUTION = "Contains data from OpenAIP (https://www.openaip.net/), licensed under CC BY-NC 4.0."
@@ -235,6 +236,8 @@ def main():
         })
 
     filter_data = json.loads(FILTER_FILE.read_text(encoding="utf-8"))
+    if DIRECTIVES_FILE.is_file():
+        filter_data["safetyDirectives"] = json.loads(DIRECTIVES_FILE.read_text(encoding="utf-8")).get("records", [])
     filter_data["firBoundaryDataset"] = {
         "status": "available_development_reference",
         "source": "OpenAIP",
@@ -258,6 +261,10 @@ def main():
                 "name": fir.get("name"),
                 "geometryFeatureId": fir.get("geometryFeatureId"),
                 "geometryAvailable": fir.get("geometryFeatureId") is not None,
+                "geometrySource": fir.get("geometrySource"),
+                "geometryNote": fir.get("geometryNote"),
+                "easaClipApplied": False if fir.get("firCode") == "UWWW" else None,
+                "easaClipLongitudeEastLimit": 60.0 if fir.get("firCode") == "UWWW" else None,
                 "sourceAdvisoryId": advisory.get("sourceId"),
                 "country": advisory.get("country"),
                 "validUntil": advisory.get("validUntil"),
@@ -309,6 +316,11 @@ def main():
                 })
     filter_data["missingFIRGeometry"] = missing_geometry
     filter_data["geometryReviewRequired"] = geometry_review
+    filter_data["geometryCoverageStatus"] = (
+        "INCOMPLETE: required Russian and Minsk FIR geometry is missing or requires clipping; "
+        "missing polygons must never be interpreted as unrestricted airspace."
+    )
+    filter_data.setdefault("policy", {})["missingGeometryHandling"] = "unknown_not_clear"
     filter_data["generatedAtUtc"] = datetime.now(timezone.utc).isoformat()
     FILTER_FILE.write_text(json.dumps(filter_data, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
