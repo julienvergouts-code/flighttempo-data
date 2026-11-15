@@ -25,8 +25,6 @@ on:
       - '!scripts/import_openaip_firs.py'
       - '!scripts/import_easa_czibs.py'
       - '!scripts/import_faa_prn.py'
-      - '!scripts/import_xplane_navdata.py'
-      - '!scripts/build_world_corridor_graph.py'
       - '!navigation_manifest.json'
       - '!navigation/airspace/**'
       - '!scripts/import_openaip_firs.py'
@@ -265,13 +263,14 @@ jobs:
           from pathlib import Path
           p = Path('navigation_manifest.json')
           m = json.loads(p.read_text())
-          datasets = [d for d in m.get('datasets', []) if d.get('id') not in {'world_corridor_graph', 'easa_czibs', 'airspace_filter', 'openaip_fir_boundaries'}]
+          datasets = [d for d in m.get('datasets', []) if d.get('id') not in {'world_corridor_graph', 'easa_czibs', 'airspace_filter', 'route_policy', 'openaip_fir_boundaries', 'faa_prn_notams'}]
           items = [
               ('world_corridor_graph', 'navigation/graph/world_corridor_graph.bin', 'legacy_global_graph_test_only', 'GPL-3.0'),
               ('easa_czibs', 'airspace/advisories/easa_czibs.json', 'advisory_reference_not_operational', 'EASA source acknowledgement'),
               ('airspace_filter', 'airspace/airspace_filter.json', 'route_preview_advisory_filter_only', 'EASA source acknowledgement + OpenAIP CC BY-NC 4.0'),
               ('route_policy', 'airspace/route_policy.json', 'route_preview_policy', 'FlightTempo original configuration'),
               ('openaip_fir_boundaries', 'navigation/airspace/openaip_fir_boundaries.geojson', 'development_reference_only', 'CC BY-NC 4.0'),
+              ('faa_prn_notams', 'airspace/faa_prn_notams.json', 'reference_only_currentness_unverified', 'FAA public reference; currentness unverified'),
           ]
           for dataset_id, rel, status, license_name in items:
               f = Path(rel)
@@ -288,6 +287,8 @@ jobs:
                   count = len(obj.get('activeAdvisories', []))
               elif dataset_id == 'route_policy':
                   count = 1
+              elif dataset_id == 'faa_prn_notams':
+                  count = len(obj.get('records', []))
               else:
                   count = len(json.loads(raw).get('features', []))
               datasets.append({
@@ -301,6 +302,8 @@ jobs:
           m.setdefault('capabilities', {})['worldCorridorGraph'] = Path('navigation/graph/world_corridor_graph.bin').is_file()
           m['capabilities']['conflictZoneAdvisories'] = Path('airspace/advisories/easa_czibs.json').is_file()
           m['capabilities']['firBoundaries'] = Path('navigation/airspace/openaip_fir_boundaries.geojson').is_file()
+          m['capabilities']['faaPrnReferences'] = Path('airspace/faa_prn_notams.json').is_file()
+          m['capabilities']['faaLiveNotamCurrentnessVerified'] = False
           m['capabilities']['hardNoFlyFIRRestrictions'] = False
           p.write_text(json.dumps(m, indent=2) + "\n")
           PY
