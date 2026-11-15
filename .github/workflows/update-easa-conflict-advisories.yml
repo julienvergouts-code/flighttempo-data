@@ -99,7 +99,7 @@ jobs:
                   if item.get("id") == "airspace-filter":
                       item["recordCount"] = len(json.loads(Path(rel).read_text()).get("activeAdvisories", []))
           root["generatedAtUtc"] = datetime.datetime.now(datetime.timezone.utc).isoformat()
-          root_path.write_text(json.dumps(root, indent=2) + "\\n")
+          root_path.write_text(json.dumps(root, indent=2) + "\n")
           meta_path = Path("airspace/advisories/meta.json")
           meta = json.loads(meta_path.read_text())
           digest, size = record(files["easa-czibs"])
@@ -108,13 +108,13 @@ jobs:
               rel = "airspace/advisories/" + item.get("path", "")
               if rel in files.values():
                   item["sha256"], item["sizeBytes"] = record(rel)
-          meta_path.write_text(json.dumps(meta, indent=2) + "\\n")
+          meta_path.write_text(json.dumps(meta, indent=2) + "\n")
           air_path = Path("airspace/meta.json")
           air = json.loads(air_path.read_text())
           for item in air.get("files", []):
               if item.get("path") == "airspace_filter.json":
                   item["sha256"], item["sizeBytes"] = record(files["airspace-filter"])
-          air_path.write_text(json.dumps(air, indent=2) + "\\n")
+          air_path.write_text(json.dumps(air, indent=2) + "\n")
           PY
       - name: Commit refreshed advisory datasets
         run: |
