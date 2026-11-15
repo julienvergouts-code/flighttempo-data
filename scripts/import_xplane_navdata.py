@@ -674,7 +674,7 @@ def update_manifest(manifest_path: Path, root: Path, import_meta=None):
     # when this navigation importer rebuilds the core airport/IFR dataset list.
     preserved_external = [
         item for item in manifest.get("datasets", [])
-        if item.get("id") in {"easa_czibs", "airspace_filter"}
+        if item.get("id") in {"easa_czibs", "airspace_filter", "world_corridor_graph"}
     ]
     existing_ids = {item.get("id") for item in datasets}
     datasets.extend(item for item in preserved_external if item.get("id") not in existing_ids)
