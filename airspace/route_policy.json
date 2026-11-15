@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "purpose": "FlightTempo route-preview preference configuration",
+  "defaultBehavior": {
+    "avoidActiveEasaAdvisories": true,
+    "alwaysRespectVerifiedLegalRestrictions": true,
+    "allowPilotOverrideOfAdvisoryAvoidance": true,
+    "allowPilotOverrideOfLegalRestrictions": false
+  },
+  "routeGeneration": {
+    "source": "world_corridor_graph.bin",
+    "routePairsAreNotPrecomputed": true,
+    "useAirlineSchedulePopularity": false,
+    "useAirlineNationalityRules": false,
+    "useObservedAdsbTrackAsRouteEvidence": true,
+    "observedTrackIsNotProofOfLegality": true
+  },
+  "semantics": {
+    "activeEasaAdvisory": "Risk/advisory area; default route preview may suggest avoiding it",
+    "legalRestriction": "Only from verified current NOTAM/AIP/regulatory source; not user-overridable in the planner",
+    "sanction": "Not inferred from country or airline nationality; only apply where a current official source establishes a relevant restriction",
+    "missingData": "Never invent a polygon, FIR code, prohibition or published procedure"
+  },
+  "limitations": [
+    "This policy is for offline route-preview experiments, not operational flight planning.",
+    "The legacy airway graph is stale and its routes may be incomplete.",
+    "FIR boundary geometry and EASA advisory mapping are community/reference data and must be verified against current State AIPs and NOTAMs."
+  ]
+}
