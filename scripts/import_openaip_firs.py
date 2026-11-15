@@ -41,7 +41,7 @@ def country_codes():
     import csv
     with AIRPORTS.open(encoding="utf-8-sig", newline="") as f:
         for row in csv.DictReader(f):
-            code = (row.get("iso_country") or "").strip().lower()
+            code = (row.get("country") or row.get("source_iso_country") or row.get("iso_country") or "").strip().lower()
             if re.fullmatch(r"[a-z]{2}", code):
                 codes.add(code)
     if not codes:
