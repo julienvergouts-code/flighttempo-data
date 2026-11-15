@@ -1,0 +1,20 @@
+{
+  "source": "FAA AeroNav CIFP",
+  "airacCycle": "2611",
+  "effectiveDate": "2026-10-29",
+  "expiryDate": "2026-11-25",
+  "sha256": "be974a777fe0da70bb143bedce4f05d5744c2c62ad382691937c4b35494bf3cf",
+  "licenceStatus": "US_government_public_domain_review_FAA_terms_and_error_notification",
+  "sourceUrl": "https://aeronav.faa.gov/Upload_313-d/cifp/CIFP_261029.zip",
+  "licenseName": "US Government work / public domain",
+  "coverage": "United States NAS only; no European coverage",
+  "recordCount": 33349,
+  "files": [
+    {
+      "path": "sids.csv",
+      "sha256": "be974a777fe0da70bb143bedce4f05d5744c2c62ad382691937c4b35494bf3cf",
+      "sizeBytes": 1646963
+    }
+  ],
+  "notes": "FAA CIFP cycle 2611. Not a worldwide SID database."
+}
