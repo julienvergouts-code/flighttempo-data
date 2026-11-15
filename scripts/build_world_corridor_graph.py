@@ -89,11 +89,17 @@ def read_airways(path):
 def read_airports(path):
     airports = []
     with path.open(encoding="utf-8-sig", newline="") as f:
-        # FlightTempo CSVs may begin with a #version directive; skip it so
-        # DictReader sees the actual column header.
-        lines = (line for line in f if not line.lstrip().startswith("#version") and not line.lstrip().lower().startswith("sep="))
-        reader = csv.DictReader(lines)
-        for row in reader:
+        # The legacy airport export has a #version line followed by a
+        # #columns directive whose first token is metadata, not a data field.
+        lines = [line for line in f if not line.lstrip().startswith("#version") and not line.lstrip().lower().startswith("sep=")]
+        reader = csv.reader(lines)
+        header = next(reader, [])
+        if header and header[0].strip().lower() == "#columns":
+            header = header[1:]
+        for values in reader:
+            if not values or values[0].strip().startswith("#"):
+                continue
+            row = dict(zip(header, values))
             icao = (row.get("icao") or "").strip().upper()
             try:
                 lat, lon = float(row["latitude"]), float(row["longitude"])
