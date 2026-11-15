@@ -1,4 +1,5 @@
 name: Update OpenAIP global FIR boundaries
+# Re-run after adding the country export importer
 
 on:
   schedule:
