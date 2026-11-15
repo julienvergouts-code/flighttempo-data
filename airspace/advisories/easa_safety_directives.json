@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "reviewedDate": "2026-11-15",
+  "provider": "European Union Aviation Safety Agency (EASA)",
+  "sourceUrl": "https://ad.easa.europa.eu/ad/SD-2021-02",
+  "attribution": "Source: European Union Aviation Safety Agency (EASA), Safety Directive SD-2021-02.",
+  "disclaimer": "This is an EASA Safety Directive addressed to competent authorities, not a CZIB and not a universal prohibition for all operators. Confirm the applicable national competent authority's implementation, current NOTAMs/AIP and operator policy before use.",
+  "records": [
+    {
+      "sourceId": "SD-2021-02",
+      "title": "Operations in FIR Minsk (UMMV)",
+      "instrumentType": "EASA Safety Directive",
+      "statusAtReview": "published; EASA Safety Publications Tool lists no supersedure",
+      "issuedDate": "2021-06-02",
+      "effectiveDate": "2021-06-02",
+      "validUntil": null,
+      "supersedure": "None listed",
+      "applicability": [
+        "EASA Member State national competent authorities responsible for oversight of aircraft operators under Commission Regulation (EU) 965/2012",
+        "EASA Member State national competent authorities responsible for oversight of air navigation service providers under Commission Regulation (EU) 2017/373"
+      ],
+      "ncaCorrectiveAction": "National competent authorities should ensure aircraft operators having their principal place of business in their territory do not conduct operations in FIR Minsk (UMMV), unless use of that airspace is deemed necessary to ensure safe operation in case of unforeseen circumstances.",
+      "exception": "Use of FIR Minsk may be necessary to ensure safe operation in case of unforeseen circumstances.",
+      "affectedFirs": [
+        {
+          "firCode": "UMMV",
+          "name": "MINSK FIR",
+          "geometryAvailable": false,
+          "geometryReason": "No Minsk FIR polygon is present in the current FlightTempo OpenAIP boundary export. Do not fabricate a polygon."
+        }
+      ],
+      "routePreviewTreatment": "operator_scope_dependent_avoidance; do_not_mark_as_universal_hard_no_fly",
+      "sourceUrl": "https://ad.easa.europa.eu/ad/SD-2021-02",
+      "sourcePdfUrl": "https://ad.easa.europa.eu/blob/EASA_SD_2021_02.pdf/SD_SD-2021-02_1"
+    }
+  ]
+}
