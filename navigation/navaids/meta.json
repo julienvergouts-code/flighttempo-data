@@ -3,7 +3,7 @@
   "airacCycle": null,
   "effectiveDate": null,
   "expiryDate": null,
-  "sha256": "d7292380662c33a95214945023ec0a5b13189599305fd18be739e167a97a9bd1",
+  "sha256": null,
   "licenceStatus": "CC0_public_domain_as_stated_by_provider",
   "sourceUrl": "https://davidmegginson.github.io/ourairports-data/navaids.csv",
   "licenseName": "CC0 / Public Domain",
@@ -11,9 +11,9 @@
   "files": [
     {
       "path": "navaids.csv",
-      "sha256": "d7292380662c33a95214945023ec0a5b13189599305fd18be739e167a97a9bd1",
-      "sizeBytes": 1524931
+      "sha256": null,
+      "sizeBytes": 2385779
     }
   ],
-  "notes": "Worldwide community reference navaids; not a complete current IFR navaid database."
+  "notes": "Normalized OurAirports-derived output. The upstream raw navaids.csv snapshot SHA-256 is d7292380662c33a95214945023ec0a5b13189599305fd18be739e167a97a9bd1 (1,524,931 bytes); calculate a separate checksum for this normalized output."
 }
