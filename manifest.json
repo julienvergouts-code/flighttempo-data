@@ -105,7 +105,7 @@
       "airacCycle": null,
       "effectiveDate": null,
       "expiryDate": null,
-      "sha256": "64a9016bf0644f2a1772a371313827e66b8079fc4b2ee7ebd00fe23ff62c19d0",
+      "sha256": "91a4f4b07098e25c63d0eb686ad67b0897e8cba5938f17402a27419316a0589e",
       "licenceStatus": "EASA_reproduction_authorised_with_source_acknowledgement",
       "coverage": "EASA active and withdrawn conflict-zone advisories",
       "recordCount": 34
@@ -192,7 +192,7 @@
       "airacCycle": null,
       "effectiveDate": null,
       "expiryDate": null,
-      "sha256": "86a65e60487a350344dc9cadcd567a2b61e8e58fbb7d2c52a27de06d17a83b66",
+      "sha256": "4fc9934a0744e75a4407c4a14b77ff25377d2f40022eae8ddb392392c34315b5",
       "licenceStatus": "mixed_source_rights_EASA_acknowledgement_and_OpenAIP_CC_BY_NC_4.0",
       "coverage": "Partial route-preview advisory mapping; incomplete FIR geometry; not a legal restriction feed",
       "recordCount": 16
