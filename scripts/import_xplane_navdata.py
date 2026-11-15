@@ -836,11 +836,6 @@ def import_navdata(
             destination.parent.mkdir(parents=True, exist_ok=True)
             os.replace(staged_path, destination)
 
-        if airways_included:
-            destination = root / OUTPUTS["flightgear_airway_segments"]
-            destination.parent.mkdir(parents=True, exist_ok=True)
-            os.replace(staged["flightgear_airway_segments"], destination)
-
     update_manifest(manifest_path, root, metadata)
     result = {
         "status": "imported",
