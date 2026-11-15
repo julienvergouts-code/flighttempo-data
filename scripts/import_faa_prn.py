@@ -99,12 +99,9 @@ def parse_notice(link: dict, base_url: str, geometry_by_code: dict) -> dict:
         match = re.search(r"\b(A\d{4}/\d{2})\b", combined)
     notam_id = match.group(1) if match else None
 
-    fir_codes = set()
-    for line in text.upper().splitlines():
-        if "FIR" in line or "UIR" in line:
-            fir_codes.update(re.findall(r"[A-Z]{4}", line))
-    fir_codes.update(re.findall(r"\(([A-Z]{4})\)", text.upper()))
-    fir_codes.difference_update({"KICZ", "NOTA", "FIRM"})
+    # FIR/UIR identifiers in FAA KICZ notices are explicitly parenthesized.
+    # Do not harvest arbitrary four-letter words from prose lines mentioning FIR.
+    fir_codes = set(re.findall(r"\(\s*([A-Z]{4})\s*\)", combined))
     fir_codes = sorted(fir_codes)
 
     applicability = section(
