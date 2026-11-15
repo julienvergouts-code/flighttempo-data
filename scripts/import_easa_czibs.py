@@ -120,6 +120,9 @@ def normalize():
             previous_filter = json.loads(FILTER.read_text(encoding="utf-8"))
         except (OSError, json.JSONDecodeError):
             previous_filter = {}
+        for preserved_key in ("faaRestrictions", "conditionalRestrictions", "faaRestrictionSource", "hardNoFlyFirs"):
+            if preserved_key in previous_filter:
+                filter_data[preserved_key] = previous_filter[preserved_key]
         previous_firs = previous_filter.get("firBoundaryDataset")
         if isinstance(previous_firs, dict) and previous_firs.get("status") == "available_development_reference":
             filter_data["firBoundaryDataset"] = previous_firs
@@ -133,6 +136,33 @@ def normalize():
                 if prior:
                     item["affectedFirs"] = prior.get("affectedFirs", [])
                     item["mappingMethod"] = prior.get("mappingMethod", "")
+            active_firs = []
+            seen_firs = set()
+            for advisory in filter_data["activeAdvisories"]:
+                for fir in advisory.get("affectedFirs", []):
+                    key = (fir.get("firCode"), fir.get("geometryFeatureId"))
+                    if key in seen_firs:
+                        continue
+                    seen_firs.add(key)
+                    active_firs.append({
+                        "firCode": fir.get("firCode"), "name": fir.get("name"),
+                        "geometryFeatureId": fir.get("geometryFeatureId"),
+                        "geometryAvailable": fir.get("geometryFeatureId") is not None,
+                        "sourceAdvisoryId": advisory.get("sourceId"),
+                        "country": advisory.get("country"), "validUntil": advisory.get("validUntil"),
+                        "classification": "EASA_advisory_not_legal_prohibition"
+                    })
+                for code in (advisory.get("explicitFirCodes") or []):
+                    key = (code, None)
+                    if key not in seen_firs:
+                        seen_firs.add(key)
+                        active_firs.append({
+                            "firCode": code, "name": None, "geometryFeatureId": None,
+                            "geometryAvailable": False, "sourceAdvisoryId": advisory.get("sourceId"),
+                            "country": advisory.get("country"), "validUntil": advisory.get("validUntil"),
+                            "classification": "EASA_advisory_not_legal_prohibition"
+                        })
+            filter_data["activeFirs"] = active_firs
             filter_data["unmappedAdvisories"] = [
                 x["sourceId"] for x in filter_data["activeAdvisories"]
                 if not x.get("explicitFirCodes") and not x.get("affectedFirs")
