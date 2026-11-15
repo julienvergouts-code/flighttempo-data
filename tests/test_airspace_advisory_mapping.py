@@ -67,7 +67,27 @@ class RussiaBelarusAdvisoryMappingTests(unittest.TestCase):
             self.assertEqual(directive["affectedFirs"][0]["firCode"], "UMMV")
             self.assertFalse(directive["routeAvoidanceReady"])
             self.assertIn("unforeseen circumstances", directive["exception"])
-        self.assertNotIn("UMMV", [])
+
+    def test_russia_geometry_requires_all_firs_verified_and_clipped(self):
+        codes = [("UUWV", "MOSCOW FIR"), ("URRV", "ROSTOV-NA-DONU FIR"),
+                 ("ULLL", "SANKT-PETERSBURG FIR"), ("USSV", "YEKATERINBURG FIR"),
+                 ("UWWW", "SAMARA FIR")]
+        features = []
+        for idx, (code, name) in enumerate(codes, start=1):
+            feature = self._feature(idx, code, name)
+            feature["properties"]["flightTempoVerifiedAgainstStateAip"] = True
+            feature["properties"]["flightTempoClippedAt60E"] = code != "UWWW"
+            features.append(feature)
+        mapped = import_openaip_firs.build_russia_advisory_mapping(
+            {"sourceId": "141480"}, features
+        )
+        self.assertFalse(mapped["routeAvoidanceReady"])
+        features[-1]["properties"]["flightTempoClippedAt60E"] = True
+        mapped = import_openaip_firs.build_russia_advisory_mapping(
+            {"sourceId": "141480"}, features
+        )
+        self.assertTrue(mapped["geometryCoverageComplete"])
+        self.assertTrue(mapped["routeAvoidanceReady"])
 
 
 if __name__ == "__main__":
