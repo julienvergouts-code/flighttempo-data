@@ -1,0 +1,78 @@
+name: Update EASA conflict-zone advisories
+
+on:
+  schedule:
+    - cron: '23 4 * * *'
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/update-easa-conflict-advisories.yml'
+      - 'scripts/import_easa_czibs.py'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: easa-conflict-advisories
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Download official EASA JSON export
+        run: |
+          mkdir -p airspace/advisories
+          curl --fail --location --retry 3 --retry-delay 3 \
+            'https://www.easa.europa.eu/en/domains/air-operations/czibs/export-json?_format=json&page=' \
+            --output airspace/advisories/easa_czibs_source.json
+          python3 -m json.tool airspace/advisories/easa_czibs_source.json > /dev/null
+      - name: Normalize advisories and route-preview filter
+        run: python3 scripts/import_easa_czibs.py
+      - name: Add EASA datasets to app download manifest
+        run: |
+          python3 - <<'PY'
+          import hashlib, json
+          from pathlib import Path
+          p = Path("navigation_manifest.json")
+          m = json.loads(p.read_text())
+          datasets = m.setdefault("datasets", [])
+          for dataset_id, rel, purpose in [
+              ("easa_czibs", "airspace/advisories/easa_czibs.json", "advisory_reference_only"),
+              ("airspace_filter", "airspace/airspace_filter.json", "route_preview_advisory_filter_only"),
+          ]:
+              raw = Path(rel).read_bytes()
+              record = {
+                  "id": dataset_id, "path": rel,
+                  "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/" + rel,
+                  "available": True,
+                  "recordCount": len(json.loads(raw).get("records", [])) if dataset_id == "easa_czibs" else len(json.loads(raw).get("activeAdvisories", [])),
+                  "sizeBytes": len(raw), "sha256": hashlib.sha256(raw).hexdigest(),
+                  "sourceProvider": "European Union Aviation Safety Agency (EASA)",
+                  "sourceUrl": "https://www.easa.europa.eu/en/domains/air-operations/czibs",
+                  "license": "EASA website copyright notice: reproduction authorised provided source is acknowledged",
+                  "licenseStatus": "reproduction_authorised_with_source_acknowledgement",
+                  "dataCycle": "not_applicable", "downloadPurpose": purpose,
+                  "operationallyAvailable": False,
+                  "status": "advisory_reference_not_operational"
+              }
+              datasets = [d for d in datasets if d.get("id") != dataset_id]
+              datasets.append(record)
+          m["datasets"] = datasets
+          m.setdefault("capabilities", {})["conflictZoneAdvisories"] = True
+          m["capabilities"]["airspaceFilterAdvisoryOnly"] = True
+          m["capabilities"]["hardNoFlyFIRRestrictions"] = False
+          p.write_text(json.dumps(m, indent=2) + "\n")
+          PY
+      - name: Commit refreshed advisory datasets
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add airspace/advisories airspace/airspace_filter.json navigation_manifest.json
+          git commit -m "data(airspace): refresh official EASA conflict-zone advisories" || echo "No advisory changes"
+          git push
