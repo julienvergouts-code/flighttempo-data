@@ -179,4 +179,5 @@ jobs:
             exit 0
           fi
           git commit -m "chore(navdata): update verified aviation datasets [skip ci]"
+          git pull --rebase origin main
           git push origin HEAD:main
