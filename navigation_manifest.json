@@ -794,18 +794,6 @@
       "operationallyAvailable": false
     },
     {
-      "id": "openaip_fir_boundaries",
-      "path": "navigation/airspace/openaip_fir_boundaries.geojson",
-      "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/navigation/airspace/openaip_fir_boundaries.geojson",
-      "available": true,
-      "recordCount": 170,
-      "sizeBytes": 2955091,
-      "sha256": "9a7c6d92328bc8a62fe4680e21baaf0e2fd4b286ccc681f326e1b1b078e0c559",
-      "status": "development_reference_only",
-      "license": "CC BY-NC 4.0",
-      "operationallyAvailable": false
-    },
-    {
       "id": "faa_prn_notams",
       "path": "airspace/faa_prn_notams.json",
       "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/airspace/faa_prn_notams.json",
@@ -957,21 +945,34 @@
       "status": "advisory_reference_not_operational"
     },
     {
+      "id": "openaip_fir_boundaries",
+      "path": "navigation/airspace/openaip_fir_boundaries.geojson",
+      "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/navigation/airspace/openaip_fir_boundaries.geojson",
+      "available": true,
+      "recordCount": 172,
+      "sizeBytes": 2995256,
+      "sha256": "2b66e8c2edc16955a0ec32cd90feb9a19c31c076fba4642883b7d45959052baf",
+      "sourceProvider": "OpenAIP",
+      "license": "CC BY-NC 4.0",
+      "licenseStatus": "CC_BY_NC_4.0_attribution_required_non_commercial_only",
+      "downloadPurpose": "development_fir_uiR_geometry_reference",
+      "operationallyAvailable": false,
+      "status": "development_reference_only"
+    },
+    {
       "id": "airspace_filter",
       "path": "airspace/airspace_filter.json",
       "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/airspace/airspace_filter.json",
       "available": true,
       "recordCount": 16,
-      "sizeBytes": 31209,
-      "sha256": "b2808ea726c3213071a0f436fb01cb19fd8db947544315c535dd5762e775195d",
-      "sourceProvider": "European Union Aviation Safety Agency (EASA)",
-      "sourceUrl": "https://www.easa.europa.eu/en/domains/air-operations/czibs",
-      "license": "EASA website copyright notice: reproduction authorised provided source is acknowledged",
-      "licenseStatus": "reproduction_authorised_with_source_acknowledgement",
-      "dataCycle": "not_applicable",
+      "sizeBytes": 30961,
+      "sha256": "43fb6ce45a23fdb15e4e1284086be2dc0d9d0d492fa5a59de1ceb573cb884950",
+      "sourceProvider": "EASA and OpenAIP",
+      "license": "EASA source acknowledgement + OpenAIP CC BY-NC 4.0",
+      "licenseStatus": "advisory_only",
       "downloadPurpose": "route_preview_advisory_filter_only",
       "operationallyAvailable": false,
-      "status": "advisory_reference_not_operational"
+      "status": "development_reference_only"
     }
   ],
   "downloadContract": {
