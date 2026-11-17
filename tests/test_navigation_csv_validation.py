@@ -19,7 +19,7 @@ class ParseCsvBytesTests(unittest.TestCase):
 
     def test_simulator_metadata_and_columns_directive(self):
         raw = (
-            b"I\n#version 1101\n#columns,latitude,longitude,ident,area,region,type\n"
+            b"#version 1101\n#columns,latitude,longitude,ident,area,region,type\n"
             b"50.0,4.0,TEST,ENRT,EB,11\n"
         )
         header, count = parse_csv_bytes(raw)
