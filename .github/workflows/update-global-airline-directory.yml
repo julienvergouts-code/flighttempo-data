@@ -58,6 +58,8 @@ jobs:
           assert item["sizeBytes"] == len(raw)
           assert item["recordCount"] == len(data["records"])
           assert item["licenseStatus"] == "CC0_structured_data"
+          assert manifest["capabilities"].get("globalAirlineDirectory") is True
+          assert manifest["statistics"].get("globalAirlineDirectory") == len(data["records"])
           print(f"Validated {len(ids)} airline records ({len(raw)} bytes)")
           PY
       - name: Commit refreshed airline directory
