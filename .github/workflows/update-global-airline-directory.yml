@@ -74,3 +74,5 @@ jobs:
           git commit -m "chore(airlines): refresh global airline directory [skip ci]"
           git pull --rebase origin main
           git push origin HEAD:main
+
+# Manual publication trigger: workflow_dispatch remains available for future refreshes.
