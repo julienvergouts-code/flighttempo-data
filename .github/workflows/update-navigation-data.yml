@@ -38,6 +38,7 @@ on:
       - 'airlines/**'
       - '.github/workflows/update-navigation-data.yml'
       - 'navigation_manifest.json'
+      - 'DATA_AUTOMATION.md'
       - '!navigation/airspace/**'
       - '!navigation/graph/**'
       - '!navigation/sources/flightgear/**'
