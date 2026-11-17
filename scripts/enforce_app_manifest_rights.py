@@ -76,8 +76,8 @@ def enforce() -> list[str]:
 
     manifest["developmentOnlySources"] = sorted(
         set(manifest.get("developmentOnlySources", []))
-        | ["Aero.Sors derivative exports: redistribution not confirmed",
-           "OpenAIP FIR geometry and derived airspace filter: CC BY-NC 4.0"]
+        | {"Aero.Sors derivative exports: redistribution not confirmed",
+           "OpenAIP FIR geometry and derived airspace filter: CC BY-NC 4.0"}
     )
     MANIFEST.write_text(
         json.dumps(manifest, indent=2, ensure_ascii=False) + "\n",
