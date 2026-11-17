@@ -280,7 +280,7 @@ jobs:
           from pathlib import Path
           p = Path('navigation_manifest.json')
           m = json.loads(p.read_text())
-          datasets = [d for d in m.get('datasets', []) if d.get('id') not in {'world_corridor_graph', 'easa_czibs', 'airspace_filter', 'route_policy', 'openaip_fir_boundaries', 'faa_prn_notams', 'aerosors_vor_ndb', 'aerosors_ils', 'aerosors_ge_navaids', 'aerosors_ge_airports'}]
+          datasets = [d for d in m.get('datasets', []) if d.get('id') not in {'world_corridor_graph', 'easa_czibs', 'easa_safety_directives', 'airspace_filter', 'route_policy', 'openaip_fir_boundaries', 'faa_prn_notams', 'aerosors_vor_ndb', 'aerosors_ils', 'aerosors_ge_navaids', 'aerosors_ge_airports'}]
           items = [
               ('world_corridor_graph', 'navigation/graph/world_corridor_graph.bin', 'legacy_global_graph_test_only', 'GPL-3.0'),
               ('easa_czibs', 'airspace/advisories/easa_czibs.json', 'advisory_reference_not_operational', 'EASA source acknowledgement'),
