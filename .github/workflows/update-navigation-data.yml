@@ -75,6 +75,8 @@ jobs:
         run: python3 -m unittest discover -s tests -v
       - name: Install French SIA procedure PDF parser
         run: python3 -m pip install -r requirements-sia-procedures.txt
+      - name: Install FAA PRN PDF parser
+        run: python3 -m pip install 'pypdf>=5,<7'
       - name: Smoke-test extraction against current official SIA SID and STAR tables
         continue-on-error: true
         run: |
@@ -248,6 +250,8 @@ jobs:
           PY
       - name: Build world corridor graph
         run: python3 scripts/build_world_corridor_graph.py
+      - name: Refresh FAA PRN reference index (not live NOTAM status)
+        run: python3 scripts/import_faa_prn.py
       - name: Register graph and airspace datasets in manifest
         run: |
           python3 - <<'PY'
