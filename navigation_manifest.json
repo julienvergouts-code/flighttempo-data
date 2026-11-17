@@ -1,6 +1,6 @@
 {
   "schemaVersion": 13,
-  "generatedAtUtc": "2026-11-17T14:41:16.579105+00:00",
+  "generatedAtUtc": "2026-11-17T14:42:42.823462+00:00",
   "procedureAiracCycle": "2611",
   "navaidTypeCounts": {
     "DME": 167,
@@ -41,7 +41,7 @@
       "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
       "provider": "OurAirports",
       "license": "CC0 / Public Domain as stated by OurAirports",
-      "downloadedAt": "2026-11-17T14:41:16.579105+00:00",
+      "downloadedAt": "2026-11-17T14:42:42.823462+00:00",
       "sizeBytes": 12761821,
       "sha256": "3d7eeb55961be0f1691e3420ec0e05d4a58be4597c61540511e3e838d7e486f9",
       "recordCount": 86371
@@ -51,7 +51,7 @@
       "url": "https://davidmegginson.github.io/ourairports-data/runways.csv",
       "provider": "OurAirports",
       "license": "CC0 / Public Domain as stated by OurAirports",
-      "downloadedAt": "2026-11-17T14:41:16.579105+00:00",
+      "downloadedAt": "2026-11-17T14:42:42.823462+00:00",
       "sizeBytes": 3975604,
       "sha256": "41685a8d8f2a11b6303a645d8e862e8a84af02dffdafea046a230acdca294917",
       "recordCount": 47127
@@ -61,7 +61,7 @@
       "url": "https://davidmegginson.github.io/ourairports-data/navaids.csv",
       "provider": "OurAirports",
       "license": "CC0 / Public Domain as stated by OurAirports",
-      "downloadedAt": "2026-11-17T14:41:16.579105+00:00",
+      "downloadedAt": "2026-11-17T14:42:42.823462+00:00",
       "sizeBytes": 1524931,
       "sha256": "d7292380662c33a95214945023ec0a5b13189599305fd18be739e167a97a9bd1",
       "recordCount": 11008
@@ -635,6 +635,18 @@
       "provenanceVerification": "not_declared"
     },
     {
+      "id": "easa_safety_directives",
+      "path": "airspace/advisories/easa_safety_directives.json",
+      "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/airspace/advisories/easa_safety_directives.json",
+      "available": true,
+      "recordCount": 2,
+      "sizeBytes": 3941,
+      "sha256": "531d42feed30978bb7574c75f69782b8b19d32a34424ef67ddef8fe5e3a625d3",
+      "status": "operator_scope_reference_only",
+      "license": "EASA source acknowledgement",
+      "operationallyAvailable": false
+    },
+    {
       "id": "world_corridor_graph",
       "path": "navigation/graph/world_corridor_graph.bin",
       "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/navigation/graph/world_corridor_graph.bin",
@@ -689,7 +701,7 @@
       "available": true,
       "recordCount": 16,
       "sizeBytes": 59342,
-      "sha256": "8be00b1f84a61e2d603705cc532e331ebc3ff4e5642fde44ecdfd7f9f92b41a2",
+      "sha256": "df563b074818bee61d84469a9adc1762bd071e2f1ec10a59d839352e6e6b8b1b",
       "status": "reference_only_currentness_unverified",
       "license": "FAA public reference; currentness unverified",
       "operationallyAvailable": false
@@ -777,7 +789,7 @@
     "airportSource": "https://davidmegginson.github.io/ourairports-data/airports.csv",
     "runwaySource": "https://davidmegginson.github.io/ourairports-data/runways.csv",
     "license": "Public Domain / CC0 as stated by OurAirports",
-    "downloadedAtUtc": "2026-11-17T14:42:02.578911+00:00",
+    "downloadedAtUtc": "2026-11-17T14:43:13.574028+00:00",
     "matchedElevationRecords": 28488,
     "matchedAirportMetadataRecords": 29747,
     "matchedAirportsWithRunways": 24174,
