@@ -71,6 +71,30 @@ def sha256(data):
     return hashlib.sha256(data).hexdigest()
 
 
+def merge_existing_manifest(existing, generated):
+    """Merge refreshed core data without discarding separately maintained app datasets."""
+    merged = dict(existing)
+    merged.update(generated)
+
+    # The OurAirports builder owns the core counts/capabilities it regenerates,
+    # but other workflows own additional datasets such as global airlines,
+    # EASA advisories, the world graph and FAA reference packages.
+    if isinstance(existing.get("datasets"), list):
+        merged["datasets"] = existing["datasets"]
+    elif isinstance(generated.get("datasets"), list):
+        merged["datasets"] = generated["datasets"]
+
+    for key in ("statistics", "capabilities"):
+        old_value = existing.get(key)
+        new_value = generated.get(key)
+        if isinstance(old_value, dict) and isinstance(new_value, dict):
+            merged[key] = {**old_value, **new_value}
+        elif isinstance(new_value, dict):
+            merged[key] = new_value
+
+    return merged
+
+
 def read_csv(data, name):
     try:
         text = data.decode("utf-8-sig")
@@ -473,6 +497,16 @@ def main():
                 "approaches": False
             }
         }
+
+        # This builder refreshes only OurAirports core files. Keep the
+        # separately maintained app datasets and provider metadata until the
+        # IFR importer and manifest-registration steps update their own fields.
+        existing_manifest_path = ROOT / "navigation_manifest.json"
+        if existing_manifest_path.is_file():
+            existing_manifest = json.loads(
+                existing_manifest_path.read_text(encoding="utf-8")
+            )
+            manifest = merge_existing_manifest(existing_manifest, manifest)
 
         manifest_path = stage / "navigation_manifest.json"
         manifest_path.write_text(
