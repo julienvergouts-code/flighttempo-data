@@ -153,22 +153,28 @@ def normalize():
             active_firs = []
             seen_firs = set()
             for advisory in filter_data["activeAdvisories"]:
-                for fir in advisory.get("affectedFirs", []):
-                    key = (fir.get("firCode"), fir.get("geometryFeatureId"))
-                    if key in seen_firs:
-                        continue
-                    seen_firs.add(key)
-                    active_firs.append({
-                        "firCode": fir.get("firCode"), "name": fir.get("name"),
-                        "geometryFeatureId": fir.get("geometryFeatureId"),
-                        "geometryAvailable": fir.get("geometryFeatureId") is not None,
-                        "sourceAdvisoryId": advisory.get("sourceId"),
-                        "country": advisory.get("country"), "validUntil": advisory.get("validUntil"),
-                        "classification": "EASA_advisory_not_legal_prohibition"
-                    })
+                # Never reactivate partial/unverified Russia geometry on the
+                # daily EASA refresh. Preserve the explicit FIR codes below as
+                # geometry-unavailable warnings until every boundary is
+                # source-verified and UWWW is clipped to the 60E limit.
+                geometry_ready = advisory.get("routeAvoidanceReady") is not False
+                if geometry_ready:
+                    for fir in advisory.get("affectedFirs", []):
+                        key = (fir.get("firCode"), fir.get("geometryFeatureId"))
+                        if key in seen_firs:
+                            continue
+                        seen_firs.add(key)
+                        active_firs.append({
+                            "firCode": fir.get("firCode"), "name": fir.get("name"),
+                            "geometryFeatureId": fir.get("geometryFeatureId"),
+                            "geometryAvailable": fir.get("geometryFeatureId") is not None,
+                            "sourceAdvisoryId": advisory.get("sourceId"),
+                            "country": advisory.get("country"), "validUntil": advisory.get("validUntil"),
+                            "classification": "EASA_advisory_not_legal_prohibition"
+                        })
                 geometry_codes = {
                     fir.get("firCode") for fir in advisory.get("affectedFirs", [])
-                    if fir.get("geometryFeatureId") is not None
+                    if geometry_ready and fir.get("geometryFeatureId") is not None
                 }
                 for code in (advisory.get("explicitFirCodes") or []):
                     if code in geometry_codes:
