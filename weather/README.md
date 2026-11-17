@@ -78,9 +78,11 @@ References:
 
 Active Sky remains an optional local simulator weather adapter:
 - It is not a navigation-data source.
-- The API is intended for local simulator integration; the public product page does not publish the full endpoint/schema.
-- The exact installed Active Sky FS version and its local API documentation are required before implementation.
-- Do not scrape HiFi DataNet, bypass authentication or redistribute/proxy its weather feed without written permission.
+- The official product page confirms an API for weather lookup, effects, mode control and weather-condition control.
+- The engine uses global METAR/TAF, upper-air GRIB, SIGMET/AIRMET, tropical-storm and snow-depth data.
+- Active Air Effects include simulated CAT, updrafts, downdrafts, microbursts, thunderstorm-vicinity turbulence, cloud turbulence and gust-related turbulence. These are simulator effects, not automatically a gridded aviation turbulence/EDR forecast.
+- The public product page does not publish the full endpoint/schema. The exact installed Active Sky FS version and its local API documentation are required before implementation.
+- Use only through the user's own licensed local installation. Do not scrape HiFi DataNet, bypass authentication or redistribute/proxy its weather feed without written permission.
 
 Reference: https://hifisimtech.com/asfs/
 
