@@ -206,17 +206,10 @@ def main() -> None:
     if not kicz_links:
         raise RuntimeError("No KICZ NOTAM links found on the official FAA PRN page; page structure may have changed.")
 
-    geometry_by_code = {}
-    geo_path = ROOT / "navigation" / "airspace" / "openaip_fir_boundaries.geojson"
-    if geo_path.is_file():
-        geo = json.loads(geo_path.read_text(encoding="utf-8"))
-        for index, feature in enumerate(geo.get("features", [])):
-            props = feature.get("properties") or {}
-            code = str(props.get("flightTempoFirCode") or props.get("designator") or props.get("icaoCode") or "").upper()
-            if code:
-                geometry_by_code.setdefault(code, []).append(feature.get("id", index))
-
-    records = [parse_notice(link, base_url, geometry_by_code) for link in kicz_links]
+    # Keep this FAA-sourced publication independent of OpenAIP's CC BY-NC
+    # geometry. FIR designators are retained, but geometry associations are
+    # intentionally omitted from the distributable FAA PRN reference.
+    records = [parse_notice(link, base_url, {}) for link in kicz_links]
     sfar_refs = [
         {"title": link["text"], "url": urllib.parse.urljoin(base_url, link.get("href") or "")}
         for link in sfar_links
