@@ -1,7 +1,7 @@
 {
   "provider": "Deutscher Wetterdienst (DWD)",
   "service_url": "https://maps.dwd.de/geoserver/ows",
-  "checked_at_utc": "2026-11-17T14:24:11.111075+00:00",
+  "checked_at_utc": "2026-11-17T14:25:58.345702+00:00",
   "purpose": "metadata_only_access_probe",
   "weather_feature_data_downloaded": false,
   "weather_feature_data_published": false,
@@ -43,10 +43,18 @@
   "service_status": "anonymous_getcapabilities_ok",
   "feature_type_count": 61,
   "feature_types_matching_aviation_weather": [],
+  "wms_status": "anonymous_getcapabilities_ok",
+  "wms_layer_count": 207,
+  "wms_weather_layers": [],
+  "wcs_status": "anonymous_getcapabilities_ok",
+  "wcs_coverage_count": 118,
+  "wcs_weather_coverages": [],
   "access_summary": {
-    "capabilities_anonymous": true,
-    "candidate_layer_count": 0,
-    "successful_sample_count": 0
+    "wfs_capabilities_anonymous": true,
+    "wfs_candidate_layer_count": 0,
+    "wfs_successful_sample_count": 0,
+    "wms_weather_layer_count": 0,
+    "wcs_weather_coverage_count": 0
   },
   "rights_status": "aviation_free_of_charge_claimed_by_DWD_catalogue; public_app_redistribution_not_confirmed"
 }
