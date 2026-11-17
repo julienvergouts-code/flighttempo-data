@@ -20,15 +20,25 @@ def parse_csv_bytes(raw: bytes, label: str = "<csv>") -> tuple[list[str], int]:
     except UnicodeDecodeError as exc:
         raise ValueError(f"{label}: CSV is not valid UTF-8: {exc}") from exc
 
-    sample = "\\n".join(text.splitlines()[:20])
-    try:
-        dialect = csv.Sniffer().sniff(sample, delimiters=",;")
-    except csv.Error:
-        dialect = csv.excel
+    # The first non-metadata line is the header in every app-facing export.
+    # Detect only the two delimiters used in this repository from that header;
+    # csv.Sniffer can misidentify quote characters when later text fields
+    # contain punctuation or semicolons.
+    header_line = next(
+        (
+            line for line in text.splitlines()
+            if line.strip()
+            and not line.lstrip().lower().startswith(("sep=", "#version"))
+        ),
+        "",
+    )
+    if not header_line:
+        raise ValueError(f"{label}: no CSV header found")
+    delimiter = ";" if header_line.count(";") > header_line.count(",") else ","
 
     # Feed the complete text stream to csv.reader. Splitting into physical
     # lines first corrupts valid CSV fields that contain quoted newlines.
-    reader = csv.reader(io.StringIO(text, newline=""), dialect)
+    reader = csv.reader(io.StringIO(text, newline=""), delimiter=delimiter, quotechar='"')
     header = None
     for row in reader:
         if not row or not any(cell.strip() for cell in row):
