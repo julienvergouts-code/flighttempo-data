@@ -1,0 +1,46 @@
+name: Probe NOAA Aviation Weather Center public feeds
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'weather/probe_noaa_awc_api.py'
+      - '.github/workflows/probe-noaa-weather.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: flighttempo-noaa-weather-probe
+  cancel-in-progress: false
+
+jobs:
+  probe-noaa-awc:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Probe NOAA AWC METAR, TAF, SIGMET and PIREP feeds
+        run: python3 weather/probe_noaa_awc_api.py --output weather/noaa/awc-probe-report.json
+      - name: Publish metadata-only probe report
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add weather/noaa/awc-probe-report.json
+          if git diff --cached --quiet; then
+            echo "NOAA AWC metadata report is unchanged."
+            exit 0
+          fi
+          git commit -m "chore(weather): refresh NOAA AWC metadata report [skip ci]"
+          git pull --rebase origin main
+          git push origin HEAD:main
