@@ -20,26 +20,26 @@ def parse_csv_bytes(raw: bytes, label: str = "<csv>") -> tuple[list[str], int]:
     except UnicodeDecodeError as exc:
         raise ValueError(f"{label}: CSV is not valid UTF-8: {exc}") from exc
 
-    lines = [
-        line for line in text.splitlines()
-        if line.strip()
-        and not line.lstrip().lower().startswith("sep=")
-        and not line.lstrip().lower().startswith("#version")
-    ]
-    if not lines:
-        raise ValueError(f"{label}: no CSV header found")
-
-    sample = "\n".join(lines[:20])
+    sample = "\\n".join(text.splitlines()[:20])
     try:
         dialect = csv.Sniffer().sniff(sample, delimiters=",;")
     except csv.Error:
         dialect = csv.excel
 
-    reader = csv.reader(io.StringIO("\n".join(lines)), dialect)
-    header = next(reader, [])
-    if header and header[0].strip().lower() == "#columns":
-        header = header[1:]
-    header = [column.strip() for column in header]
+    # Feed the complete text stream to csv.reader. Splitting into physical
+    # lines first corrupts valid CSV fields that contain quoted newlines.
+    reader = csv.reader(io.StringIO(text, newline=""), dialect)
+    header = None
+    for row in reader:
+        if not row or not any(cell.strip() for cell in row):
+            continue
+        first = row[0].strip().lower()
+        if first.startswith("sep=") or first.startswith("#version"):
+            continue
+        if first == "#columns":
+            row = row[1:]
+        header = [column.strip() for column in row]
+        break
 
     if not header or not any(header):
         raise ValueError(f"{label}: empty CSV header")
@@ -47,19 +47,19 @@ def parse_csv_bytes(raw: bytes, label: str = "<csv>") -> tuple[list[str], int]:
         raise ValueError(f"{label}: duplicate CSV column names")
 
     count = 0
-    for line_number, row in enumerate(reader, start=2):
+    for row_number, row in enumerate(reader, start=2):
         if not row or not any(cell.strip() for cell in row):
             continue
-        if row[0].lstrip().startswith("#"):
+        first = row[0].lstrip().lower()
+        if first.startswith("sep=") or first.startswith("#version") or first.startswith("#"):
             continue
         if len(row) != len(header):
             raise ValueError(
-                f"{label}: row {line_number} has {len(row)} fields; "
+                f"{label}: record {row_number} has {len(row)} fields; "
                 f"expected {len(header)}"
             )
         count += 1
     return header, count
-
 
 def validate_dataset(root: Path, dataset: dict) -> dict:
     relative = dataset.get("path")
