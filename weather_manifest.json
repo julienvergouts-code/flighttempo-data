@@ -192,41 +192,43 @@
       "notes": "Do not enable until DWD confirms access, app display, caching and redistribution rights and provides credentials or a public layer."
     },
     {
-      "id": "hifi_active_sky_local",
-      "name": "HiFi Active Sky (local simulator API)",
+      "id": "hifi_active_sky_fs",
+      "name": "HiFi Active Sky FS",
       "accessVerified": false,
-      "integrationStatus": "installed_product_and_api_schema_required",
+      "integrationStatus": "local_simulator_adapter_api_schema_required",
       "enabled": false,
       "dataClass": "simulator_local_weather",
-      "scope": "User-owned local licensed Active Sky installation only; exact product/version not yet confirmed",
-      "access": {
-        "interface": "product-specific documented local HTTP/API interface",
-        "documentationLocation": "installed product's Documentation folder; for ASXP12, Program Files installation / Documentation",
-        "authentication": "must follow installed product documentation; not assumed"
-      },
+      "scope": "User-owned local simulator installation only",
       "notes": [
-        "Official HiFi product pages confirm third-party APIs for Active Sky FS and Active Sky XP/XP12.",
-        "The user's exact Active Sky product/build and simulator platform have not been confirmed.",
-        "Use read-only API methods only; do not alter simulator weather modes, conditions or settings.",
-        "Exact endpoint paths, port, authentication, payload schema and supported weather fields must be taken from the installed build's API documentation.",
-        "Candidate target fields include METAR/TAF, SIGMET/AIRMET, winds and temperatures aloft, turbulence, icing, thunderstorms, windshear, jet-stream information, mountain waves, volcanic ash and PIREPs/AIREPs; availability must be verified individually.",
-        "Simulator effects such as turbulence, drafts, thermals and microbursts must not be presented as forecast EDR/CAT data unless the API explicitly defines a forecast product and units.",
-        "Do not access HiFi DataNet directly, scrape protected endpoints, bypass authentication or redistribute/proxy HiFi weather output without written permission."
+        "Official product page confirms a third-party API for weather lookup, effects, mode control and weather-condition control.",
+        "The product's weather engine consumes global METAR/TAF, upper-air GRIB, SIGMET/AIRMET, tropical-storm and snow-depth data.",
+        "Active Air Effects are simulator effects, not automatically a gridded aviation turbulence forecast or an EDR hazard product.",
+        "The full API endpoint/schema is not published on the public product page; the installed product documentation is required before coding the adapter.",
+        "Use only through the user's own licensed local installation. Do not scrape HiFi DataNet or redistribute/proxy its output without written permission."
       ],
-      "sourceUrls": [
-        "https://hifisimtech.com/asfs/",
-        "https://hifisimtech.com/asxp/",
-        "https://www.hifitechinc.com/asxp12/"
+      "sourceUrl": "https://hifisimtech.com/asfs/",
+      "documentedApiCapabilities": [
+        "weather_lookup",
+        "effects",
+        "mode_control",
+        "weather_conditions_control"
       ],
-      "implementationRequirements": [
-        "identify_installed_product_and_build",
-        "read_only_local_adapter",
-        "documented_weather_fields_only",
-        "area_weather_if_supported",
-        "wind_and_vertical_layers_if_exposed",
-        "observation_and_forecast_time_semantics",
-        "stale_data_expiry",
-        "connection_health_and_timeout"
+      "documentedWeatherInputs": [
+        "METAR",
+        "TAF",
+        "upper_air_GRIB",
+        "SIGMET/AIRMET",
+        "tropical_storm_data",
+        "ground_snow_depth"
+      ],
+      "simulatedEffects": [
+        "clear_air_turbulence",
+        "updrafts",
+        "downdrafts",
+        "microbursts",
+        "thunderstorm_vicinity_turbulence",
+        "cloud_turbulence",
+        "gust_related_turbulence"
       ]
     },
     {
