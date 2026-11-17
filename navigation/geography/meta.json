@@ -1,0 +1,56 @@
+{
+  "version": 1,
+  "file": "world_geography.json.gz",
+  "sha256": "1e5328d38a6c5ce2fafc13ddb0c0b1d2998d37de18d904fa6795d63b12cbac22",
+  "sizeBytes": 150962,
+  "landmarkCount": 8161,
+  "generatedAtUtc": null,
+  "license": "Public Domain (Natural Earth data; curated coordinates are factual geographic references)",
+  "sources": {
+    "populated_places": {
+      "url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_10m_populated_places_simple.geojson",
+      "sha256": "fd3fa867a320cbd5c5b6bb5bc550afeec2939fb2cef688e508007282a55ac42f",
+      "lastModified": "",
+      "etag": "\"bba28ae5e63e22cfcd9e2091dc20244e064e083ef87b61e95447c65614f2a674\""
+    },
+    "elevation_points": {
+      "url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_10m_geography_regions_elevation_points.geojson",
+      "sha256": "f98a16867867146ec4146d6d4b18c823eeedb2825947de666116cf9a4e3f43cb",
+      "lastModified": "",
+      "etag": "\"5b5eef236836cf6f41537f9ee2ab1fa7f98d6f700771145b9ed7565ae32d8e6e\""
+    },
+    "geography_points": {
+      "url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_10m_geography_regions_points.geojson",
+      "sha256": "25821b530966e62756faebf53699f12bf73550f8228aa4bbdf3e4132dd7cf806",
+      "lastModified": "",
+      "etag": "\"2e205aef7743c7606e30be4a7e2324ef4ee4144c061e686b5fcbed977e032d1e\""
+    },
+    "rivers": {
+      "url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_10m_rivers_lake_centerlines.geojson",
+      "sha256": "bb854a900ecbd3b408df46d5e16e3e0f974ba55993f9d8b5c26e855273c0905a",
+      "lastModified": "",
+      "etag": "\"36d97e42e43df3b3d6cbc46d6e291faf0f680e8a3f6ba92925b52b3d7dd6ac58\""
+    },
+    "lakes": {
+      "url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_10m_lakes.geojson",
+      "sha256": "2d036f53dedec578001c5c30c2959ee7d4eebc1306900fa4367c49929ec8f2d9",
+      "lastModified": "",
+      "etag": "\"8e71b29203fcde2a70bcba8ca419bfd463fb1b089d68c2c454ebacfd25064e5f\""
+    },
+    "country_borders": {
+      "url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_10m_admin_0_boundary_lines_land.geojson",
+      "sha256": "74d9c16229c095fde65943a9919e337682f044bcebccb120764f38edf3b70f4a",
+      "lastModified": "",
+      "etag": "\"9176727cf144d204c5e12735944c09bd7837716208c7276b38176b08d19afe72\""
+    }
+  },
+  "hydrography": {
+    "file": "world_hydrography.json.gz",
+    "sha256": "21b0d5c093f47dbbd383d438cc329d557e5d89918f71331bbb8c07dc897a8ae2",
+    "sizeBytes": 3028963,
+    "riversFeatureCount": 1455,
+    "lakesFeatureCount": 1355,
+    "countryBorderFeatureCount": 515,
+    "note": "Companion pack; current Android landmark loader does not yet parse or render these geometry layers."
+  }
+}
