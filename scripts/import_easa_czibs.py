@@ -150,6 +150,9 @@ def normalize():
                         ]
                     item["affectedFirs"] = prior_affected
                     item["mappingMethod"] = prior.get("mappingMethod", "")
+                    for preserved_key in ("routeAvoidanceReady", "geometryCoverageComplete", "affectedAirspace"):
+                        if preserved_key in prior:
+                            item[preserved_key] = prior[preserved_key]
             active_firs = []
             seen_firs = set()
             for advisory in filter_data["activeAdvisories"]:
