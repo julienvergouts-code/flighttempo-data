@@ -30,7 +30,7 @@ Every main navigation-data run:
 1. runs the Python unit-test suite;
 2. refreshes the eligible source datasets;
 3. rebuilds and smoke-tests the global corridor graph;
-4. refreshes FAA PRN references;
+4. refreshes FAA PRN references; the legacy IFR importer also checks committed source checksums and refuses unexpectedly small exports before replacing global CSVs;
 5. checks the packaged FAA CIFP cycle against the official publication;
 6. applies the app-manifest redistribution-rights guard;
 7. validates every app-downloadable CSV for file presence, path containment, byte size, SHA-256, header uniqueness, row widths and manifest record count;
