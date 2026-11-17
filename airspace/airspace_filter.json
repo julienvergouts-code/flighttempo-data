@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAtUtc": "2026-11-16T05:54:57.123003+00:00",
+  "generatedAtUtc": "2026-11-17T05:19:06.089319+00:00",
   "source": "EASA CZIB JSON export",
   "sourceUrl": "https://www.easa.europa.eu/en/domains/air-operations/czibs/export-json?_format=json&page=",
   "policy": {
@@ -12,59 +12,12 @@
   },
   "activeAdvisories": [
     {
-      "sourceId": "143944",
-      "name": "Airspace of Jordan",
-      "country": "Jordan",
-      "validUntil": "2026-11-16",
-      "affectedFirs": [],
-      "mappingMethod": "country-export polygon association; verify FIR designators and boundaries against State AIP"
-    },
-    {
-      "sourceId": "144230",
-      "name": "Airspace of Saudi Arabia",
-      "country": "Saudi Arabia",
-      "validUntil": "2026-11-16",
-      "affectedFirs": [
-        {
-          "firCode": "OEJD",
-          "name": "OEJD FIR",
-          "sourceCountryCodes": [
-            "SA"
-          ],
-          "geometryFeatureId": 126
-        }
-      ],
-      "mappingMethod": "country-export polygon association; verify FIR designators and boundaries against State AIP"
-    },
-    {
       "sourceId": "20599",
       "name": "Airspace of Syria",
       "country": "Syria",
-      "validUntil": "2026-11-30",
-      "affectedFirs": [],
-      "mappingMethod": "country-export polygon association; verify FIR designators and boundaries against State AIP"
-    },
-    {
-      "sourceId": "20589",
-      "name": "Airspace of Somalia",
-      "country": "Somalia",
       "validUntil": "2027-04-30",
-      "affectedFirs": [],
-      "mappingMethod": "country-export polygon association; verify FIR designators and boundaries against State AIP"
-    },
-    {
-      "sourceId": "20585",
-      "name": "Airspace of Mali",
-      "country": "Mali",
-      "validUntil": "2027-04-30",
-      "affectedFirs": [],
-      "mappingMethod": "country-export polygon association; verify FIR designators and boundaries against State AIP"
-    },
-    {
-      "sourceId": "20602",
-      "name": "Airspace of Yemen – Sana’a Flight Information Region",
-      "country": "Yemen",
-      "validUntil": "2027-04-30",
+      "explicitFirCodes": [],
+      "status": "active",
       "affectedFirs": [],
       "mappingMethod": "country-export polygon association; verify FIR designators and boundaries against State AIP"
     },
@@ -72,7 +25,9 @@
       "sourceId": "143861",
       "name": "Airspace of Iran",
       "country": "Iran",
-      "validUntil": "2026-11-16",
+      "validUntil": "2027-01-31",
+      "explicitFirCodes": [],
+      "status": "active",
       "affectedFirs": [
         {
           "firCode": "OIIX",
@@ -89,7 +44,9 @@
       "sourceId": "143862",
       "name": "Airspace of Iraq",
       "country": "Iraq",
-      "validUntil": "2026-11-16",
+      "validUntil": "2027-01-31",
+      "explicitFirCodes": [],
+      "status": "active",
       "affectedFirs": [],
       "mappingMethod": "country-export polygon association; verify FIR designators and boundaries against State AIP"
     },
@@ -97,7 +54,9 @@
       "sourceId": "143863",
       "name": "Airspace of Lebanon",
       "country": "Lebanon",
-      "validUntil": "2026-11-16",
+      "validUntil": "2027-01-31",
+      "explicitFirCodes": [],
+      "status": "active",
       "affectedFirs": [],
       "mappingMethod": "country-export polygon association; verify FIR designators and boundaries against State AIP"
     },
@@ -105,7 +64,9 @@
       "sourceId": "143899",
       "name": "Airspace of the Persian Gulf and Gulf of Oman",
       "country": "Bahrain, Kuwait, Qatar, Oman, United Arab Emirates",
-      "validUntil": "2026-11-16",
+      "validUntil": "2027-01-31",
+      "explicitFirCodes": [],
+      "status": "active",
       "affectedFirs": [
         {
           "firCode": "OMAE",
@@ -119,10 +80,73 @@
       "mappingMethod": "country-export polygon association; verify FIR designators and boundaries against State AIP"
     },
     {
+      "sourceId": "143944",
+      "name": "Airspace of Jordan",
+      "country": "Jordan",
+      "validUntil": "2027-01-31",
+      "explicitFirCodes": [],
+      "status": "active",
+      "affectedFirs": [],
+      "mappingMethod": "country-export polygon association; verify FIR designators and boundaries against State AIP"
+    },
+    {
+      "sourceId": "144230",
+      "name": "Airspace of Saudi Arabia",
+      "country": "Saudi Arabia",
+      "validUntil": "2027-01-31",
+      "explicitFirCodes": [],
+      "status": "active",
+      "affectedFirs": [
+        {
+          "firCode": "OEJD",
+          "name": "OEJD FIR",
+          "sourceCountryCodes": [
+            "SA"
+          ],
+          "geometryFeatureId": 126
+        }
+      ],
+      "mappingMethod": "country-export polygon association; verify FIR designators and boundaries against State AIP"
+    },
+    {
+      "sourceId": "20589",
+      "name": "Airspace of Somalia",
+      "country": "Somalia",
+      "validUntil": "2027-04-30",
+      "explicitFirCodes": [],
+      "status": "active",
+      "affectedFirs": [],
+      "mappingMethod": "country-export polygon association; verify FIR designators and boundaries against State AIP"
+    },
+    {
+      "sourceId": "20585",
+      "name": "Airspace of Mali",
+      "country": "Mali",
+      "validUntil": "2027-04-30",
+      "explicitFirCodes": [],
+      "status": "active",
+      "affectedFirs": [],
+      "mappingMethod": "country-export polygon association; verify FIR designators and boundaries against State AIP"
+    },
+    {
+      "sourceId": "20602",
+      "name": "Airspace of Yemen – Sana’a Flight Information Region",
+      "country": "Yemen",
+      "validUntil": "2027-04-30",
+      "explicitFirCodes": [
+        "OYSC"
+      ],
+      "status": "active",
+      "affectedFirs": [],
+      "mappingMethod": "country-export polygon association; verify FIR designators and boundaries against State AIP"
+    },
+    {
       "sourceId": "20582",
       "name": "Airspace of Libya",
       "country": "Libya",
       "validUntil": "2027-01-31",
+      "explicitFirCodes": [],
+      "status": "active",
       "affectedFirs": [
         {
           "firCode": "HLLL",
@@ -140,6 +164,8 @@
       "name": "Airspace of Afghanistan",
       "country": "Afghanistan",
       "validUntil": "2027-01-31",
+      "explicitFirCodes": [],
+      "status": "active",
       "affectedFirs": [],
       "mappingMethod": "country-export polygon association; verify FIR designators and boundaries against State AIP"
     },
@@ -148,6 +174,8 @@
       "name": "Airspace of Pakistan – Baluchistan and Khyber Pakhtunkhwa provinces",
       "country": "Pakistan",
       "validUntil": "2027-01-31",
+      "explicitFirCodes": [],
+      "status": "active",
       "affectedFirs": [
         {
           "firCode": "OPKR",
@@ -173,6 +201,8 @@
       "name": "Airspace of Ukraine",
       "country": "Ukraine",
       "validUntil": "2027-01-31",
+      "explicitFirCodes": [],
+      "status": "active",
       "affectedFirs": [],
       "mappingMethod": "country-export polygon association; verify FIR designators and boundaries against State AIP"
     },
@@ -181,6 +211,8 @@
       "name": "Airspace of Sudan",
       "country": "Sudan",
       "validUntil": "2027-01-31",
+      "explicitFirCodes": [],
+      "status": "active",
       "affectedFirs": [],
       "mappingMethod": "country-export polygon association; verify FIR designators and boundaries against State AIP"
     },
@@ -189,6 +221,8 @@
       "name": "Airspace of the Russian Federation",
       "country": "Russia",
       "validUntil": "2027-01-31",
+      "explicitFirCodes": [],
+      "status": "active",
       "affectedFirs": [
         {
           "firCode": "UMKK",
@@ -235,13 +269,12 @@
     }
   ],
   "unmappedAdvisories": [
-    "143944",
     "20599",
-    "20589",
-    "20585",
-    "20602",
     "143862",
     "143863",
+    "143944",
+    "20589",
+    "20585",
     "20574",
     "136057",
     "137874"
@@ -851,23 +884,13 @@
   "hardNoFlyFirs": [],
   "activeFirs": [
     {
-      "firCode": "OEJD",
-      "name": "OEJD FIR",
-      "geometryFeatureId": 126,
-      "geometryAvailable": true,
-      "sourceAdvisoryId": "144230",
-      "country": "Saudi Arabia",
-      "validUntil": "2026-11-16",
-      "classification": "EASA_advisory_not_legal_prohibition"
-    },
-    {
       "firCode": "OIIX",
       "name": "TEHRAN FIR",
       "geometryFeatureId": 193,
       "geometryAvailable": true,
       "sourceAdvisoryId": "143861",
       "country": "Iran",
-      "validUntil": "2026-11-16",
+      "validUntil": "2027-01-31",
       "classification": "EASA_advisory_not_legal_prohibition"
     },
     {
@@ -877,7 +900,27 @@
       "geometryAvailable": true,
       "sourceAdvisoryId": "143899",
       "country": "Bahrain, Kuwait, Qatar, Oman, United Arab Emirates",
-      "validUntil": "2026-11-16",
+      "validUntil": "2027-01-31",
+      "classification": "EASA_advisory_not_legal_prohibition"
+    },
+    {
+      "firCode": "OEJD",
+      "name": "OEJD FIR",
+      "geometryFeatureId": 126,
+      "geometryAvailable": true,
+      "sourceAdvisoryId": "144230",
+      "country": "Saudi Arabia",
+      "validUntil": "2027-01-31",
+      "classification": "EASA_advisory_not_legal_prohibition"
+    },
+    {
+      "firCode": "OYSC",
+      "name": null,
+      "geometryFeatureId": null,
+      "geometryAvailable": false,
+      "sourceAdvisoryId": "20602",
+      "country": "Yemen",
+      "validUntil": "2027-04-30",
       "classification": "EASA_advisory_not_legal_prohibition"
     },
     {
