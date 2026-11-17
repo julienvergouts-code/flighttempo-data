@@ -1,0 +1,96 @@
+{
+  "provider": "Open-Meteo",
+  "checked_at_utc": "2026-11-17T14:46:25.454308+00:00",
+  "purpose": "metadata_only_pressure_level_forecast_probe",
+  "forecast_values_published": false,
+  "test_location": {
+    "airport": "EBBR",
+    "latitude": 50.9014,
+    "longitude": 4.4844
+  },
+  "http_status": 200,
+  "time_count": 24,
+  "first_forecast_time_utc": "2026-11-17T00:00",
+  "last_forecast_time_utc": "2026-11-17T23:00",
+  "variables": {
+    "wind_speed_300hPa": {
+      "unit": "kn",
+      "sample_count": 24
+    },
+    "wind_direction_300hPa": {
+      "unit": "\u00b0",
+      "sample_count": 24
+    },
+    "temperature_300hPa": {
+      "unit": "\u00b0C",
+      "sample_count": 24
+    },
+    "geopotential_height_300hPa": {
+      "unit": "m",
+      "sample_count": 24
+    },
+    "wind_speed_250hPa": {
+      "unit": "kn",
+      "sample_count": 24
+    },
+    "wind_direction_250hPa": {
+      "unit": "\u00b0",
+      "sample_count": 24
+    },
+    "temperature_250hPa": {
+      "unit": "\u00b0C",
+      "sample_count": 24
+    },
+    "geopotential_height_250hPa": {
+      "unit": "m",
+      "sample_count": 24
+    },
+    "wind_speed_200hPa": {
+      "unit": "kn",
+      "sample_count": 24
+    },
+    "wind_direction_200hPa": {
+      "unit": "\u00b0",
+      "sample_count": 24
+    },
+    "temperature_200hPa": {
+      "unit": "\u00b0C",
+      "sample_count": 24
+    },
+    "geopotential_height_200hPa": {
+      "unit": "m",
+      "sample_count": 24
+    },
+    "wind_speed_150hPa": {
+      "unit": "kn",
+      "sample_count": 24
+    },
+    "wind_direction_150hPa": {
+      "unit": "\u00b0",
+      "sample_count": 24
+    },
+    "temperature_150hPa": {
+      "unit": "\u00b0C",
+      "sample_count": 24
+    },
+    "geopotential_height_150hPa": {
+      "unit": "m",
+      "sample_count": 24
+    }
+  },
+  "pressure_levels_hpa": [
+    300,
+    250,
+    200,
+    150
+  ],
+  "notes": [
+    "Global pressure-level forecast fields are available for wind speed, wind direction, temperature and geopotential height.",
+    "These are NWP forecast fields, not an aviation turbulence or icing product.",
+    "Any wind-shear calculation must be labelled as a non-operational model-derived indicator, not EDR/CAT forecast.",
+    "The hosted free API is for non-commercial use and requires CC BY 4.0 attribution; commercial use requires a separate licence."
+  ],
+  "source_url": "https://open-meteo.com/en/docs",
+  "data_license": "CC-BY-4.0",
+  "api_access": "free_non_commercial_only"
+}
