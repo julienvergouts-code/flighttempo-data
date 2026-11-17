@@ -68,6 +68,7 @@ def fetch_country(cc):
 FIR_NAME_TO_CODE = {
     "TEHRAN FIR": "OIIX", "TRIPOLI FIR": "HLLL",
     "KALININGRAD FIR": "UMKK", "SAMARA FIR": "UWWW",
+    "YEKATERINBURG FIR": "USSV",
     "SIMFEROPOL FIR": "UKFV", "ROSTOV-NA-DONU FIR": "URRV",
     "MOSCOW FIR": "UUWV", "ST PETERSBURG FIR": "ULLL",
     "KYIV FIR": "UKBV", "DNIPRO FIR": "UKDV",
@@ -115,6 +116,112 @@ def is_fir(feature):
         return True
     label = str(props.get("typeName") or props.get("typeLabel") or "").upper()
     return label in {"FIR", "UIR"}
+
+
+RUSSIA_CZIB_2025_01_R3_FIRS = [
+    ("UUWV", "MOSCOW FIR"),
+    ("URRV", "ROSTOV-NA-DONU FIR"),
+    ("ULLL", "SANKT-PETERSBURG FIR"),
+    ("USSV", "YEKATERINBURG FIR"),
+    ("UWWW", "SAMARA FIR"),
+]
+
+
+def build_russia_advisory_mapping(item, features):
+    """Map only the FIRs explicitly named by EASA CZIB 2025-01 R3.
+
+    OpenAIP polygons are candidate reference geometry only. They are not
+    validated against State AIPs, UWWW must be clipped at 60E, and the current
+    OpenAIP export lacks some of the five FIRs. Therefore this mapping must not
+    be activated for route avoidance until all five source-backed geometries
+    are present, clipped to the bulletin scope and validated.
+    """
+    by_code = {}
+    for feature in features:
+        props = feature.get("properties") or {}
+        code = props.get("flightTempoFirCode") or fir_code(props)
+        if code and code not in by_code:
+            by_code[code] = feature
+
+    affected = []
+    for code, name in RUSSIA_CZIB_2025_01_R3_FIRS:
+        feature = by_code.get(code)
+        props = (feature.get("properties") or {}) if feature else {}
+        verified = props.get("flightTempoVerifiedAgainstStateAip") is True
+        clipped = props.get("flightTempoClippedAt60E") is True
+        affected.append({
+            "firCode": code,
+            "name": name,
+            "sourceCountryCodes": ["RU"],
+            "geometryFeatureId": feature.get("id") if feature else None,
+            "geometryAvailable": feature is not None,
+            "geometrySource": "OpenAIP CC BY-NC 4.0 development reference" if feature else None,
+            "geometryVerifiedAgainstStateAip": verified,
+            "geometryClippedTo60E": clipped,
+            "geometryStatus": (
+                "state_aip_verified" if verified and clipped
+                else "candidate_openAIP_unverified" if feature
+                else "missing_in_current_OpenAIP_export"
+            ),
+            "requiresLongitudeClipAt60E": True,
+        })
+
+    complete = all(
+        x["geometryAvailable"]
+        and x["geometryVerifiedAgainstStateAip"]
+        and x["geometryClippedTo60E"]
+        for x in affected
+    )
+    return {
+        "affectedAirspace": {
+            "territory": "Russian Federation",
+            "longitudeLimitDegreesEast": 60.0,
+            "longitudeRelationship": "west_of",
+            "verticalScope": "all_altitudes_and_flight_levels",
+            "sourceText": "All altitudes / flight levels in the airspace of the Russian Federation west of longitude 60° East.",
+        },
+        "affectedFirs": affected,
+        "geometryCoverageComplete": complete,
+        "routeAvoidanceReady": complete,
+        "mappingMethod": "explicit_fir_list_from_EASA_CZIB_2025-01_R3; candidate OpenAIP polygons are community reference geometry only; no country-export association or synthetic boundary is used",
+    }
+
+
+def build_active_firs(advisories):
+    active_firs = []
+    seen_firs = set()
+    for advisory in advisories:
+        # An incomplete or unvalidated advisory set is not safe to treat as a
+        # complete avoidance polygon set. Keep its scope in the advisory
+        # record but do not activate partial geometries in the route layer.
+        if advisory.get("routeAvoidanceReady") is False:
+            continue
+        for fir in advisory.get("affectedFirs", []):
+            key = (fir.get("firCode"), fir.get("geometryFeatureId"))
+            if key in seen_firs:
+                continue
+            seen_firs.add(key)
+            active_firs.append({
+                "firCode": fir.get("firCode"),
+                "name": fir.get("name"),
+                "geometryFeatureId": fir.get("geometryFeatureId"),
+                "geometryAvailable": fir.get("geometryAvailable", fir.get("geometryFeatureId") is not None),
+                "sourceAdvisoryId": advisory.get("sourceId"),
+                "country": advisory.get("country"),
+                "validUntil": advisory.get("validUntil"),
+                "classification": "EASA_advisory_not_legal_prohibition",
+            })
+        for code in (advisory.get("explicitFirCodes") or []):
+            key = (code, None)
+            if key not in seen_firs:
+                seen_firs.add(key)
+                active_firs.append({
+                    "firCode": code, "name": None, "geometryFeatureId": None,
+                    "geometryAvailable": False, "sourceAdvisoryId": advisory.get("sourceId"),
+                    "country": advisory.get("country"), "validUntil": advisory.get("validUntil"),
+                    "classification": "EASA_advisory_not_legal_prohibition",
+                })
+    return active_firs
 
 
 def main():
@@ -187,6 +294,21 @@ def main():
     for item in easa.get("records", []):
         if item.get("effectiveStatus") != "active":
             continue
+
+        # The Russian bulletin names five FIRs and a 60E limit. Do not use
+        # country-export matching here: it incorrectly attaches unrelated FIRs
+        # (e.g. Kaliningrad and Simferopol) and misses the actual five-FIR scope.
+        if str(item.get("sourceId")) == "141480":
+            mapped = build_russia_advisory_mapping(item, features)
+            advisories.append({
+                "sourceId": item.get("sourceId"),
+                "name": item.get("name"),
+                "country": item.get("country"),
+                "validUntil": item.get("validUntil"),
+                **mapped,
+            })
+            continue
+
         country_names = [x.strip() for x in (item.get("country") or "").split(",") if x.strip()]
         wanted = {code for name in country_names for code in EASA_COUNTRY_CODES.get(name, [])}
         affected = []
@@ -221,36 +343,12 @@ def main():
         "note": "Community-maintained FIR/UIR geometry. Advisory-country association is a routing hint, not a legal prohibition. Verify against current State AIPs and NOTAMs."
     }
     filter_data["activeAdvisories"] = advisories
-    active_firs = []
-    seen_firs = set()
-    for advisory in advisories:
-        for fir in advisory.get("affectedFirs", []):
-            key = (fir.get("firCode"), fir.get("geometryFeatureId"))
-            if key in seen_firs:
-                continue
-            seen_firs.add(key)
-            active_firs.append({
-                "firCode": fir.get("firCode"),
-                "name": fir.get("name"),
-                "geometryFeatureId": fir.get("geometryFeatureId"),
-                "geometryAvailable": fir.get("geometryFeatureId") is not None,
-                "sourceAdvisoryId": advisory.get("sourceId"),
-                "country": advisory.get("country"),
-                "validUntil": advisory.get("validUntil"),
-                "classification": "EASA_advisory_not_legal_prohibition"
-            })
-        for code in (advisory.get("explicitFirCodes") or []):
-            key = (code, None)
-            if key not in seen_firs:
-                seen_firs.add(key)
-                active_firs.append({
-                    "firCode": code, "name": None, "geometryFeatureId": None,
-                    "geometryAvailable": False, "sourceAdvisoryId": advisory.get("sourceId"),
-                    "country": advisory.get("country"), "validUntil": advisory.get("validUntil"),
-                    "classification": "EASA_advisory_not_legal_prohibition"
-                })
+    active_firs = build_active_firs(advisories)
     filter_data["activeFirs"] = active_firs
     filter_data["unmappedAdvisories"] = [x["sourceId"] for x in advisories if not x.get("affectedFirs") and not x.get("explicitFirCodes")]
+    filter_data["incompleteGeometryAdvisories"] = [
+        x["sourceId"] for x in advisories if x.get("routeAvoidanceReady") is False
+    ]
     filter_data["generatedAtUtc"] = datetime.now(timezone.utc).isoformat()
     FILTER_FILE.write_text(json.dumps(filter_data, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
