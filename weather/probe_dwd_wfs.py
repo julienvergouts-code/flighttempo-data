@@ -65,6 +65,35 @@ def schema_fields(xml_bytes: bytes) -> list[dict[str, str]]:
     return list(unique.values())
 
 
+def get_wms_layers(xml_bytes: bytes) -> list[dict[str, str]]:
+    root = ET.fromstring(xml_bytes)
+    layers = []
+    for node in root.iter():
+        if local_name(node.tag) != "Layer":
+            continue
+        name = title = ""
+        for child in list(node):
+            if local_name(child.tag) == "Name" and child.text:
+                name = child.text.strip()
+            elif local_name(child.tag) == "Title" and child.text:
+                title = child.text.strip()
+        if name:
+            layers.append({"name": name, "title": title})
+    unique = {item["name"]: item for item in layers}
+    return sorted(unique.values(), key=lambda item: item["name"])
+
+
+def get_wcs_coverages(xml_bytes: bytes) -> list[str]:
+    root = ET.fromstring(xml_bytes)
+    names = []
+    for node in root.iter():
+        if local_name(node.tag) in {"CoverageId", "CoverageName"} and node.text:
+            value = node.text.strip()
+            if value and value not in names:
+                names.append(value)
+    return sorted(names)
+
+
 def probe_layer(layer: str) -> dict:
     result = {"layer": layer, "describe_status": "not_attempted", "sample_status": "not_attempted"}
     try:
@@ -132,16 +161,49 @@ def build_report() -> dict:
                 group_result[layer] = {"layer": layer, "describe_status": "not_listed", "sample_status": "not_attempted"}
         report["candidate_groups"][group] = group_result
 
+    try:
+        wms = request_bytes({
+            "service": "WMS", "version": "1.3.0", "request": "GetCapabilities",
+        })
+        wms_layers = get_wms_layers(wms)
+        report["wms_status"] = "anonymous_getcapabilities_ok"
+        report["wms_layer_count"] = len(wms_layers)
+        report["wms_weather_layers"] = [
+            item for item in wms_layers
+            if any(token in (item["name"] + " " + item["title"]).upper()
+                   for token in ("EDP", "ADWICE", "TURBUL", "ICING", "WAWFOR"))
+        ]
+    except (urllib.error.URLError, TimeoutError, OSError, ET.ParseError) as exc:
+        report["wms_status"] = "error"
+        report["wms_error"] = str(exc)[:500]
+
+    try:
+        wcs = request_bytes({
+            "service": "WCS", "version": "2.0.1", "request": "GetCapabilities",
+        })
+        coverages = get_wcs_coverages(wcs)
+        report["wcs_status"] = "anonymous_getcapabilities_ok"
+        report["wcs_coverage_count"] = len(coverages)
+        report["wcs_weather_coverages"] = [
+            name for name in coverages
+            if any(token in name.upper() for token in ("EDP", "ADWICE", "TURBUL", "ICING", "WAWFOR"))
+        ]
+    except (urllib.error.URLError, TimeoutError, OSError, ET.ParseError) as exc:
+        report["wcs_status"] = "error"
+        report["wcs_error"] = str(exc)[:500]
+
     report["access_summary"] = {
-        "capabilities_anonymous": True,
-        "candidate_layer_count": sum(
+        "wfs_capabilities_anonymous": True,
+        "wfs_candidate_layer_count": sum(
             1 for group in report["candidate_groups"].values()
             for item in group.values() if item.get("describe_status") == "ok"
         ),
-        "successful_sample_count": sum(
+        "wfs_successful_sample_count": sum(
             1 for group in report["candidate_groups"].values()
             for item in group.values() if item.get("sample_status") == "ok"
         ),
+        "wms_weather_layer_count": len(report.get("wms_weather_layers", [])),
+        "wcs_weather_coverage_count": len(report.get("wcs_weather_coverages", [])),
     }
     report["rights_status"] = "aviation_free_of_charge_claimed_by_DWD_catalogue; public_app_redistribution_not_confirmed"
     return report
