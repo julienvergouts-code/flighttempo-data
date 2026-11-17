@@ -28,6 +28,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
+      # This job owns the global_airline_directory entry in navigation_manifest.json.
       - uses: actions/checkout@v4
         with:
           ref: ${{ github.event.pull_request.head.sha || 'main' }}
