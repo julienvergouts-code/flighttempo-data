@@ -108,7 +108,7 @@ Sources:
 
 ## Implementation order
 
-1. Verify and repair the existing GitHub Actions pipeline before adding new scheduled jobs. The 17 November 2026 navigation workflow has failed in the unit-test stage on a feature branch; the latest main airline-directory run passed generation/tests but failed at the commit/publish step. Do not declare the pipeline healthy until those are diagnosed and rerun successfully.
+1. Pipeline reliability repair completed on 17 November 2026: queued workflows now check out the latest main branch instead of a stale triggering SHA; airline-only changes no longer trigger the navigation rebuild; the global airline directory is preserved by navigation manifest refreshes and covered by a regression test. The main navigation refresh and airline directory publication both passed after the fixes.
 2. Probe the DWD WFS GetCapabilities endpoint, confirm the exact EDP and ADWICE layers, anonymous/authenticated access, schema, timestamps, forecast levels and pagination. Keep the first probe as a non-publishing test.
 3. Confirm DWD's rights for use in a public FlightTempo app, caching and redistribution. If only licensed-user consumption is allowed, integrate as a user-provided/local provider rather than a shared public feed.
 4. Add NOAA global METAR/TAF/SIGMET retrieval with bounded requests, caching and freshness timestamps.
