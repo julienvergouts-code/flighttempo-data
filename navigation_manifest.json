@@ -119,9 +119,6 @@
       "candidateProcedureCountries": [
         "FR"
       ],
-      "vfrOnlyProviders": [
-        "OpenFlightMaps"
-      ],
       "sources": [
         {
           "id": "FR_SIA_XML",
@@ -150,29 +147,6 @@
           "sourceStatus": "public_open_data_reference_dataset",
           "dataStatus": "not_available_in_FlightTempo",
           "notes": "The SIA XML export is an openly reusable reference-data source (Licence Ouverte 2.0), useful for airports, runways, navaids and designated-point coordinates. Do not assume that this XML package contains complete IFR SID/STAR/approach leg sequences. France's published procedure tables are available separately as eAIP DATA PDFs and must be ingested and validated independently."
-        },
-        {
-          "id": "OFMA_EUROPE",
-          "jurisdiction": "European regions; coverage varies by OFM region",
-          "provider": "open flightmaps association (OFMA)",
-          "sourceUrl": "https://openflightmaps.org/",
-          "license": "OFMA General Users' License",
-          "redistribution": "conditional_public_redistribution",
-          "licenseStatus": "commercial_app_use_permitted_subject_to_GUL",
-          "attribution": "open flightmaps (OFMA)",
-          "procedureScope": [
-            "VFR traffic circuits",
-            "VFR arrival routes",
-            "VFR departure routes"
-          ],
-          "excludes": [
-            "IFR SIDs",
-            "IFR STARs",
-            "instrument approaches"
-          ],
-          "sourceStatus": "candidate_vfr_source",
-          "dataStatus": "not_imported",
-          "notes": "OFMA FAQ permits use in an app that is sold when the General Users' License is followed. Coverage and completeness differ by region; do not promote these VFR vectors to IFR procedures."
         },
         {
           "id": "DFS_INSPIRE",
