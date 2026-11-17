@@ -196,6 +196,18 @@
       "licenceStatus": "GPL-3.0_legacy_stale_personal_development_reference",
       "coverage": "Worldwide legacy low/high airway segments",
       "recordCount": 70291
+    },
+    {
+      "id": "easa-safety-directives",
+      "path": "airspace/advisories/easa_safety_directives.json",
+      "source": "EASA Safety Directives SD-2021-02 and SD-2021-03",
+      "airacCycle": null,
+      "effectiveDate": "2021-06-02",
+      "expiryDate": null,
+      "sha256": "531d42feed30978bb7574c75f69782b8b19d32a34424ef67ddef8fe5e3a625d3",
+      "licenceStatus": "EASA_source_acknowledgement",
+      "coverage": "Operator-scope-specific safety directives for FIR Minsk (UMMV)",
+      "recordCount": 2
     }
   ]
 }
