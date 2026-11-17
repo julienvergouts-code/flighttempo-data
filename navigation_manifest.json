@@ -481,7 +481,9 @@
       "effectiveDate": "",
       "expiryDate": "",
       "provenanceVerification": "source_attributed",
-      "operationallyAvailable": false
+      "operationallyAvailable": false,
+      "sha256": "1ec3494e0938dfa3621658e259b21c0c7a37a7a784c1e032e468f53901e903d6",
+      "sizeBytes": 3941
     },
     {
       "id": "faa_prn_notams",
