@@ -55,3 +55,8 @@ The navigation-data workflow runs `scripts/validate_navigation_csvs.py` against 
 - Aero.Sors-derived CSV exports were removed from this public repository because permission to republish transformed CSV derivatives has not been confirmed. The importer scripts are retained for possible future private testing, but the automated pipeline does not run them.
 - OpenAIP FIR/UIR polygons are retained only as non-commercial research/reference data under CC BY-NC 4.0. They and the mixed-source airspace filter are deliberately excluded from the app download manifest. Do not use them in a commercial build without suitable permission.
 - The app manifest is checked by `scripts/enforce_app_manifest_rights.py` and the CSV validator rejects downloadable entries marked non-commercial-only or with unconfirmed redistribution rights.
+
+
+## Global airline directory
+
+The worldwide airline entity directory is published separately at `airlines/global_airlines.json` under CC0-1.0. Its `global_airline_directory` entry in `navigation_manifest.json` is maintained by the airline refresh workflow and is preserved when the navigation manifest is rebuilt. It is a reference lookup dataset, not an operational airline schedule or route feed.
