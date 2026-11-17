@@ -1,0 +1,76 @@
+name: Refresh Global Airline Directory
+
+on:
+  schedule:
+    - cron: "27 5 * * 1"
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "scripts/build_global_airline_directory.py"
+      - "tests/test_global_airline_directory.py"
+      - ".github/workflows/update-global-airline-directory.yml"
+  pull_request:
+    paths:
+      - "scripts/build_global_airline_directory.py"
+      - "tests/test_global_airline_directory.py"
+      - ".github/workflows/update-global-airline-directory.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: flighttempo-shared-manifest-updates
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Build worldwide airline directory from CC0 structured data
+        run: python3 scripts/build_global_airline_directory.py
+      - name: Run airline directory tests
+        run: python3 -m unittest discover -s tests -p "test_global_airline_directory.py" -v
+      - name: Validate generated JSON and app manifest
+        run: |
+          python3 - <<'PY'
+          import hashlib, json
+          from pathlib import Path
+          data_path = Path("airlines/global_airlines.json")
+          data = json.loads(data_path.read_text(encoding="utf-8"))
+          assert data["schemaVersion"] == 1
+          assert data["recordCount"] == len(data["records"]) >= 100
+          ids = [row["wikidataId"] for row in data["records"]]
+          assert len(ids) == len(set(ids))
+          manifest = json.loads(Path("navigation_manifest.json").read_text(encoding="utf-8"))
+          item = next(d for d in manifest["datasets"] if d["id"] == "global_airline_directory")
+          raw = data_path.read_bytes()
+          assert item["available"] is True
+          assert item["sha256"] == hashlib.sha256(raw).hexdigest()
+          assert item["sizeBytes"] == len(raw)
+          assert item["recordCount"] == len(data["records"])
+          assert item["licenseStatus"] == "CC0_structured_data"
+          print(f"Validated {len(ids)} airline records ({len(raw)} bytes)")
+          PY
+      - name: Commit refreshed airline directory
+        if: github.ref == 'refs/heads/main' && (github.event_name == 'schedule' || github.event_name == 'push' || github.event_name == 'workflow_dispatch')
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add airlines/global_airlines.json airlines/global_airlines_meta.json navigation_manifest.json
+          if git diff --cached --quiet; then
+            echo "No airline directory changes."
+            exit 0
+          fi
+          git commit -m "chore(airlines): refresh global airline directory [skip ci]"
+          git pull --rebase origin main
+          git push origin HEAD:main
