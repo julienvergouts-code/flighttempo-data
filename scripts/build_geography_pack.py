@@ -125,7 +125,8 @@ def build_landmarks(sources: dict[str, dict[str, Any]]) -> list[dict[str, Any]]:
         if not name or not (-90 <= lat <= 90 and -180 <= lon <= 180):
             return
         kind = str(item.get("kind") or "FEATURE").strip().upper()
-        key = (name.casefold(), kind)
+        country_key = str(item.get("country") or "").strip().casefold()
+        key = (name.casefold(), kind, country_key, round(lat, 3), round(lon, 3))
         if key in seen:
             return
         seen.add(key)
