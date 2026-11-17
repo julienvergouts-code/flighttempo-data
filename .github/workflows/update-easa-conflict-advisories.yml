@@ -92,7 +92,7 @@ jobs:
               "recordCount": len(json.loads(raw).get("records", []))
           })
           manifest["generatedAtUtc"] = __import__("datetime").datetime.now(__import__("datetime").timezone.utc).isoformat()
-          root.write_text(json.dumps(manifest, indent=2) + "\\n", encoding="utf-8")
+          root.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
           PY
       - name: Enforce app manifest redistribution rights
         run: python3 scripts/enforce_app_manifest_rights.py
