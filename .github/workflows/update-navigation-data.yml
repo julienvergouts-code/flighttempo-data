@@ -411,3 +411,5 @@ jobs:
           git commit -m "chore(navdata): update verified aviation datasets [skip ci]"
           git pull --rebase origin main
           git push origin HEAD:main
+
+# Re-trigger full navigation-data validation after the manifest checksum correction.
