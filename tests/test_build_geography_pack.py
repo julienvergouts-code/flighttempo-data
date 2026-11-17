@@ -35,6 +35,19 @@ class GeographyPackTests(unittest.TestCase):
         self.assertIn("Small Remote Town", names)
         self.assertIn("Large City", names)
 
+    def test_same_named_places_in_different_locations_are_preserved(self):
+        sources = {
+            "populated_places": {"features": [
+                point_feature("Springfield", 10.0, 20.0, iso_a2="AA"),
+                point_feature("Springfield", 30.0, 40.0, iso_a2="BB"),
+            ]},
+            "elevation_points": {"features": []},
+            "geography_points": {"features": []},
+        }
+        records = MODULE.build_landmarks(sources)
+        springfields = [item for item in records if item["name"] == "Springfield"]
+        self.assertEqual(len(springfields), 2)
+
     def test_named_peaks_are_filtered_at_3500_ft(self):
         sources = {
             "populated_places": {"features": []},
