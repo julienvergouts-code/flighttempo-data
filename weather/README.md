@@ -93,17 +93,29 @@ References:
 - DWD SWIM layer inventory: https://swimt.dwd.de/swim_docs/reference/service_transition.html
 - DWD service registry: https://eur-registry.swim.aero/service-description/met-ceus-en-route-hazardous-meteorological-polygon-service
 
-## HiFi Active Sky FS
+## HiFi Active Sky XP 12 — local API integration
 
-Active Sky remains an optional local simulator weather adapter:
-- It is not a navigation-data source.
-- The official product page confirms an API for weather lookup, effects, mode control and weather-condition control.
-- The engine uses global METAR/TAF, upper-air GRIB, SIGMET/AIRMET, tropical-storm and snow-depth data.
-- Active Air Effects include simulated CAT, updrafts, downdrafts, microbursts, thunderstorm-vicinity turbulence, cloud turbulence and gust-related turbulence. These are simulator effects, not automatically a gridded aviation turbulence/EDR forecast.
-- The public product page does not publish the full endpoint/schema. The exact installed Active Sky FS version and its local API documentation are required before implementation.
-- Use only through the user's own licensed local installation. Do not scrape HiFi DataNet, bypass authentication or redistribute/proxy its weather feed without written permission.
+Active Sky XP 12 is the relevant HiFi product for an X-Plane 12 installation. It is a **local simulator-weather adapter**, not a navigation-data source or a public weather-data API.
 
-Reference: https://hifisimtech.com/asfs/
+Verified from HiFi's official product information:
+- ASXP12 supports X-Plane 12 (v12.04 or later) and Windows 64-bit.
+- HiFi explicitly provides a third-party API with an HTTP interface for getting and setting weather.
+- The API documentation is installed locally in the ASXP12 Program Files installation folder, under the `Documentation` subfolder.
+- The product's weather engine synthesizes surface observations and model data; the official description also lists historical/custom weather and enhanced turbulence/draft/thermal/microburst effects.
+- A newer ASXP12 update added a comprehensive area-weather API function, so the adapter must target the installed build's API document rather than assume older ASXP/ASXP11 endpoints.
+
+**Integration boundary**
+- Read-only FlightTempo integration should use only documented GET/read methods for weather observations, area weather, winds/layers and active SIGMET/AIRMET information where available.
+- Do not call control/set methods from FlightTempo. Do not change the simulator's weather mode, aircraft environment or user settings.
+- Keep the adapter bound to the user's own local licensed ASXP12 instance. Do not connect directly to HiFi DataNet, scrape protected network endpoints, or redistribute/proxy HiFi weather data without written permission.
+- Treat ASXP12 turbulence, drafts, thermals and microbursts as simulator effects/engine outputs unless the API explicitly exposes a forecast product with documented units, vertical bounds, validity and semantics. Never relabel effects as EDR or an operational CAT forecast.
+- No endpoint, port, response schema or authentication assumption is hard-coded in FlightTempo yet. These must be taken from the installed API PDF and verified against the running local instance.
+
+**One integration input remains necessary:** the file `Active Sky XP 12\\Documentation\\Active_Sky_XP_API.pdf` (or the equivalent API PDF supplied with the installed build). Once available, implement and test the exact read-only endpoints, response parser, time/altitude handling and failure states.
+
+References:
+- Official product/API description: https://www.hifitechinc.com/asxp12/
+- Official ASXP12 update history: https://support.justflight.com/support/solutions/articles/17000138798-active-sky-xp-12-x-plane-12-changelog
 
 ## What is not yet available globally for free
 
