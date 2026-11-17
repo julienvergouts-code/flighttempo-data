@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAtUtc": "2026-11-17T14:38:00Z",
+  "generatedAtUtc": "2026-11-17T14:46:25Z",
   "purpose": "FlightTempo weather-provider contract. This file describes live provider endpoints and access constraints; it is not a weather-data snapshot.",
   "operationalUse": false,
   "providers": [
@@ -230,6 +230,62 @@
         "cloud_turbulence",
         "gust_related_turbulence"
       ]
+    },
+    {
+      "id": "open_meteo_global_forecast",
+      "name": "Open-Meteo Global Weather Forecast API",
+      "accessVerified": true,
+      "integrationStatus": "pressure_level_endpoint_verified_android_not_yet_integrated",
+      "access": {
+        "authentication": "none_for_free_non_commercial_tier",
+        "baseUrl": "https://api.open-meteo.com/v1/forecast",
+        "licence": "CC-BY-4.0",
+        "commercialUse": "separate_subscription_or_licence_required",
+        "limits": {
+          "maxRequestsPerDay": 10000,
+          "maxRequestsPerHour": 5000,
+          "maxRequestsPerMinute": 600
+        }
+      },
+      "products": [
+        {
+          "id": "pressure_level_wind_temperature",
+          "dataClass": "weather_forecast",
+          "endpointTemplate": "https://api.open-meteo.com/v1/forecast?latitude={LAT}&longitude={LON}&hourly=wind_speed_300hPa,wind_direction_300hPa,temperature_300hPa,geopotential_height_300hPa,wind_speed_250hPa,wind_direction_250hPa,temperature_250hPa,geopotential_height_250hPa,wind_speed_200hPa,wind_direction_200hPa,temperature_200hPa,geopotential_height_200hPa,wind_speed_150hPa,wind_direction_150hPa,temperature_150hPa,geopotential_height_150hPa&forecast_days=1&wind_speed_unit=kn&temperature_unit=celsius&timezone=UTC",
+          "format": "JSON",
+          "coverage": "Global model coverage",
+          "pressureLevelsHpa": [
+            300,
+            250,
+            200,
+            150
+          ],
+          "fields": [
+            "wind_speed",
+            "wind_direction",
+            "temperature",
+            "geopotential_height"
+          ],
+          "verifiedTest": {
+            "airport": "EBBR",
+            "httpStatus": 200,
+            "hourlyPointsPerVariable": 24,
+            "checkedAtUtc": "2026-11-17T14:46:25Z"
+          },
+          "recommendedClientCacheSeconds": 3600,
+          "attribution": "Weather data by Open-Meteo.com — CC BY 4.0",
+          "notes": [
+            "Use geopotential_height to associate pressure levels with actual model altitude.",
+            "These are numerical weather prediction fields, not a turbulence or icing forecast.",
+            "Any vertical-shear calculation must be labelled as a non-operational model-derived indicator, not EDR/CAT."
+          ]
+        }
+      ],
+      "sourceUrl": "https://open-meteo.com/en/docs",
+      "notes": [
+        "The hosted free API is strictly for non-commercial use; a commercial FlightTempo release needs a separate licence or a self-hosted source arrangement.",
+        "Attribution under CC BY 4.0 is mandatory."
+      ]
     }
   ],
   "globalCoverageSummary": {
@@ -239,6 +295,7 @@
     "pirep": false,
     "griddedTurbulenceForecast": false,
     "griddedIcingForecast": false,
-    "notes": "A public no-key global feed is verified for METAR, TAF and SIGMET. No public no-key global gridded turbulence/icing forecast has been verified. DWD protected EDP/ADWICE access and HiFi local API remain gated."
+    "notes": "A public no-key global feed is verified for METAR, TAF and SIGMET. No public no-key global gridded turbulence/icing forecast has been verified. DWD protected EDP/ADWICE access and HiFi local API remain gated.",
+    "globalMultiLevelWindTemperatureForecast": true
   }
 }
