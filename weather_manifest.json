@@ -1,0 +1,166 @@
+{
+  "schemaVersion": 1,
+  "generatedAtUtc": "2026-11-17T14:28:26Z",
+  "purpose": "FlightTempo weather-provider contract. This file describes live provider endpoints and access constraints; it is not a weather-data snapshot.",
+  "operationalUse": false,
+  "providers": [
+    {
+      "id": "noaa_awc",
+      "name": "NOAA Aviation Weather Center Data API",
+      "accessVerified": true,
+      "integrationStatus": "public_endpoints_verified_android_client_not_yet_integrated",
+      "access": {
+        "authentication": "none_for_public_data_api",
+        "baseUrl": "https://aviationweather.gov/api/data",
+        "maxRequestsPerMinute": 100,
+        "typicalMaxResultsPerQuery": 400,
+        "cors": false,
+        "userAgentRequiredRecommended": true
+      },
+      "products": [
+        {
+          "id": "metar",
+          "dataClass": "weather_observation",
+          "endpointTemplate": "https://aviationweather.gov/api/data/metar?ids={ICAO}&format=json",
+          "format": "JSON",
+          "coverage": "Worldwide",
+          "verifiedTest": {
+            "airport": "EBBR",
+            "httpStatus": 200,
+            "records": 1,
+            "checkedAtUtc": "2026-11-17T14:28:26Z"
+          },
+          "recommendedClientCacheSeconds": 300
+        },
+        {
+          "id": "taf",
+          "dataClass": "weather_forecast",
+          "endpointTemplate": "https://aviationweather.gov/api/data/taf?ids={ICAO}&format=json",
+          "format": "JSON",
+          "coverage": "Worldwide",
+          "verifiedTest": {
+            "airport": "EBBR",
+            "httpStatus": 200,
+            "records": 1,
+            "checkedAtUtc": "2026-11-17T14:28:26Z"
+          },
+          "recommendedClientCacheSeconds": 600
+        },
+        {
+          "id": "sigmet_global",
+          "dataClass": "weather_hazard_polygon",
+          "endpoint": "https://aviationweather.gov/data/cache/sigmets.cache.json.gz",
+          "format": "gzip JSON",
+          "coverage": "Worldwide",
+          "refreshIntervalSeconds": 60,
+          "verifiedTest": {
+            "httpStatus": 200,
+            "records": 148,
+            "checkedAtUtc": "2026-11-17T14:28:26Z"
+          },
+          "recommendedClientCacheSeconds": 60
+        },
+        {
+          "id": "pirep_airep",
+          "dataClass": "weather_observation",
+          "endpoint": "https://aviationweather.gov/data/cache/aircraftreports.cache.csv.gz",
+          "format": "gzip CSV",
+          "coverage": "Primarily US and North Atlantic; not worldwide",
+          "refreshIntervalSeconds": 60,
+          "verifiedTest": {
+            "httpStatus": 200,
+            "records": 2322,
+            "checkedAtUtc": "2026-11-17T14:28:26Z"
+          },
+          "recommendedClientCacheSeconds": 60,
+          "notes": "Contains pilot-reported turbulence and icing; treat as observations, not forecasts."
+        }
+      ],
+      "notes": [
+        "Use ICAO identifiers for METAR/TAF route-airport lookups.",
+        "Use the provider's global SIGMET cache rather than polling hundreds of per-FIR requests.",
+        "Do not exceed the documented 100 requests/minute limit or 400-result per-query limit.",
+        "The API does not enable browser CORS. A native Android HTTP client is not subject to browser CORS, but must still use a descriptive User-Agent and caching.",
+        "This provider exposes global observations, forecasts and SIGMET warnings; it does not provide a verified worldwide gridded turbulence/icing forecast through the documented Data API."
+      ],
+      "sourceUrl": "https://aviationweather.gov/data/api/"
+    },
+    {
+      "id": "noaa_awc_gfa",
+      "name": "NOAA Aviation Weather Center Graphical Forecasts for Aviation",
+      "accessVerified": false,
+      "integrationStatus": "regional_product_reference_only",
+      "enabled": false,
+      "products": [
+        {
+          "id": "gtg_turbulence_edr",
+          "dataClass": "weather_hazard_forecast",
+          "coverage": "United States including Alaska and Hawaii, Gulf/Caribbean and portions of Atlantic/Pacific",
+          "verticalCoverage": "FL030-FL480 plus low-level AGL layers",
+          "forecastHorizonHours": 18,
+          "notes": "GTG/EDR turbulence guidance. Not global. No supported machine-readable integration endpoint verified in this repository."
+        },
+        {
+          "id": "cip_icing",
+          "dataClass": "weather_hazard_forecast",
+          "coverage": "Regional GFA domain; not global",
+          "notes": "Current Icing Product combines NWP, radar, METAR, PIREP, satellite and lightning inputs. Not a worldwide icing grid."
+        }
+      ],
+      "sourceUrl": "https://aviationweather.gov/gfa/help/"
+    },
+    {
+      "id": "dwd_aviation_hazards",
+      "name": "Deutscher Wetterdienst aviation EDP/ADWICE",
+      "accessVerified": false,
+      "integrationStatus": "protected_service_access_required",
+      "enabled": false,
+      "serviceUrl": "https://maps.dwd.de/geoserver/ows",
+      "candidateLayers": [
+        "dwd:ICON_ADWICE_POLYGONE_GLOBAL",
+        "dwd:ICON_ADWICE_POLYGONE",
+        "dwd:ICON_EDPP_POLYGONS",
+        "dwd:ICON-Turbulenz-Polygone",
+        "dwd:ICON-EU-Turbulence-Polygons"
+      ],
+      "probeResult": {
+        "checkedAtUtc": "2026-11-17T14:25:58Z",
+        "anonymousWfsFeatureTypes": 61,
+        "anonymousWmsLayers": 207,
+        "anonymousWcsCoverages": 118,
+        "matchingPublicEdpAdwiceLayers": 0
+      },
+      "access": {
+        "authentication": "DWD SWIM/MET-CEUS subscription and HTTP Basic Authentication required for protected aviation hazard layers",
+        "price": "DWD catalogue lists EDP/ADWICE products as free of charge for aviation; access and public app rights are separate questions",
+        "publicAppRedistribution": "not_confirmed"
+      },
+      "sourceUrl": "https://swimt.dwd.de/swim_docs/reference/service_transition.html",
+      "notes": "Do not enable until DWD confirms access, app display, caching and redistribution rights and provides credentials or a public layer."
+    },
+    {
+      "id": "hifi_active_sky_fs",
+      "name": "HiFi Active Sky FS",
+      "accessVerified": false,
+      "integrationStatus": "local_simulator_adapter_api_schema_required",
+      "enabled": false,
+      "dataClass": "simulator_local_weather",
+      "scope": "User-owned local simulator installation only",
+      "notes": [
+        "Optional local simulator weather integration, not a worldwide weather-data provider.",
+        "Do not scrape HiFi DataNet, bypass authentication or publish/proxy Active Sky output without written permission.",
+        "The local Active Sky FS API documentation and exact installed product version are required before implementing the adapter."
+      ],
+      "sourceUrl": "https://hifisimtech.com/asfs/"
+    }
+  ],
+  "globalCoverageSummary": {
+    "metar": true,
+    "taf": true,
+    "sigmet": true,
+    "pirep": false,
+    "griddedTurbulenceForecast": false,
+    "griddedIcingForecast": false,
+    "notes": "A public no-key global feed is verified for METAR, TAF and SIGMET. No public no-key global gridded turbulence/icing forecast has been verified. DWD protected EDP/ADWICE access and HiFi local API remain gated."
+  }
+}
