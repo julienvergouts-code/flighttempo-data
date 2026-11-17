@@ -33,6 +33,12 @@ class ParseCsvBytesTests(unittest.TestCase):
         self.assertEqual(header, ["code", "displayName", "signOnMins"])
         self.assertEqual(count, 1)
 
+    def test_quoted_multiline_field_is_preserved(self):
+        raw = b'id,name\\n1,"Alpha\\nAirport"\\n2,Beta\\n'
+        header, count = parse_csv_bytes(raw)
+        self.assertEqual(header, ["id", "name"])
+        self.assertEqual(count, 2)
+
     def test_rejects_duplicate_headers(self):
         with self.assertRaisesRegex(ValueError, "duplicate"):
             parse_csv_bytes(b"id,name,id\n1,A,2\n")
