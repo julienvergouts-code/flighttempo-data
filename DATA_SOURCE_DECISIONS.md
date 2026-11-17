@@ -62,6 +62,20 @@ Sources:
 - API: https://aviationweather.gov/data/api/
 - API use and restrictions: https://aviationweather.gov/data/api/
 
+### 3. Open-Meteo global pressure-level winds and temperatures
+
+A metadata-only probe succeeded at EBBR on 17 November 2026. The free API returned 24 hourly forecast points at 300, 250, 200 and 150 hPa for wind speed, wind direction, temperature and geopotential height.
+
+- This fills the global multi-level wind/temperature profile gap and supports a forecast timeline.
+- It is numerical weather prediction, not an aviation turbulence or icing product.
+- A vertical wind-shear calculation may be displayed only as a clearly labelled model-derived, non-operational indicator, never as EDR/CAT.
+- The hosted free API is non-commercial only and the data requires CC BY 4.0 attribution. Commercial use needs a separate licence or a different/self-hosted source arrangement.
+
+Sources:
+- API documentation: https://open-meteo.com/en/docs
+- Terms: https://open-meteo.com/en/terms
+- Data licence: https://open-meteo.com/en/license
+
 ### 3. WAFS turbulence / icing grids
 
 The official WAFS products provide global gridded turbulence and icing forecasts. WIFS access requires registration and eligibility (international flight operations or support to them), and credentials/API access. This is not an anonymous, no-account public feed, so it is not part of the free-by-default pipeline unless the user independently qualifies and the access terms permit the intended app use.
