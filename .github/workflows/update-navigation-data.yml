@@ -298,6 +298,8 @@ jobs:
         run: python3 scripts/enrich_airport_reference.py
       - name: Enforce app manifest redistribution rights
         run: python3 scripts/enforce_app_manifest_rights.py
+      - name: Check current FAA CIFP publication and packaged cycle
+        run: python3 scripts/check_faa_cifp_currentness.py
       - name: Validate every downloadable CSV in the app manifest
         run: python3 scripts/validate_navigation_csvs.py --manifest navigation_manifest.json
       - name: Verify generated datasets and manifest
@@ -387,6 +389,7 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add \
             navigation/ \
+            procedures/ \
             airports/airports.csv \
             airlines/airlines.csv \
             airlines/route_rules.csv \
