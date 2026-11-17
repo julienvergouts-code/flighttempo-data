@@ -114,40 +114,12 @@
     "europe": {
       "status": "partial_public_source_confirmed_not_ingested",
       "operationallyAvailable": false,
-      "summary": "France publishes current procedure DATA sheets in its eAIP, including structured SID and STAR leg tables and some RNP approach precoding tables. Its separate SIA AIXM4.5/XML export is openly reusable reference data but is not yet treated as a complete IFPD feed. No complete Europe-wide IFR procedure dataset has been established.",
+      "summary": "France publishes current procedure DATA sheets in its eAIP, including structured SID and STAR leg tables and some RNP approach precoding tables. No complete Europe-wide IFR procedure dataset has been established.",
       "confirmedProcedureCountries": [],
       "candidateProcedureCountries": [
         "FR"
       ],
       "sources": [
-        {
-          "id": "FR_SIA_XML",
-          "jurisdiction": "FR",
-          "provider": "Service de l'Information Aeronautique (DGAC France)",
-          "sourceUrl": "https://www.sia.aviation-civile.gouv.fr/produits-numeriques-en-libre-disposition/les-bases-de-donnees-sia/donnees-aeronautiques-xml-airac-11-26.html",
-          "mirrorUrl": "https://data.cquest.org/dgac/aip/",
-          "format": [
-            "AIXM 4.5 XML",
-            "XML_SIA"
-          ],
-          "procedureScope": [],
-          "license": "Licence Ouverte / Open Licence v2.0 (Etalab)",
-          "redistribution": "public_redistribution",
-          "licenseStatus": "verified_from_official_SIA_open_data_terms",
-          "attribution": "Service de l'Information Aeronautique (SIA France); include the source and last update date.",
-          "cycle": "2611",
-          "effectiveDate": "2026-10-29",
-          "expiryDate": "2026-11-25",
-          "downloadPrice": "EUR 0",
-          "packageSize": "5.8 MB",
-          "fileMembers": [
-            "AIXM4.5_all_FR_OM_YYYY-MM-DD.xml",
-            "XML_SIA_YYYY-MM-DD.xml"
-          ],
-          "sourceStatus": "public_open_data_reference_dataset",
-          "dataStatus": "not_available_in_FlightTempo",
-          "notes": "The SIA XML export is an openly reusable reference-data source (Licence Ouverte 2.0), useful for airports, runways, navaids and designated-point coordinates. Do not assume that this XML package contains complete IFR SID/STAR/approach leg sequences. France's published procedure tables are available separately as eAIP DATA PDFs and must be ingested and validated independently."
-        },
         {
           "id": "DFS_INSPIRE",
           "jurisdiction": "DE",
