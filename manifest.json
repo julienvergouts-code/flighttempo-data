@@ -16,7 +16,7 @@
     "missingRegionalProcedures": "remain_missing_never_invent",
     "openAipAttribution": "Contains data from OpenAIP (https://www.openaip.net/), licensed under CC BY-NC 4.0.",
     "airacNetStorage": "blocked_until_licence_clarified",
-    "aerosors": "experimental_private_development_only_derivative_redistribution_not_confirmed"
+    "aerosors": "derivative_redistribution_not_confirmed; do not publish derived CSV exports or include them in app downloads without written permission"
   },
   "datasets": [
     {
