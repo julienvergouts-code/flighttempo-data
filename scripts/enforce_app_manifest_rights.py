@@ -56,6 +56,13 @@ def enforce() -> list[str]:
             manifest.setdefault("capabilities", {})[flag] = False
         blocked.append(dataset_id)
 
+    # These flags describe app-download availability, not the presence of
+    # research files in the repository. Set them false even if an earlier
+    # workflow removed the dataset entries before this guard runs.
+    for flags in CAPABILITY_FLAGS.values():
+        for flag in flags:
+            manifest.setdefault("capabilities", {})[flag] = False
+
     # Keep research counts out of the app-facing capability/statistics surface.
     statistics = manifest.setdefault("statistics", {})
     research_keys = [
