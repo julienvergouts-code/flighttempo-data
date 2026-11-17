@@ -229,7 +229,8 @@
     "aeroSorsIlsFacilities": false,
     "aerosors_ge_navaids": false,
     "aerosors_ge_airports": false,
-    "airspaceFilterAdvisoryOnly": false
+    "airspaceFilterAdvisoryOnly": false,
+    "easaSafetyDirectives": true
   },
   "procedureCoverageStatus": "FAA_US_NAS_ONLY_TEST_DATA; EUROPE_FRANCE_SOURCE_NOT_INGESTED; ASIA_NO_PUBLIC_REDISTRIBUTABLE_SOURCE_CONFIRMED",
   "procedureOperationalUse": false,
@@ -964,6 +965,22 @@
       "operationallyAvailable": false,
       "status": "not_published_redistribution_rights_unconfirmed_or_non_commercial_only",
       "downloadBlockReason": "Retained for research/provenance only. Do not publish through the app download manifest until redistribution rights suitable for the intended product have been confirmed in writing."
+    },
+    {
+      "id": "easa_safety_directives",
+      "path": "airspace/advisories/easa_safety_directives.json",
+      "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/airspace/advisories/easa_safety_directives.json",
+      "available": true,
+      "recordCount": 2,
+      "sizeBytes": 3941,
+      "sha256": "531d42feed30978bb7574c75f69782b8b19d32a34424ef67ddef8fe5e3a625d3",
+      "sourceProvider": "European Union Aviation Safety Agency (EASA)",
+      "sourceUrl": "https://ad.easa.europa.eu/ad/SD-2021-02",
+      "license": "EASA source acknowledgement",
+      "licenseStatus": "reproduction_authorised_with_source_acknowledgement",
+      "downloadPurpose": "operator_scope_safety_directive_reference_only",
+      "operationallyAvailable": false,
+      "status": "reference_only_not_universal_no_fly"
     }
   ],
   "downloadContract": {
