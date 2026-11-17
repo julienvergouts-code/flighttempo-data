@@ -69,7 +69,7 @@ class RussiaBelarusAdvisoryMappingTests(unittest.TestCase):
         for directive in directives:
             self.assertEqual(directive["affectedFirs"][0]["firCode"], "UMMV")
             self.assertFalse(directive["affectedFirs"][0]["geometryAvailable"])
-            self.assertIn("unforeseen circumstances", directive["exceptionsText"])
+            self.assertIn("unforeseen circumstances", directive["exception"])
 
     def test_russia_geometry_requires_all_firs_verified_and_clipped(self):
         codes = [("UUWV", "MOSCOW FIR"), ("URRV", "ROSTOV-NA-DONU FIR"),
