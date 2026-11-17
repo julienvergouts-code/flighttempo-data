@@ -174,5 +174,53 @@ class OurAirportsFullFieldExportTests(unittest.TestCase):
         self.assertEqual(row["source_usageType"], "HIGH")
 
 
+    def test_manifest_merge_preserves_separately_managed_datasets(self):
+        external_datasets = [
+            {
+                "id": "global_airline_directory",
+                "path": "airlines/global_airlines.json",
+                "available": True,
+                "recordCount": 3846,
+                "licenseStatus": "CC0_structured_data",
+            },
+            {
+                "id": "easa_czibs",
+                "path": "airspace/advisories/easa_czibs.json",
+                "available": True,
+                "recordCount": 34,
+            },
+        ]
+        existing = {
+            "schemaVersion": 13,
+            "datasets": external_datasets,
+            "statistics": {"globalAirlineDirectory": 3846, "airports": 10},
+            "capabilities": {
+                "globalAirlineDirectory": True,
+                "conflictZoneAdvisories": True,
+                "airports": False,
+            },
+            "downloadContract": {"version": 1, "repository": "flighttempo-data"},
+            "regionalProcedureCoverage": {"europe": {"status": "partial"}},
+        }
+        generated = {
+            "schemaVersion": 13,
+            "generatedAtUtc": "2026-11-17T00:00:00Z",
+            "statistics": {"airports": 29747, "runways": 47127},
+            "capabilities": {"airports": True, "runways": True},
+            "dataSources": [{"dataset": "airports", "provider": "OurAirports"}],
+        }
+
+        merged = builder.merge_existing_manifest(existing, generated)
+
+        self.assertEqual(merged["datasets"], external_datasets)
+        self.assertEqual(merged["statistics"]["globalAirlineDirectory"], 3846)
+        self.assertEqual(merged["statistics"]["airports"], 29747)
+        self.assertTrue(merged["capabilities"]["globalAirlineDirectory"])
+        self.assertTrue(merged["capabilities"]["conflictZoneAdvisories"])
+        self.assertTrue(merged["capabilities"]["airports"])
+        self.assertEqual(merged["downloadContract"], existing["downloadContract"])
+        self.assertEqual(merged["regionalProcedureCoverage"], existing["regionalProcedureCoverage"])
+
+
 if __name__ == "__main__":
     unittest.main()
