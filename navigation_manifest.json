@@ -939,7 +939,7 @@
       "available": true,
       "recordCount": 34,
       "sizeBytes": 18566,
-      "sha256": "c524c24e213ceb040b5262ee61c50c7b63d4f1c5a24681af8795257d2e009426",
+      "sha256": "a13df3097ded1a3e965d5185d636d86af391c97622329498353c87899ad8aded",
       "sourceProvider": "European Union Aviation Safety Agency (EASA)",
       "sourceUrl": "https://www.easa.europa.eu/en/domains/air-operations/czibs",
       "license": "EASA website copyright notice: reproduction authorised provided source is acknowledged",
@@ -964,7 +964,7 @@
       "dataCycle": "not_applicable",
       "downloadPurpose": "operator_scope_safety_directive_reference_only",
       "operationallyAvailable": false,
-      "status": "advisory_reference_not_operational"
+      "status": "reference_only_not_universal_no_fly"
     },
     {
       "id": "airspace_filter",
@@ -972,7 +972,7 @@
       "available": false,
       "recordCount": 16,
       "sizeBytes": 38396,
-      "sha256": "ee76544df390272c613e1ebe8c6750b85230c6badc4e374b354041894e605430",
+      "sha256": "88721c3d290c8f027c3295e36d927c07a612629fd4480d80ab6934fe3f41b863",
       "sourceProvider": "European Union Aviation Safety Agency (EASA)",
       "sourceUrl": "https://www.easa.europa.eu/en/domains/air-operations/czibs",
       "license": "EASA website copyright notice: reproduction authorised provided source is acknowledged",
