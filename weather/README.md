@@ -45,6 +45,25 @@ Official API documentation: https://aviationweather.gov/data/api/
 4. Do not label the current three sampled 250 hPa wind points and synthetic line segments as a complete jetstream analysis. They are sparse upper-air wind samples. A proper route layer needs time-aware sampling at multiple pressure levels (at least 300/250/200/150 hPa) along the full route, with wind direction/speed and temperature retained at each point.
 5. Do not infer turbulence or icing from a high-wind threshold. Without a verified EDR/icing forecast, show SIGMETs and PIREPs as their actual data classes and label any model-derived shear indicator as a non-operational proxy.
 
+## Verified global multi-level winds: Open-Meteo
+
+A metadata-only probe succeeded for EBBR on 17 November 2026. The free non-commercial API returned 24 hourly forecast points for each of these pressure levels:
+
+- 300 hPa
+- 250 hPa
+- 200 hPa
+- 150 hPa
+
+At every level the API returned wind speed, wind direction, temperature and geopotential height. This supports a real multi-level winds/temperature profile and a forecast timeline along a route. Use geopotential height to associate pressure levels with model altitude.
+
+**Limitations and licence:**
+- These are global numerical weather prediction fields, not an aviation turbulence or icing product.
+- A vertical wind-shear calculation may be displayed only as a clearly labelled model-derived, non-operational indicator. Do not label it EDR or a CAT forecast.
+- The hosted free API is non-commercial only (10,000 requests/day, 5,000/hour, 600/minute) and the data requires CC BY 4.0 attribution.
+- A commercial FlightTempo release needs a separate Open-Meteo licence or a different/self-hosted source arrangement.
+
+Source: https://open-meteo.com/en/docs
+
 ## Regional turbulence and icing guidance: NOAA GFA
 
 The AWC Graphical Forecasts for Aviation includes:
