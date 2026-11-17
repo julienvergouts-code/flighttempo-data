@@ -45,6 +45,7 @@ jobs:
           datasets = m.setdefault("datasets", [])
           for dataset_id, rel, purpose in [
               ("easa_czibs", "airspace/advisories/easa_czibs.json", "advisory_reference_only"),
+              ("easa_safety_directives", "airspace/advisories/easa_safety_directives.json", "operator_scope_safety_directive_reference_only"),
               ("airspace_filter", "airspace/airspace_filter.json", "route_preview_advisory_filter_only"),
           ]:
               raw = Path(rel).read_bytes()
@@ -52,7 +53,7 @@ jobs:
                   "id": dataset_id, "path": rel,
                   "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/" + rel,
                   "available": True,
-                  "recordCount": len(json.loads(raw).get("records", [])) if dataset_id == "easa_czibs" else len(json.loads(raw).get("activeAdvisories", [])),
+                  "recordCount": len(json.loads(raw).get("records", [])) if dataset_id in {"easa_czibs", "easa_safety_directives"} else len(json.loads(raw).get("activeAdvisories", [])),
                   "sizeBytes": len(raw), "sha256": hashlib.sha256(raw).hexdigest(),
                   "sourceProvider": "European Union Aviation Safety Agency (EASA)",
                   "sourceUrl": "https://www.easa.europa.eu/en/domains/air-operations/czibs",
@@ -66,9 +67,32 @@ jobs:
               datasets.append(record)
           m["datasets"] = datasets
           m.setdefault("capabilities", {})["conflictZoneAdvisories"] = True
+          m["capabilities"]["easaSafetyDirectives"] = True
           m["capabilities"]["airspaceFilterAdvisoryOnly"] = True
           m["capabilities"]["hardNoFlyFIRRestrictions"] = False
           p.write_text(json.dumps(m, indent=2) + "\n")
+          PY
+      - name: Update root EASA provenance catalogue
+        run: |
+          python3 - <<'PY'
+          import hashlib, json
+          from pathlib import Path
+          root = Path("manifest.json")
+          manifest = json.loads(root.read_text(encoding="utf-8"))
+          rel = "airspace/advisories/easa_safety_directives.json"
+          raw = Path(rel).read_bytes()
+          manifest["datasets"] = [d for d in manifest.get("datasets", []) if d.get("id") != "easa-safety-directives"]
+          manifest["datasets"].append({
+              "id": "easa-safety-directives", "path": rel,
+              "source": "EASA Safety Directives SD-2021-02 and SD-2021-03",
+              "airacCycle": None, "effectiveDate": "2021-06-02", "expiryDate": None,
+              "sha256": hashlib.sha256(raw).hexdigest(),
+              "licenceStatus": "EASA_source_acknowledgement",
+              "coverage": "Operator-scope-specific safety directives for FIR Minsk (UMMV)",
+              "recordCount": len(json.loads(raw).get("records", []))
+          })
+          manifest["generatedAtUtc"] = __import__("datetime").datetime.now(__import__("datetime").timezone.utc).isoformat()
+          root.write_text(json.dumps(manifest, indent=2) + "\\n", encoding="utf-8")
           PY
       - name: Enforce app manifest redistribution rights
         run: python3 scripts/enforce_app_manifest_rights.py
@@ -76,7 +100,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add airspace/advisories airspace/airspace_filter.json navigation_manifest.json
+          git add airspace/advisories airspace/airspace_filter.json navigation_manifest.json manifest.json
           git commit -m "data(airspace): refresh official EASA conflict-zone advisories" || echo "No advisory changes"
           git pull --rebase origin main
           git push

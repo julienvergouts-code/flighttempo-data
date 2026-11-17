@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAtUtc": "2026-11-17T12:35:02.545559+00:00",
+  "generatedAtUtc": "2026-11-15T21:35:46.474Z",
   "source": "EASA CZIB JSON export",
   "sourceUrl": "https://www.easa.europa.eu/en/domains/air-operations/czibs/export-json?_format=json&page=",
   "policy": {
@@ -12,12 +12,59 @@
   },
   "activeAdvisories": [
     {
+      "sourceId": "143944",
+      "name": "Airspace of Jordan",
+      "country": "Jordan",
+      "validUntil": "2026-11-16",
+      "affectedFirs": [],
+      "mappingMethod": "country-export polygon association; verify FIR designators and boundaries against State AIP"
+    },
+    {
+      "sourceId": "144230",
+      "name": "Airspace of Saudi Arabia",
+      "country": "Saudi Arabia",
+      "validUntil": "2026-11-16",
+      "affectedFirs": [
+        {
+          "firCode": "OEJD",
+          "name": "OEJD FIR",
+          "sourceCountryCodes": [
+            "SA"
+          ],
+          "geometryFeatureId": 126
+        }
+      ],
+      "mappingMethod": "country-export polygon association; verify FIR designators and boundaries against State AIP"
+    },
+    {
       "sourceId": "20599",
       "name": "Airspace of Syria",
       "country": "Syria",
+      "validUntil": "2026-11-30",
+      "affectedFirs": [],
+      "mappingMethod": "country-export polygon association; verify FIR designators and boundaries against State AIP"
+    },
+    {
+      "sourceId": "20589",
+      "name": "Airspace of Somalia",
+      "country": "Somalia",
       "validUntil": "2027-04-30",
-      "explicitFirCodes": [],
-      "status": "active",
+      "affectedFirs": [],
+      "mappingMethod": "country-export polygon association; verify FIR designators and boundaries against State AIP"
+    },
+    {
+      "sourceId": "20585",
+      "name": "Airspace of Mali",
+      "country": "Mali",
+      "validUntil": "2027-04-30",
+      "affectedFirs": [],
+      "mappingMethod": "country-export polygon association; verify FIR designators and boundaries against State AIP"
+    },
+    {
+      "sourceId": "20602",
+      "name": "Airspace of Yemen – Sana’a Flight Information Region",
+      "country": "Yemen",
+      "validUntil": "2027-04-30",
       "affectedFirs": [],
       "mappingMethod": "country-export polygon association; verify FIR designators and boundaries against State AIP"
     },
@@ -25,9 +72,7 @@
       "sourceId": "143861",
       "name": "Airspace of Iran",
       "country": "Iran",
-      "validUntil": "2027-01-31",
-      "explicitFirCodes": [],
-      "status": "active",
+      "validUntil": "2026-11-16",
       "affectedFirs": [
         {
           "firCode": "OIIX",
@@ -44,9 +89,7 @@
       "sourceId": "143862",
       "name": "Airspace of Iraq",
       "country": "Iraq",
-      "validUntil": "2027-01-31",
-      "explicitFirCodes": [],
-      "status": "active",
+      "validUntil": "2026-11-16",
       "affectedFirs": [],
       "mappingMethod": "country-export polygon association; verify FIR designators and boundaries against State AIP"
     },
@@ -54,9 +97,7 @@
       "sourceId": "143863",
       "name": "Airspace of Lebanon",
       "country": "Lebanon",
-      "validUntil": "2027-01-31",
-      "explicitFirCodes": [],
-      "status": "active",
+      "validUntil": "2026-11-16",
       "affectedFirs": [],
       "mappingMethod": "country-export polygon association; verify FIR designators and boundaries against State AIP"
     },
@@ -64,9 +105,7 @@
       "sourceId": "143899",
       "name": "Airspace of the Persian Gulf and Gulf of Oman",
       "country": "Bahrain, Kuwait, Qatar, Oman, United Arab Emirates",
-      "validUntil": "2027-01-31",
-      "explicitFirCodes": [],
-      "status": "active",
+      "validUntil": "2026-11-16",
       "affectedFirs": [
         {
           "firCode": "OMAE",
@@ -80,73 +119,10 @@
       "mappingMethod": "country-export polygon association; verify FIR designators and boundaries against State AIP"
     },
     {
-      "sourceId": "143944",
-      "name": "Airspace of Jordan",
-      "country": "Jordan",
-      "validUntil": "2027-01-31",
-      "explicitFirCodes": [],
-      "status": "active",
-      "affectedFirs": [],
-      "mappingMethod": "country-export polygon association; verify FIR designators and boundaries against State AIP"
-    },
-    {
-      "sourceId": "144230",
-      "name": "Airspace of Saudi Arabia",
-      "country": "Saudi Arabia",
-      "validUntil": "2027-01-31",
-      "explicitFirCodes": [],
-      "status": "active",
-      "affectedFirs": [
-        {
-          "firCode": "OEJD",
-          "name": "OEJD FIR",
-          "sourceCountryCodes": [
-            "SA"
-          ],
-          "geometryFeatureId": 126
-        }
-      ],
-      "mappingMethod": "country-export polygon association; verify FIR designators and boundaries against State AIP"
-    },
-    {
-      "sourceId": "20589",
-      "name": "Airspace of Somalia",
-      "country": "Somalia",
-      "validUntil": "2027-04-30",
-      "explicitFirCodes": [],
-      "status": "active",
-      "affectedFirs": [],
-      "mappingMethod": "country-export polygon association; verify FIR designators and boundaries against State AIP"
-    },
-    {
-      "sourceId": "20585",
-      "name": "Airspace of Mali",
-      "country": "Mali",
-      "validUntil": "2027-04-30",
-      "explicitFirCodes": [],
-      "status": "active",
-      "affectedFirs": [],
-      "mappingMethod": "country-export polygon association; verify FIR designators and boundaries against State AIP"
-    },
-    {
-      "sourceId": "20602",
-      "name": "Airspace of Yemen – Sana’a Flight Information Region",
-      "country": "Yemen",
-      "validUntil": "2027-04-30",
-      "explicitFirCodes": [
-        "OYSC"
-      ],
-      "status": "active",
-      "affectedFirs": [],
-      "mappingMethod": "country-export polygon association; verify FIR designators and boundaries against State AIP"
-    },
-    {
       "sourceId": "20582",
       "name": "Airspace of Libya",
       "country": "Libya",
       "validUntil": "2027-01-31",
-      "explicitFirCodes": [],
-      "status": "active",
       "affectedFirs": [
         {
           "firCode": "HLLL",
@@ -164,8 +140,6 @@
       "name": "Airspace of Afghanistan",
       "country": "Afghanistan",
       "validUntil": "2027-01-31",
-      "explicitFirCodes": [],
-      "status": "active",
       "affectedFirs": [],
       "mappingMethod": "country-export polygon association; verify FIR designators and boundaries against State AIP"
     },
@@ -174,26 +148,7 @@
       "name": "Airspace of Pakistan – Baluchistan and Khyber Pakhtunkhwa provinces",
       "country": "Pakistan",
       "validUntil": "2027-01-31",
-      "explicitFirCodes": [],
-      "status": "active",
-      "affectedFirs": [
-        {
-          "firCode": "OPKR",
-          "name": "KARACHI FIR",
-          "sourceCountryCodes": [
-            "PK"
-          ],
-          "geometryFeatureId": 166
-        },
-        {
-          "firCode": "OPLR",
-          "name": "LAHORE FIR",
-          "sourceCountryCodes": [
-            "PK"
-          ],
-          "geometryFeatureId": 167
-        }
-      ],
+      "affectedFirs": [],
       "mappingMethod": "country-export polygon association; verify FIR designators and boundaries against State AIP"
     },
     {
@@ -201,8 +156,6 @@
       "name": "Airspace of Ukraine",
       "country": "Ukraine",
       "validUntil": "2027-01-31",
-      "explicitFirCodes": [],
-      "status": "active",
       "affectedFirs": [],
       "mappingMethod": "country-export polygon association; verify FIR designators and boundaries against State AIP"
     },
@@ -211,8 +164,6 @@
       "name": "Airspace of Sudan",
       "country": "Sudan",
       "validUntil": "2027-01-31",
-      "explicitFirCodes": [],
-      "status": "active",
       "affectedFirs": [],
       "mappingMethod": "country-export polygon association; verify FIR designators and boundaries against State AIP"
     },
@@ -221,32 +172,19 @@
       "name": "Airspace of the Russian Federation",
       "country": "Russia",
       "validUntil": "2027-01-31",
-      "explicitFirCodes": [],
-      "status": "active",
       "affectedFirs": [
         {
-          "firCode": "UMKK",
-          "name": "KALININGRAD FIR",
+          "firCode": "UUWV",
+          "name": "MOSCOW FIR",
           "sourceCountryCodes": [
             "RU"
           ],
-          "geometryFeatureId": 2310
-        },
-        {
-          "firCode": "UWWW",
-          "name": "SAMARA FIR",
-          "sourceCountryCodes": [
-            "RU"
-          ],
-          "geometryFeatureId": 2448
-        },
-        {
-          "firCode": "UKFV",
-          "name": "SIMFEROPOL FIR",
-          "sourceCountryCodes": [
-            "RU"
-          ],
-          "geometryFeatureId": 2450
+          "geometryFeatureId": null,
+          "geometryAvailable": false,
+          "geometrySource": null,
+          "geometryVerifiedAgainstStateAip": false,
+          "geometryStatus": "missing_in_current_OpenAIP_export",
+          "requiresLongitudeClipAt60E": true
         },
         {
           "firCode": "URRV",
@@ -254,28 +192,75 @@
           "sourceCountryCodes": [
             "RU"
           ],
-          "geometryFeatureId": 2458
+          "geometryFeatureId": 2458,
+          "geometryAvailable": true,
+          "geometrySource": "OpenAIP CC BY-NC 4.0 development reference",
+          "geometryVerifiedAgainstStateAip": false,
+          "geometryStatus": "candidate_openAIP_unverified",
+          "requiresLongitudeClipAt60E": true
         },
         {
-          "firCode": "UKFV",
-          "name": "SIMFEROPOL FIR",
+          "firCode": "ULLL",
+          "name": "SANKT-PETERSBURG FIR",
           "sourceCountryCodes": [
             "RU"
           ],
-          "geometryFeatureId": 2460
+          "geometryFeatureId": null,
+          "geometryAvailable": false,
+          "geometrySource": null,
+          "geometryVerifiedAgainstStateAip": false,
+          "geometryStatus": "missing_in_current_OpenAIP_export",
+          "requiresLongitudeClipAt60E": true
+        },
+        {
+          "firCode": "USSV",
+          "name": "YEKATERINBURG FIR",
+          "sourceCountryCodes": [
+            "RU"
+          ],
+          "geometryFeatureId": null,
+          "geometryAvailable": false,
+          "geometrySource": null,
+          "geometryVerifiedAgainstStateAip": false,
+          "geometryStatus": "missing_in_current_OpenAIP_export",
+          "requiresLongitudeClipAt60E": true
+        },
+        {
+          "firCode": "UWWW",
+          "name": "SAMARA FIR",
+          "sourceCountryCodes": [
+            "RU"
+          ],
+          "geometryFeatureId": 2448,
+          "geometryAvailable": true,
+          "geometrySource": "OpenAIP CC BY-NC 4.0 development reference",
+          "geometryVerifiedAgainstStateAip": false,
+          "geometryStatus": "candidate_openAIP_unverified",
+          "requiresLongitudeClipAt60E": true
         }
       ],
-      "mappingMethod": "country-export polygon association; verify FIR designators and boundaries against State AIP"
+      "mappingMethod": "explicit_fir_list_from_EASA_CZIB_2025-01_R3; candidate OpenAIP polygons are community reference geometry only; no country-export association or synthetic boundary is used",
+      "affectedAirspace": {
+        "territory": "Russian Federation",
+        "longitudeLimitDegreesEast": 60,
+        "longitudeRelationship": "west_of",
+        "verticalScope": "all_altitudes_and_flight_levels",
+        "sourceText": "All altitudes / flight levels in the airspace of the Russian Federation west of longitude 60° East."
+      },
+      "geometryCoverageComplete": false,
+      "routeAvoidanceReady": false
     }
   ],
   "unmappedAdvisories": [
-    "20599",
-    "143862",
-    "143863",
     "143944",
+    "20599",
     "20589",
     "20585",
+    "20602",
+    "143862",
+    "143863",
     "20574",
+    "20587",
     "136057",
     "137874"
   ],
@@ -284,10 +269,52 @@
     "source": "OpenAIP",
     "license": "CC BY-NC 4.0",
     "attribution": "Contains data from OpenAIP (https://www.openaip.net/), licensed under CC BY-NC 4.0.",
-    "featureCount": 172,
+    "featureCount": 170,
     "file": "navigation/airspace/openaip_fir_boundaries.geojson",
     "note": "Community-maintained FIR/UIR geometry. Advisory-country association is a routing hint, not a legal prohibition. Verify against current State AIPs and NOTAMs."
   },
+  "activeFirs": [
+    {
+      "firCode": "OEJD",
+      "name": "OEJD FIR",
+      "geometryFeatureId": 126,
+      "geometryAvailable": true,
+      "sourceAdvisoryId": "144230",
+      "country": "Saudi Arabia",
+      "validUntil": "2026-11-16",
+      "classification": "EASA_advisory_not_legal_prohibition"
+    },
+    {
+      "firCode": "OIIX",
+      "name": "TEHRAN FIR",
+      "geometryFeatureId": 193,
+      "geometryAvailable": true,
+      "sourceAdvisoryId": "143861",
+      "country": "Iran",
+      "validUntil": "2026-11-16",
+      "classification": "EASA_advisory_not_legal_prohibition"
+    },
+    {
+      "firCode": "OMAE",
+      "name": "OMAE FIR",
+      "geometryFeatureId": 42,
+      "geometryAvailable": true,
+      "sourceAdvisoryId": "143899",
+      "country": "Bahrain, Kuwait, Qatar, Oman, United Arab Emirates",
+      "validUntil": "2026-11-16",
+      "classification": "EASA_advisory_not_legal_prohibition"
+    },
+    {
+      "firCode": "HLLL",
+      "name": "TRIPOLI FIR",
+      "geometryFeatureId": 17,
+      "geometryAvailable": true,
+      "sourceAdvisoryId": "20582",
+      "country": "Libya",
+      "validUntil": "2027-01-31",
+      "classification": "EASA_advisory_not_legal_prohibition"
+    }
+  ],
   "faaRestrictions": [
     {
       "notamId": "A0029/21",
@@ -882,126 +909,84 @@
     "sfarReferenceCount": 7
   },
   "hardNoFlyFirs": [],
-  "activeFirs": [
+  "incompleteGeometryAdvisories": [
+    "141480"
+  ],
+  "operatorSpecificAdvisories": [
     {
-      "firCode": "OIIX",
-      "name": "TEHRAN FIR",
-      "geometryFeatureId": 193,
-      "geometryAvailable": true,
-      "sourceAdvisoryId": "143861",
-      "country": "Iran",
-      "validUntil": "2027-01-31",
-      "classification": "EASA_advisory_not_legal_prohibition"
+      "sourceId": "EASA_SD_2021_02",
+      "documentNumber": "2021-02",
+      "sourceType": "EASA_Safety_Directive",
+      "issuedDate": "2021-06-02",
+      "subject": "Operations in FIR Minsk (UMMV)",
+      "affectedFirs": [
+        {
+          "firCode": "UMMV",
+          "name": "MINSK FIR",
+          "geometryFeatureId": null,
+          "geometryAvailable": false,
+          "geometryStatus": "no_source_verified_geometry_in_current_dataset"
+        }
+      ],
+      "appliesTo": "EASA Member States' NCAs responsible for oversight of operators whose principal place of business is in that Member State; national implementation must be checked.",
+      "requiredAction": "NCAs should ensure applicable operators do not conduct operations in FIR Minsk (UMMV).",
+      "exception": "Use of the airspace where deemed necessary to ensure safe operation in case of unforeseen circumstances.",
+      "validityText": "Pending finalisation of the international investigation, or until further notice.",
+      "currentnessStatus": "No supersedure is listed in the published directive; verify the applicable NCA implementation and current NOTAM before applying to a particular operator.",
+      "currentnessVerified": false,
+      "routeAvoidanceReady": false,
+      "userOverrideAllowed": false,
+      "sourceUrl": "https://ad.easa.europa.eu/blob/EASA_SD_2021_02.pdf/SD_SD-2021-02_1"
     },
     {
-      "firCode": "OMAE",
-      "name": "OMAE FIR",
-      "geometryFeatureId": 42,
-      "geometryAvailable": true,
-      "sourceAdvisoryId": "143899",
-      "country": "Bahrain, Kuwait, Qatar, Oman, United Arab Emirates",
-      "validUntil": "2027-01-31",
-      "classification": "EASA_advisory_not_legal_prohibition"
+      "sourceId": "EASA_SD_2021_03",
+      "documentNumber": "2021-03",
+      "sourceType": "EASA_Safety_Directive",
+      "issuedDate": "2021-06-02",
+      "subject": "Operations in FIR Minsk (UMMV) by operators for which EASA acts as competent authority",
+      "affectedFirs": [
+        {
+          "firCode": "UMMV",
+          "name": "MINSK FIR",
+          "geometryFeatureId": null,
+          "geometryAvailable": false,
+          "geometryStatus": "no_source_verified_geometry_in_current_dataset"
+        }
+      ],
+      "appliesTo": "Operators conducting Regulation (EU) 965/2012 air operations for which EASA issued the AOC and acts as competent authority.",
+      "requiredAction": "Applicable operators shall not conduct operations in FIR Minsk (UMMV).",
+      "exception": "Use of the airspace where deemed necessary to ensure safe operation in case of unforeseen circumstances.",
+      "validityText": "Pending finalisation of the international investigation, or until further notice.",
+      "currentnessStatus": "The directive states it is mandatory for persons for whom EASA acts as competent authority; verify current revision/status before operational reliance.",
+      "currentnessVerified": false,
+      "routeAvoidanceReady": false,
+      "userOverrideAllowed": false,
+      "sourceUrl": "https://ad.easa.europa.eu/blob/EASA_SD_2021_03.pdf/SD_SD-2021-03_1"
     },
     {
-      "firCode": "OEJD",
-      "name": "OEJD FIR",
-      "geometryFeatureId": 126,
-      "geometryAvailable": true,
-      "sourceAdvisoryId": "144230",
-      "country": "Saudi Arabia",
-      "validUntil": "2027-01-31",
-      "classification": "EASA_advisory_not_legal_prohibition"
-    },
-    {
-      "firCode": "OYSC",
-      "name": null,
-      "geometryFeatureId": null,
-      "geometryAvailable": false,
-      "sourceAdvisoryId": "20602",
-      "country": "Yemen",
-      "validUntil": "2027-04-30",
-      "classification": "EASA_advisory_not_legal_prohibition"
-    },
-    {
-      "firCode": "HLLL",
-      "name": "TRIPOLI FIR",
-      "geometryFeatureId": 17,
-      "geometryAvailable": true,
-      "sourceAdvisoryId": "20582",
-      "country": "Libya",
-      "validUntil": "2027-01-31",
-      "classification": "EASA_advisory_not_legal_prohibition"
-    },
-    {
-      "firCode": "OPKR",
-      "name": "KARACHI FIR",
-      "geometryFeatureId": 166,
-      "geometryAvailable": true,
-      "sourceAdvisoryId": "20587",
-      "country": "Pakistan",
-      "validUntil": "2027-01-31",
-      "classification": "EASA_advisory_not_legal_prohibition"
-    },
-    {
-      "firCode": "OPLR",
-      "name": "LAHORE FIR",
-      "geometryFeatureId": 167,
-      "geometryAvailable": true,
-      "sourceAdvisoryId": "20587",
-      "country": "Pakistan",
-      "validUntil": "2027-01-31",
-      "classification": "EASA_advisory_not_legal_prohibition"
-    },
-    {
-      "firCode": "UMKK",
-      "name": "KALININGRAD FIR",
-      "geometryFeatureId": 2310,
-      "geometryAvailable": true,
-      "sourceAdvisoryId": "141480",
-      "country": "Russia",
-      "validUntil": "2027-01-31",
-      "classification": "EASA_advisory_not_legal_prohibition"
-    },
-    {
-      "firCode": "UWWW",
-      "name": "SAMARA FIR",
-      "geometryFeatureId": 2448,
-      "geometryAvailable": true,
-      "sourceAdvisoryId": "141480",
-      "country": "Russia",
-      "validUntil": "2027-01-31",
-      "classification": "EASA_advisory_not_legal_prohibition"
-    },
-    {
-      "firCode": "UKFV",
-      "name": "SIMFEROPOL FIR",
-      "geometryFeatureId": 2450,
-      "geometryAvailable": true,
-      "sourceAdvisoryId": "141480",
-      "country": "Russia",
-      "validUntil": "2027-01-31",
-      "classification": "EASA_advisory_not_legal_prohibition"
-    },
-    {
-      "firCode": "URRV",
-      "name": "ROSTOV-NA-DONU FIR",
-      "geometryFeatureId": 2458,
-      "geometryAvailable": true,
-      "sourceAdvisoryId": "141480",
-      "country": "Russia",
-      "validUntil": "2027-01-31",
-      "classification": "EASA_advisory_not_legal_prohibition"
-    },
-    {
-      "firCode": "UKFV",
-      "name": "SIMFEROPOL FIR",
-      "geometryFeatureId": 2460,
-      "geometryAvailable": true,
-      "sourceAdvisoryId": "141480",
-      "country": "Russia",
-      "validUntil": "2027-01-31",
-      "classification": "EASA_advisory_not_legal_prohibition"
+      "sourceId": "EASA_SIB_2021_10",
+      "documentNumber": "2021-10",
+      "sourceType": "EASA_Safety_Information_Bulletin",
+      "issuedDate": "2021-05-25",
+      "subject": "Operations in FIR Minsk (UMMV)",
+      "affectedFirs": [
+        {
+          "firCode": "UMMV",
+          "name": "MINSK FIR",
+          "geometryFeatureId": null,
+          "geometryAvailable": false,
+          "geometryStatus": "no_source_verified_geometry_in_current_dataset"
+        }
+      ],
+      "appliesTo": "Operators with principal place of business in an EASA Member State and EASA-authorised third-country operators when operating to, from or within the EU, as described by EASA.",
+      "requiredAction": "EASA advises applicable operators to avoid operations in FIR Minsk (UMMV).",
+      "exception": "Avoidance does not apply where use is deemed necessary to ensure safe operation in case of unforeseen circumstances.",
+      "validityText": "Check the current EASA publication, operator risk assessment and State implementation.",
+      "currentnessStatus": "Advisory reference; verify current applicability and State/operator notices.",
+      "currentnessVerified": false,
+      "routeAvoidanceReady": false,
+      "userOverrideAllowed": true,
+      "sourceUrl": "https://www.easa.europa.eu/en/newsroom-and-events/news/easa-issues-safety-information-bulletin-operations-belarus-airspace"
     }
   ]
 }
