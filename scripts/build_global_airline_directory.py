@@ -179,12 +179,13 @@ def update_manifest(dataset_path: str, records: list[dict[str, Any]], digest: st
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--output", default="airlines/global_airlines.json")
-    parser.add_argument("--manifest-only", action="store_true")
     args = parser.parse_args()
     output = ROOT / args.output
     output.parent.mkdir(parents=True, exist_ok=True)
 
     bindings = fetch_bindings()
+    if len(bindings) >= 20000:
+        raise RuntimeError("Wikidata result reached the 20,000-row safety limit; refusing a potentially truncated publication")
     records = build_records(bindings)
     if len(records) < 100:
         raise RuntimeError(f"Refusing to publish suspiciously small airline result: {len(records)} records")
