@@ -1,0 +1,29 @@
+{
+  "checkedAtUtc": "2026-11-17T12:34:01.608142+00:00",
+  "source": "FAA AeroNav CIFP",
+  "sourcePageUrl": "https://www.faa.gov/air_traffic/flight_info/aeronav/digital_products/cifp/download/",
+  "updateFrequency": "28 days",
+  "status": "packaged_cycle_current_next_cycle_published",
+  "packagedCycle": {
+    "cycleToken": "261029",
+    "effectiveDate": "2026-10-29",
+    "expiryDate": "2026-11-25"
+  },
+  "packagedCycleListedByFaa": true,
+  "latestPublishedCycle": {
+    "cycleToken": "261126",
+    "effectiveDate": "2026-11-26",
+    "expiryDate": "2026-12-24",
+    "downloadUrl": "https://aeronav.faa.gov/Upload_313-d/cifp/CIFP_261126.zip"
+  },
+  "nextFutureCycle": {
+    "cycleToken": "261126",
+    "effectiveDate": "2026-11-26",
+    "expiryDate": "2026-12-24",
+    "downloadUrl": "https://aeronav.faa.gov/Upload_313-d/cifp/CIFP_261126.zip"
+  },
+  "latestPublishedDownloadUrl": "https://aeronav.faa.gov/Upload_313-d/cifp/CIFP_261126.zip",
+  "automaticImport": false,
+  "automaticImportReason": "The repository does not yet contain a verified FAA ARINC 424 parser and end-to-end regression suite. This monitor must not replace procedure CSVs without that validation.",
+  "operationalUse": false
+}
