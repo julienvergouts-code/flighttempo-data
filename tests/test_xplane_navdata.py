@@ -404,5 +404,39 @@ class XPlaneNavdataTests(unittest.TestCase):
 
 
 
+    def test_global_airline_directory_is_preserved_when_navigation_manifest_rebuilds(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            existing_dataset = {
+                "id": "global_airline_directory",
+                "path": "airlines/global_airlines.json",
+                "downloadUrl": "https://example.test/global_airlines.json",
+                "available": True,
+                "recordCount": 3846,
+                "sizeBytes": 12345,
+                "sha256": "abc123",
+                "license": "CC0-1.0",
+                "licenseStatus": "CC0_structured_data",
+                "operationallyAvailable": False,
+            }
+            manifest_path = root / "navigation_manifest.json"
+            manifest_path.write_text(json.dumps({
+                "schemaVersion": 13,
+                "datasets": [existing_dataset],
+                "capabilities": {"globalAirlineDirectory": True},
+                "statistics": {"globalAirlineDirectory": 3846},
+            }), encoding="utf-8")
+
+            result = update_manifest(manifest_path, root)
+            preserved = next(
+                item for item in result["datasets"]
+                if item["id"] == "global_airline_directory"
+            )
+            self.assertEqual(preserved, existing_dataset)
+            self.assertTrue(result["capabilities"]["globalAirlineDirectory"])
+            self.assertEqual(result["statistics"]["globalAirlineDirectory"], 3846)
+
+
+
 if __name__ == "__main__":
     unittest.main()
