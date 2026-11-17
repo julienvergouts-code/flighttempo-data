@@ -132,6 +132,8 @@ jobs:
           PY
       - name: Build OurAirports reference datasets
         run: python3 scripts/build_aviation_db.py
+      - name: Build Global Overflight & VFR Geography Packs
+        run: python3 scripts/build_geography_pack.py
       - name: Import optional global IFR fixes and navaids
         run: |
           python3 scripts/import_xplane_navdata.py \
@@ -338,13 +340,33 @@ jobs:
           test -s navigation/navaids/navaids.csv
           test -s navigation/runways/runways_parsed.csv
           test -s navigation_manifest.json
+          test -s navigation/geography/world_geography.json.gz
+          test -s navigation/geography/world_hydrography.json.gz
+          test -s navigation/geography/meta.json
           python3 - <<'PY'
           import csv
+          import gzip
           import hashlib
           import json
           from pathlib import Path
 
           manifest = json.loads(Path("navigation_manifest.json").read_text())
+          # The Android landmark loader requires a top-level JSON array.
+          with gzip.open("navigation/geography/world_geography.json.gz", "rt", encoding="utf-8") as handle:
+              geography = json.load(handle)
+          assert isinstance(geography, list), "World geography pack must remain a top-level JSON array"
+          assert len(geography) >= 5000, f"Unexpectedly small global geography pack: {len(geography)}"
+          for item in geography:
+              assert item.get("name") and item.get("kind") in {"CITY", "PEAK", "ISLAND", "FEATURE"}
+              assert -90 <= float(item["lat"]) <= 90 and -180 <= float(item["lon"]) <= 180
+          with gzip.open("navigation/geography/world_hydrography.json.gz", "rt", encoding="utf-8") as handle:
+              hydro = json.load(handle)
+          assert set(hydro.get("layers", {})) == {"rivers", "lakes", "countryBorders"}
+          assert all(hydro["layers"][name] for name in ("rivers", "lakes", "countryBorders"))
+          geography_meta = json.loads(Path("navigation/geography/meta.json").read_text())
+          assert geography_meta["sha256"] == hashlib.sha256(Path("navigation/geography/world_geography.json.gz").read_bytes()).hexdigest()
+          assert geography_meta["hydrography"]["sha256"] == hashlib.sha256(Path("navigation/geography/world_hydrography.json.gz").read_bytes()).hexdigest()
+          print(f"World geography pack: {len(geography):,} landmarks; hydrography layers: { {k: len(v) for k, v in hydro['layers'].items()} }")
           assert manifest["schemaVersion"] == 13, "Unexpected manifest schema version"
           expected = {
               "airports/airports.csv": 1000,
