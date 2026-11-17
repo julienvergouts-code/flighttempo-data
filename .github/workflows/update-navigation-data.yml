@@ -88,7 +88,7 @@ jobs:
           item["sha256"] = hashlib.sha256(raw).hexdigest()
           item["sizeBytes"] = len(raw)
           item["recordCount"] = len(data.get("records", []))
-          manifest_path.write_text(json.dumps(manifest, indent=2) + "\\n", encoding="utf-8")
+          manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
           print(f"Reconciled EASA directives reference: {item['recordCount']} records, {item['sizeBytes']} bytes, sha256={item['sha256']}")
           PY
       - name: Run IFR importer unit tests
