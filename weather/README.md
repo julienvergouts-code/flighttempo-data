@@ -10,8 +10,17 @@ The metadata-only GitHub Actions probe ran successfully on 17 November 2026:
 | --- | --- | --- |
 | METAR | Worldwide | EBBR query returned 1 record (HTTP 200) |
 | TAF | Worldwide | EBBR query returned 1 record (HTTP 200) |
-| Current SIGMET cache | Worldwide | 148 records retrieved from the public cache |
-| PIREP/AIREP cache | Primarily US and North Atlantic | 2,322 reports retrieved |
+| Current SIGMET cache | Worldwide | 151 records retrieved from the public cache |
+| PIREP/AIREP cache | Primarily US and North Atlantic | 2,350 reports retrieved |
+
+Additional endpoint checks against the exact URLs used by the Android map code:
+
+- `/api/data/isigmet?format=geojson`: HTTP 200, 150 features
+- `/api/data/sigmet?format=geojson`: HTTP 200, 149 features
+- `/api/data/airsigmet?format=geojson`: HTTP 200, 1 feature
+- `/api/data/surface?format=geojson`: **HTTP 404**
+
+The last result identifies a real map-layer defect: the current implementation's surface-analysis URL is not a valid AWC API endpoint. Its fallback pressure centers must be removed; synthetic H/L centers must never be drawn as live weather. Show the surface-analysis layer as unavailable until a supported, verified source is integrated.
 
 Only availability, counts and field names are committed. No raw weather observations or hazard records are stored in this repository.
 
