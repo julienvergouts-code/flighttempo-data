@@ -55,3 +55,10 @@ The importer in scripts/import_sia_eaip_procedures.py reads official SIA DATA PD
 - ILS, RNAV and RNP approaches remain distinct procedure types; an ILS facility or runway attribute is not itself an approach procedure.
 
 This repository is a reference-data source for FlightTempo, not an approved aeronautical information publication or an operational navigation source.
+
+
+## Automatic FAA cycle monitoring
+
+The daily navigation workflow checks the official [FAA CIFP download page](https://www.faa.gov/air_traffic/flight_info/aeronav/digital_products/cifp/download/) and writes `faa-cifp-currentness.json`. It records the packaged cycle, latest published cycle, effective/expiry dates and whether an update is due. The monitor fails the pipeline once the packaged cycle has expired.
+
+**The procedure CSVs are not automatically re-parsed yet.** The repository does not currently contain a verified, tested ARINC 424 importer. The monitor deliberately does not replace procedure data until an importer and cycle-to-cycle regression checks exist. FAA states CIFP is updated every 28 days and requires recipients to notify customers of reported errors and notify FAA when errors are found. See the FAA product page and its customer agreement.

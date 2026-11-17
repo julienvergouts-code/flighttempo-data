@@ -736,6 +736,56 @@ def update_manifest(manifest_path: Path, root: Path, import_meta=None):
     return manifest
 
 
+def validate_existing_snapshot(source_dir: Path, sources: dict, root: Path) -> None:
+    """Fail closed if the committed legacy snapshot is incomplete or changed unexpectedly."""
+    prior_path = source_dir / "import_metadata.json"
+    if not prior_path.is_file():
+        return
+    prior = json.loads(prior_path.read_text(encoding="utf-8"))
+    prior_files = {item.get("fileName"): item for item in prior.get("files", [])}
+    for kind, source in sources.items():
+        expected = prior_files.get(source["file_name"])
+        if not expected:
+            continue
+        actual_hash = sha256(source["raw"])
+        expected_hash = expected.get("sha256")
+        if expected_hash and actual_hash != expected_hash:
+            raise ValueError(
+                f"{source['file_name']}: source checksum changed from the committed "
+                "snapshot; review provenance and counts before replacing global data"
+            )
+        expected_size = expected.get("sizeBytes")
+        if expected_size is not None and len(source["raw"]) != int(expected_size):
+            raise ValueError(
+                f"{source['file_name']}: source size changed from the committed snapshot"
+            )
+
+    prior_counts = prior.get("counts", {})
+    minimums = {"fixes": 50000, "navaids": 10000}
+    if "airways" in sources:
+        minimums["airwaySegments"] = 30000
+    actual_counts = {
+        "fixes": len(parse_fixes(sources["fixes"])[0]),
+        "navaids": len(parse_navaids(sources["navaids"])[0]),
+    }
+    if "airways" in sources:
+        parsed_airways, _, _, _ = parse_airways(
+            sources["airways"],
+            parse_fixes(sources["fixes"])[0],
+            parse_navaids(sources["navaids"])[0],
+        )
+        actual_counts["airwaySegments"] = len(parsed_airways)
+    for key, minimum in minimums.items():
+        previous = int(prior_counts.get(key, 0) or 0)
+        floor = max(minimum, int(previous * 0.90)) if previous else minimum
+        if actual_counts.get(key, 0) < floor:
+            raise ValueError(
+                f"Refusing to replace legacy global {key}: parsed "
+                f"{actual_counts.get(key, 0)}, below safety floor {floor} "
+                f"(previous count {previous})."
+            )
+
+
 def import_navdata(
     source_dir: Path,
     root: Path,
@@ -752,6 +802,7 @@ def import_navdata(
         return {"status": "skipped_missing_source", "missing": missing}
 
     sources = {kind: read_source_file(path, kind) for kind, path in located.items()}
+    validate_existing_snapshot(source_dir, sources, root)
     source_manifest = source_dir / "source-manifest.json"
     supplied = json.loads(source_manifest.read_text(encoding="utf-8")) if source_manifest.exists() else {}
     data_cycle = validate_source_cycles(

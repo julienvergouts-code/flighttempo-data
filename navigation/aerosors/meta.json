@@ -4,28 +4,14 @@
   "effectiveDate": null,
   "expiryDate": null,
   "sha256": null,
-  "licenceStatus": "personal_development_experimental_only_derivative_CSV_redistribution_not_confirmed",
-  "files": [
-    {
-      "path": "vor_ndb.csv",
-      "sha256": "4321ac3bcbb028c4aeecd9fc717b393a1eb6022dbc6208356dfbc3976141cc9d",
-      "sizeBytes": 1974739
-    },
-    {
-      "path": "ils.csv",
-      "sha256": "25d814a50212c9a2c8ea410f322a302eec8dd1c1f4eb8bf318a62baebff4a56f",
-      "sizeBytes": 1162180
-    },
-    {
-      "path": "ge_navaids.csv",
-      "sha256": "547bf5cc58fc4dfdd93fda8e39769b59756d3ce14745193c290049914f1e951b",
-      "sizeBytes": 1068765
-    },
-    {
-      "path": "ge_airports.csv",
-      "sha256": "01c917d87fd4be4f8f779f85e1fe42ffa84bca48ae51d301c6eaed5fc37dc727",
-      "sizeBytes": 2687429
-    }
-  ],
-  "notes": "Simulator/reference data, not validated against national AIPs. Keep isolated from verified datasets."
+  "licenceStatus": "derivative_redistribution_not_confirmed_not_published",
+  "files": [],
+  "notes": "Aero.Sors source files may be consulted for private research under their applicable terms. Derived CSV exports have been removed from the public repository because permission to republish derivatives has not been confirmed. Do not re-enable workflow imports or app-manifest downloads without written permission.",
+  "publicationStatus": "derived_CSV_exports_removed_from_repository_pending_written_permission",
+  "historicalExportCounts": {
+    "vorNdb": 7995,
+    "ils": 4470,
+    "geNavaids": 7995,
+    "geAirports": 20978
+  }
 }

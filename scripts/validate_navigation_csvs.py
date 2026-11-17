@@ -115,6 +115,22 @@ def validate_dataset(root: Path, dataset: dict) -> dict:
     return result
 
 
+def redistribution_block_reason(dataset: dict) -> str | None:
+    license_text = " ".join(
+        str(dataset.get(key, "")) for key in ("license", "licenseStatus", "status")
+    ).lower()
+    blocked_markers = (
+        "cc by-nc",
+        "cc_by_nc",
+        "non_commercial_only",
+        "not_confirmed",
+        "redistribution_not_confirmed",
+        "derivative_redistribution",
+        "personal_development_test_only",
+    )
+    return next((marker for marker in blocked_markers if marker in license_text), None)
+
+
 def validate_manifest(root: Path, manifest_path: Path) -> list[dict]:
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     datasets = manifest.get("datasets")
@@ -123,7 +139,20 @@ def validate_manifest(root: Path, manifest_path: Path) -> list[dict]:
 
     results = []
     for dataset in datasets:
-        if not isinstance(dataset, dict) or not dataset.get("available", False):
+        if not isinstance(dataset, dict):
+            raise ValueError("Manifest dataset entry must be an object")
+        blocked_reason = redistribution_block_reason(dataset)
+        if dataset.get("available", False) and blocked_reason:
+            raise ValueError(
+                f"{dataset.get('id', dataset.get('path'))}: marked downloadable "
+                f"despite restricted/unconfirmed rights ({blocked_reason})"
+            )
+        if not dataset.get("available", False):
+            if dataset.get("downloadUrl"):
+                raise ValueError(
+                    f"{dataset.get('id', dataset.get('path'))}: unavailable dataset "
+                    "must not retain a downloadUrl"
+                )
             continue
         relative = str(dataset.get("path", ""))
         if relative.lower().endswith(".csv"):

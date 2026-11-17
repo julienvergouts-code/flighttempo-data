@@ -13,7 +13,6 @@ on:
       - 'airlines/**'
       - '.github/workflows/update-navigation-data.yml'
       - 'navigation_manifest.json'
-      - '!navigation_manifest.json'
       - '!navigation/airspace/**'
       - '!navigation/graph/**'
       - '!navigation/sources/flightgear/**'
@@ -22,11 +21,6 @@ on:
       - '!navigation/airways/flightgear_airway_segments.csv'
       - '!navigation/README.md'
       - '!airspace/**'
-      - '!scripts/import_openaip_firs.py'
-      - '!scripts/import_easa_czibs.py'
-      - '!scripts/import_faa_prn.py'
-      - '!navigation_manifest.json'
-      - '!navigation/airspace/**'
       - '!scripts/import_openaip_firs.py'
       - '!scripts/import_easa_czibs.py'
       - '!scripts/import_faa_prn.py'
@@ -43,7 +37,6 @@ on:
       - 'airlines/**'
       - '.github/workflows/update-navigation-data.yml'
       - 'navigation_manifest.json'
-      - '!navigation_manifest.json'
       - '!navigation/airspace/**'
       - '!navigation/graph/**'
       - '!navigation/sources/flightgear/**'
@@ -61,7 +54,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: openaip-fir-import
+  group: flighttempo-shared-manifest-updates
   cancel-in-progress: false
 
 jobs:
@@ -77,12 +70,14 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Install Aero.Sors workbook parser
+      - name: Install unit-test fixture dependency
         run: python3 -m pip install -r requirements-aerosors.txt
       - name: Run IFR importer unit tests
         run: python3 -m unittest discover -s tests -v
       - name: Install French SIA procedure PDF parser
         run: python3 -m pip install -r requirements-sia-procedures.txt
+      - name: Install FAA PRN PDF parser
+        run: python3 -m pip install 'pypdf>=5,<7'
       - name: Smoke-test extraction against current official SIA SID and STAR tables
         continue-on-error: true
         run: |
@@ -256,6 +251,8 @@ jobs:
           PY
       - name: Build world corridor graph
         run: python3 scripts/build_world_corridor_graph.py
+      - name: Refresh FAA PRN reference index (not live NOTAM status)
+        run: python3 scripts/import_faa_prn.py
       - name: Register graph and airspace datasets in manifest
         run: |
           python3 - <<'PY'
@@ -263,13 +260,11 @@ jobs:
           from pathlib import Path
           p = Path('navigation_manifest.json')
           m = json.loads(p.read_text())
-          datasets = [d for d in m.get('datasets', []) if d.get('id') not in {'world_corridor_graph', 'easa_czibs', 'airspace_filter', 'route_policy', 'openaip_fir_boundaries', 'faa_prn_notams'}]
+          datasets = [d for d in m.get('datasets', []) if d.get('id') not in {'world_corridor_graph', 'easa_czibs', 'airspace_filter', 'route_policy', 'openaip_fir_boundaries', 'faa_prn_notams', 'aerosors_vor_ndb', 'aerosors_ils', 'aerosors_ge_navaids', 'aerosors_ge_airports'}]
           items = [
               ('world_corridor_graph', 'navigation/graph/world_corridor_graph.bin', 'legacy_global_graph_test_only', 'GPL-3.0'),
               ('easa_czibs', 'airspace/advisories/easa_czibs.json', 'advisory_reference_not_operational', 'EASA source acknowledgement'),
-              ('airspace_filter', 'airspace/airspace_filter.json', 'route_preview_advisory_filter_only', 'EASA source acknowledgement + OpenAIP CC BY-NC 4.0'),
               ('route_policy', 'airspace/route_policy.json', 'route_preview_policy', 'FlightTempo original configuration'),
-              ('openaip_fir_boundaries', 'navigation/airspace/openaip_fir_boundaries.geojson', 'development_reference_only', 'CC BY-NC 4.0'),
               ('faa_prn_notams', 'airspace/faa_prn_notams.json', 'reference_only_currentness_unverified', 'FAA public reference; currentness unverified'),
           ]
           for dataset_id, rel, status, license_name in items:
@@ -283,14 +278,10 @@ jobs:
                   count = meta['edgeCount']
               elif dataset_id == 'easa_czibs':
                   count = len(obj.get('records', []))
-              elif dataset_id == 'airspace_filter':
-                  count = len(obj.get('activeAdvisories', []))
               elif dataset_id == 'route_policy':
                   count = 1
               elif dataset_id == 'faa_prn_notams':
                   count = len(obj.get('records', []))
-              else:
-                  count = len(json.loads(raw).get('features', []))
               datasets.append({
                   'id': dataset_id, 'path': rel,
                   'downloadUrl': 'https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/' + rel,
@@ -301,18 +292,19 @@ jobs:
           m['datasets'] = datasets
           m.setdefault('capabilities', {})['worldCorridorGraph'] = Path('navigation/graph/world_corridor_graph.bin').is_file()
           m['capabilities']['conflictZoneAdvisories'] = Path('airspace/advisories/easa_czibs.json').is_file()
-          m['capabilities']['firBoundaries'] = Path('navigation/airspace/openaip_fir_boundaries.geojson').is_file()
+          m['capabilities']['firBoundaries'] = False
           m['capabilities']['faaPrnReferences'] = Path('airspace/faa_prn_notams.json').is_file()
+          m['capabilities']['airspaceFilterAdvisoryOnly'] = False
           m['capabilities']['faaLiveNotamCurrentnessVerified'] = False
           m['capabilities']['hardNoFlyFIRRestrictions'] = False
           p.write_text(json.dumps(m, indent=2) + "\n")
           PY
       - name: Enrich airport reference with OurAirports runway and elevation data
         run: python3 scripts/enrich_airport_reference.py
-      - name: Import Aero.Sors worldwide VOR/NDB and ILS tables (experimental)
-        run: python3 scripts/import_aerosors_tables.py --manifest navigation_manifest.json --optional
-      - name: Import Aero.Sors worldwide Google Earth navaids and airports (experimental)
-        run: python3 scripts/import_aerosors_kmz.py --manifest navigation_manifest.json --optional
+      - name: Enforce app manifest redistribution rights
+        run: python3 scripts/enforce_app_manifest_rights.py
+      - name: Check current FAA CIFP publication and packaged cycle
+        run: python3 scripts/check_faa_cifp_currentness.py
       - name: Validate every downloadable CSV in the app manifest
         run: python3 scripts/validate_navigation_csvs.py --manifest navigation_manifest.json
       - name: Verify generated datasets and manifest
@@ -402,6 +394,8 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add \
             navigation/ \
+            procedures/ \
+            airspace/ \
             airports/airports.csv \
             airlines/airlines.csv \
             airlines/route_rules.csv \

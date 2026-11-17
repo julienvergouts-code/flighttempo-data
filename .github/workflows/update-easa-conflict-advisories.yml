@@ -14,7 +14,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: openaip-fir-import
+  group: flighttempo-shared-manifest-updates
   cancel-in-progress: false
 
 jobs:
@@ -70,6 +70,8 @@ jobs:
           m["capabilities"]["hardNoFlyFIRRestrictions"] = False
           p.write_text(json.dumps(m, indent=2) + "\n")
           PY
+      - name: Enforce app manifest redistribution rights
+        run: python3 scripts/enforce_app_manifest_rights.py
       - name: Commit refreshed advisory datasets
         run: |
           git config user.name "github-actions[bot]"

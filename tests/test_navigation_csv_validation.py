@@ -49,6 +49,19 @@ class ParseCsvBytesTests(unittest.TestCase):
 
 
 class ManifestValidationTests(unittest.TestCase):
+    def test_blocks_downloadable_noncommercial_or_unconfirmed_sources(self):
+        from scripts.validate_navigation_csvs import redistribution_block_reason
+        self.assertIsNotNone(redistribution_block_reason({
+            "id": "openaip", "license": "CC BY-NC 4.0", "available": True
+        }))
+        self.assertIsNotNone(redistribution_block_reason({
+            "id": "aerosors", "licenseStatus": "derivative_redistribution_not_confirmed"
+        }))
+        self.assertIsNone(redistribution_block_reason({
+            "id": "ourairports", "license": "CC0 / Public Domain"
+        }))
+
+
     def test_validates_file_hash_size_and_count(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
