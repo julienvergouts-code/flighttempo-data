@@ -126,14 +126,14 @@ def write_gzip(path,payload):
     data=path.read_bytes()
     return hashlib.sha256(data).hexdigest(),len(data)
 
-def build(src,out,meta,country,effective,axis):
+def build(src,out,meta,country,effective,axis,attribution):
     root=ET.parse(src).getroot()
     rows,errors=extract(root,axis)
     if not rows: raise RuntimeError("No supported polygons extracted; refusing to publish empty pack")
     digest,size=write_gzip(out,rows)
     manifest={"schemaVersion":1,"dataset":"vfr-airspace","country":country,"sourceFile":src.name,
       "sourceSha256":hashlib.sha256(src.read_bytes()).hexdigest(),"sourceFormat":"AIXM 4.x XML",
-      "effectiveDate":effective,"generatedAtUtc":datetime.now(timezone.utc).isoformat(),
+      "effectiveDate":effective,"attribution":attribution,"generatedAtUtc":datetime.now(timezone.utc).isoformat(),
       "coordinateReference":"WGS84","coordinateOrder":"longitude,latitude","axisOrderMode":axis,
       "recordCount":len(rows),"airspaceTypeCounts":dict(Counter(r["airspaceType"] for r in rows)),
       "errorCounts":dict(errors),"packPath":str(out),"packSha256":digest,"packSizeBytes":size,
@@ -148,12 +148,12 @@ def build(src,out,meta,country,effective,axis):
 def main():
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument("--input",required=True,type=Path); p.add_argument("--country",required=True,choices=["BE","FR"])
-    p.add_argument("--effective-date"); p.add_argument("--axis-order",choices=["auto","lonlat","latlon"],default="auto")
+    p.add_argument("--effective-date"); p.add_argument("--attribution",required=True,help="Exact SIA/OFM attribution text required by the source licence"); p.add_argument("--axis-order",choices=["auto","lonlat","latlon"],default="auto")
     p.add_argument("--output",type=Path,default=Path("navigation/vfr/airspace_vfr.json.gz"))
     p.add_argument("--manifest",type=Path,default=Path("navigation/vfr/vfr_meta.json"))
     a=p.parse_args()
     try:
-        m=build(a.input,a.output,a.manifest,a.country,a.effective_date,a.axis_order)
+        m=build(a.input,a.output,a.manifest,a.country,a.effective_date,a.axis_order,a.attribution)
         print(json.dumps({k:m[k] for k in ("country","recordCount","airspaceTypeCounts","errorCounts","packSha256")},indent=2))
     except Exception as e: print("ERROR:",e,file=sys.stderr); return 2
     return 0
