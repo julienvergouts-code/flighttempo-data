@@ -61,7 +61,7 @@ jobs:
                   "licenseStatus": "reproduction_authorised_with_source_acknowledgement",
                   "dataCycle": "not_applicable", "downloadPurpose": purpose,
                   "operationallyAvailable": False,
-                  "status": "advisory_reference_not_operational"
+                  "status": "reference_only_not_universal_no_fly" if dataset_id == "easa_safety_directives" else "advisory_reference_not_operational"
               }
               datasets = [d for d in datasets if d.get("id") != dataset_id]
               datasets.append(record)
