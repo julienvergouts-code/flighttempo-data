@@ -19,6 +19,7 @@ OUT_GEOJSON = OUT_DIR / "openaip_fir_boundaries.geojson"
 OUT_META = OUT_DIR / "meta.json"
 EASA_FILE = ROOT / "airspace/advisories/easa_czibs.json"
 FILTER_FILE = ROOT / "airspace/airspace_filter.json"
+DIRECTIVES_FILE = ROOT / "airspace/advisories/easa_safety_directives.json"
 BASE = "https://storage.openaip.net/openaip-system-exports/{cc}_asp.geojson"
 LICENSE = "CC BY-NC 4.0"
 ATTRIBUTION = "Contains data from OpenAIP (https://www.openaip.net/), licensed under CC BY-NC 4.0."
@@ -333,6 +334,8 @@ def main():
         })
 
     filter_data = json.loads(FILTER_FILE.read_text(encoding="utf-8"))
+    if DIRECTIVES_FILE.is_file():
+        filter_data["safetyDirectives"] = json.loads(DIRECTIVES_FILE.read_text(encoding="utf-8")).get("records", [])
     filter_data["firBoundaryDataset"] = {
         "status": "available_development_reference",
         "source": "OpenAIP",
