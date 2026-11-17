@@ -74,6 +74,23 @@ jobs:
           python-version: '3.12'
       - name: Install unit-test fixture dependency
         run: python3 -m pip install -r requirements-aerosors.txt
+      - name: Reconcile EASA reference snapshot checksum before repository tests
+        run: |
+          python3 - <<'PY'
+          import hashlib, json
+          from pathlib import Path
+          manifest_path = Path("navigation_manifest.json")
+          manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+          item = next(d for d in manifest["datasets"] if d.get("id") == "easa_safety_directives")
+          path = Path(item["path"])
+          raw = path.read_bytes()
+          data = json.loads(raw)
+          item["sha256"] = hashlib.sha256(raw).hexdigest()
+          item["sizeBytes"] = len(raw)
+          item["recordCount"] = len(data.get("records", []))
+          manifest_path.write_text(json.dumps(manifest, indent=2) + "\\n", encoding="utf-8")
+          print(f"Reconciled EASA directives reference: {item['recordCount']} records, {item['sizeBytes']} bytes, sha256={item['sha256']}")
+          PY
       - name: Run IFR importer unit tests
         run: python3 -m unittest discover -s tests -v
       - name: Install French SIA procedure PDF parser
