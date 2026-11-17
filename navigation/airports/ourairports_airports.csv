@@ -14807,7 +14807,7 @@ BR-1731,BR,-15.77077,-57.74119,489,Fazenda Bom Jesus Airport,430302,BR-1731,smal
 BR-1732,BR,-29.95492,-51.17377,75,Full Gauge Helipad,430304,BR-1732,heliport,Full Gauge Helipad,-29.954916,-51.173767,75,SA,BR,BR-RS,Canoas,no,,,SSUG,RS0115,,,
 BR-1733,BR,-18.45963,-55.53334,531,Fazenda Santa Alaydes Airstrip,430492,BR-1733,small_airport,Fazenda Santa Alaydes Airstrip,-18.459633,-55.533335,531,SA,BR,BR-MS,Corumbá,no,,,SDDA,MS0026,,,
 BR-1734,BR,-16.68683,-49.28194,2530,Heliponto Privado Hiper Moreira,430493,BR-1734,heliport,Heliponto Privado Hiper Moreira,-16.686828,-49.281943,2530,SA,BR,BR-GO,Goiânia,no,,,SDJH,GO0154,,,
-BR-1735,BR,-21.12274,-54.44674,1450,Fazenda Guanabara Airport,36870,BR-1735,small_airport,Fazenda Guanabara Airport,-21.122742,-54.44674,1450,SA,BR,BR-MS,Nova Alvorada Do Sul,no,,,,,,,
+BR-1735,BR,-21.12139,-54.44667,1499,Fazenda Guanabara Airport,36870,BR-1735,closed,Fazenda Guanabara Airport,-21.121389,-54.446667,1499,SA,BR,BR-MS,Nova Alvorada do Sul,no,,,,,,,"SJTJ, SWFG, MS0372"
 BR-1736,BR,-12.8096,-38.24826,76,Jauá Airport,36896,BR-1736,small_airport,Jauá Airport,-12.809597,-38.248258,76,SA,BR,BR-BA,Camaçari,no,,,,,,,"SJUK, SNEE"
 BR-1737,BR,-12.8096,-38.24826,76,[Duplicate] Jauá Airport,37070,BR-1737,small_airport,[Duplicate] Jauá Airport,-12.809597,-38.248258,76,SA,BR,BR-BA,Camaçari,no,,,,,,,"SJUK, SNEE"
 BR-1738,BR,-13.00523,-61.24044,847,Fazenda Santa Ana Airport,36403,BR-1738,small_airport,Fazenda Santa Ana Airport,-13.005234,-61.240443,847,SA,BR,BR-RO,Corumbiara,no,,,SD22,RO0015,,,SIZN
@@ -16379,6 +16379,7 @@ BR-3309,BR,-11.13591,-57.27117,890,Fazenda Piquiri 5B Airport,611612,BR-3309,sma
 BR-3310,BR,-19.10735,-51.08877,1280,Fazenda São José do Corrente Airport,611620,BR-3310,small_airport,Fazenda São José do Corrente Airport,-19.107346,-51.08877,1280,SA,BR,BR-GO,Itarumã,no,,,SN53,GO0453,,,
 BR-3311,BR,-16.38287,-48.57129,3064,Fazenda Conquista Airport,611622,BR-3311,small_airport,Fazenda Conquista Airport,-16.382869,-48.571294,3064,SA,BR,BR-U-A,Gameleira de Goiás,no,,,SN54,GO0454,,,
 BR-3312,BR,-20.654,-46.56341,,Usina Privado Airport,611635,BR-3312,small_airport,Usina Privado Airport,-20.654,-46.563409,,SA,BR,BR-MG,Passos,no,,,,,,,
+BR-3313,BR,-18.58158,-53.71665,1241,Fazenda Selena Taludia Airstrip,611709,BR-3313,small_airport,Fazenda Selena Taludia Airstrip,-18.581583,-53.71665,1241,SA,BR,BR-U-A,Figueirão,no,,,SN31,MS0831,,,
 BR-ALT,BR,-1.917,-54.7231,55,Alenquer Municipal Airport,30637,BR-ALT,small_airport,Alenquer Municipal Airport,-1.917,-54.7231,55,SA,BR,BR-PA,Alenquer,no,,ALT,SDWQ,PA0027,,https://en.wikipedia.org/wiki/Alenquer_Airport,
 BS-0001,BS,24.27074,-76.54099,,Fowl Cay Airstrip,46168,BS-0001,closed,Fowl Cay Airstrip,24.2707432941,-76.5409862995,,NA,BS,BS-EX,Fowl Cay,no,,,,,,,
 BS-0002,BS,23.65141,-74.84505,,Port Nelson Airstrip,46379,BS-0002,closed,Port Nelson Airstrip,23.651411,-74.845051,,NA,BS,BS-RC,Port Nelson,no,,,,,,,
@@ -44434,7 +44435,7 @@ LJCE,SI,45.9,15.5302,510,Cerklje ob Krki Air Base,4385,LJCE,medium_airport,Cerkl
 LJCL,SI,46.2456,15.2231,801,Celje Airfield,29766,LJCL,small_airport,Celje Airfield,46.245602,15.2231,801,EU,SI,SI-011,Celje,no,,,LJCL,,http://www.aeroklub-celje.si/en/,https://en.wikipedia.org/wiki/Celje_Airport,"Letališče Celje, Levec"
 LJDI,SI,45.68278,14.00323,1420,Divača Airfield,44770,LJDI,small_airport,Divača Airfield,45.682778,14.003234,1420,EU,SI,SI-019,Divača,no,,,LJDI,,https://letaliscedivaca.si/,https://en.wikipedia.org/wiki/Diva%C4%8Da_Airport,"Donje Ležeče, Sežana, Kras"
 LJLJ,SI,46.2237,14.4576,1273,Ljubljana Jože Pučnik Airport,4386,LJLJ,large_airport,Ljubljana Jože Pučnik Airport,46.223701,14.4576,1273,EU,SI,SI-012,Zgornji Brnik,yes,LJLJ,LJU,LJLJ,,http://www.lju-airport.si/,https://en.wikipedia.org/wiki/Ljubljana_Jo%C5%BEe_Pu%C4%8Dnik_Airport,"Ljubljana, Kranj"
-LJMB,SI,46.4799,15.6861,876,Maribor Edvard Rusjan Airport,4387,LJMB,medium_airport,Maribor Edvard Rusjan Airport,46.4799,15.6861,876,EU,SI,SI-160,Maribor,yes,LJMB,MBX,LJMB,,https://www.mbx-airport.si/en/airport,https://en.wikipedia.org/wiki/Maribor_Airport,
+LJMB,SI,46.47986,15.68613,876,Maribor Edvard Rusjan Airport,4387,LJMB,medium_airport,Maribor Edvard Rusjan Airport,46.479861,15.686131,876,EU,SI,SI-160,Maribor,yes,LJMB,MBX,LJMB,,https://www.mbx-airport.si/en/airport,https://en.wikipedia.org/wiki/Maribor_Airport,
 LJMS,SI,46.6294,16.175,600,Murska Sobota Airfield,30174,LJMS,small_airport,Murska Sobota Airfield,46.629398,16.174999,600,EU,SI,SI-080,Murska Sobota,no,,,LJMS,,,,
 LJNM,SI,45.80174,15.10454,572,Novo Mesto Airfield,44771,LJNM,small_airport,Novo Mesto Airfield,45.801743,15.104544,572,EU,SI,SI-085,Novo Mesto,no,,,LJNM,,http://www.aeroklub-nm.si/,https://sl.wikipedia.org/wiki/Letali%C5%A1%C4%8De_Novo_mesto-Pre%C4%8Dna,Prečna
 LJPO,SI,45.7522,14.1947,,Postojna Airfield,44903,LJPO,small_airport,Postojna Airfield,45.752201,14.1947,,EU,SI,SI-094,Postojna,no,,,LJPO,,,https://sl.wikipedia.org/wiki/Letali%C5%A1%C4%8De_Postojna,
@@ -49684,7 +49685,7 @@ MYCC,BS,25.55442,-79.2754,14,Cat Cay Airport,30866,MYCC,small_airport,Cat Cay Ai
 MYCH,BS,24.15449,-75.51796,3,Hawks Nest Airport,31985,MYCH,small_airport,Hawks Nest Airport,24.15449,-75.51796,3,NA,BS,BS-CI,Hawks Nest Creek,no,,,MYCH,,http://www.hawks-nest.com/airport/,https://en.wikipedia.org/wiki/Hawks_Nest_Airport,
 MYCI,BS,22.7456,-74.1824,5,Colonel Hill Airport,4938,MYCI,medium_airport,Colonel Hill Airport,22.7456,-74.182404,5,NA,BS,BS-CK,Colonel Hill,yes,MYCI,CRI,MYCI,,,https://en.wikipedia.org/wiki/Colonial_Hill_Airport,Crooked Island Airport
 MYCP,BS,22.8297,-74.3461,,Pitts Town Airport,32181,MYCP,small_airport,Pitts Town Airport,22.8297,-74.3461,,NA,BS,BS-CK,Pitts Town,no,MYCP,PWN,MYCP,,,https://en.wikipedia.org/wiki/Pitts_Town_Airport,
-MYCS,BS,23.69762,-80.38978,5,Cay Sal Airport,31986,MYCS,small_airport,Cay Sal Airport,23.697625,-80.389781,5,NA,BS,BS-BI,Cay Sal,no,MYCS,,MYCS,,,https://en.wikipedia.org/wiki/Cay_Sal_Airport,
+MYCS,BS,23.69762,-80.38978,5,Cay Sal Airport,31986,MYCS,closed,Cay Sal Airport,23.697625,-80.389781,5,NA,BS,BS-BI,Cay Sal,no,,,,,,https://en.wikipedia.org/wiki/Cay_Sal_Airport,MYCS
 MYCZ,BS,24.70972,-77.7725,37,AUTEC Heliport,300108,MYCZ,heliport,AUTEC Heliport,24.709722,-77.7725,37,NA,BS,BS-NS,Andros Town,no,MYCZ,,MYCZ,NCZ,,https://en.wikipedia.org/wiki/Autec_Heliport,Atlantic Undersea Test and Evaluation Center
 MYEB,BS,24.08949,-76.39792,10,Black Point Airstrip,46383,MYEB,small_airport,Black Point Airstrip,24.089488,-76.397917,10,NA,BS,BS-EX,Black Point,no,MYEB,,MYEB,,,https://en.wikipedia.org/wiki/Black_Point_Airport,
 MYEF,BS,23.5626,-75.878,9,Exuma International Airport,4939,MYEF,medium_airport,Exuma International Airport,23.562599,-75.877998,9,NA,BS,BS-EX,Moss Town,yes,MYEF,GGT,MYEF,,,https://en.wikipedia.org/wiki/Exuma_International_Airport,
@@ -62437,6 +62438,7 @@ SN11,US,37.0065,-95.9316,755,Caney Municipal Hospital Helicopter Pad Heliport,24
 SN12,US,37.36246,-100.47246,2737,Jenkinson Airport,24591,SN12,small_airport,Jenkinson Airport,37.362463,-100.472463,2737,NA,US,US-KS,Meade,no,,,KM64,M64,,,SN12
 SN13,US,37.6583,-97.7745,1380,Albers Airport,24592,SN13,small_airport,Albers Airport,37.658298,-97.774498,1380,NA,US,US-KS,Cheney,no,,,,SN13,,,
 SN14,BR,-18.67776,-40.81637,640,Gramazini BSF Heliport,611611,SN14,heliport,Gramazini BSF Heliport,-18.677764,-40.816372,640,SA,BR,BR-ES,Barra de São Francisco,no,,,SN14,ES0057,,,
+SN15,BR,-14.61418,-43.46296,1595,Fazenda Itauna Airport,611707,SN15,small_airport,Fazenda Itauna Airport,-14.614182,-43.462965,1595,SA,BR,BR-RO,Alta Floresta d'Oeste,no,,,SN15,BA0541,,,
 SN16,BR,-12.18269,-62.40847,703,Fazenda Furna Rica Airstrip,604212,SN16,small_airport,Fazenda Furna Rica Airstrip,-12.182689,-62.408467,703,SA,BR,BR-RO,Alta Floresta d'Oeste,no,,,SN16,RO0104,,,
 SN17,BR,-15.8737,-49.00289,2406,Condomínio Reserva 1727 Heliport,604218,SN17,heliport,Condomínio Reserva 1727 Heliport,-15.873701,-49.002892,2406,SA,BR,BR-GO,Pirenópolis,no,,,SN17,GO0410,,,
 SN18,US,37.66825,-97.02604,1295,Sills Air Park,24596,SN18,small_airport,Sills Air Park,37.668249,-97.026044,1295,NA,US,US-KS,Augusta,no,,,,SN18,,,
@@ -62482,7 +62484,7 @@ SN2X,BR,-23.2875,-49.24139,2116,Fazenda Belvedere Airport,597791,SN2X,small_airp
 SN2Y,BR,-7.94333,-49.67556,692,Aerojet Airstrip,511398,SN2Y,small_airport,Aerojet Airstrip,-7.943333,-49.675556,692,SA,BR,BR-PA,Conceição do Araguaia,no,,,SN2Y,PA0366,,,
 SN2Z,BR,-23.81625,-46.73653,2533,Subprefeitura de Parelheiros Heliport,511397,SN2Z,heliport,Subprefeitura de Parelheiros Heliport,-23.816249,-46.736532,2533,SA,BR,BR-SP,São Paulo,no,,,SN2Z,SP1456,,,
 SN30,US,39.8478,-96.635,1283,Marysville Mediport Heliport,24607,SN30,heliport,Marysville Mediport Heliport,39.847801208496094,-96.63500213623047,1283,NA,US,US-KS,Marysville,no,,,SN30,SN30,,,
-SN31,US,37.2452,-96.982,1156,William Newton Memorial Hospital Heliport,24608,SN31,heliport,William Newton Memorial Hospital Heliport,37.245201110839844,-96.98200225830078,1156,NA,US,US-KS,Winfield,no,,,SN31,SN31,,,
+SN31,US,37.24635,-96.98251,1156,William Newton Memorial Hospital Heliport,24608,SN31,heliport,William Newton Memorial Hospital Heliport,37.246351,-96.982514,1156,NA,US,US-KS,Winfield,no,,,,SN31,,,
 SN32,US,37.4257,-97.27005,1210,Rands Airport,24609,SN32,small_airport,Rands Airport,37.425701,-97.270052,1210,NA,US,US-KS,Belle Plaine,no,,,,SN32,,,
 SN33,US,39.42819,-97.1241,1275,Callaway Airpark,24610,SN33,small_airport,Callaway Airpark,39.428189,-97.124103,1275,NA,US,US-KS,Clay Center,no,,,,SN33,,,
 SN34,US,37.57373,-97.49246,1300,Rucker Airport,24611,SN34,small_airport,Rucker Airport,37.573727,-97.492461,1300,NA,US,US-KS,Clearwater,no,,,,SN34,,,
@@ -62703,6 +62705,7 @@ SNAS,BR,-18.2224,-45.189,2579,Três Marias Airport,274,SNAS,small_airport,Três 
 SNAU,BR,-10.90145,-37.08292,26,Aeroclube de Sergipe Airport,29663,SNAU,small_airport,Aeroclube de Sergipe Airport,-10.901452,-37.082921,26,SA,BR,BR-SE,Aracaju,no,,,SISG,SE0003,,https://en.wikipedia.org/wiki/Aeroclube_de_Sergipe,SNAU
 SNAV,BR,-9.50435,-40.36996,1289,Agrovale Airport,37035,SNAV,small_airport,Agrovale Airport,-9.504348,-40.36996,1289,SA,BR,BR-BA,Juazeiro,no,,,SNAV,BA0130,,,
 SNAX,BR,-22.6386,-50.45598,1850,Marcelo Pires Halzhausen Airport,45622,SNAX,small_airport,Marcelo Pires Halzhausen Airport,-22.638601,-50.455983,1850,SA,BR,BR-SP,Assis,no,,AIF,SNAX,SP0016,,https://en.wikipedia.org/wiki/Assis_Airport,"SBAS, Assis Airport"
+SNB1,BR,-7.33207,-44.86579,1024,Fazenda Dona Mari Agromapi Airport,611710,SNB1,small_airport,Fazenda Dona Mari Agromapi Airport,-7.332069,-44.865789,1024,SA,BR,BR-MA,São Félix de Balsas,no,,,SNB1,MA0225,,,
 SNB2,BR,-18.87405,-48.20558,2923,Unidade ALB-URLA Heliport,546792,SNB2,heliport,Unidade ALB-URLA Heliport,-18.874051,-48.205585,2923,SA,BR,BR-MG,Uberlândia,no,,,SNB2,MG0476,,,
 SNB4,BR,-3.67671,-44.52415,174,Fazenda Cantanhede Airport,553273,SNB4,small_airport,Fazenda Cantanhede Airport,-3.676706,-44.524153,174,SA,BR,BR-MA,Matões do Norte,no,,,SNB4,MA0194,,,
 SNB5,BR,-17.92146,-55.59451,503,Fazenda Abelha Airstrip,597792,SNB5,small_airport,Fazenda Abelha Airstrip,-17.921461,-55.594508,503,SA,BR,BR-MS,Corumbá,no,,,SNB5,MS0751,,,
@@ -62724,7 +62727,7 @@ SNBR,BR,-12.0789,-45.009,2451,Dom Ricardo Weberberger Airport,283,SNBR,small_air
 SNBS,BR,-7.52531,-46.05336,948,Balsas Airport,284,SNBS,small_airport,Balsas Airport,-7.525305,-46.053364,948,SA,BR,BR-MA,Balsas,no,SNBS,BSS,SNBS,MA0010,,https://pt.wikipedia.org/wiki/Aeroporto_de_Balsas,
 SNBT,BR,-7.21694,-44.55056,984,Benedito Leite Airport,37042,SNBT,small_airport,Benedito Leite Airport,-7.216944,-44.550556,984,SA,BR,BR-MA,Benedito Leite,no,,,SNBT,,,https://pt.wikipedia.org/wiki/Aeroporto_de_Benedito_Leite,
 SNBU,BR,-19.35945,-44.05676,2211,Fazenda Alegria Heliport,331767,SNBU,heliport,Fazenda Alegria Heliport,-19.359449,-44.056764,2211,SA,BR,BR-MG,Funilândia,no,SNBU,,SNBU,MG0249,,,
-SNBX,BR,-11.0808,-43.1475,1345,Barra Airport,287,SNBX,small_airport,Barra Airport,-11.0808,-43.147499,1345,SA,BR,BR-BA,Barra,no,SNBX,BQQ,SNBX,SNBX,,https://en.wikipedia.org/wiki/Barra_Airport_(Brazil),
+SNBX,BR,-11.0808,-43.1475,1345,Barra Airport,287,SNBX,small_airport,Barra Airport,-11.0808,-43.147499,1345,SA,BR,BR-BA,Barra,no,SNBX,BQQ,SNBX,BA0028,,https://en.wikipedia.org/wiki/Barra_Airport_(Brazil),
 SNBZ,BR,-13.49058,-42.22916,1788,Paramirim Airport,133,SNBZ,small_airport,Paramirim Airport,-13.490582,-42.229164,1788,SA,BR,BR-BA,Paramirim,no,,,SNBZ,BA0042,,,SB05
 SNC1,BR,-18.65472,-52.37439,2488,Fazenda Atalaia Canaã Airport,607937,SNC1,small_airport,Fazenda Atalaia Canaã Airport,-18.654725,-52.374391,2488,SA,BR,BR-GO,Aporé,no,,,SNC1,GO0430,,,
 SNC2,BR,-12.72013,-58.0636,1568,Fazenda Horizonte Norte Airport,596615,SNC2,small_airport,Fazenda Horizonte Norte Airport,-12.720133,-58.063602,1568,SA,BR,BR-MT,Brasnorte,no,,,SNC2,MT1041,,,
@@ -62734,10 +62737,10 @@ SNC6,BR,-6.88708,-43.87071,751,Fazenda Brejo Airport,596618,SNC6,small_airport,F
 SNC7,BR,-16.23477,-54.8946,814,Fazenda Frange Airport,553926,SNC7,small_airport,Fazenda Frange Airport,-16.234767,-54.894597,814,SA,BR,BR-MT,Juscimeira,no,,,SNC7,MT1074,,,
 SNC8,BR,-9.10419,-50.57269,804,Fazenda Piquia Airport,608992,SNC8,small_airport,Fazenda Piquia Airport,-9.104188,-50.572694,804,SA,BR,BR-PA,Santana do Araguaia,no,,,SNC8,PA0419,,,
 SNC9,BR,-12.2776,-48.33,909,Joia Rara Airport,547689,SNC9,small_airport,Joia Rara Airport,-12.277605,-48.33,909,SA,BR,BR-TO,São Salvador do Tocantins,no,,,SNC9,TO0122,,,
-SNCA,BR,-20.8923,-45.3351,3182,Campo Belo Airport,289,SNCA,small_airport,Campo Belo Airport,-20.89229965209961,-45.33509826660156,3182,SA,BR,BR-MG,Campo Belo,no,,,SNCA,SNCA,,,
-SNCB,BR,-2.52361,-53.93972,502,Castanhal Airport,37044,SNCB,small_airport,Castanhal Airport,-2.523611068725586,-53.939720153808594,502,SA,BR,BR-PA,Prainha,no,,,SNCB,,,,
-SNCD,BR,-7.69056,-34.87583,16,Catuama Heliport,37046,SNCD,heliport,Catuama Heliport,-7.690556049346924,-34.875831604003906,16,SA,BR,BR-PE,Goiana,no,,,SNCD,,,,
-SNCE,BR,-21.1061,-45.8047,2559,Campo do Meio Airport,29749,SNCE,small_airport,Campo do Meio Airport,-21.10610008239746,-45.8046989440918,2559,SA,BR,BR-MG,Campo Do Meio,no,,,SNCE,,,,
+SNCA,BR,-20.89231,-45.33515,3282,Campo Belo Airport,289,SNCA,small_airport,Campo Belo Airport,-20.892309,-45.335151,3282,SA,BR,BR-MG,Campo Belo,no,,,SNCA,MG0031,,,
+SNCB,BR,-2.52579,-53.94412,502,Castanhal Airport,37044,SNCB,small_airport,Castanhal Airport,-2.525792,-53.944121,502,SA,BR,BR-PA,Prainha,no,,,SNCB,PA0084,,,
+SNCD,BR,-7.66317,-34.83788,16,Catuama Heliport,37046,SNCD,heliport,Catuama Heliport,-7.663166,-34.83788,16,SA,BR,BR-PE,Goiana,no,,,SNCD,PE0040,,,
+SNCE,BR,-21.10532,-45.8028,2559,Campo do Meio Airport,29749,SNCE,small_airport,Campo do Meio Airport,-21.105322,-45.802795,2559,SA,BR,BR-MG,Campo do Meio,no,,,SNCE,MG0061,,,
 SNCH,BR,-23.65764,-45.49811,26,UTGCA Heliport,323609,SNCH,heliport,UTGCA Heliport,-23.657645,-45.49811,26,SA,BR,BR-SP,Caraguatatuba,no,,,SNCH,,,,
 SNCI,BR,-1.231,-47.2006,174,Cibrasa Airport,290,SNCI,small_airport,Cibrasa Airport,-1.2309999465942383,-47.200599670410156,174,SA,BR,BR-PA,Capanema,no,,,SNCI,SNCI,,,
 SNCJ,BR,-2.54373,-54.71104,407,Piquiatuba Airport,37049,SNCJ,small_airport,Piquiatuba Airport,-2.543727,-54.711039,407,SA,BR,BR-PA,Santarém,no,,,SNCJ,,,,
@@ -64835,7 +64838,7 @@ SWEW,BR,-15.84222,-58.63167,656,Fazenda Felicidade Airport,37860,SWEW,small_airp
 SWFA,BR,-16.25056,-47.61722,3281,Fazenda Pamplona Airport,37864,SWFA,small_airport,Fazenda Pamplona Airport,-16.25055694580078,-47.61722183227539,3281,SA,BR,BR-GO,Cristalina,no,,,SWFA,,,,
 SWFB,BR,-23.78721,-49.42415,1982,Fazendas Bergamini Heliport,337283,SWFB,heliport,Fazendas Bergamini Heliport,-23.78721,-49.424154,1982,SA,BR,BR-SP,Riversul,no,,,SWFB,SP1282,,,
 SWFD,BR,-22.55912,-55.38114,1864,Fazenda Dom Felipe Airport,46477,SNFH,small_airport,Fazenda Dom Felipe Airport,-22.559118,-55.381143,1864,SA,BR,BR-MS,Ponta Porã,no,SWFD,,SWFD,MS0371,,,SNFH
-SWFG,BR,-12.03,-51.6775,1116,Fazenda Guanabara Airport,37869,SWFG,small_airport,Fazenda Guanabara Airport,-12.029999732971191,-51.6775016784668,1116,SA,BR,BR-MT,Barra Do Garças,no,,,SWFG,,,,
+SWFG,BR,-12.03,-51.6775,1116,Fazenda Guanabara Airport,37869,SWFG,small_airport,Fazenda Guanabara Airport,-12.03,-51.677502,1116,SA,BR,BR-MT,Barra do Garças,no,,,,,,,
 SWFL,BR,-10.09389,-50.38278,600,Fazenda Peixe Bravo Airport,37872,SWFL,small_airport,Fazenda Peixe Bravo Airport,-10.093889,-50.382778,600,SA,BR,BR-MT,Santa Terezinha,no,,,SWFL,MT0341,,,
 SWFN,BR,-3.07292,-60.02194,203,Flores Airport,37873,SWFN,small_airport,Flores Airport,-3.072917,-60.021937,203,SA,BR,BR-AM,Manaus,no,,,SWFN,,,,Amazonas Aeroclub
 SWFP,BR,-10.6373,-52.02868,801,Fazenda Primavera Airport,37875,SWFP,small_airport,Fazenda Primavera Airport,-10.637303,-52.028684,801,SA,BR,BR-MT,Porto Alegre Do Norte,no,,,SD4B,MT0699,,,"SWFP, Fazenda Paraíso"

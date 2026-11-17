@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "repository": "julienvergouts-code/flighttempo-data",
-  "generatedAtUtc": "2026-11-16T09:02:16.241020+00:00",
+  "generatedAtUtc": "2026-11-17T05:03:06.225493+00:00",
   "purpose": "Personal FlightTempo development, cross-checking, route-building experiments and flight-preparation practice; not an operational navigation database.",
   "rules": {
     "datasetMetaRequired": true,
@@ -135,6 +135,30 @@
       "recordCount": 1
     },
     {
+      "id": "openaip-fir-boundaries",
+      "path": "navigation/airspace/openaip_fir_boundaries.geojson",
+      "source": "OpenAIP country airspace exports",
+      "airacCycle": null,
+      "effectiveDate": null,
+      "expiryDate": null,
+      "sha256": "2b66e8c2edc16955a0ec32cd90feb9a19c31c076fba4642883b7d45959052baf",
+      "licenceStatus": "CC_BY_NC_4.0_attribution_required_non_commercial_only",
+      "coverage": "Worldwide FIR/UIR polygons where published in OpenAIP country exports",
+      "recordCount": 172
+    },
+    {
+      "id": "faa-prn-notams",
+      "path": "airspace/faa_prn_notams.json",
+      "source": "FAA PRN KICZ NOTAM index",
+      "airacCycle": null,
+      "effectiveDate": null,
+      "expiryDate": null,
+      "sha256": "706fd8f0e0db3fd43f58b2489356a51b9cb325a740335d3e545632014e896737",
+      "licenceStatus": "FAA_public_information_reference_currentness_unverified",
+      "coverage": "FAA-published international prohibition/restriction notice references",
+      "recordCount": 16
+    },
+    {
       "id": "legacy-global-ifr-fixes",
       "path": "navigation/waypoints/flightgear_fixes.csv",
       "source": "X-Plane default navigation data mirror (ptsmonteiro/x-plane-navdata)",
@@ -172,30 +196,6 @@
       "licenceStatus": "GPL-3.0_legacy_stale_personal_development_reference",
       "coverage": "Worldwide legacy low/high airway segments",
       "recordCount": 70291
-    },
-    {
-      "id": "openaip-fir-boundaries",
-      "path": "navigation/airspace/openaip_fir_boundaries.geojson",
-      "source": "OpenAIP country airspace exports",
-      "airacCycle": null,
-      "effectiveDate": null,
-      "expiryDate": null,
-      "sha256": "2b66e8c2edc16955a0ec32cd90feb9a19c31c076fba4642883b7d45959052baf",
-      "licenceStatus": "CC_BY_NC_4.0_attribution_required_non_commercial_only",
-      "coverage": "Worldwide FIR/UIR polygons where published in OpenAIP country exports",
-      "recordCount": 172
-    },
-    {
-      "id": "faa-prn-notams",
-      "path": "airspace/faa_prn_notams.json",
-      "source": "FAA PRN KICZ NOTAM index",
-      "airacCycle": null,
-      "effectiveDate": null,
-      "expiryDate": null,
-      "sha256": "706fd8f0e0db3fd43f58b2489356a51b9cb325a740335d3e545632014e896737",
-      "licenceStatus": "FAA_public_information_reference_currentness_unverified",
-      "coverage": "FAA-published international prohibition/restriction notice references",
-      "recordCount": 16
     }
   ]
 }
