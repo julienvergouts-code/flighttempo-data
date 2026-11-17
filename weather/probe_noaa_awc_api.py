@@ -108,6 +108,10 @@ def main() -> int:
         "products": {
             "metar_ebbr": probe_json_endpoint("METAR", "metar", "ids=EBBR&format=json"),
             "taf_ebbr": probe_json_endpoint("TAF", "taf", "ids=EBBR&format=json"),
+            "isigmet_geojson": probe_json_endpoint("International SIGMET", "isigmet", "format=geojson"),
+            "legacy_sigmet_geojson": probe_json_endpoint("Legacy SIGMET", "sigmet", "format=geojson"),
+            "airsigmet_geojson": probe_json_endpoint("Domestic SIGMET", "airsigmet", "format=geojson"),
+            "surface_analysis_geojson": probe_json_endpoint("Surface analysis", "surface", "format=geojson"),
             "global_sigmet_cache": probe_sigmet_cache(),
             "pirep_cache": probe_pirep_cache(),
         },
