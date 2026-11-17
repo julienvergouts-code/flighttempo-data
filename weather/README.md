@@ -37,6 +37,14 @@ Only availability, counts and field names are committed. No raw weather observat
 
 Official API documentation: https://aviationweather.gov/data/api/
 
+### Required Android map corrections
+
+1. Keep the verified international SIGMET GeoJSON endpoint. The legacy SIGMET endpoint also returns data; do not merge both blindly because their feature sets overlap. Prefer the global SIGMET cache or de-duplicate by FIR, series identifier and validity interval.
+2. Remove the unsupported `/api/data/surface?format=geojson` request and the four hardcoded pressure-center fallback points. If the source fails, return an explicit unavailable state and draw no pressure centers/fronts.
+3. Add the AWC PIREP/AIREP feed as a separate observation layer. Use report coordinates, observation time, turbulence/icing intensity and vertical bounds. Label reports as pilot observations, not forecast corridors. Filter stale reports and avoid implying worldwide coverage.
+4. Do not label the current three sampled 250 hPa wind points and synthetic line segments as a complete jetstream analysis. They are sparse upper-air wind samples. A proper route layer needs time-aware sampling at multiple pressure levels (at least 300/250/200/150 hPa) along the full route, with wind direction/speed and temperature retained at each point.
+5. Do not infer turbulence or icing from a high-wind threshold. Without a verified EDR/icing forecast, show SIGMETs and PIREPs as their actual data classes and label any model-derived shear indicator as a non-operational proxy.
+
 ## Regional turbulence and icing guidance: NOAA GFA
 
 The AWC Graphical Forecasts for Aviation includes:
