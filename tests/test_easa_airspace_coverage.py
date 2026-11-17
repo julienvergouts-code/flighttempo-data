@@ -50,9 +50,10 @@ class EasaAirspaceCoverageTests(unittest.TestCase):
         self.assertEqual(item["sha256"], hashlib.sha256(path.read_bytes()).hexdigest())
 
     def test_mixed_openaip_airspace_filter_is_not_in_app_download_manifest(self):
-        item = next(x for x in self.manifest["datasets"] if x["id"] == "airspace_filter")
-        self.assertFalse(item["available"])
-        self.assertNotIn("downloadUrl", item)
+        items = [x for x in self.manifest["datasets"] if x["id"] == "airspace_filter"]
+        self.assertTrue(all(not item.get("available", False) for item in items))
+        self.assertTrue(all("downloadUrl" not in item for item in items))
+        self.assertFalse(self.manifest.get("capabilities", {}).get("airspaceFilterAdvisoryOnly", False))
 
 
 if __name__ == "__main__":
