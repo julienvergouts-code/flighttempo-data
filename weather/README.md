@@ -93,31 +93,18 @@ References:
 - DWD SWIM layer inventory: https://swimt.dwd.de/swim_docs/reference/service_transition.html
 - DWD service registry: https://eur-registry.swim.aero/service-description/met-ceus-en-route-hazardous-meteorological-polygon-service
 
-## HiFi Active Sky — local API integration
+## HiFi Active Sky FS
 
-HiFi Active Sky is a potential local simulator-weather adapter for FlightTempo, not a navigation-data source or a public weather-data API. The exact installed product and simulator version have **not yet been confirmed**, so the adapter must remain version-neutral until the user's installed API documentation is inspected.
+Active Sky remains an optional local simulator weather adapter:
+- It is not a navigation-data source.
+- The official product page confirms an API for weather lookup, effects, mode control and weather-condition control.
+- The engine uses global METAR/TAF, upper-air GRIB, SIGMET/AIRMET, tropical-storm and snow-depth data.
+- Active Air Effects include simulated CAT, updrafts, downdrafts, microbursts, thunderstorm-vicinity turbulence, cloud turbulence and gust-related turbulence. These are simulator effects, not automatically a gridded aviation turbulence/EDR forecast.
+- The public product page does not publish the full endpoint/schema. The exact installed Active Sky FS version and its local API documentation are required before implementation.
+- Use only through the user's own licensed local installation. Do not scrape HiFi DataNet, bypass authentication or redistribute/proxy its weather feed without written permission.
 
-Verified from HiFi's official product information:
-- Active Sky FS advertises a third-party API for weather lookup, effects, mode control and weather-condition control.
-- Active Sky XP / XP 12 also provide a third-party HTTP API. For ASXP12, HiFi says the API documentation is in the Program Files installation folder under the `Documentation` subfolder.
-- ASXP12's documented API includes comprehensive area-weather retrieval in later updates; the exact functions vary by product/build and must be checked against the installed documentation.
+Reference: https://hifisimtech.com/asfs/
 
-**Intended FlightTempo weather scope**
-The earlier project requirement is to investigate turbulence and other aviation weather hazards, prioritising free, legally usable sources where available. Candidate fields to check in the installed API documentation are METAR/TAF, SIGMET/AIRMET, winds and temperatures aloft, turbulence, icing, thunderstorms, windshear, jet-stream information, mountain waves, volcanic ash and PIREPs/AIREPs. This is a target list, **not a claim that every Active Sky build exposes each field through its API**.
-
-**Integration boundary**
-- Implement read-only calls only. Do not call weather-control, mode-control or settings-changing API functions from FlightTempo.
-- Use only the user's own licensed local Active Sky installation. Do not connect directly to HiFi DataNet, scrape protected network endpoints, bypass authentication, or redistribute/proxy HiFi weather output without written permission.
-- Treat turbulence, drafts, thermals and microbursts as simulator effects/engine outputs unless the API explicitly exposes a forecast product with documented units, vertical bounds, validity and semantics. Never relabel effects as EDR or an operational CAT forecast.
-- No endpoint, port, response schema or authentication assumption is hard-coded in FlightTempo yet. These must come from the installed build's API documentation and be verified against the running local instance.
-
-**Remaining implementation input:** the API PDF from the user's installed Active Sky product (for ASXP12, the `Documentation` subfolder under its Program Files installation). Once available, implement and test the exact read-only endpoints, response parser, time/altitude handling, stale-data expiry and failure states.
-
-References:
-- Active Sky FS: https://hifisimtech.com/asfs/
-- Active Sky XP: https://hifisimtech.com/asxp/
-- Active Sky XP 12: https://www.hifitechinc.com/asxp12/
-- ASXP12 update history: https://support.justflight.com/support/solutions/articles/17000138798-active-sky-xp-12-x-plane-12-changelog
 ## What is not yet available globally for free
 
 As of the 17 November 2026 probes, FlightTempo has not verified a public no-key worldwide gridded turbulence/icing forecast feed. The verified free global layer is METAR/TAF/SIGMET; PIREP coverage is regional. DWD EDP/ADWICE may be available to eligible aviation users through a protected service, and HiFi Active Sky can be used locally if its API contract is supplied.
