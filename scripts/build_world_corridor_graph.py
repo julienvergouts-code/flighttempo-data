@@ -264,6 +264,8 @@ def build_graph(segments, airports):
         route_smoke_test("EBBR", "RJAA", 35000, airport_node_ids, node_rows, edge_rows, strings),
         route_smoke_test("EBBR", "EDDM", 25000, airport_node_ids, node_rows, edge_rows, strings),
         route_smoke_test("LFPG", "EDDM", 25000, airport_node_ids, node_rows, edge_rows, strings),
+        route_smoke_test("EBLG", "LGAV", 35000, airport_node_ids, node_rows, edge_rows, strings),
+        route_smoke_test("LFPG", "LGAV", 35000, airport_node_ids, node_rows, edge_rows, strings),
     ]
     meta = {
         "schemaVersion": 1,
