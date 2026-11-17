@@ -192,43 +192,39 @@
       "notes": "Do not enable until DWD confirms access, app display, caching and redistribution rights and provides credentials or a public layer."
     },
     {
-      "id": "hifi_active_sky_fs",
-      "name": "HiFi Active Sky FS",
+      "id": "hifi_active_sky_xp12",
+      "name": "HiFi Active Sky XP 12",
       "accessVerified": false,
-      "integrationStatus": "local_simulator_adapter_api_schema_required",
+      "integrationStatus": "local_http_api_documentation_required",
       "enabled": false,
       "dataClass": "simulator_local_weather",
-      "scope": "User-owned local simulator installation only",
+      "scope": "User-owned local licensed X-Plane 12 installation only",
+      "access": {
+        "interface": "documented local HTTP API",
+        "documentationLocation": "ASXP12 Program Files installation folder / Documentation subfolder",
+        "authentication": "follow installed API documentation; not assumed"
+      },
       "notes": [
-        "Official product page confirms a third-party API for weather lookup, effects, mode control and weather-condition control.",
-        "The product's weather engine consumes global METAR/TAF, upper-air GRIB, SIGMET/AIRMET, tropical-storm and snow-depth data.",
-        "Active Air Effects are simulator effects, not automatically a gridded aviation turbulence forecast or an EDR hazard product.",
-        "The full API endpoint/schema is not published on the public product page; the installed product documentation is required before coding the adapter.",
-        "Use only through the user's own licensed local installation. Do not scrape HiFi DataNet or redistribute/proxy its output without written permission."
+        "Official HiFi product information confirms a comprehensive third-party API with an easy-access HTTP interface for getting and setting weather.",
+        "The API documentation is supplied in the local ASXP12 installation's Documentation subfolder.",
+        "Use read-only GET methods only for FlightTempo; do not alter simulator weather mode or conditions.",
+        "Exact endpoint paths, port, authentication, payload schema and supported weather fields must be read from the installed build's API PDF before implementation.",
+        "A newer ASXP12 update added comprehensive area-weather retrieval; use the installed build's documentation.",
+        "Simulator effects such as turbulence, drafts, thermals and microbursts must not be presented as forecast EDR/CAT data unless the API explicitly defines a forecast product and units.",
+        "Do not access HiFi DataNet directly, scrape protected endpoints or redistribute/proxy HiFi weather output without written permission."
       ],
-      "sourceUrl": "https://hifisimtech.com/asfs/",
+      "sourceUrl": "https://www.hifitechinc.com/asxp12/",
       "documentedApiCapabilities": [
-        "weather_lookup",
-        "effects",
-        "mode_control",
-        "weather_conditions_control"
+        "local_http_weather_read",
+        "weather_control_api_exists_but_not_used"
       ],
-      "documentedWeatherInputs": [
-        "METAR",
-        "TAF",
-        "upper_air_GRIB",
-        "SIGMET/AIRMET",
-        "tropical_storm_data",
-        "ground_snow_depth"
-      ],
-      "simulatedEffects": [
-        "clear_air_turbulence",
-        "updrafts",
-        "downdrafts",
-        "microbursts",
-        "thunderstorm_vicinity_turbulence",
-        "cloud_turbulence",
-        "gust_related_turbulence"
+      "implementationRequirements": [
+        "read_only_local_adapter",
+        "area_weather",
+        "wind_and_vertical_layers_if_exposed",
+        "observation_and_forecast_time_semantics",
+        "stale_data_expiry",
+        "connection_health_and_timeout"
       ]
     },
     {
