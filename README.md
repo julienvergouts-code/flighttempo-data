@@ -16,8 +16,8 @@ The manifest lists downloadable datasets, relative paths, SHA-256 checksums, rec
 
 | Dataset | Coverage / contents | Current status |
 | --- | --- | --- |
-| `navigation/airports/ourairports_airports.csv` | 86,368 worldwide airport records | OurAirports CC0 |
-| `navigation/runways/runways_parsed.csv` | 47,122 runway records | OurAirports CC0 |
+| `navigation/airports/ourairports_airports.csv` | 86,371 worldwide airport records | OurAirports CC0 |
+| `navigation/runways/runways_parsed.csv` | 47,127 runway records | OurAirports CC0 |
 | `navigation/navaids/navaids.csv` | 11,008 navaids | OurAirports CC0 |
 | `navigation/waypoints/flightgear_fixes.csv` | 113,356 IFR fixes | Legacy X-Plane snapshot, cycle token 2012.08, GPL-3.0 |
 | `navigation/navaids/flightgear_navaids.csv` | 26,599 navaids, including ILS-related facilities | Legacy X-Plane snapshot, cycle token 2012.08, GPL-3.0 |
