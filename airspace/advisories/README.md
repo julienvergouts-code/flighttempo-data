@@ -17,3 +17,7 @@ Attribution: Source: European Union Aviation Safety Agency (EASA), Conflict Zone
 - This dataset is not a sole source for operational risk assessment. Check State AIPs/NOTAMs, operator policy and the original bulletin.
 
 Last-mile data rights and disclaimers: https://www.easa.europa.eu/en/disclaimer
+
+## Separate EASA Safety Directive reference
+
+`easa_safety_directives.json` records EASA Safety Directive SD-2021-02, “Operations in FIR Minsk (UMMV)”, separately from the CZIB export. Both SD-2021-02 and SD-2021-03 were issued and became effective on 2 June 2021; the EASA Safety Publications Tool lists supersedure as not applicable for both. SD-2021-02 is addressed to EASA Member State NCAs and recommends action for operators under their oversight. SD-2021-03 applies directly to aircraft operators whose AOC was issued by EASA and for which EASA acts as the competent authority. Both include an exception where use of UMMV is necessary for safe operation in unforeseen circumstances. Do not represent either directive as a universal hard no-fly rule for every operator. Confirm competent-authority scope and current implementation. The Minsk FIR geometry is not present in the current OpenAIP import.
