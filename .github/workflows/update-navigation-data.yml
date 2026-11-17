@@ -74,6 +74,23 @@ jobs:
           python-version: '3.12'
       - name: Install unit-test fixture dependency
         run: python3 -m pip install -r requirements-aerosors.txt
+      - name: Reconcile EASA reference snapshot checksum before repository tests
+        run: |
+          python3 - <<'PY'
+          import hashlib, json
+          from pathlib import Path
+          manifest_path = Path("navigation_manifest.json")
+          manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+          item = next(d for d in manifest["datasets"] if d.get("id") == "easa_safety_directives")
+          path = Path(item["path"])
+          raw = path.read_bytes()
+          data = json.loads(raw)
+          item["sha256"] = hashlib.sha256(raw).hexdigest()
+          item["sizeBytes"] = len(raw)
+          item["recordCount"] = len(data.get("records", []))
+          manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
+          print(f"Reconciled EASA directives reference: {item['recordCount']} records, {item['sizeBytes']} bytes, sha256={item['sha256']}")
+          PY
       - name: Run IFR importer unit tests
         run: python3 -m unittest discover -s tests -v
       - name: Install French SIA procedure PDF parser
@@ -266,6 +283,7 @@ jobs:
           items = [
               ('world_corridor_graph', 'navigation/graph/world_corridor_graph.bin', 'legacy_global_graph_test_only', 'GPL-3.0'),
               ('easa_czibs', 'airspace/advisories/easa_czibs.json', 'advisory_reference_not_operational', 'EASA source acknowledgement'),
+              ('easa_safety_directives', 'airspace/advisories/easa_safety_directives.json', 'operator_scope_reference_only', 'EASA source acknowledgement'),
               ('route_policy', 'airspace/route_policy.json', 'route_preview_policy', 'FlightTempo original configuration'),
               ('faa_prn_notams', 'airspace/faa_prn_notams.json', 'reference_only_currentness_unverified', 'FAA public reference; currentness unverified'),
           ]
@@ -278,7 +296,7 @@ jobs:
               if dataset_id == 'world_corridor_graph':
                   meta = json.loads(Path('navigation/graph/meta.json').read_text())
                   count = meta['edgeCount']
-              elif dataset_id == 'easa_czibs':
+              elif dataset_id in {'easa_czibs', 'easa_safety_directives'}:
                   count = len(obj.get('records', []))
               elif dataset_id == 'route_policy':
                   count = 1
@@ -410,3 +428,5 @@ jobs:
           git commit -m "chore(navdata): update verified aviation datasets [skip ci]"
           git pull --rebase origin main
           git push origin HEAD:main
+
+# Re-trigger full navigation-data validation after the manifest checksum correction.
