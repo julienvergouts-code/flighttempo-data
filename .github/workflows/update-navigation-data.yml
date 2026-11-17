@@ -24,7 +24,6 @@ on:
       - '!scripts/import_openaip_firs.py'
       - '!scripts/import_easa_czibs.py'
       - '!scripts/import_faa_prn.py'
-      - '!navigation_manifest.json'
   schedule:
     - cron: '15 4 * * *'
   workflow_dispatch:
@@ -72,8 +71,6 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Install Aero.Sors workbook parser
-        run: python3 -m pip install -r requirements-aerosors.txt
       - name: Run IFR importer unit tests
         run: python3 -m unittest discover -s tests -v
       - name: Install French SIA procedure PDF parser
