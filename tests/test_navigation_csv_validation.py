@@ -34,7 +34,7 @@ class ParseCsvBytesTests(unittest.TestCase):
         self.assertEqual(count, 1)
 
     def test_quoted_multiline_field_is_preserved(self):
-        raw = b'id,name\\n1,"Alpha\\nAirport"\\n2,Beta\\n'
+        raw = b'id,name\n1,"Alpha\nAirport"\n2,Beta\n'
         header, count = parse_csv_bytes(raw)
         self.assertEqual(header, ["id", "name"])
         self.assertEqual(count, 2)
