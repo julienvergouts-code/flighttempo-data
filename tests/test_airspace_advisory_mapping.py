@@ -57,16 +57,19 @@ class RussiaBelarusAdvisoryMappingTests(unittest.TestCase):
         }])
         self.assertEqual(active, [])
 
-    def test_belarus_is_separate_operator_specific_safety_guidance(self):
-        directives = import_easa_czibs.BELARUS_OPERATOR_SPECIFIC_ADVISORIES
+    def test_belarus_directives_are_separate_from_czib_and_not_geometry_ready(self):
+        import json
+        path = ROOT / "airspace/advisories/easa_safety_directives.json"
+        payload = json.loads(path.read_text(encoding="utf-8"))
+        directives = payload["records"]
         self.assertEqual(
             {x["sourceId"] for x in directives},
-            {"EASA_SD_2021_02", "EASA_SD_2021_03", "EASA_SIB_2021_10"},
+            {"SD-2021-02", "SD-2021-03"},
         )
         for directive in directives:
             self.assertEqual(directive["affectedFirs"][0]["firCode"], "UMMV")
-            self.assertFalse(directive["routeAvoidanceReady"])
-            self.assertIn("unforeseen circumstances", directive["exception"])
+            self.assertFalse(directive["affectedFirs"][0]["geometryAvailable"])
+            self.assertIn("unforeseen circumstances", directive["exceptionsText"])
 
     def test_russia_geometry_requires_all_firs_verified_and_clipped(self):
         codes = [("UUWV", "MOSCOW FIR"), ("URRV", "ROSTOV-NA-DONU FIR"),
