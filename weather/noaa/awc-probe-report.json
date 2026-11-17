@@ -1,6 +1,6 @@
 {
   "provider": "NOAA Aviation Weather Center",
-  "checked_at_utc": "2026-11-17T14:28:26.261390+00:00",
+  "checked_at_utc": "2026-11-17T14:35:00.259815+00:00",
   "purpose": "metadata_only_access_probe",
   "weather_records_downloaded_for_publication": false,
   "products": {
@@ -56,11 +56,84 @@
         "validTimeTo"
       ]
     },
+    "isigmet_geojson": {
+      "url": "https://aviationweather.gov/api/data/isigmet?format=geojson",
+      "http_status": 200,
+      "status": "ok",
+      "record_count": 150,
+      "field_names": [
+        "base",
+        "chng",
+        "dir",
+        "firId",
+        "firName",
+        "hazard",
+        "icaoId",
+        "qualifier",
+        "rawSigmet",
+        "seriesId",
+        "spd",
+        "top",
+        "validTimeFrom",
+        "validTimeTo"
+      ]
+    },
+    "legacy_sigmet_geojson": {
+      "url": "https://aviationweather.gov/api/data/sigmet?format=geojson",
+      "http_status": 200,
+      "status": "ok",
+      "record_count": 149,
+      "field_names": [
+        "base",
+        "chng",
+        "dir",
+        "firId",
+        "firName",
+        "hazard",
+        "icaoId",
+        "qualifier",
+        "rawSigmet",
+        "seriesId",
+        "sigmetType",
+        "spd",
+        "top",
+        "validTimeFrom",
+        "validTimeTo"
+      ]
+    },
+    "airsigmet_geojson": {
+      "url": "https://aviationweather.gov/api/data/airsigmet?format=geojson",
+      "http_status": 200,
+      "status": "ok",
+      "record_count": 1,
+      "field_names": [
+        "airSigmetType",
+        "alphaChar",
+        "altitudeHi1",
+        "altitudeHi2",
+        "altitudeLow1",
+        "altitudeLow2",
+        "hazard",
+        "icaoId",
+        "movementDir",
+        "movementSpd",
+        "rawAirSigmet",
+        "seriesId",
+        "severity",
+        "validTimeFrom",
+        "validTimeTo"
+      ]
+    },
+    "surface_analysis_geojson": {
+      "url": "https://aviationweather.gov/api/data/surface?format=geojson",
+      "status": "error",
+      "error": "HTTP Error 404: Not Found"
+    },
     "global_sigmet_cache": {
       "url": "https://aviationweather.gov/data/cache/sigmets.cache.json.gz",
       "http_status": 200,
       "status": "ok",
-      "record_count": 148,
+      "record_count": 151,
       "field_names": [
         "base",
         "chng",
@@ -88,7 +161,7 @@
       "url": "https://aviationweather.gov/data/cache/aircraftreports.cache.csv.gz",
       "http_status": 200,
       "status": "ok",
-      "record_count": 2322,
+      "record_count": 2350,
       "field_names": [
         "receipt_time",
         "observation_time",
@@ -149,6 +222,6 @@
     "cors_enabled": false,
     "recommended_large_query_method": "provider cache files"
   },
-  "successful_product_probes": 4,
+  "successful_product_probes": 7,
   "service_status": "reachable"
 }
