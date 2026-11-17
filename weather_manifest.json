@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAtUtc": "2026-11-17T14:28:26Z",
+  "generatedAtUtc": "2026-11-17T14:35:00Z",
   "purpose": "FlightTempo weather-provider contract. This file describes live provider endpoints and access constraints; it is not a weather-data snapshot.",
   "operationalUse": false,
   "providers": [
@@ -55,8 +55,8 @@
           "refreshIntervalSeconds": 60,
           "verifiedTest": {
             "httpStatus": 200,
-            "records": 148,
-            "checkedAtUtc": "2026-11-17T14:28:26Z"
+            "records": 151,
+            "checkedAtUtc": "2026-11-17T14:35:00Z"
           },
           "recommendedClientCacheSeconds": 60
         },
@@ -69,11 +69,63 @@
           "refreshIntervalSeconds": 60,
           "verifiedTest": {
             "httpStatus": 200,
-            "records": 2322,
-            "checkedAtUtc": "2026-11-17T14:28:26Z"
+            "records": 2350,
+            "checkedAtUtc": "2026-11-17T14:35:00Z"
           },
           "recommendedClientCacheSeconds": 60,
           "notes": "Contains pilot-reported turbulence and icing; treat as observations, not forecasts."
+        },
+        {
+          "id": "sigmet_international_geojson",
+          "dataClass": "weather_hazard_polygon",
+          "endpoint": "https://aviationweather.gov/api/data/isigmet?format=geojson",
+          "format": "GeoJSON",
+          "coverage": "Worldwide international SIGMETs",
+          "verifiedTest": {
+            "httpStatus": 200,
+            "records": 150,
+            "checkedAtUtc": "2026-11-17T14:35:00Z"
+          },
+          "recommendedClientCacheSeconds": 60
+        },
+        {
+          "id": "sigmet_legacy_geojson",
+          "dataClass": "weather_hazard_polygon",
+          "endpoint": "https://aviationweather.gov/api/data/sigmet?format=geojson",
+          "format": "GeoJSON",
+          "coverage": "Worldwide SIGMET feed (legacy endpoint; verify overlap before merging)",
+          "verifiedTest": {
+            "httpStatus": 200,
+            "records": 149,
+            "checkedAtUtc": "2026-11-17T14:35:00Z"
+          },
+          "recommendedClientCacheSeconds": 60
+        },
+        {
+          "id": "airsigmet_geojson",
+          "dataClass": "weather_hazard_polygon",
+          "endpoint": "https://aviationweather.gov/api/data/airsigmet?format=geojson",
+          "format": "GeoJSON",
+          "coverage": "Domestic AWC SIGMET/AIRMET feed",
+          "verifiedTest": {
+            "httpStatus": 200,
+            "records": 1,
+            "checkedAtUtc": "2026-11-17T14:35:00Z"
+          },
+          "recommendedClientCacheSeconds": 60
+        },
+        {
+          "id": "surface_analysis_geojson",
+          "dataClass": "weather_synoptic_analysis",
+          "endpoint": "https://aviationweather.gov/api/data/surface?format=geojson",
+          "format": "GeoJSON",
+          "coverage": "Not available through this endpoint",
+          "enabled": false,
+          "verifiedTest": {
+            "httpStatus": 404,
+            "checkedAtUtc": "2026-11-17T14:35:00Z"
+          },
+          "notes": "The existing app's surface-analysis request returns HTTP 404. Do not draw synthetic pressure centers as a fallback; show the layer as unavailable until a supported source is verified."
         }
       ],
       "notes": [
@@ -81,7 +133,8 @@
         "Use the provider's global SIGMET cache rather than polling hundreds of per-FIR requests.",
         "Do not exceed the documented 100 requests/minute limit or 400-result per-query limit.",
         "The API does not enable browser CORS. A native Android HTTP client is not subject to browser CORS, but must still use a descriptive User-Agent and caching.",
-        "This provider exposes global observations, forecasts and SIGMET warnings; it does not provide a verified worldwide gridded turbulence/icing forecast through the documented Data API."
+        "This provider exposes global observations, forecasts and SIGMET warnings; it does not provide a verified worldwide gridded turbulence/icing forecast through the documented Data API.",
+        "Probe result: /isigmet and /sigmet GeoJSON endpoints return 200; /airsigmet returns 200. The app's /surface?format=geojson endpoint returns HTTP 404 and must not be represented with hardcoded H/L pressure centers."
       ],
       "sourceUrl": "https://aviationweather.gov/data/api/"
     },
