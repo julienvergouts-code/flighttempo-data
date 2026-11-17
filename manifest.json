@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "repository": "julienvergouts-code/flighttempo-data",
-  "generatedAtUtc": "2026-11-17T05:03:06.225493+00:00",
+  "generatedAtUtc": "2026-11-17T07:37:53.940551+00:00",
   "purpose": "Personal FlightTempo development, cross-checking, route-building experiments and flight-preparation practice; not an operational navigation database.",
   "rules": {
     "datasetMetaRequired": true,
@@ -147,18 +147,6 @@
       "recordCount": 172
     },
     {
-      "id": "faa-prn-notams",
-      "path": "airspace/faa_prn_notams.json",
-      "source": "FAA PRN KICZ NOTAM index",
-      "airacCycle": null,
-      "effectiveDate": null,
-      "expiryDate": null,
-      "sha256": "706fd8f0e0db3fd43f58b2489356a51b9cb325a740335d3e545632014e896737",
-      "licenceStatus": "FAA_public_information_reference_currentness_unverified",
-      "coverage": "FAA-published international prohibition/restriction notice references",
-      "recordCount": 16
-    },
-    {
       "id": "legacy-global-ifr-fixes",
       "path": "navigation/waypoints/flightgear_fixes.csv",
       "source": "X-Plane default navigation data mirror (ptsmonteiro/x-plane-navdata)",
@@ -196,6 +184,18 @@
       "licenceStatus": "GPL-3.0_legacy_stale_personal_development_reference",
       "coverage": "Worldwide legacy low/high airway segments",
       "recordCount": 70291
+    },
+    {
+      "id": "faa-prn-notams",
+      "path": "airspace/faa_prn_notams.json",
+      "source": "FAA PRN KICZ NOTAM index",
+      "airacCycle": null,
+      "effectiveDate": null,
+      "expiryDate": null,
+      "sha256": "a189091142f7cd8e79c40da8bfe5c21a2e0af9edb7eafa28ef964f75aeaf28d0",
+      "licenceStatus": "FAA_public_information_reference_currentness_unverified",
+      "coverage": "FAA-published international prohibition/restriction notice references",
+      "recordCount": 16
     }
   ]
 }

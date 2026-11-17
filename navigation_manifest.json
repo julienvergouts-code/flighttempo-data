@@ -782,18 +782,6 @@
       "operationallyAvailable": false
     },
     {
-      "id": "route_policy",
-      "path": "airspace/route_policy.json",
-      "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/airspace/route_policy.json",
-      "available": true,
-      "recordCount": 1,
-      "sizeBytes": 2075,
-      "sha256": "773b000d643bf8e4d82bbc6734ae439765d184d3154c32f1c8ac018db70ff88a",
-      "status": "route_preview_policy",
-      "license": "FlightTempo original configuration",
-      "operationallyAvailable": false
-    },
-    {
       "id": "openaip_fir_boundaries",
       "path": "navigation/airspace/openaip_fir_boundaries.geojson",
       "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/navigation/airspace/openaip_fir_boundaries.geojson",
@@ -803,18 +791,6 @@
       "sha256": "2b66e8c2edc16955a0ec32cd90feb9a19c31c076fba4642883b7d45959052baf",
       "status": "development_reference_only",
       "license": "CC BY-NC 4.0",
-      "operationallyAvailable": false
-    },
-    {
-      "id": "faa_prn_notams",
-      "path": "airspace/faa_prn_notams.json",
-      "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/airspace/faa_prn_notams.json",
-      "available": true,
-      "recordCount": 16,
-      "sizeBytes": 59543,
-      "sha256": "706fd8f0e0db3fd43f58b2489356a51b9cb325a740335d3e545632014e896737",
-      "status": "reference_only_currentness_unverified",
-      "license": "FAA public reference; currentness unverified",
       "operationallyAvailable": false
     },
     {
@@ -957,6 +933,18 @@
       "status": "advisory_reference_not_operational"
     },
     {
+      "id": "faa_prn_notams",
+      "path": "airspace/faa_prn_notams.json",
+      "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/airspace/faa_prn_notams.json",
+      "available": true,
+      "recordCount": 16,
+      "sizeBytes": 59543,
+      "sha256": "a189091142f7cd8e79c40da8bfe5c21a2e0af9edb7eafa28ef964f75aeaf28d0",
+      "license": "FAA government source; public information",
+      "status": "reference_only_currentness_unverified",
+      "operationallyAvailable": false
+    },
+    {
       "id": "airspace_filter",
       "path": "airspace/airspace_filter.json",
       "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/airspace/airspace_filter.json",
@@ -964,14 +952,21 @@
       "recordCount": 16,
       "sizeBytes": 32148,
       "sha256": "f1c48b72f521c3a90bd678c1f99b5046deb11466a1da7f9a879e31bfce3fd049",
-      "sourceProvider": "European Union Aviation Safety Agency (EASA)",
-      "sourceUrl": "https://www.easa.europa.eu/en/domains/air-operations/czibs",
-      "license": "EASA website copyright notice: reproduction authorised provided source is acknowledged",
-      "licenseStatus": "reproduction_authorised_with_source_acknowledgement",
-      "dataCycle": "not_applicable",
-      "downloadPurpose": "route_preview_advisory_filter_only",
-      "operationallyAvailable": false,
-      "status": "advisory_reference_not_operational"
+      "license": "EASA acknowledgement + OpenAIP CC BY-NC 4.0 + FAA reference",
+      "status": "advisory_and_conditional_reference_only",
+      "operationallyAvailable": false
+    },
+    {
+      "id": "route_policy",
+      "path": "airspace/route_policy.json",
+      "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/airspace/route_policy.json",
+      "available": true,
+      "recordCount": 1,
+      "sizeBytes": 2075,
+      "sha256": "773b000d643bf8e4d82bbc6734ae439765d184d3154c32f1c8ac018db70ff88a",
+      "license": "FlightTempo original configuration",
+      "status": "route_preview_policy",
+      "operationallyAvailable": false
     }
   ],
   "downloadContract": {
