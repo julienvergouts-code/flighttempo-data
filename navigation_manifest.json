@@ -33,7 +33,8 @@
     "airportReferenceOurAirportsElevationMatches": 28488,
     "airportReferenceRunwayMatches": 24174,
     "airportReferenceMultipleRunwayAirports": 3905,
-    "airportReferenceOurAirportsMetadataMatches": 29747
+    "airportReferenceOurAirportsMetadataMatches": 29747,
+    "globalAirlineDirectory": 3846
   },
   "dataSources": [
     {
@@ -102,7 +103,8 @@
     "aerosors_ils": false,
     "aeroSorsIlsFacilities": false,
     "aerosors_ge_navaids": false,
-    "aerosors_ge_airports": false
+    "aerosors_ge_airports": false,
+    "globalAirlineDirectory": true
   },
   "procedureCoverageStatus": "FAA_US_NAS_ONLY_TEST_DATA; EUROPE_FRANCE_SOURCE_NOT_INGESTED; ASIA_NO_PUBLIC_REDISTRIBUTABLE_SOURCE_CONFIRMED",
   "procedureOperationalUse": false,
@@ -554,6 +556,25 @@
       "effectiveDate": "",
       "expiryDate": "",
       "provenanceVerification": "not_declared"
+    },
+    {
+      "id": "global_airline_directory",
+      "path": "airlines/global_airlines.json",
+      "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/airlines/global_airlines.json",
+      "available": true,
+      "recordCount": 3846,
+      "sizeBytes": 1581603,
+      "sha256": "33d3fc7103df22d7219a2c6966cb60cd2f8a4fdefd656e6eadfb20d0027bb46f",
+      "sourceProvider": "Wikidata structured data",
+      "sourceUrl": "https://www.wikidata.org/",
+      "coverage": "Worldwide airline entities with at least one IATA, ICAO or callsign identifier recorded in Wikidata",
+      "license": "CC0-1.0",
+      "licenseStatus": "CC0_structured_data",
+      "dataCycle": "weekly_snapshot",
+      "effectiveDate": "",
+      "expiryDate": "",
+      "provenanceVerification": "provider_CC0_policy",
+      "operationallyAvailable": false
     },
     {
       "id": "ourairports_airports",
