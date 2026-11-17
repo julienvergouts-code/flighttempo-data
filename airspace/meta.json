@@ -8,8 +8,8 @@
   "files": [
     {
       "path": "airspace_filter.json",
-      "sha256": "f1c48b72f521c3a90bd678c1f99b5046deb11466a1da7f9a879e31bfce3fd049",
-      "sizeBytes": 32148,
+      "sha256": "55fde8fdf2a9dc066accca8cd78bcb525ee4fa3274f2588d88a78671172a0375",
+      "sizeBytes": 38045,
       "recordCount": 16
     },
     {
@@ -20,16 +20,9 @@
     },
     {
       "path": "faa_prn_notams.json",
-      "sha256": "a189091142f7cd8e79c40da8bfe5c21a2e0af9edb7eafa28ef964f75aeaf28d0",
-      "sizeBytes": 59543,
+      "sha256": "7c6666e56b796bbd57e00a97ddf1bac7bfb45c4e52983b00f347b3c6f946f3aa",
+      "sizeBytes": 59342,
       "recordCount": 16
-    },
-    {
-      "path": "advisories/easa_safety_directives.json",
-      "sha256": "531d42feed30978bb7574c75f69782b8b19d32a34424ef67ddef8fe5e3a625d3",
-      "sizeBytes": 3941,
-      "recordCount": 2,
-      "licenseStatus": "EASA_source_acknowledgement"
     }
   ],
   "notes": "airspace_filter.json combines EASA advisory records with OpenAIP FIR geometry references. It does not contain a complete legal prohibition feed. See per-source metadata in airspace/advisories and navigation/airspace. EASA Minsk Safety Directives are maintained separately under airspace/advisories and are not a universal no-fly rule."

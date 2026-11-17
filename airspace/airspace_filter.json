@@ -364,10 +364,8 @@
       "affectedFirs": [
         {
           "firCode": "OIIX",
-          "geometryFeatureIds": [
-            193
-          ],
-          "geometryAvailable": true
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
         }
       ],
       "appliesTo": [],
@@ -415,10 +413,8 @@
       "affectedFirs": [
         {
           "firCode": "HLLL",
-          "geometryFeatureIds": [
-            17
-          ],
-          "geometryAvailable": true
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
         }
       ],
       "appliesTo": [],
@@ -454,10 +450,8 @@
         },
         {
           "firCode": "OEJD",
-          "geometryFeatureIds": [
-            126
-          ],
-          "geometryAvailable": true
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
         },
         {
           "firCode": "OKAC",
@@ -466,10 +460,8 @@
         },
         {
           "firCode": "OMAE",
-          "geometryFeatureIds": [
-            42
-          ],
-          "geometryAvailable": true
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
         },
         {
           "firCode": "OOMM",
@@ -494,10 +486,8 @@
       "affectedFirs": [
         {
           "firCode": "URRV",
-          "geometryFeatureIds": [
-            2458
-          ],
-          "geometryAvailable": true
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
         },
         {
           "firCode": "UUWV",
@@ -506,10 +496,8 @@
         },
         {
           "firCode": "UWWW",
-          "geometryFeatureIds": [
-            2448
-          ],
-          "geometryAvailable": true
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
         }
       ],
       "appliesTo": [
@@ -610,11 +598,8 @@
         },
         {
           "firCode": "UKFV",
-          "geometryFeatureIds": [
-            2450,
-            2460
-          ],
-          "geometryAvailable": true
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
         },
         {
           "firCode": "UKLV",
@@ -748,10 +733,8 @@
         },
         {
           "firCode": "OEJD",
-          "geometryFeatureIds": [
-            126
-          ],
-          "geometryAvailable": true
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
         },
         {
           "firCode": "OKAC",
@@ -760,10 +743,8 @@
         },
         {
           "firCode": "OMAE",
-          "geometryFeatureIds": [
-            42
-          ],
-          "geometryAvailable": true
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
         },
         {
           "firCode": "OOMM",
@@ -787,10 +768,8 @@
       "affectedFirs": [
         {
           "firCode": "URRV",
-          "geometryFeatureIds": [
-            2458
-          ],
-          "geometryAvailable": true
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
         },
         {
           "firCode": "UUWV",
@@ -799,10 +778,8 @@
         },
         {
           "firCode": "UWWW",
-          "geometryFeatureIds": [
-            2448
-          ],
-          "geometryAvailable": true
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
         }
       ],
       "appliesTo": [
@@ -856,11 +833,8 @@
         },
         {
           "firCode": "UKFV",
-          "geometryFeatureIds": [
-            2450,
-            2460
-          ],
-          "geometryAvailable": true
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
         },
         {
           "firCode": "UKLV",

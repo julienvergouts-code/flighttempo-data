@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "repository": "julienvergouts-code/flighttempo-data",
-  "generatedAtUtc": "2026-11-17T12:43:12.091072+00:00",
+  "generatedAtUtc": "2026-11-17T12:44:55.239071+00:00",
   "purpose": "Personal FlightTempo development, cross-checking, route-building experiments and flight-preparation practice; not an operational navigation database.",
   "rules": {
     "datasetMetaRequired": true,
@@ -147,16 +147,16 @@
       "recordCount": 172
     },
     {
-      "id": "faa-prn-notams",
-      "path": "airspace/faa_prn_notams.json",
-      "source": "FAA PRN KICZ NOTAM index",
+      "id": "easa-safety-directives",
+      "path": "airspace/advisories/easa_safety_directives.json",
+      "source": "EASA Safety Directives SD-2021-02 and SD-2021-03",
       "airacCycle": null,
-      "effectiveDate": null,
+      "effectiveDate": "2021-06-02",
       "expiryDate": null,
-      "sha256": "a189091142f7cd8e79c40da8bfe5c21a2e0af9edb7eafa28ef964f75aeaf28d0",
-      "licenceStatus": "FAA_public_information_reference_currentness_unverified",
-      "coverage": "FAA-published international prohibition/restriction notice references",
-      "recordCount": 16
+      "sha256": "531d42feed30978bb7574c75f69782b8b19d32a34424ef67ddef8fe5e3a625d3",
+      "licenceStatus": "EASA_source_acknowledgement",
+      "coverage": "Operator-scope-specific safety directives for FIR Minsk (UMMV)",
+      "recordCount": 2
     },
     {
       "id": "legacy-global-ifr-fixes",
@@ -198,16 +198,16 @@
       "recordCount": 70291
     },
     {
-      "id": "easa-safety-directives",
-      "path": "airspace/advisories/easa_safety_directives.json",
-      "source": "EASA Safety Directives SD-2021-02 and SD-2021-03",
+      "id": "faa-prn-notams",
+      "path": "airspace/faa_prn_notams.json",
+      "source": "FAA PRN KICZ NOTAM index",
       "airacCycle": null,
-      "effectiveDate": "2021-06-02",
+      "effectiveDate": null,
       "expiryDate": null,
-      "sha256": "531d42feed30978bb7574c75f69782b8b19d32a34424ef67ddef8fe5e3a625d3",
-      "licenceStatus": "EASA_source_acknowledgement",
-      "coverage": "Operator-scope-specific safety directives for FIR Minsk (UMMV)",
-      "recordCount": 2
+      "sha256": "7c6666e56b796bbd57e00a97ddf1bac7bfb45c4e52983b00f347b3c6f946f3aa",
+      "licenceStatus": "FAA_public_information_reference_currentness_unverified",
+      "coverage": "FAA-published international prohibition/restriction notice references",
+      "recordCount": 16
     }
   ]
 }
