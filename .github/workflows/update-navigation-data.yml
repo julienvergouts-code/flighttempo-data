@@ -37,7 +37,6 @@ on:
       - 'airlines/**'
       - '.github/workflows/update-navigation-data.yml'
       - 'navigation_manifest.json'
-      - '!navigation_manifest.json'
       - '!navigation/airspace/**'
       - '!navigation/graph/**'
       - '!navigation/sources/flightgear/**'
@@ -394,6 +393,7 @@ jobs:
           git add \
             navigation/ \
             procedures/ \
+            airspace/ \
             airports/airports.csv \
             airlines/airlines.csv \
             airlines/route_rules.csv \
