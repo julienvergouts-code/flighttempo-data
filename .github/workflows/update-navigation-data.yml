@@ -63,7 +63,7 @@ jobs:
   build-and-update-navdata:
     runs-on: ubuntu-latest
     steps:
-      # Queued manifest jobs must use the latest main, not the older triggering SHA.
+      # Queued manifest jobs must use latest main; the OurAirports builder preserves external datasets.
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
