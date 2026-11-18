@@ -1,32 +1,21 @@
-# ADS-B route learning evidence
+# Non-US ADS-B corridor learning (Milestone 1)
 
-This subsystem turns a **single-aircraft readsb trace JSON** into evidence linking
-observed ADS-B positions to existing navigation fixes.
+Evidence generation only; this never modifies the authoritative navigation graph.
+
+- Non-US airport pairs only; airport identifiers beginning K, P, or T are excluded.
+- Ground samples are retained to anchor departure/arrival before anonymisation.
+- readsb top-level timestamp is Unix epoch base; each trace row's first value is a relative seconds offset.
+- Output contains airport pairs, anonymised sampled geometry, fix sequences, sample counts, low-confidence inferred links and FTWG A* comparison.
+- No aircraft hex, registration, callsign, raw trace rows, or per-point timestamps are written.
+- A single observation remains INFERRED_OBSERVATION / low confidence. Promotion requires repeat independent evidence or explicit airway matching.
+- ADS-B is observed trajectory evidence, not filed route, clearance, or proof of airway use.
+- Raw traces stay local; never commit them.
+- ADSB.lol is ODbL 1.0; verify attribution/share-alike obligations before redistribution.
 
 ## Run locally
 
 ```bash
-python scripts/adsb_learning/match_trace.py --trace trace.json
+python scripts/adsb_learning/build_corridors.py --trace /path/to/trace.json --trace /path/to/another.json --output /tmp/corridor_evidence.json
 ```
 
-## GitHub Actions
-
-Run **Learn navigation evidence from ADS-B trace** manually and supply a direct
-download URL for one aircraft's trace JSON. The workflow downloads only that
-trace, matches positions to the existing waypoint reference, and commits
-versioned evidence under this directory.
-
-The whole-sky ADSB.lol daily archive is multi-gigabyte and split across assets.
-This workflow deliberately does not download that archive on a schedule. A
-separate, efficient per-aircraft historical trace endpoint/source must be
-confirmed before enabling unattended daily ingestion.
-
-## Data integrity
-
-- ADS-B proximity is not proof of exact fix crossing, filed route, airway clearance,
-  or procedure usage.
-- Matches are evidence only; they do not alter authoritative fixes or airway graph.
-- Multiple independent flights can accumulate evidence in `fix_evidence.json`.
-- ADSB.lol data is ODbL 1.0. Preserve attribution and assess share-alike duties
-  before redistributing derived databases.
-- Never place confidential airline OFPs in this public repository.
+The existing FlightGear/X-Plane graph has source cycle token 2012.08. A* comparison proves graph parser compatibility/path availability only, not current AIRAC validity or operational suitability.
