@@ -47,10 +47,13 @@ def load_airports(path):
     airports = []
     with open(path, newline="", encoding="utf-8") as f:
         for row in csv.DictReader(f):
-            ident = (row.get("ident") or row.get("icao") or "").upper()
+            # Our normalized OurAirports export uses icao/latitude/longitude;
+            # the raw OurAirports source uses ident/latitude_deg/longitude_deg.
+            ident = (row.get("ident") or row.get("icao") or "").strip().upper()
             try:
-                lat, lon = float(row["latitude_deg"]), float(row["longitude_deg"])
-            except (KeyError, TypeError, ValueError):
+                lat = float(row.get("latitude_deg") or row.get("latitude"))
+                lon = float(row.get("longitude_deg") or row.get("longitude"))
+            except (TypeError, ValueError):
                 continue
             if len(ident) == 4 and ident.isalnum():
                 airports.append((ident, lat, lon))
