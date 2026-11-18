@@ -64,6 +64,8 @@ def compile_graph(out):
    direction=field(row,"direction","dir").upper()
    pairs=[(u,v)] if direction in ("F","FORWARD","1") else [(u,v),(v,u)]
    for x,y in pairs: edges[(x,y,airway)]=(x,y,tenths,airway)
+ if not edges:
+  raise RuntimeError(f"No airway edges resolved from {rows} CSV rows; inspect the logged header and map its endpoint columns.")
  packed=sorted(edges.values())
  out.parent.mkdir(parents=True,exist_ok=True)
  with out.open("wb") as f:
