@@ -292,7 +292,7 @@ def main():
                           "release": release, "origin": result["origin"],
                           "destination": result["destination"],
                           "matched_fix_count": result.get("matchCount", 0),
-                          "graph_comparison": comparison.get("status"),
+                          "graph_comparison": result["graphComparison"]["status"],
                           "output": str(out)}, indent=2))
 
 
