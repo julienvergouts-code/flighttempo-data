@@ -65,27 +65,36 @@ def nearest_airport(point, airports, radius=AIRPORT_ANCHOR_RADIUS_NM):
     return ident if d <= radius else None
 
 def anchor_airports(points, airports):
-    # First use genuine ground samples close to an airport. If coverage begins
-    # or ends airborne, use the closest airport to the trace boundary (max 35 NM).
+    """Resolve terminal airports from multiple boundary samples, not one ADS-B point."""
+    if not points or not airports:
+        return None, None
+
+    def resolve_window(window):
+        # Count repeated nearest-airport matches; break ties by smallest
+        # cumulative distance. This avoids selecting an airport from one noisy point.
+        votes = defaultdict(lambda: [0, 0.0])
+        for point in window:
+            ranked = [(distance_nm((point["lat"], point["lon"]), (lat, lon)), ident)
+                      for ident, lat, lon in airports]
+            if not ranked:
+                continue
+            distance, ident = min(ranked)
+            if distance <= 25.0:
+                votes[ident][0] += 1
+                votes[ident][1] += distance
+        if not votes:
+            return None
+        return min(votes, key=lambda ident: (-votes[ident][0], votes[ident][1], ident))
+
+    # Ground evidence is preferred only when it independently anchors both ends.
     ground = [p for p in points if p["ground"]]
-    if ground:
-        hits = [(p["t"], nearest_airport(p, airports, 8.0)) for p in ground]
-        hits = [(t, a) for t, a in hits if a]
-        if len(hits) >= 2:
-            return hits[0][1], hits[-1][1]
-    def closest(point, radius):
-        ranked = [(distance_nm((point["lat"], point["lon"]), (lat, lon)), ident)
-                  for ident, lat, lon in airports]
-        if not ranked: return None
-        d, ident = min(ranked)
-        return ident if d <= radius else None
-    # Boundary windows tolerate missing ADS-B coverage at touchdown/liftoff.
-    window = max(1, min(30, len(points)//10))
-    starts = [closest(p, 35.0) for p in points[:window]]
-    ends = [closest(p, 35.0) for p in points[-window:]]
-    starts = [a for a in starts if a]
-    ends = [a for a in ends if a]
-    return (starts[0] if starts else None, ends[-1] if ends else None)
+    if len(ground) >= 2:
+        first = resolve_window(ground[:10])
+        last = resolve_window(list(reversed(ground[-10:])))
+        if first and last:
+            return first, last
+
+    return resolve_window(points[:10]), resolve_window(list(reversed(points[-10:])))
 
 def match_fixes(points, fixes, radius=FIX_MATCH_RADIUS_NM):
     matched = []
