@@ -4,6 +4,8 @@ on:
     paths:
       - "scripts/adsb_learning/**"
       - "scripts/route_preview.py"
+      - "pipeline/**"
+      - "pipeline/**"
       - "tests/test_adsb_corridor_builder.py"
       - ".github/workflows/test-adsb-corridor-builder.yml"
   push:
