@@ -6,11 +6,12 @@ on:
       date:
         description: "UTC archive date (YYYY-MM-DD)"
         required: true
-        default: "2026-11-17"
+        default: "2026-11-13"
         type: string
       icao24:
         description: "Six-character benchmark ICAO24 hex"
         required: true
+        default: "440C1B"
         type: string
 
 permissions:
@@ -29,6 +30,8 @@ jobs:
           python-version: "3.12"
       - name: Install pipeline dependency
         run: python -m pip install -r pipeline/requirements.txt
+      - name: Compile FTWG binary from repository navigation CSVs
+        run: python pipeline/compile_ftwg_graph.py
       - name: Fetch real archive trace and validate corridor
         env:
           RUN_DATE: ${{ inputs.date }}
