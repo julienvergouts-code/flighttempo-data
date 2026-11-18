@@ -13448,7 +13448,7 @@ BR-0349,BR,-25.34695,-49.05738,2930,BMR Medical Heliport,328955,BR-0349,heliport
 BR-0350,BR,-22.61723,-53.58053,840,Fazenda Bela Vista Airport,328957,BR-0350,small_airport,Fazenda Bela Vista Airport,-22.617232,-53.580533,840,SA,BR,BR-MS,Novo Horizonte do Sul,no,,,SNBE,MS0200,,,
 BR-0351,BR,-19.84213,-43.87142,2290,Eco Aviação Heliport,328996,BR-0351,heliport,Eco Aviação Heliport,-19.842128,-43.871418,2290,SA,BR,BR-MG,Belo Horizonte,no,,,SWAH,MG0277,,,
 BR-0352,BR,-22.73841,-45.53996,5663,N. S. A. Heliport,329000,BR-0352,heliport,N. S. A. Heliport,-22.738409,-45.539957,5663,SA,BR,BR-SP,Campos do Jordão,yes,,,SNBK,SP0691,,,
-BR-0353,BR,-22.79222,-54.17944,1381,Fazenda Dois Irmãos Airport,329038,BR-0353,small_airport,Fazenda Dois Irmãos Airport,-22.792222,-54.179444,1381,SA,BR,BR-MS,Naviraí,no,,,SNDI,SNDI,,,
+BR-0353,BR,-22.79222,-54.17944,1381,Fazenda Dois Irmãos Airport,329038,BR-0353,small_airport,Fazenda Dois Irmãos Airport,-22.792222,-54.179444,1381,SA,BR,BR-MS,Naviraí,no,,,SNDI,MS0203,,,
 BR-0355,BR,-23.415,-46.58055,2605,Helinorte,329042,BR-0355,heliport,Helinorte,-23.415,-46.580555,2605,SA,BR,BR-SP,São Paulo,no,,,SSUH,SSUH,,,
 BR-0356,BR,-22.07427,-51.03878,1493,Fazenda Guadiana Airport,329168,BR-0356,small_airport,Fazenda Guadiana Airport,-22.074271,-51.038782,1493,SA,BR,BR-SP,Martinópolis,no,,,SIGY,SP0178,,,
 BR-0357,BR,-23.50468,-46.85099,3002,Evolution Corporate Heliport,329169,BR-0357,heliport,Evolution Corporate Heliport,-23.504682,-46.850985,3002,SA,BR,BR-SP,Barueri,no,,,SDEG,SP0316,,,
@@ -49670,7 +49670,7 @@ MYAN,BS,25.0538,-78.049,5,San Andros Airport,4928,MYAN,medium_airport,San Andros
 MYAO,BS,26.31773,-77.56133,16,Moores Island Airport,35340,MYA0,small_airport,Moores Island Airport,26.317729,-77.561331,16,NA,BS,BS-SO,Moore's Island,no,MYAO,,MYAO,MYAO,,https://en.wikipedia.org/wiki/Mores_Island_Airport,Hard Bargain
 MYAP,BS,22.4418,-73.9709,11,Spring Point Airport,4929,MYAP,medium_airport,Spring Point Airport,22.441799,-73.970901,11,NA,BS,BS-AK,Spring Point,yes,MYAP,AXP,MYAP,,,https://en.wikipedia.org/wiki/Spring_Point_Airport,
 MYAS,BS,26.0047,-77.39562,8,Sandy Point Airport,4930,MYAS,small_airport,Sandy Point Airport,26.004698,-77.395622,8,NA,BS,BS-SO,Sandy Point,no,MYAS,,MYAS,,,https://en.wikipedia.org/wiki/Sandy_Point_Airport,
-MYAT,BS,26.7453,-77.3913,8,Treasure Cay Airport,4931,MYAT,medium_airport,Treasure Cay Airport,26.745300293,-77.3912963867,8,NA,BS,BS-CO,Treasure Cay,yes,MYAT,TCB,MYAT,,,https://en.wikipedia.org/wiki/Treasure_Cay_Airport,
+MYAT,BS,26.7453,-77.3913,8,Treasure Cay Airport,4931,MYAT,medium_airport,Treasure Cay Airport,26.7453,-77.391296,8,NA,BS,BS-CO,Treasure Cay,yes,MYAT,TCB,MYAT,,,https://en.wikipedia.org/wiki/Treasure_Cay_Airport,
 MYAW,BS,27.25966,-78.40045,10,Walkers Cay Airport,29641,MYAW,small_airport,Walkers Cay Airport,27.259656,-78.400455,10,NA,BS,BS-NO,Walkers Cay,no,MYAW,WKR,MYAW,,,https://en.wikipedia.org/wiki/Walker%27s_Cay_Airport,
 MYAX,BS,26.9503,-77.5438,10,Spanish Cay Airport,4932,MYAX,small_airport,Spanish Cay Airport,26.9503,-77.5438,10,NA,BS,BS-NO,,no,MYAX,,MYAX,,,https://en.wikipedia.org/wiki/Spanish_Cay_Airport,
 MYBC,BS,25.4171,-77.8809,5,Chub Cay Airport,4933,MYBC,medium_airport,Chub Cay Airport,25.417101,-77.880898,5,NA,BS,BS-NS,Chub Cay,yes,MYBC,CCZ,MYBC,,,https://en.wikipedia.org/wiki/Chub_Cay_International_Airport,
@@ -49704,7 +49704,7 @@ MYK,US,61.3357,-142.687,1650,May Creek Airport,22655,MYK,small_airport,May Creek
 MYLD,BS,23.179,-75.0936,9,Deadman's Cay Airport,4948,MYLD,medium_airport,Deadman's Cay Airport,23.1790008545,-75.09359741210001,9,NA,BS,BS-LI,Deadman's Cay,yes,MYLD,LGI,MYLD,,,https://en.wikipedia.org/wiki/Deadman's_Cay_Airport,
 MYLM,BS,23.64967,-75.32409,,Cape Santa Maria Airstrip,46380,BS-0003,small_airport,Cape Santa Maria Airstrip,23.649674,-75.32409,,NA,BS,BS-LI,Galliot Cay,no,MYLM,,MYLM,,,https://en.wikipedia.org/wiki/Cape_Santa_Maria_Airport,
 MYLR,BS,23.00993,-74.90485,11,Hard Bargain Airport,326433,MYLR,medium_airport,Hard Bargain Airport,23.009934,-74.904851,11,NA,BS,BS-LI,,no,,,MYLR,,,https://en.wikipedia.org/wiki/Hard_Bargain_Airport,Diamond Roads
-MYLS,BS,23.58232,-75.26862,10,Stella Maris Airport,4949,MYLS,medium_airport,Stella Maris Airport,23.582317,-75.268621,10,NA,BS,BS-LI,Stella Maris,yes,MYLS,SML,MYLS,,,https://en.wikipedia.org/wiki/Stella_Maris_Airport,
+MYLS,BS,23.58303,-75.26887,10,Stella Maris Airport,4949,MYLS,medium_airport,Stella Maris Airport,23.58303,-75.268873,10,NA,BS,BS-LI,Stella Maris,yes,MYLS,SML,MYLS,,,https://en.wikipedia.org/wiki/Stella_Maris_Airport,
 MYMM,BS,22.3795,-73.01349,11,Mayaguana Airport,4950,MYMM,medium_airport,Mayaguana Airport,22.379499,-73.013494,11,NA,BS,BS-MG,Abraham Bay Settlement,yes,MYMM,MYG,MYMM,,,https://en.wikipedia.org/wiki/Mayaguana_Airport,
 MYNN,BS,25.039,-77.4662,16,Lynden Pindling International Airport,4951,MYNN,large_airport,Lynden Pindling International Airport,25.039,-77.466202,16,NA,BS,BS-NP,Nassau,yes,MYNN,NAS,MYNN,,http://www.nas.bs/,https://en.wikipedia.org/wiki/Lynden_Pindling_International_Airport,"Windsor Field, Nassau International Airport"
 MYRD,BS,22.1818,-75.7295,6,Duncan Town Airport,4952,MYRD,medium_airport,Duncan Town Airport,22.181801,-75.7295,6,NA,BS,BS-RI,Duncan Town,no,MYRD,DCT,MYRD,,,https://en.wikipedia.org/wiki/Duncan_Town_Airport,
@@ -62741,9 +62741,9 @@ SNCA,BR,-20.89231,-45.33515,3282,Campo Belo Airport,289,SNCA,small_airport,Campo
 SNCB,BR,-2.52579,-53.94412,502,Castanhal Airport,37044,SNCB,small_airport,Castanhal Airport,-2.525792,-53.944121,502,SA,BR,BR-PA,Prainha,no,,,SNCB,PA0084,,,
 SNCD,BR,-7.66317,-34.83788,16,Catuama Heliport,37046,SNCD,heliport,Catuama Heliport,-7.663166,-34.83788,16,SA,BR,BR-PE,Goiana,no,,,SNCD,PE0040,,,
 SNCE,BR,-21.10532,-45.8028,2559,Campo do Meio Airport,29749,SNCE,small_airport,Campo do Meio Airport,-21.105322,-45.802795,2559,SA,BR,BR-MG,Campo do Meio,no,,,SNCE,MG0061,,,
-SNCH,BR,-23.65764,-45.49811,26,UTGCA Heliport,323609,SNCH,heliport,UTGCA Heliport,-23.657645,-45.49811,26,SA,BR,BR-SP,Caraguatatuba,no,,,SNCH,,,,
-SNCI,BR,-1.231,-47.2006,174,Cibrasa Airport,290,SNCI,small_airport,Cibrasa Airport,-1.2309999465942383,-47.200599670410156,174,SA,BR,BR-PA,Capanema,no,,,SNCI,SNCI,,,
-SNCJ,BR,-2.54373,-54.71104,407,Piquiatuba Airport,37049,SNCJ,small_airport,Piquiatuba Airport,-2.543727,-54.711039,407,SA,BR,BR-PA,Santarém,no,,,SNCJ,,,,
+SNCH,BR,-23.65762,-45.49811,26,UTGCA Heliport,323609,SNCH,heliport,UTGCA Heliport,-23.657624,-45.498115,26,SA,BR,BR-SP,Caraguatatuba,no,,,SNCH,SP0693,,,
+SNCI,BR,-1.23054,-47.20067,124,Cibrasa Airport,290,SNCI,small_airport,Cibrasa Airport,-1.230539,-47.200671,124,SA,BR,BR-PA,Capanema,no,,,SNCI,PA0085,,,
+SNCJ,BR,-2.54382,-54.71088,453,Piquiatuba Airport,37049,SNCJ,small_airport,Piquiatuba Airport,-2.543816,-54.710878,453,SA,BR,BR-PA,Santarém,no,,,SNCJ,PA0086,,,
 SNCL,BR,-13.38944,-38.91,3,Lorenzo Airport,37050,SNCL,small_airport,Lorenzo Airport,-13.389444,-38.91,3,SA,BR,BR-BA,Cairu,no,,MXQ,SNCL,BA0131,,,
 SNCM,BR,-4.02361,-38.20889,20,Caponga Heliport,37051,SNCM,heliport,Caponga Heliport,-4.023611,-38.208889,20,SA,BR,BR-CE,Cascavel,no,,,,,,,SNCM
 SNCN,BR,-15.79591,-47.89357,3855,Parque Cidade Heliport,323607,SNCN,heliport,Parque Cidade Heliport,-15.795914,-47.893569,3855,SA,BR,BR-DF,Brasília,no,,,SNCN,DF0016,,,
@@ -62752,11 +62752,11 @@ SNCP,BR,-27.63413,-50.35825,2887,Planalto Serrano Regional Airport,340053,SNCP,m
 SNCR,BR,-19.96306,-43.95555,3426,Viganó I Heliport,37054,SNCR,heliport,Viganó I Heliport,-19.963056564331055,-43.9555549621582,3426,SA,BR,BR-MG,Belo Horizonte,no,,,SNCR,,,,
 SNCS,BR,-7.05171,-40.35827,2001,Campos Sales Airport,291,SNCS,small_airport,Campos Sales Airport,-7.051714,-40.358274,2001,SA,BR,BR-CE,Campos Sales,no,,,SNCS,CE0009,,https://pt.wikipedia.org/wiki/Aeroporto_de_Campos_Sales,
 SNCT,BR,-19.7253,-42.1121,2067,Ubaporanga Airport,292,SNCT,small_airport,Ubaporanga Airport,-19.7253,-42.112099,2067,SA,BR,BR-MG,Caratinga,no,,,SNCT,MG0056,,https://en.wikipedia.org/wiki/Ubaporanga_Airport,QTL 
-SNCV,BR,-19.55148,-49.49742,1805,Campina Verde Airport,29752,SNCV,small_airport,Campina Verde Airport,-19.551478,-49.497425,1805,SA,BR,BR-MG,Campina Verde,no,,,SNCV,MG0062,,,
+SNCV,BR,-19.55148,-49.49742,1805,Campina Verde Airport,29752,SNCV,closed,Campina Verde Airport,-19.551478,-49.497425,1805,SA,BR,BR-MG,Campina Verde,no,,,,,,http://wikimapia.org/5696165/pt/SNCV-Aeródromo-de-Campina-Verde,"SNCV, MG0062"
 SNCW,BR,-2.373,-44.3964,148,Alcântara Space Center Airport,293,SNCW,small_airport,Alcântara Space Center Airport,-2.373,-44.3964,148,SA,BR,BR-MA,Alcântara,no,,,SNCW,MA9001,,https://pt.wikipedia.org/wiki/Aeroporto_de_Alc%C3%A2ntara,
 SNCX,BR,-19.48748,-40.57936,502,Colatina Airport,294,SNCX,small_airport,Colatina Airport,-19.487476,-40.579362,502,SA,BR,BR-ES,Colatina,no,,QCH,SNCX,ES0004,,https://pt.wikipedia.org/wiki/Aeroporto_de_Colatina,
 SNCY,BR,-10.22264,-36.28535,138,Campo da Praia Airport,37055,SNCY,small_airport,Campo da Praia Airport,-10.222636,-36.285352,138,SA,BR,BR-AL,Coruripe,no,,,SNCY,AL0006,,,
-SNCZ,BR,-20.4033,-42.9165,1877,Ponte Nova Airport,295,SNCZ,small_airport,Ponte Nova Airport,-20.40329933166504,-42.916500091552734,1877,SA,BR,BR-MG,Ponte Nova,no,,,SNCZ,SNCZ,,,
+SNCZ,BR,-20.4033,-42.9165,1877,Ponte Nova Airport,295,SNCZ,small_airport,Ponte Nova Airport,-20.403299,-42.9165,1877,SA,BR,BR-MG,Ponte Nova,no,,,SNCZ,MG0059,,,
 SND2,BR,-14.56666,-54.89135,1536,Fazenda Santa Emília Airport,604824,SND2,small_airport,Fazenda Santa Emília Airport,-14.566663,-54.891354,1536,SA,BR,BR-MT,Planalto da Serra,no,,,SND2,MT1057,,,
 SND7,BR,-20.31376,-46.30109,2707,DGL Heliport,552920,SND7,heliport,DGL Heliport,-20.313756,-46.301092,2707,SA,BR,BR-MG,São Roque de Minas,no,,,SND7,MG0616,,,
 SND8,BR,-16.7765,-43.89292,2208,GRP Heliport,552923,SND8,heliport,GRP Heliport,-16.776503,-43.892925,2208,SA,BR,BR-MG,Montes Claro,no,,,SND8,MG0617,,,
@@ -62764,18 +62764,18 @@ SND9,BR,-22.91783,-48.88278,2277,Santa Fé Heliport,552513,SND9,heliport,Santa F
 SNDA,BR,-15.38194,-58.64972,778,Fazenda Vale Formoso Airstrip,531950,SNDA,small_airport,Fazenda Vale Formoso Airstrip,-15.381944,-58.649722,778,SA,BR,BR-MT,Figueirópolis d'Oeste,no,,,SNDA,MT0243,,,
 SNDC,BR,-8.03119,-49.97969,679,Redenção Airport,296,SNDC,small_airport,Redenção Airport,-8.031188,-49.979687,679,SA,BR,BR-PA,Redenção,no,SNDC,RDC,SNDC,PA0030,,https://en.wikipedia.org/wiki/Reden%C3%A7%C3%A3o_Airport,
 SNDD,BR,-3.69236,-45.26903,118,Fazenda Eldorado Airport,37057,SNDD,small_airport,Fazenda Eldorado Airport,-3.692355,-45.26903,118,SA,BR,BR-MA,Igarapé do Meio,no,,,SBOT,MA0110,,,SNDD
-SNDE,BR,-22.90868,-43.18021,440,BNDES Heliport,323601,SNDE,heliport,BNDES Heliport,-22.908681,-43.180207,440,SA,BR,BR-RJ,Rio de Janeiro,no,,,SNDE,,,,
-SNDH,BR,-12.16286,-45.0337,1682,Aba Airport,37059,SNDH,small_airport,Aba Airport,-12.162858,-45.033695,1682,SA,BR,BR-BA,Barreiras,no,,,SNDH,,,,
-SNDK,BR,-23.55806,-46.61861,2661,C.T.O Itaú Heliport,309759,SNDK,heliport,C.T.O Itaú Heliport,-23.5580558777,-46.618610382099995,2661,SA,BR,BR-SP,São Paulo,no,,,SNDK,SNDK,,,
+SNDE,BR,-22.90854,-43.17999,440,BNDES Heliport,323601,SNDE,heliport,BNDES Heliport,-22.908535,-43.179995,440,SA,BR,BR-RJ,Rio de Janeiro,no,,,SNDE,RJ0124,,,
+SNDH,BR,-12.16286,-45.0337,1526,Aba Airport,37059,SNDH,small_airport,Aba Airport,-12.162858,-45.033695,1526,SA,BR,BR-BA,Barreiras,no,,,SNDH,BA0132,,,
+SNDK,BR,-23.55775,-46.61548,2595,C.T.O Itaú Helistops,309759,SNDK,heliport,C.T.O Itaú Helistops,-23.557754,-46.615478,2595,SA,BR,BR-SP,São Paulo,no,,,SNDK,SP0694,,,
 SNDL,BR,-3.34578,-39.12623,46,Luciano Cavalcante Heliport,335228,SNDL,heliport,Luciano Cavalcante Heliport,-3.345783,-39.12623,46,SA,BR,BR-CE,Paraipaba,no,,,SNDL,CE0048,,,
-SNDM,BR,-23.4404,-46.4352,2532,Karina Heliport,309758,SNDM,heliport,Karina Heliport,-23.4404,-46.4352,2532,SA,BR,BR-SP,Guarulhos,no,,,SNDM,SNDM,,,
-SNDN,BR,-12.94398,-38.42578,256,Cemaden - CIGE Heliport,329040,SNDN,heliport,Cemaden - CIGE Heliport,-12.94398,-38.425784,256,SA,BR,BR-BA,Salvador,no,SNDN,,SNDN,SNDN,,,
+SNDM,BR,-23.44031,-46.43526,2533,Karina Helistop,309758,SNDM,heliport,Karina Helistop,-23.440312,-46.435259,2533,SA,BR,BR-SP,Guarulhos,no,,,SNDM,SP0695,,,
+SNDN,BR,-12.94399,-38.42578,256,Cemaden - CIGE Helistop,329040,SNDN,heliport,Cemaden - CIGE Helistop,-12.943993,-38.425782,256,SA,BR,BR-BA,Salvador,no,SNDN,,SNDN,BA0212,,,
 SNDO,BR,-16.71142,-47.01534,3031,Ouro Branco Airport,37062,SNDO,small_airport,Ouro Branco Airport,-16.711423,-47.015343,3031,SA,BR,BR-MG,Paracatu,no,,,SICU,MG0094,,,SNDO
-SNDQ,BR,-12.92111,-45.56944,2549,Fazenda Soya Airport,37064,SNDQ,small_airport,Fazenda Soya Airport,-12.921111106872559,-45.56944274902344,2549,SA,BR,BR-BA,São Desidério,no,,,SNDQ,,,,
-SNDR,BR,-5.07979,-42.8737,373,Domingos Rego Airport,298,SNDR,small_airport,Domingos Rego Airport,-5.07979,-42.873699,373,SA,BR,BR-MA,Timon,no,,,SNDR,SNDR,,https://pt.wikipedia.org/wiki/Aeroporto_de_Timon,
-SNDT,BR,-18.232,-43.6504,4446,Diamantina Airport,299,SNDT,small_airport,Diamantina Airport,-18.232000351,-43.650398254399995,4446,SA,BR,BR-MG,Diamantina,no,SNDT,DTI,SNDT,,,https://en.wikipedia.org/wiki/Diamantina_Airport,
-SNDU,BR,-20.63833,-45.99806,2854,Ponta Do Sol Airport,46361,SNDU,small_airport,Ponta Do Sol Airport,-20.638333,-45.998056,2854,SA,BR,BR-MG,Capitólio,no,,,SNDU,SNDU,,,
-SNDV,BR,-20.1807,-44.8709,2608,Brigadeiro Cabral Airport,300,SNDV,small_airport,Brigadeiro Cabral Airport,-20.180700302124,-44.870899200439,2608,SA,BR,BR-MG,Divinópolis,no,SNDV,DIQ,SNDV,SNDV,,https://pt.wikipedia.org/wiki/Aeroporto_de_Divin%C3%B3polis,
+SNDQ,BR,-12.92228,-45.56956,2549,Fazenda Soya Airport,37064,SNDQ,small_airport,Fazenda Soya Airport,-12.922283,-45.569558,2549,SA,BR,BR-BA,São Desidério,no,,,SNDQ,BA0133,,,
+SNDR,BR,-5.07979,-42.8737,302,Domingos Rego Airport,298,SNDR,small_airport,Domingos Rego Airport,-5.07979,-42.873699,302,SA,BR,BR-MA,Timon,no,,,SNDR,MA0035,,https://pt.wikipedia.org/wiki/Aeroporto_de_Timon,
+SNDT,BR,-18.232,-43.6504,4446,Juscelino Kubitschek Airport,299,SNDT,small_airport,Juscelino Kubitschek Airport,-18.232,-43.650398,4446,SA,BR,BR-MG,Diamantina,no,SNDT,DTI,SNDT,MG0030,,https://en.wikipedia.org/wiki/Diamantina_Airport,Diamantina Airport
+SNDU,BR,-20.63886,-45.99868,2608,Ponta do Sol Airport,46361,SNDU,small_airport,Ponta do Sol Airport,-20.638863,-45.99868,2608,SA,BR,BR-MG,Capitólio,no,,,SNDU,MG0141,,,
+SNDV,BR,-20.18057,-44.87098,2623,Brigadeiro Antônio Cabral Airport,300,SNDV,small_airport,Brigadeiro Antônio Cabral Airport,-20.180574,-44.870977,2623,SA,BR,BR-MG,Divinópolis,no,SNDV,DIQ,SNDV,MG0015,,https://pt.wikipedia.org/wiki/Aeroporto_de_Divin%C3%B3polis,
 SNDX,BR,-10.04,-36.32639,345,Cachoeira Airport,37065,SNDX,small_airport,Cachoeira Airport,-10.039999961853027,-36.32638931274414,345,SA,BR,BR-AL,Coruripe,no,,,SNDX,,,,
 SNE1,BR,-22.90248,-45.91573,3402,Essênia 1 Heliport,606514,SNE1,heliport,Essênia 1 Heliport,-22.902481,-45.915726,3402,SA,BR,BR-SP,São José dos Campos,no,,,SNE1,SP1504,,,
 SNE2,BR,-24.01121,-48.41706,2474,Fazenda Santa Rosa Heliport,552506,SNE2,heliport,Fazenda Santa Rosa Heliport,-24.011208,-48.417058,2474,SA,BR,BR-SP,Capão Bonito,no,,,SNE2,SP1475,,,
@@ -63219,11 +63219,11 @@ SNWF,BR,-22.43806,-55.23167,1476,Fazenda Cachoeirinha Airport,37313,SNWF,small_a
 SNWG,BR,-23.58221,-54.04889,591,Fazenda Iporã Airport,37314,SNWG,small_airport,Fazenda Iporã Airport,-23.582209,-54.048893,591,SA,BR,BR-MS,Itaquiraí,no,,,SNWG,MS0234,,,SNWS
 SNWH,BR,-22.96305,-53.54577,883,Fazenda São Mateus Airport,37315,SNWH,small_airport,Fazenda São Mateus Airport,-22.963045,-53.545769,883,SA,BR,BR-PR,Querência do Norte,no,,,SNWH,PR0069,,,
 SNWI,BR,-14.06889,-60.00917,594,Fazenda São João do Guapore Airport,37316,SNWI,small_airport,Fazenda São João do Guapore Airport,-14.068889,-60.009167,594,SA,BR,BR-MT,Nova Lacerda,no,,,SNWI,,,,Fazenda São João II Airport
-SNWJ,BR,-15.20806,-58.62472,1345,Fazenda Rancho Alegre Airport,37317,SNWJ,small_airport,Fazenda Rancho Alegre Airport,-15.208056449890137,-58.62472152709961,1345,SA,BR,BR-MT,Araputanga,no,,,SNWJ,,,,
-SNWK,BR,-16.67444,-54.26639,722,Fazenda Santa Terezinha Airport,37318,SNWK,small_airport,Fazenda Santa Terezinha Airport,-16.6744441986084,-54.266387939453125,722,SA,BR,BR-MT,Pedra Preta,no,,,SNWK,,,,
+SNWJ,BR,-15.20683,-58.62702,1455,Fazenda Rancho Grande Airport,37317,SNWJ,small_airport,Fazenda Rancho Grande Airport,-15.206831,-58.627024,1455,SA,BR,BR-MT,Indiavaí,no,,,SNWJ,MT0274,,,"Rancho Alegre, Araputanga"
+SNWK,BR,-16.67323,-54.26999,1037,Fazenda Santa Terezinha Airport,37318,SNWK,small_airport,Fazenda Santa Terezinha Airport,-16.673233,-54.269994,1037,SA,BR,BR-MT,Pedra Preta,no,,,SNWK,MT0275,,,
 SNWM,BR,-20.38747,-51.19762,1181,Fazenda Bonito Airport,37320,SNWM,small_airport,Fazenda Bonito Airport,-20.387468,-51.197617,1181,SA,BR,BR-SP,Ilha Solteira,no,,,SI4C,SP1215,,,SNWM
 SNWN,BR,-16.67071,-54.39165,968,Fazenda Aliança Airport,37321,SNWN,small_airport,Fazenda Aliança Airport,-16.670708,-54.391648,968,SA,BR,BR-MT,Pedra Preta,no,,,SDQ2,MT0702,,,SNWN
-SNWO,BR,-23.01778,-54.62444,1001,Fazenda Vera Cruz Airport,37322,SNWO,small_airport,Fazenda Vera Cruz Airport,-23.017778396606445,-54.62444305419922,1001,SA,BR,BR-MS,Amambaí,no,,,SNWO,,,,
+SNWO,BR,-23.01885,-54.63027,1227,Fazenda Vera Cruz Airport,37322,SNWO,small_airport,Fazenda Vera Cruz Airport,-23.018847,-54.630268,1227,SA,BR,BR-MS,Amambaí,no,,,SNWO,MS0236,,,
 SNWQ,BR,-29.33007,-54.33636,1257,Fazenda Santa Cecília Airport,341139,SNWQ,small_airport,Fazenda Santa Cecília Airport,-29.330071,-54.336362,1257,SA,BR,BR-RS,Jari,no,,,SNWQ,RS0131,,,
 SNWR,BR,-2.6366,-51.82708,201,Wilma Rabelo Airport,415,SNWR,small_airport,Wilma Rabelo Airport,-2.636603,-51.82708,201,SA,BR,BR-PA,Senador José Porfírio,no,,,SNWR,PA0109,,,
 SNWS,BR,-5.21135,-40.7042,1043,Crateús Airport,416,SNWS,small_airport,Crateús Airport,-5.21135,-40.704201,1043,SA,BR,BR-CE,Crateús,no,,JCS,SNWS,CE0005,https://www.sop.ce.gov.br/projeto/crateus/,https://en.wikipedia.org/wiki/Crate%C3%BAs_Airport,
@@ -64941,7 +64941,7 @@ SWKZ,BR,-11.7175,-58.25945,984,Fazenda Cerejal Airport,37946,SWKZ,small_airport,
 SWLA,BR,-11.88472,-58.63167,1030,Fazenda Amália Airport,37947,SWLA,small_airport,Fazenda Amália Airport,-11.884721755981445,-58.63166809082031,1030,SA,BR,BR-MT,Juína,no,,,SWLA,,,,
 SWLB,BR,-7.27897,-64.7695,243,Lábrea Airport,557,SWLB,small_airport,Lábrea Airport,-7.27897,-64.769501,243,SA,BR,BR-AM,Lábrea,yes,SWLB,LBR,SWLB,AM0024,,https://en.wikipedia.org/wiki/L%C3%A1brea_Airport,
 SWLC,BR,-17.83472,-50.95611,2464,General Leite de Castro Airport,558,SWLC,small_airport,General Leite de Castro Airport,-17.834723,-50.956112,2464,SA,BR,BR-GO,Rio Verde,no,SWLC,RVD,SWLC,SWLC,,https://en.wikipedia.org/wiki/Rio_Verde_Airport,
-SWLD,BR,-14.88405,-45.33857,2510,Porto Cajueiro Airport,44449,SWLD,small_airport,Porto Cajueiro Airport,-14.88405,-45.338569,2510,SA,BR,BR-MG,Januária,no,,,SNCK,MG0140,,,SWLD
+SWLD,BR,-14.88443,-45.339,2503,Porto Cajueiro Airport,44449,SWLD,small_airport,Porto Cajueiro Airport,-14.884428,-45.339,2503,SA,BR,BR-MG,Januária,no,,,SNCK,MG0140,,,SWLD
 SWLF,BR,-15.62028,-58.20889,725,Fazenda Dona Laura Airport,37949,SWLF,small_airport,Fazenda Dona Laura Airport,-15.620278358459473,-58.20888900756836,725,SA,BR,BR-MT,São José Dos Quatro Marcos,no,,,SWLF,,,,
 SWLN,BR,-13.418,-58.47179,1690,Fazenda Franciosi Airport,37953,SWLN,small_airport,Fazenda Franciosi Airport,-13.417998,-58.471792,1690,SA,BR,BR-MT,Sapezal,no,,,SWFF,MT0340,,,SWLN
 SWLO,BR,-26.48806,-49.08389,197,Hospital São José Heliport,44453,SWLO,heliport,Hospital São José Heliport,-26.488056182900003,-49.0838890076,197,SA,BR,BR-SC,Jaraguá Do Sul,no,,,SWLO,,,,
