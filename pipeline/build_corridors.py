@@ -254,9 +254,29 @@ def main():
         if len(accepted) != 1:
             raise RuntimeError(f"Benchmark produced {len(accepted)} accepted traces; expected exactly one")
         result = accepted[0]
-        comparison = result.get("graphComparison", {})
-        if comparison.get("status") != "path_found":
-            raise RuntimeError("Benchmark did not produce a successful FTWG graph comparison")
+
+        # Validate the observed fix sequence against the compiled FTWG v1 graph.
+        nav = RepositoryNavDatabase()
+        nav._load_airways()
+        observed = result.get("matchedFixes", [])
+        graph_status = "UNVERIFIED_ENDPOINTS"
+        overlap = 0.0
+        if len(observed) >= 2:
+            astar = nav.a_star_connected(observed[0], observed[-1])
+            if astar is None:
+                graph_status = "GRAPH_GAP_DETECTED"
+            else:
+                path, _distance = astar
+                a, b = set(observed), set(path)
+                overlap = round(len(a & b) / max(1, len(a | b)), 3)
+                graph_status = "CONNECTED_FTWG"
+        result["graphComparison"] = {
+            "graph_source": nav.graph_source,
+            "status": graph_status,
+            "fix_jaccard_overlap": overlap,
+        }
+        if graph_status != "CONNECTED_FTWG":
+            raise RuntimeError(f"Benchmark FTWG comparison failed: {graph_status} ({nav.graph_source})")
         # Do not serialize aircraft identity or the source trace into the published artifact.
         forbidden = {"hex", "icao", "registration", "callsign"}
         def scan(value):
