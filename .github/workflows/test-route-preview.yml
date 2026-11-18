@@ -1,0 +1,33 @@
+name: Test offline route preview
+
+on:
+  pull_request:
+    paths:
+      - "scripts/route_preview.py"
+      - "tests/test_route_preview.py"
+      - "navigation/graph/**"
+      - ".github/workflows/test-route-preview.yml"
+  push:
+    branches:
+      - feature/adsb-route-learning
+    paths:
+      - "scripts/route_preview.py"
+      - "tests/test_route_preview.py"
+      - "navigation/graph/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  route-preview-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Run route preview unit tests
+        run: python -m unittest tests/test_route_preview.py -v
+      - name: Run EDDV-LG G offline route smoke test
+        run: python scripts/route_preview.py EDDV EBLG --altitude-ft 25000
