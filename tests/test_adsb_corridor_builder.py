@@ -21,6 +21,20 @@ class CorridorBuilderTests(unittest.TestCase):
         self.assertEqual(link["evidenceType"],"INFERRED_OBSERVATION")
         self.assertEqual(link["confidence"],"low")
         self.assertEqual(link["independentSamples"],1)
-    def test_non_us_exclusion_policy(self):
+
+    def test_airport_anchor_uses_multiple_boundary_points_with_25nm_radius(self):
+        airports=[("EHAM",52.3086,4.7639),("LFPG",49.0097,2.5479)]
+        points=[]
+        for i in range(6):
+            points.append({"t":i,"lat":52.31+i*0.002,"lon":4.77,"ground":False})
+        for i in range(6):
+            points.append({"t":100+i,"lat":49.01+i*0.002,"lon":2.55,"ground":False})
+        self.assertEqual(builder.anchor_airports(points,airports),("EHAM","LFPG"))
+
+    def test_airport_anchor_rejects_airports_beyond_25nm(self):
+        airports=[("EHAM",52.3086,4.7639),("LFPG",49.0097,2.5479)]
+        points=[{"t":i,"lat":55.0,"lon":8.0,"ground":False} for i in range(12)]
+        self.assertEqual(builder.anchor_airports(points,airports),(None,None))
+\n    def test_non_us_exclusion_policy(self):
         self.assertEqual(builder.EXCLUDED_AIRPORT_PREFIXES,("K","P","T"))
 if __name__=="__main__": unittest.main()
