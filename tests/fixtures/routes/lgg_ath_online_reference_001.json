@@ -1,0 +1,168 @@
+{
+  "schemaVersion": 1,
+  "recordType": "route_reference_test_case",
+  "testCaseId": "LGG-ATH-ONLINE-REFERENCE-001",
+  "endpoints": {
+    "departure": "EBLG",
+    "arrival": "LGAV"
+  },
+  "referenceSource": {
+    "name": "Online Flight Planner",
+    "url": "https://onlineflightplanner.org/",
+    "suppliedBy": "user",
+    "sourceType": "publicly generated route string"
+  },
+  "routeString": "EBLG SID LNO N852 DIK M150 GEBDA Y173 PABLA Z721 UTABA L607 ELMEM N606 OTRES T307 DIRAB DCT MOBDO DCT BARPI DCT NUPSO DCT BALHA DCT LEBGA DCT TRN DCT PINDO UL607 XORKI STAR LGAV",
+  "parsedSequence": [
+    {
+      "type": "procedure_placeholder",
+      "airport": "EBLG",
+      "identifier": null,
+      "status": "unresolved"
+    },
+    {
+      "type": "fix",
+      "identifier": "LNO"
+    },
+    {
+      "type": "airway",
+      "identifier": "N852"
+    },
+    {
+      "type": "fix",
+      "identifier": "DIK"
+    },
+    {
+      "type": "airway",
+      "identifier": "M150"
+    },
+    {
+      "type": "fix",
+      "identifier": "GEBDA"
+    },
+    {
+      "type": "airway",
+      "identifier": "Y173"
+    },
+    {
+      "type": "fix",
+      "identifier": "PABLA"
+    },
+    {
+      "type": "airway",
+      "identifier": "Z721"
+    },
+    {
+      "type": "fix",
+      "identifier": "UTABA"
+    },
+    {
+      "type": "airway",
+      "identifier": "L607"
+    },
+    {
+      "type": "fix",
+      "identifier": "ELMEM"
+    },
+    {
+      "type": "airway",
+      "identifier": "N606"
+    },
+    {
+      "type": "fix",
+      "identifier": "OTRES"
+    },
+    {
+      "type": "airway",
+      "identifier": "T307"
+    },
+    {
+      "type": "fix",
+      "identifier": "DIRAB"
+    },
+    {
+      "type": "direct"
+    },
+    {
+      "type": "fix",
+      "identifier": "MOBDO"
+    },
+    {
+      "type": "direct"
+    },
+    {
+      "type": "fix",
+      "identifier": "BARPI"
+    },
+    {
+      "type": "direct"
+    },
+    {
+      "type": "fix",
+      "identifier": "NUPSO"
+    },
+    {
+      "type": "direct"
+    },
+    {
+      "type": "fix",
+      "identifier": "BALHA"
+    },
+    {
+      "type": "direct"
+    },
+    {
+      "type": "fix",
+      "identifier": "LEBGA"
+    },
+    {
+      "type": "direct"
+    },
+    {
+      "type": "fix",
+      "identifier": "TRN"
+    },
+    {
+      "type": "direct"
+    },
+    {
+      "type": "fix",
+      "identifier": "PINDO"
+    },
+    {
+      "type": "airway",
+      "identifier": "UL607"
+    },
+    {
+      "type": "fix",
+      "identifier": "XORKI"
+    },
+    {
+      "type": "procedure_placeholder",
+      "airport": "LGAV",
+      "identifier": null,
+      "status": "unresolved"
+    }
+  ],
+  "validation": {
+    "routeCorrectness": "user_marked_incorrect",
+    "acceptedAsFlownRoute": false,
+    "acceptedAsPublishedRoute": false,
+    "coordinatesResolved": false,
+    "airwayConnectivityVerified": false,
+    "procedureNamesResolved": false,
+    "eligibleForProductionNavigationDatabase": false
+  },
+  "intendedUse": [
+    "test route-string parser",
+    "look up identifiers in the existing simulator-derived fix and airway datasets",
+    "report missing identifiers and disconnected airway transitions",
+    "later compare route geometry with ADS-B tracks for the LGG-ATH corridor"
+  ],
+  "dataPolicy": {
+    "coordinatesMustComeFrom": "existing permitted navigation datasets or independently verified permitted source",
+    "doNotInferCoordinatesFromRouteString": true,
+    "doNotPromoteUnverifiedRouteToProduction": true
+  },
+  "notes": "This is a deliberately incorrect public route-planner example supplied as a test fixture. Preserve it as a reference input only; do not treat its sequence as the correct LGG-LGAV route."
+}
