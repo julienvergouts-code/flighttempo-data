@@ -26,6 +26,108 @@ BUILDER = ROOT / "scripts" / "adsb_learning" / "build_corridors.py"
 API = "https://api.github.com/repos/adsblol/globe_history_{year}/releases/tags/{tag}"
 CHUNK = 1024 * 1024
 
+import csv
+import heapq
+import math
+import struct
+
+REPO_ROOT = Path(__file__).resolve().parents[1]
+PATH_FTWG_BIN = REPO_ROOT / "navigation" / "graph" / "ftwg_navgraph.bin"
+PATH_AIRWAYS = REPO_ROOT / "navigation" / "airways" / "flightgear_airway_segments.csv"
+PATH_FIXES = REPO_ROOT / "navigation" / "waypoints" / "flightgear_fixes.csv"
+FTWG_MAGIC = b"FTWG"
+FTWG_HEADER = struct.Struct("<4sHHII")
+FTWG_NODE = struct.Struct("<8siiB3x")
+FTWG_EDGE = struct.Struct("<IIH6s")
+
+def _nm(a, b):
+    p1, p2 = math.radians(a[0]), math.radians(b[0])
+    dp, dl = math.radians(b[0]-a[0]), math.radians(b[1]-a[1])
+    q = math.sin(dp/2)**2 + math.cos(p1)*math.cos(p2)*math.sin(dl/2)**2
+    return 2*3440.065*math.atan2(math.sqrt(q), math.sqrt(1-q))
+
+class RepositoryNavDatabase:
+    """FTWG v1 reader; CSV is a clearly tagged fallback only."""
+    def __init__(self):
+        self.fix_coords_by_ident = {}
+        self.adj = {}
+        self.graph_source = "UNAVAILABLE"
+
+    def _load_airways(self):
+        if PATH_FTWG_BIN.exists():
+            try:
+                self._load_ftwg_binary(PATH_FTWG_BIN)
+                return
+            except Exception as exc:
+                print(f"[NAV] Warning: invalid FTWG binary ({exc}); falling back to CSV.")
+                self.adj.clear()
+                self.fix_coords_by_ident.clear()
+        if not PATH_FIXES.exists() or not PATH_AIRWAYS.exists():
+            print("[NAV] FTWG binary and CSV fallback unavailable.")
+            return
+        with PATH_FIXES.open(newline="", encoding="utf-8", errors="replace") as f:
+            for row in csv.DictReader(f):
+                ident=(row.get("ident") or row.get("id") or row.get("fix_id") or "").strip().upper()
+                try: lat=float(row.get("lat") or row.get("latitude") or row.get("latitude_deg"))
+                except (TypeError,ValueError): continue
+                try: lon=float(row.get("lon") or row.get("longitude") or row.get("longitude_deg"))
+                except (TypeError,ValueError): continue
+                if ident: self.fix_coords_by_ident.setdefault(ident,(lat,lon))
+        edges=0
+        with PATH_AIRWAYS.open(newline="",encoding="utf-8",errors="replace") as f:
+            for row in csv.DictReader(f):
+                a=(row.get("from_fix") or row.get("start_fix") or row.get("fix1") or "").strip().upper()
+                b=(row.get("to_fix") or row.get("end_fix") or row.get("fix2") or "").strip().upper()
+                awy=(row.get("airway") or row.get("airway_id") or "").strip().upper()
+                if a in self.fix_coords_by_ident and b in self.fix_coords_by_ident:
+                    d=_nm(self.fix_coords_by_ident[a],self.fix_coords_by_ident[b])
+                    self.adj.setdefault(a,[]).append((b,d,awy))
+                    self.adj.setdefault(b,[]).append((a,d,awy))
+                    edges+=1
+        self.graph_source="CSV_FALLBACK"
+        print(f"[NAV] Loaded {edges:,} CSV fallback edges")
+
+    def _load_ftwg_binary(self, bin_path):
+        raw=bin_path.read_bytes()
+        if len(raw)<FTWG_HEADER.size: raise ValueError("truncated header")
+        magic,version,flags,nodes,edges=FTWG_HEADER.unpack_from(raw)
+        if magic!=FTWG_MAGIC: raise ValueError(f"bad magic {magic!r}")
+        expected=FTWG_HEADER.size+nodes*FTWG_NODE.size+edges*FTWG_EDGE.size
+        if len(raw)!=expected: raise ValueError(f"size {len(raw)} != expected {expected}")
+        idx=[]; off=FTWG_HEADER.size
+        for _ in range(nodes):
+            ident,lat,lon,kind=FTWG_NODE.unpack_from(raw,off); off+=FTWG_NODE.size
+            name=ident.split(b"\\0",1)[0].decode("ascii","ignore").strip().upper()
+            idx.append(name)
+            if name: self.fix_coords_by_ident.setdefault(name,(lat/1e6,lon/1e6))
+        loaded=0
+        for _ in range(edges):
+            u,v,dist,awy=FTWG_EDGE.unpack_from(raw,off); off+=FTWG_EDGE.size
+            if u>=nodes or v>=nodes: raise ValueError("edge index out of range")
+            a,b=idx[u],idx[v]
+            airway=awy.split(b"\\0",1)[0].decode("ascii","ignore").strip().upper()
+            if a and b:
+                self.adj.setdefault(a,[]).append((b,dist/10.0,airway))
+                loaded+=1
+        self.graph_source=f"FTWG_BINARY_V{version}"
+        print(f"[NAV] Loaded {nodes:,} nodes and {loaded:,} directed edges from {bin_path.name}")
+
+    def a_star_connected(self,start,end):
+        if start not in self.adj or end not in self.adj: return None
+        goal=self.fix_coords_by_ident[end]; startpos=self.fix_coords_by_ident[start]
+        queue=[(_nm(startpos,goal),0.0,start,[start])]; visited=set()
+        while queue:
+            _,cost,node,path=heapq.heappop(queue)
+            if node==end: return path,cost
+            if node in visited: continue
+            visited.add(node)
+            for nxt,w,_ in self.adj.get(node,[]):
+                if nxt in visited: continue
+                nc=cost+w
+                heapq.heappush(queue,(nc+_nm(self.fix_coords_by_ident[nxt],goal),nc,nxt,path+[nxt]))
+        return None
+
+
 
 class ConcatenatedHttpStream(io.RawIOBase):
     """Present multiple ordered release assets as one readable tar stream."""
