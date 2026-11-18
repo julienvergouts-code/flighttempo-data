@@ -1,6 +1,11 @@
 name: ADS-B corridor benchmark (real archive)
 
 on:
+  push:
+    branches: [feature/adsb-route-learning]
+    paths:
+      - "pipeline/**"
+      - ".github/workflows/update_corridors.yml"
   workflow_dispatch:
     inputs:
       date:
@@ -34,8 +39,8 @@ jobs:
         run: python pipeline/compile_ftwg_graph.py
       - name: Fetch real archive trace and validate corridor
         env:
-          RUN_DATE: ${{ inputs.date }}
-          ICAO24: ${{ inputs.icao24 }}
+          RUN_DATE: ${{ inputs.date || '2026-11-13' }}
+          ICAO24: ${{ inputs.icao24 || '440C1B' }}
         run: |
           set -euo pipefail
           python pipeline/build_corridors.py --mode benchmark --date "$RUN_DATE" --icao24 "$ICAO24" --output /tmp/benchmark_evidence.json
