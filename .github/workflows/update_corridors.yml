@@ -5,6 +5,8 @@ on:
     branches: [feature/adsb-route-learning]
     paths:
       - "pipeline/**"
+      - "scripts/adsb_learning/**"
+      - "tests/test_adsb_corridor_builder.py"
       - ".github/workflows/update_corridors.yml"
   workflow_dispatch:
     inputs:
