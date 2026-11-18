@@ -65,14 +65,27 @@ def nearest_airport(point, airports, radius=AIRPORT_ANCHOR_RADIUS_NM):
     return ident if d <= radius else None
 
 def anchor_airports(points, airports):
-    # Ground samples are preferred; airborne samples are fallback only.
+    # First use genuine ground samples close to an airport. If coverage begins
+    # or ends airborne, use the closest airport to the trace boundary (max 35 NM).
     ground = [p for p in points if p["ground"]]
-    for pool in (ground, points):
-        hits = [(p["t"], nearest_airport(p, airports)) for p in pool]
+    if ground:
+        hits = [(p["t"], nearest_airport(p, airports, 8.0)) for p in ground]
         hits = [(t, a) for t, a in hits if a]
-        if hits:
+        if len(hits) >= 2:
             return hits[0][1], hits[-1][1]
-    return None, None
+    def closest(point, radius):
+        ranked = [(distance_nm((point["lat"], point["lon"]), (lat, lon)), ident)
+                  for ident, lat, lon in airports]
+        if not ranked: return None
+        d, ident = min(ranked)
+        return ident if d <= radius else None
+    # Boundary windows tolerate missing ADS-B coverage at touchdown/liftoff.
+    window = max(1, min(30, len(points)//10))
+    starts = [closest(p, 35.0) for p in points[:window]]
+    ends = [closest(p, 35.0) for p in points[-window:]]
+    starts = [a for a in starts if a]
+    ends = [a for a in ends if a]
+    return (starts[0] if starts else None, ends[-1] if ends else None)
 
 def match_fixes(points, fixes, radius=FIX_MATCH_RADIUS_NM):
     matched = []
