@@ -26,6 +26,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+      - name: Install pipeline dependencies
+        run: python -m pip install -r pipeline/requirements.txt
       - name: Compile archive pipeline
         run: python -m py_compile pipeline/build_corridors.py pipeline/compile_ftwg_graph.py scripts/adsb_learning/build_corridors.py
       - name: Run ADS-B corridor unit tests
