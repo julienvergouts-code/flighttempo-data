@@ -26,6 +26,6 @@ jobs:
         with:
           python-version: "3.12"
       - name: Compile archive pipeline
-        run: python -m py_compile pipeline/build_corridors.py scripts/adsb_learning/build_corridors.py
+        run: python -m py_compile pipeline/build_corridors.py pipeline/compile_ftwg_graph.py scripts/adsb_learning/build_corridors.py
       - name: Run ADS-B corridor unit tests
         run: python -m unittest discover -s tests -p "test_adsb_corridor_builder.py" -v
