@@ -97,7 +97,7 @@ class RepositoryNavDatabase:
         idx=[]; off=FTWG_HEADER.size
         for _ in range(nodes):
             ident,lat,lon,kind=FTWG_NODE.unpack_from(raw,off); off+=FTWG_NODE.size
-            name=ident.split(b"\\0",1)[0].decode("ascii","ignore").strip().upper()
+            name=ident.split(b"\x00",1)[0].decode("ascii","ignore").strip().upper()
             idx.append(name)
             if name: self.fix_coords_by_ident.setdefault(name,(lat/1e6,lon/1e6))
         loaded=0
@@ -105,7 +105,7 @@ class RepositoryNavDatabase:
             u,v,dist,awy=FTWG_EDGE.unpack_from(raw,off); off+=FTWG_EDGE.size
             if u>=nodes or v>=nodes: raise ValueError("edge index out of range")
             a,b=idx[u],idx[v]
-            airway=awy.split(b"\\0",1)[0].decode("ascii","ignore").strip().upper()
+            airway=awy.split(b"\x00",1)[0].decode("ascii","ignore").strip().upper()
             if a and b:
                 self.adj.setdefault(a,[]).append((b,dist/10.0,airway))
                 loaded+=1
