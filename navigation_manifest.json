@@ -104,7 +104,8 @@
     "aeroSorsIlsFacilities": false,
     "aerosors_ge_navaids": false,
     "aerosors_ge_airports": false,
-    "globalAirlineDirectory": true
+    "globalAirlineDirectory": true,
+    "easaSafetyDirectives": true
   },
   "procedureCoverageStatus": "FAA_US_NAS_ONLY_TEST_DATA; EUROPE_FRANCE_SOURCE_NOT_INGESTED; ASIA_NO_PUBLIC_REDISTRIBUTABLE_SOURCE_CONFIRMED",
   "procedureOperationalUse": false,
@@ -668,30 +669,6 @@
       "operationallyAvailable": false
     },
     {
-      "id": "easa_czibs",
-      "path": "airspace/advisories/easa_czibs.json",
-      "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/airspace/advisories/easa_czibs.json",
-      "available": true,
-      "recordCount": 34,
-      "sizeBytes": 18566,
-      "sha256": "a13df3097ded1a3e965d5185d636d86af391c97622329498353c87899ad8aded",
-      "status": "advisory_reference_not_operational",
-      "license": "EASA source acknowledgement",
-      "operationallyAvailable": false
-    },
-    {
-      "id": "easa_safety_directives",
-      "path": "airspace/advisories/easa_safety_directives.json",
-      "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/airspace/advisories/easa_safety_directives.json",
-      "available": true,
-      "recordCount": 2,
-      "sizeBytes": 3941,
-      "sha256": "531d42feed30978bb7574c75f69782b8b19d32a34424ef67ddef8fe5e3a625d3",
-      "status": "operator_scope_reference_only",
-      "license": "EASA source acknowledgement",
-      "operationallyAvailable": false
-    },
-    {
       "id": "route_policy",
       "path": "airspace/route_policy.json",
       "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/airspace/route_policy.json",
@@ -714,6 +691,57 @@
       "status": "reference_only_currentness_unverified",
       "license": "FAA public reference; currentness unverified",
       "operationallyAvailable": false
+    },
+    {
+      "id": "easa_czibs",
+      "path": "airspace/advisories/easa_czibs.json",
+      "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/airspace/advisories/easa_czibs.json",
+      "available": true,
+      "recordCount": 34,
+      "sizeBytes": 18566,
+      "sha256": "1110f70f7d573c626905be6647fa035800c5df6515f29198ed5754d6aa664f2c",
+      "sourceProvider": "European Union Aviation Safety Agency (EASA)",
+      "sourceUrl": "https://www.easa.europa.eu/en/domains/air-operations/czibs",
+      "license": "EASA website copyright notice: reproduction authorised provided source is acknowledged",
+      "licenseStatus": "reproduction_authorised_with_source_acknowledgement",
+      "dataCycle": "not_applicable",
+      "downloadPurpose": "advisory_reference_only",
+      "operationallyAvailable": false,
+      "status": "advisory_reference_not_operational"
+    },
+    {
+      "id": "easa_safety_directives",
+      "path": "airspace/advisories/easa_safety_directives.json",
+      "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/airspace/advisories/easa_safety_directives.json",
+      "available": true,
+      "recordCount": 2,
+      "sizeBytes": 3941,
+      "sha256": "531d42feed30978bb7574c75f69782b8b19d32a34424ef67ddef8fe5e3a625d3",
+      "sourceProvider": "European Union Aviation Safety Agency (EASA)",
+      "sourceUrl": "https://www.easa.europa.eu/en/domains/air-operations/czibs",
+      "license": "EASA website copyright notice: reproduction authorised provided source is acknowledged",
+      "licenseStatus": "reproduction_authorised_with_source_acknowledgement",
+      "dataCycle": "not_applicable",
+      "downloadPurpose": "operator_scope_safety_directive_reference_only",
+      "operationallyAvailable": false,
+      "status": "reference_only_not_universal_no_fly"
+    },
+    {
+      "id": "airspace_filter",
+      "path": "airspace/airspace_filter.json",
+      "available": false,
+      "recordCount": 16,
+      "sizeBytes": 38045,
+      "sha256": "6f7e8d5abae124557de3ac815f5f7143a3a5bf6522e1688b629ce6e5308c7510",
+      "sourceProvider": "European Union Aviation Safety Agency (EASA)",
+      "sourceUrl": "https://www.easa.europa.eu/en/domains/air-operations/czibs",
+      "license": "EASA website copyright notice: reproduction authorised provided source is acknowledged",
+      "licenseStatus": "reproduction_authorised_with_source_acknowledgement",
+      "dataCycle": "not_applicable",
+      "downloadPurpose": "route_preview_advisory_filter_only",
+      "operationallyAvailable": false,
+      "status": "not_published_redistribution_rights_unconfirmed_or_non_commercial_only",
+      "downloadBlockReason": "Retained for research/provenance only. Do not publish through the app download manifest until redistribution rights suitable for the intended product have been confirmed in writing."
     }
   ],
   "downloadContract": {
