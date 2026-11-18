@@ -28,6 +28,6 @@ jobs:
         with:
           python-version: "3.12"
       - name: Run route preview unit tests
-        run: python -m unittest tests/test_route_preview.py -v
-      - name: Run EDDV-LG G offline route smoke test
+        run: python tests/test_route_preview.py -v
+      - name: Run EDDV-EBLG offline route smoke test
         run: python scripts/route_preview.py EDDV EBLG --altitude-ft 25000
