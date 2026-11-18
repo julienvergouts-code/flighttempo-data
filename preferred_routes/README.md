@@ -32,3 +32,19 @@ The schema and empty dataset establish the storage contract. The existing A* gra
 EUROCONTROL NM B2B and FAA SWIM are possible restricted/authorised sources for actual filed flight data. Do not label any generated route as filed. OpenSky and ADS-B sources provide observed positions/tracks, not public filed OFPs. Access and redistribution terms must be checked per provider.
 
 No AIP ingestion is introduced by this subsystem. No proprietary commercial navdata is used.
+
+
+## Implemented offline route preview
+
+`scripts/route_preview.py` now reads the existing FTWG binary graph directly and runs an altitude-filtered A* search between ICAO airport nodes. It emits a JSON route candidate with ordered graph nodes, airway labels, synthetic connector labels, distance and an explicit legacy-data warning.
+
+Example:
+
+```bash
+python scripts/route_preview.py EDDV EBLG --altitude-ft 25000
+python scripts/route_preview.py EBLG LFPG --altitude-ft 30000
+```
+
+This is a real offline graph query; it does not require a web route service. The graph is currently a 2012.08 legacy snapshot, so output is for route-preview and database-development only. Synthetic airport connectors are not SIDs or STARs. The CLI does not yet export each generated result into the preferred-route collection automatically; that is the next integration step.
+
+A sanitised EDDV–EBLG operator-supplied route reference example is stored in `operator_reference_routes.json`. It contains only the route sequence and no flight identifier, aircraft registration, date, crew details or OFP document. It remains unvalidated against the graph and must not be treated as current operational data.
