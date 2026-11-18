@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Fetch and validate one real ADSB.lol historical readsb trace.
+"""Fetch and validate one real ADSB.lol historical readsb trace.\n\nAirport-anchor failures include nearest terminal distances for diagnosis.
 
 Benchmark-only by design. It never fabricates data and never publishes raw traces.
 Global whole-sky ingestion is intentionally gated until this path has been validated.
