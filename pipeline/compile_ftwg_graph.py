@@ -47,13 +47,17 @@ def compile_graph(out):
  by={}
  for i,n in enumerate(nodes): by.setdefault(n[0],[]).append(i)
  if not AIRWAYS.exists(): raise FileNotFoundError(AIRWAYS)
- edges={}
+ edges={}; rows=0; resolved=0
  with AIRWAYS.open(newline="",encoding="utf-8",errors="replace") as f:
-  for row in csv.DictReader(f):
-   airway=field(row,"airway","airway_id","route").upper()[:6]
-   a=field(row,"from_fix","start_fix","fix1","from_id","source_fix").upper()
-   b=field(row,"to_fix","end_fix","fix2","to_id","target_fix").upper()
+  reader=csv.DictReader(f)
+  print("[FTWG] airway CSV columns:", reader.fieldnames)
+  for row in reader:
+   rows+=1
+   airway=field(row,"airway","airway_id","route","airway_name","name").upper()[:6]
+   a=field(row,"from_fix","start_fix","fix1","from_id","source_fix","from_ident","source_ident","fix_from","fix_a","start","from","start_ident","from_waypoint","start_fix_ident").upper()
+   b=field(row,"to_fix","end_fix","fix2","to_id","target_fix","to_ident","target_ident","fix_to","fix_b","end","to","end_ident","to_waypoint","end_fix_ident").upper()
    if a not in by or b not in by or a==b: continue
+   resolved+=1
    best=None
    for u in by[a]:
     for v in by[b]:
@@ -64,8 +68,9 @@ def compile_graph(out):
    direction=field(row,"direction","dir").upper()
    pairs=[(u,v)] if direction in ("F","FORWARD","1") else [(u,v),(v,u)]
    for x,y in pairs: edges[(x,y,airway)]=(x,y,tenths,airway)
+ print(f"[FTWG] examined {rows:,} airway rows; resolved {resolved:,} endpoint pairs")
  if not edges:
-  raise RuntimeError(f"No airway edges resolved from {rows} CSV rows; inspect the logged header and map its endpoint columns.")
+  raise RuntimeError("No airway edges resolved; CSV endpoint schema is not mapped or data is empty.")
  packed=sorted(edges.values())
  out.parent.mkdir(parents=True,exist_ok=True)
  with out.open("wb") as f:
