@@ -133,7 +133,27 @@ def process_trace(path, airports, fixes, graph_airports):
         raise ValueError(f"{path}: fewer than two valid trace points")
     origin, destination = anchor_airports(points, airports)
     if not origin or not destination:
-        raise ValueError(f"{path}: unable to establish both airport anchors")
+        def nearest_summary(window):
+            samples = []
+            for point in window:
+                if not airports:
+                    continue
+                distance, ident = min(
+                    (distance_nm((point["lat"], point["lon"]), (lat, lon)), ident)
+                    for ident, lat, lon in airports
+                )
+                samples.append((distance, ident))
+            if not samples:
+                return "no-airport-reference"
+            distance, ident = min(samples)
+            return f"{ident}:{distance:.1f}NM"
+        raise ValueError(
+            f"{path}: unable to establish both airport anchors "
+            f"(origin={origin or 'none'}, destination={destination or 'none'}, "
+            f"ground_samples={sum(1 for point in points if point['ground'])}, "
+            f"nearest_start={nearest_summary(points[:10])}, "
+            f"nearest_end={nearest_summary(list(reversed(points[-10:])))})"
+        )
     if any(a.startswith(EXCLUDED_AIRPORT_PREFIXES) for a in (origin, destination)):
         return {"excluded": True, "reason": "US/territory airport prefix", "origin": origin, "destination": destination}
     if origin not in graph_airports or destination not in graph_airports:
