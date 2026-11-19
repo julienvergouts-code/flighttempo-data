@@ -51,6 +51,7 @@ jobs:
           AUTO_PICK: ${{ inputs.auto_pick_4ca && 'true' || 'false' }}
         run: |
           set -euo pipefail
+          trap 'rm -f /tmp/archive.aa /tmp/archive.ab /tmp/benchmark_trace.raw' EXIT
           if [[ "$AUTO_PICK" == "true" ]]; then
             python pipeline/build_corridors.py --mode benchmark --date "$RUN_DATE" --auto-pick-4ca --output /tmp/benchmark_evidence.json
           else
@@ -72,7 +73,11 @@ jobs:
             wait "$PID_AA"
             wait "$PID_AB"
             echo "Extracting target trace_full_$HEX.json"
+            set +o pipefail
             cat /tmp/archive.aa /tmp/archive.ab | tar -xOf - --wildcards --occurrence=1 "*trace_full_$HEX.json*" > /tmp/benchmark_trace.raw
+            TAR_STATUS=$?
+            set -o pipefail
+            if [[ "$TAR_STATUS" -ne 0 ]]; then echo "tar extraction failed (exit $TAR_STATUS)" >&2; exit "$TAR_STATUS"; fi
             test -s /tmp/benchmark_trace.raw
             rm -f /tmp/archive.aa /tmp/archive.ab
             python pipeline/build_corridors.py --mode benchmark --date "$RUN_DATE" --icao24 "$ICAO24" --trace-file /tmp/benchmark_trace.raw --output /tmp/benchmark_evidence.json
