@@ -253,6 +253,7 @@ def main():
     parser.add_argument("--mode", choices=("benchmark", "global"), default="benchmark")
     parser.add_argument("--icao24", help="Six-character ICAO24 for benchmark mode")
     parser.add_argument("--auto-pick-4ca", action="store_true", help="Select first qualifying Irish Ryanair 4CA trace (>100 KB)")
+    parser.add_argument("--trace-file", help="Local extracted trace (raw or gzip-compressed)")
     parser.add_argument("--output", default="adsb/corridors/benchmark_evidence.json")
     args = parser.parse_args()
 
@@ -268,7 +269,18 @@ def main():
 
     with tempfile.TemporaryDirectory(prefix="flighttempo-adsb-") as tmp:
         trace = Path(tmp) / "benchmark_trace.json"
-        release = find_trace(args.date, args.icao24, trace, args.auto_pick_4ca)
+        if args.trace_file:
+            raw = Path(args.trace_file).read_bytes()
+            if raw[:2] == b"\\x1f\\x8b":
+                raw = gzip.decompress(raw)
+            document = json.loads(raw)
+            if not isinstance(document, dict) or not isinstance(document.get("trace"), list):
+                raise RuntimeError(f"Local trace file is not a readsb trace document: {args.trace_file}")
+            trace.write_bytes(raw)
+            release = {"source": "workflow-local-extraction", "release_tag": f"v{args.date}"}
+            print(f"[archive] local trace loaded: {len(document['trace'])} rows", flush=True)
+        else:
+            release = find_trace(args.date, args.icao24, trace, args.auto_pick_4ca)
         out = Path(args.output)
         out.parent.mkdir(parents=True, exist_ok=True)
         subprocess.run([sys.executable, str(BUILDER), "--trace", str(trace),
