@@ -13,12 +13,17 @@ on:
       date:
         description: "UTC archive date (YYYY-MM-DD)"
         required: true
-        default: "2026-11-18"
+        default: "2026-11-17"
         type: string
-      icao24:
-        description: "Six-character benchmark ICAO24 hex"
+      auto_pick_4ca:
+        description: "Automatically select first qualifying Ryanair Irish 4CA airframe"
         required: true
-        default: "4CA2D5"
+        default: true
+        type: boolean
+      icao24:
+        description: "Six-character benchmark ICAO24 hex (ignored in auto-pick mode)"
+        required: false
+        default: ""
         type: string
 
 permissions:
@@ -41,11 +46,16 @@ jobs:
         run: python pipeline/compile_ftwg_graph.py
       - name: Fetch real archive trace and validate corridor
         env:
-          RUN_DATE: ${{ inputs.date || '2026-11-18' }}
-          ICAO24: ${{ inputs.icao24 || '4CA2D5' }}
+          RUN_DATE: ${{ inputs.date || '2026-11-17' }}
+          ICAO24: ${{ inputs.icao24 || '' }}
+          AUTO_PICK: ${{ inputs.auto_pick_4ca || 'true' }}
         run: |
           set -euo pipefail
-          python pipeline/build_corridors.py --mode benchmark --date "$RUN_DATE" --icao24 "$ICAO24" --output /tmp/benchmark_evidence.json
+          if [[ "$AUTO_PICK" == "true" ]]; then
+            python pipeline/build_corridors.py --mode benchmark --date "$RUN_DATE" --auto-pick-4ca --output /tmp/benchmark_evidence.json
+          else
+            python pipeline/build_corridors.py --mode benchmark --date "$RUN_DATE" --icao24 "$ICAO24" --output /tmp/benchmark_evidence.json
+          fi
       - name: Upload validated anonymised evidence
         uses: actions/upload-artifact@v4
         with:
