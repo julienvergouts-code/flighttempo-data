@@ -261,6 +261,17 @@ def main():
         observed = result.get("matchedFixes", [])
         graph_status = "UNVERIFIED_ENDPOINTS"
         overlap = 0.0
+        endpoint_diagnostics = {
+            "matched_fix_count": len(observed),
+            "origin_airport": result.get("origin"),
+            "destination_airport": result.get("destination"),
+            "first_matched_fix": observed[0] if observed else None,
+            "last_matched_fix": observed[-1] if observed else None,
+            "first_fix_in_graph": observed[0] in nav.adj if observed else False,
+            "last_fix_in_graph": observed[-1] in nav.adj if observed else False,
+            "first_fix_degree": len(nav.adj.get(observed[0], [])) if observed else 0,
+            "last_fix_degree": len(nav.adj.get(observed[-1], [])) if observed else 0,
+        }
         if len(observed) >= 2:
             astar = nav.a_star_connected(observed[0], observed[-1])
             if astar is None:
@@ -274,9 +285,11 @@ def main():
             "graph_source": nav.graph_source,
             "status": graph_status,
             "fix_jaccard_overlap": overlap,
+            "diagnostics": endpoint_diagnostics,
         }
+        print("[BENCHMARK] FTWG endpoint diagnostics: " + json.dumps(endpoint_diagnostics), flush=True)
         if graph_status != "CONNECTED_FTWG":
-            raise RuntimeError(f"Benchmark FTWG comparison failed: {graph_status} ({nav.graph_source})")
+            raise RuntimeError(f"Benchmark FTWG comparison failed: {graph_status} ({nav.graph_source}); diagnostics={json.dumps(endpoint_diagnostics)}")
         # Do not serialize aircraft identity or the source trace into the published artifact.
         forbidden = {"hex", "icao", "registration", "callsign"}
         def scan(value):
