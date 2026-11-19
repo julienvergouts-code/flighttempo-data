@@ -151,7 +151,7 @@ def split_flight_legs(points, max_gap_seconds=1200):
                              "after_ground": [], "segmentation": "GROUND_TRANSITIONS_OPEN_END"})
     return legs or [{"points": points, "segmentation": "NO_USABLE_AIRBORNE_SEGMENTS"}]
 
-def airport_from_ground(window, airports, radius=25.0):
+def airport_from_ground(window, airports, radius=AIRPORT_ANCHOR_RADIUS_NM):
     if not window or not airports:
         return None
     votes = defaultdict(lambda: [0, 0.0])
@@ -220,9 +220,33 @@ def process_trace(path, airports, fixes, graph_airports):
             continue
         if origin not in graph_airports or destination not in graph_airports:
             raise ValueError(f"{path}: leg {leg_no} airport missing from graph: {origin}/{destination}")
+        duration_minutes = (leg_points[-1]["t"] - leg_points[0]["t"]) / 60.0
+        max_distance_from_origin = max(distance_nm((p["lat"], p["lon"]),
+                                      next(( (lat, lon) for ident, lat, lon in airports if ident == origin), (p["lat"], p["lon"])))
+                                      for p in leg_points)
+        max_alt = max((p.get("altitude_ft") or 0 for p in leg_points), default=0)
+        max_speed = max((p.get("groundspeed_kt") or 0 for p in leg_points), default=0)
+        if max_alt <= 1000 and max_speed <= 80:
+            results.append({"excluded": True, "reason": "GROUND_ONLY_OR_LOW_ACTIVITY",
+                            "legNumber": leg_no, "origin": origin, "destination": destination,
+                            "segmentation": segment["segmentation"], "positionCount": len(leg_points),
+                            "maxAltitudeFt": max_alt, "maxGroundspeedKt": max_speed})
+            continue
+        local_rtb = origin == destination
+        if local_rtb and (duration_minutes <= 15 or max_distance_from_origin <= 15):
+            results.append({"excluded": True, "reason": "LOCAL_OR_RTB_BELOW_GUARD",
+                            "legNumber": leg_no, "origin": origin, "destination": destination,
+                            "segmentation": segment["segmentation"], "positionCount": len(leg_points),
+                            "durationMinutes": round(duration_minutes, 1),
+                            "maxDistanceFromAirportNm": round(max_distance_from_origin, 1)})
+            continue
         matches = match_fixes(leg_points, fixes)
         results.append({"excluded": False, "legNumber": leg_no, "origin": origin,
                         "destination": destination, "segmentation": segment["segmentation"],
+                        "routeType": "LOCAL_OR_RTB" if local_rtb else "POINT_TO_POINT",
+                        "durationMinutes": round(duration_minutes, 1),
+                        "maxDistanceFromAirportNm": round(max_distance_from_origin, 1),
+                        "maxAltitudeFt": max_alt, "maxGroundspeedKt": max_speed,
                         "positionCount": len(leg_points), "matchedFixes": [m["fix"] for m in matches],
                         "matchCount": len(matches),
                         "geometry": [[round(p["lat"], 4), round(p["lon"], 4)] for p in leg_points[::max(1, len(leg_points)//100)]],
