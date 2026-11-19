@@ -181,8 +181,16 @@ def main():
     airports, fixes = load_airports(args.airports), []
     with open(args.waypoints, newline="", encoding="utf-8") as f:
         for row in csv.DictReader(f):
-            try: fixes.append((row["id"], float(row["latitude"]), float(row["longitude"])))
-            except (KeyError, ValueError): continue
+            ident = (row.get("ident") or row.get("id") or row.get("fix_id") or
+                     row.get("navaid_id") or row.get("name") or "").strip().upper()
+            try:
+                lat = float(row.get("lat") or row.get("latitude") or row.get("latitude_deg"))
+                lon = float(row.get("lon") or row.get("longitude") or row.get("longitude_deg"))
+            except (TypeError, ValueError):
+                continue
+            if ident and len(ident) <= 8 and -90 <= lat <= 90 and -180 <= lon <= 180:
+                fixes.append((ident, lat, lon))
+    print(f"[ADS-B] Loaded {len(fixes):,} waypoint/fix coordinates from {args.waypoints.name}", flush=True)
     results, routes = [], []
     for trace in args.trace:
         result = process_trace(trace, airports, fixes, graph_airports)
