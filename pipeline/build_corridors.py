@@ -193,21 +193,35 @@ def release_assets(date: str, session: requests.Session) -> tuple[dict, list[str
     raise RuntimeError(f"No ADSB.lol production or staging archive release found for {date}")
 
 
-def find_trace(date: str, icao24: str, output: Path) -> dict:
+def find_trace(date: str, icao24: str | None, output: Path, auto_pick_4ca: bool = False) -> dict:
     session = requests.Session()
     session.headers.update({"User-Agent": "FlightTempo-ADS-B-corridor-benchmark/1.0",
                             "Accept": "application/vnd.github+json"})
     release, urls = release_assets(date, session)
-    wanted = f"trace_full_{icao24.lower()}.json"
+    wanted = f"trace_full_{icao24.lower()}.json" if icao24 else None
     found = False
+    candidates = []
+    scanned = 0
+    trace_members = 0
     with ConcatenatedHttpStream(urls, session) as raw:
         with io.BufferedReader(raw, buffer_size=CHUNK) as buffered:
             with tarfile.open(fileobj=buffered, mode="r|") as archive:
                 for member in archive:
                     member_name = member.name.replace("\\", "/").strip().lower()
                     name = member_name.rsplit("/", 1)[-1]
-                    if not member.isfile() or not (name == wanted or name == wanted + ".gz"):
+                    scanned += 1
+                    if not member.isfile():
                         continue
+                    if name.startswith("trace_full_"):
+                        trace_members += 1
+                    target = (name == wanted or name == wanted + ".gz") if wanted else (
+                        auto_pick_4ca and name.startswith("trace_full_4ca") and
+                        (name.endswith(".json") or name.endswith(".json.gz")) and member.size > 100_000)
+                    if not target:
+                        continue
+                    if auto_pick_4ca:
+                        candidates.append({"member": member.name, "size": member.size})
+                        print(f"[archive] candidate {member.name} size={member.size}", flush=True)
                     source = archive.extractfile(member)
                     if source is None:
                         continue
@@ -220,9 +234,15 @@ def find_trace(date: str, icao24: str, output: Path) -> dict:
                         raise RuntimeError(f"Archive member {member.name} is not a readsb trace document")
                     output.write_bytes(payload)
                     found = True
+                    if auto_pick_4ca:
+                        icao24 = name.split("trace_full_", 1)[-1].split(".", 1)[0]
+                        print(f"[archive] AUTO-PICK selected hex={icao24} member={member.name} size={member.size}", flush=True)
                     print(f"[archive] found and parsed {member.name}; {len(document['trace'])} rows", flush=True)
                     break
+    print(f"[archive] scan summary: members_scanned={scanned} trace_full_members={trace_members} auto_pick_candidates={len(candidates)}", flush=True)
     if not found:
+        if auto_pick_4ca:
+            raise RuntimeError(f"No qualifying trace_full_4ca*.json(.gz) member >100000 bytes in {date} archive; scanned={scanned}, trace_full={trace_members}")
         raise RuntimeError(f"ICAO24 {icao24} was not present in the {date} archive")
     return {"release_tag": release.get("tag_name"), "release_url": release.get("html_url")}
 
@@ -231,21 +251,24 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--date", required=True, help="UTC archive date YYYY-MM-DD")
     parser.add_argument("--mode", choices=("benchmark", "global"), default="benchmark")
-    parser.add_argument("--icao24", help="Required for benchmark mode")
+    parser.add_argument("--icao24", help="Six-character ICAO24 for benchmark mode")
+    parser.add_argument("--auto-pick-4ca", action="store_true", help="Select first qualifying Irish Ryanair 4CA trace (>100 KB)")
     parser.add_argument("--output", default="adsb/corridors/benchmark_evidence.json")
     args = parser.parse_args()
 
     datetime.strptime(args.date, "%Y-%m-%d")
     if args.mode == "global":
         raise SystemExit("Global ingestion is deliberately locked until real benchmark archive validation passes.")
-    if not args.icao24 or not re.fullmatch(r"[0-9a-fA-F]{6}", args.icao24):
-        raise SystemExit("Benchmark mode requires a six-character ICAO24 hex via --icao24.")
+    if not args.auto_pick_4ca and (not args.icao24 or not re.fullmatch(r"[0-9a-fA-F]{6}", args.icao24)):
+        raise SystemExit("Benchmark mode requires --icao24 or --auto-pick-4ca.")
+    if args.auto_pick_4ca and args.icao24:
+        raise SystemExit("Use --auto-pick-4ca without --icao24.")
     if not BUILDER.is_file():
         raise SystemExit(f"Existing corridor builder not found: {BUILDER}")
 
     with tempfile.TemporaryDirectory(prefix="flighttempo-adsb-") as tmp:
         trace = Path(tmp) / "benchmark_trace.json"
-        release = find_trace(args.date, args.icao24, trace)
+        release = find_trace(args.date, args.icao24, trace, args.auto_pick_4ca)
         out = Path(args.output)
         out.parent.mkdir(parents=True, exist_ok=True)
         subprocess.run([sys.executable, str(BUILDER), "--trace", str(trace),
