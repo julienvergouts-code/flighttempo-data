@@ -99,6 +99,45 @@ def anchor_airports(points, airports):
 
     return resolve_window(points[:10]), resolve_window(list(reversed(points[-10:])))
 
+def split_flight_legs(points):
+    """Split aircraft-day traces into airborne legs bounded by ground samples."""
+    if not points:
+        return []
+    if sum(1 for p in points if p["ground"]) < 2:
+        return [{"points": points, "segmentation": "NO_GROUND_FLAGS"}]
+    legs, in_air, start = [], False, None
+    for i, point in enumerate(points):
+        if not point["ground"] and not in_air:
+            in_air, start = True, i
+        elif point["ground"] and in_air:
+            airborne = points[start:i]
+            if len(airborne) >= 2:
+                legs.append({"points": airborne,
+                            "before_ground": points[max(0, start-10):start],
+                            "after_ground": points[i:min(len(points), i+10)],
+                            "segmentation": "GROUND_TRANSITIONS"})
+            in_air, start = False, None
+    if in_air and start is not None:
+        airborne = points[start:]
+        if len(airborne) >= 2:
+            legs.append({"points": airborne, "before_ground": points[max(0,start-10):start],
+                         "after_ground": [], "segmentation": "GROUND_TRANSITIONS_OPEN_END"})
+    return legs or [{"points": points, "segmentation": "NO_USABLE_AIRBORNE_SEGMENTS"}]
+
+def airport_from_ground(window, airports, radius=25.0):
+    if not window or not airports:
+        return None
+    votes = defaultdict(lambda: [0, 0.0])
+    for point in window:
+        distance, ident = min((distance_nm((point["lat"], point["lon"]), (lat, lon)), ident)
+                              for ident, lat, lon in airports)
+        if distance <= radius:
+            votes[ident][0] += 1
+            votes[ident][1] += distance
+    if not votes:
+        return None
+    return min(votes, key=lambda ident: (-votes[ident][0], votes[ident][1], ident))
+
 def match_fixes(points, fixes, radius=FIX_MATCH_RADIUS_NM):
     matched = []
     for p in points:
@@ -134,39 +173,34 @@ def process_trace(path, airports, fixes, graph_airports):
     meta, points = read_points(path)
     if len(points) < 2:
         raise ValueError(f"{path}: fewer than two valid trace points")
-    origin, destination = anchor_airports(points, airports)
-    if not origin or not destination:
-        def nearest_summary(window):
-            samples = []
-            for point in window:
-                if not airports:
-                    continue
-                distance, ident = min(
-                    (distance_nm((point["lat"], point["lon"]), (lat, lon)), ident)
-                    for ident, lat, lon in airports
-                )
-                samples.append((distance, ident))
-            if not samples:
-                return "no-airport-reference"
-            distance, ident = min(samples)
-            return f"{ident}:{distance:.1f}NM"
-        raise ValueError(
-            f"{path}: unable to establish both airport anchors "
-            f"(origin={origin or 'none'}, destination={destination or 'none'}, "
-            f"ground_samples={sum(1 for point in points if point['ground'])}, "
-            f"nearest_start={nearest_summary(points[:10])}, "
-            f"nearest_end={nearest_summary(list(reversed(points[-10:])))})"
-        )
-    if any(a.startswith(EXCLUDED_AIRPORT_PREFIXES) for a in (origin, destination)):
-        return {"excluded": True, "reason": "US/territory airport prefix", "origin": origin, "destination": destination}
-    if origin not in graph_airports or destination not in graph_airports:
-        raise ValueError(f"{path}: airport missing from FTWG graph: {origin}/{destination}")
-    matches = match_fixes(points, fixes)
-    return {"excluded": False, "origin": origin, "destination": destination,
-            "positionCount": len(points), "matchedFixes": [m["fix"] for m in matches],
-            "matchCount": len(matches), "geometry": [[round(p["lat"], 4), round(p["lon"], 4)] for p in points[::max(1, len(points)//100)]],
-            "candidateLinks": candidate_links(matches),
-            "graphComparison": "pending"}
+    segments = split_flight_legs(points)
+    results = []
+    for leg_no, segment in enumerate(segments, 1):
+        leg_points = segment["points"]
+        before, after = segment.get("before_ground", []), segment.get("after_ground", [])
+        origin = airport_from_ground(before, airports) if before else None
+        destination = airport_from_ground(after, airports) if after else None
+        if not origin or not destination:
+            fallback_origin, fallback_destination = anchor_airports(leg_points, airports)
+            origin, destination = origin or fallback_origin, destination or fallback_destination
+        if not origin or not destination:
+            raise ValueError(f"{path}: leg {leg_no} airport anchors unresolved ({origin or 'none'}->{destination or 'none'}); segmentation={segment['segmentation']}")
+        excluded = any(a.startswith(EXCLUDED_AIRPORT_PREFIXES) for a in (origin, destination))
+        if excluded:
+            results.append({"excluded": True, "legNumber": leg_no, "origin": origin,
+                            "destination": destination, "segmentation": segment["segmentation"],
+                            "positionCount": len(leg_points)})
+            continue
+        if origin not in graph_airports or destination not in graph_airports:
+            raise ValueError(f"{path}: leg {leg_no} airport missing from graph: {origin}/{destination}")
+        matches = match_fixes(leg_points, fixes)
+        results.append({"excluded": False, "legNumber": leg_no, "origin": origin,
+                        "destination": destination, "segmentation": segment["segmentation"],
+                        "positionCount": len(leg_points), "matchedFixes": [m["fix"] for m in matches],
+                        "matchCount": len(matches),
+                        "geometry": [[round(p["lat"], 4), round(p["lon"], 4)] for p in leg_points[::max(1, len(leg_points)//100)]],
+                        "candidateLinks": candidate_links(matches), "graphComparison": "pending"})
+    return results
 
 def main():
     p = argparse.ArgumentParser(description=__doc__)
@@ -193,15 +227,18 @@ def main():
     print(f"[ADS-B] Loaded {len(fixes):,} waypoint/fix coordinates from {args.waypoints.name}", flush=True)
     results, routes = [], []
     for trace in args.trace:
-        result = process_trace(trace, airports, fixes, graph_airports)
-        if not result["excluded"]:
-            route = route_preview.find_route(nodes, graph_airports, adjacency, result["origin"], result["destination"], args.altitude_ft)
-            result["graphComparison"] = {"status": "path_found", "routeClass": route["routeClass"],
-                                         "graphDistanceNm": route["distanceNm"],
-                                         "graphFixSequence": route["nodes"],
-                                         "observedFixSequence": result["matchedFixes"]}
-            routes.append((result["origin"], result["destination"]))
-        results.append(result)
+        trace_legs = process_trace(trace, airports, fixes, graph_airports)
+        print(f"[ADS-B] {Path(trace).name}: segmented into {len(trace_legs)} leg(s): " +
+              ", ".join(f'{r.get("origin","?")}-{r.get("destination","?")} ({r.get("positionCount",0)} points, {r.get("matchCount",0)} fixes)' for r in trace_legs), flush=True)
+        for result in trace_legs:
+            if not result["excluded"]:
+                route = route_preview.find_route(nodes, graph_airports, adjacency, result["origin"], result["destination"], args.altitude_ft)
+                result["graphComparison"] = {"status": "path_found", "routeClass": route["routeClass"],
+                                             "graphDistanceNm": route["distanceNm"],
+                                             "graphFixSequence": route["nodes"],
+                                             "observedFixSequence": result["matchedFixes"]}
+                routes.append((result["origin"], result["destination"]))
+            results.append(result)
     # Only aggregate, de-identified outputs are serialised. No hex/reg/callsign or timestamps.
     corridors = defaultdict(lambda: {"samples": 0, "fixSequences": [], "candidateLinks": [], "geometry": []})
     for r in results:
