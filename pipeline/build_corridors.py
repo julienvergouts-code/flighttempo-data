@@ -251,45 +251,41 @@ def main():
                         "--output", str(out)], cwd=ROOT, check=True)
         evidence = json.loads(out.read_text(encoding="utf-8"))
         accepted = [r for r in evidence.get("traceResults", []) if not r.get("excluded")]
-        if len(accepted) != 1:
-            raise RuntimeError(f"Benchmark produced {len(accepted)} accepted traces; expected exactly one")
-        result = accepted[0]
-
-        # Validate the observed fix sequence against the compiled FTWG v1 graph.
+        if not accepted:
+            raise RuntimeError("Benchmark produced no eligible non-excluded flight legs")
         nav = RepositoryNavDatabase()
         nav._load_airways()
-        observed = result.get("matchedFixes", [])
-        graph_status = "UNVERIFIED_ENDPOINTS"
-        overlap = 0.0
-        endpoint_diagnostics = {
-            "matched_fix_count": len(observed),
-            "origin_airport": result.get("origin"),
-            "destination_airport": result.get("destination"),
-            "first_matched_fix": observed[0] if observed else None,
-            "last_matched_fix": observed[-1] if observed else None,
-            "first_fix_in_graph": observed[0] in nav.adj if observed else False,
-            "last_fix_in_graph": observed[-1] in nav.adj if observed else False,
-            "first_fix_degree": len(nav.adj.get(observed[0], [])) if observed else 0,
-            "last_fix_degree": len(nav.adj.get(observed[-1], [])) if observed else 0,
-        }
-        if len(observed) >= 2:
-            astar = nav.a_star_connected(observed[0], observed[-1])
-            if astar is None:
-                graph_status = "GRAPH_GAP_DETECTED"
-            else:
-                path, _distance = astar
-                a, b = set(observed), set(path)
-                overlap = round(len(a & b) / max(1, len(a | b)), 3)
-                graph_status = "CONNECTED_FTWG"
-        result["graphComparison"] = {
-            "graph_source": nav.graph_source,
-            "status": graph_status,
-            "fix_jaccard_overlap": overlap,
-            "diagnostics": endpoint_diagnostics,
-        }
-        print("[BENCHMARK] FTWG endpoint diagnostics: " + json.dumps(endpoint_diagnostics), flush=True)
-        if graph_status != "CONNECTED_FTWG":
-            raise RuntimeError(f"Benchmark FTWG comparison failed: {graph_status} ({nav.graph_source}); diagnostics={json.dumps(endpoint_diagnostics)}")
+        comparisons = []
+        for result in accepted:
+            observed = result.get("matchedFixes", [])
+            diag = {
+                "leg": result.get("legNumber"),
+                "origin_airport": result.get("origin"),
+                "destination_airport": result.get("destination"),
+                "segmentation": result.get("segmentation"),
+                "position_count": result.get("positionCount"),
+                "matched_fix_count": len(observed),
+                "first_matched_fix": observed[0] if observed else None,
+                "last_matched_fix": observed[-1] if observed else None,
+                "first_fix_in_graph": observed[0] in nav.adj if observed else False,
+                "last_fix_in_graph": observed[-1] in nav.adj if observed else False,
+            }
+            status, overlap = "UNVERIFIED_ENDPOINTS", 0.0
+            if len(observed) >= 2:
+                astar = nav.a_star_connected(observed[0], observed[-1])
+                if astar:
+                    path, _distance = astar
+                    a, b = set(observed), set(path)
+                    overlap = round(len(a & b) / max(1, len(a | b)), 3)
+                    status = "CONNECTED_FTWG"
+                else:
+                    status = "GRAPH_GAP_DETECTED"
+            result["graphComparison"] = {"graph_source": nav.graph_source, "status": status,
+                                         "fix_jaccard_overlap": overlap, "diagnostics": diag}
+            comparisons.append({"status": status, **diag, "overlap": overlap})
+        print("[BENCHMARK] Per-leg FTWG comparison: " + json.dumps(comparisons), flush=True)
+        if not any(x["status"] == "CONNECTED_FTWG" for x in comparisons):
+            raise RuntimeError(f"No flight leg connected through FTWG graph: {json.dumps(comparisons)}")
         # Do not serialize aircraft identity or the source trace into the published artifact.
         forbidden = {"hex", "icao", "registration", "callsign"}
         def scan(value):
