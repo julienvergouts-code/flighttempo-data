@@ -13,17 +13,17 @@ on:
       date:
         description: "UTC archive date (YYYY-MM-DD)"
         required: true
-        default: "2026-11-17"
+        default: "2026-11-16"
         type: string
       auto_pick_4ca:
         description: "Automatically select first qualifying Ryanair Irish 4CA airframe"
         required: true
-        default: true
+        default: false
         type: boolean
       icao24:
         description: "Six-character benchmark ICAO24 hex (ignored in auto-pick mode)"
         required: false
-        default: ""
+        default: "4CA2D5"
         type: string
 
 permissions:
@@ -46,9 +46,9 @@ jobs:
         run: python pipeline/compile_ftwg_graph.py
       - name: Fetch real archive trace and validate corridor
         env:
-          RUN_DATE: ${{ inputs.date || '2026-11-17' }}
-          ICAO24: ${{ inputs.icao24 || '' }}
-          AUTO_PICK: ${{ inputs.auto_pick_4ca || 'true' }}
+          RUN_DATE: ${{ inputs.date || '2026-11-16' }}
+          ICAO24: ${{ inputs.icao24 || '4CA2D5' }}
+          AUTO_PICK: ${{ inputs.auto_pick_4ca && 'true' || 'false' }}
         run: |
           set -euo pipefail
           if [[ "$AUTO_PICK" == "true" ]]; then
