@@ -540,7 +540,7 @@
       "sha256": "be974a777fe0da70bb143bedce4f05d5744c2c62ad382691937c4b35494bf3cf",
       "sourceProvider": "FAA AeroNav",
       "sourceUrl": "https://aeronav.faa.gov/Upload_313-d/cifp/CIFP_261029.zip",
-      "coverage": "United States / FAA National Airspace System — departure procedures",
+      "coverage": "United States / FAA National Airspace System \u2014 departure procedures",
       "sourceTag": "FAA_CIFP_2611",
       "license": "US Government Public Domain (FAA AeroNav)",
       "licenseStatus": "public_domain",
@@ -563,7 +563,7 @@
       "sha256": "6bf123c683e442c1a07fbc46f4f11ad45045f8322a1b2506d65f6719055c0c06",
       "sourceProvider": "FAA AeroNav",
       "sourceUrl": "https://aeronav.faa.gov/Upload_313-d/cifp/CIFP_261029.zip",
-      "coverage": "United States / FAA National Airspace System — arrival procedures",
+      "coverage": "United States / FAA National Airspace System \u2014 arrival procedures",
       "sourceTag": "FAA_CIFP_2611",
       "license": "US Government Public Domain (FAA AeroNav)",
       "licenseStatus": "public_domain",
@@ -586,7 +586,7 @@
       "sha256": "ff7b9121e79b56ff616a77e285c9cba764575fd2c58335b3281124813362d3dd",
       "sourceProvider": "FAA AeroNav",
       "sourceUrl": "https://aeronav.faa.gov/Upload_313-d/cifp/CIFP_261029.zip",
-      "coverage": "United States / FAA National Airspace System — instrument approaches",
+      "coverage": "United States / FAA National Airspace System \u2014 instrument approaches",
       "sourceTag": "FAA_CIFP_2611",
       "license": "US Government Public Domain (FAA AeroNav)",
       "licenseStatus": "public_domain",
@@ -669,30 +669,6 @@
       "operationallyAvailable": false
     },
     {
-      "id": "faa_prn_notams",
-      "path": "airspace/faa_prn_notams.json",
-      "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/airspace/faa_prn_notams.json",
-      "available": true,
-      "recordCount": 16,
-      "sizeBytes": 59342,
-      "sha256": "f2c970b5b2e83fd0accce38eae4d89b5e455817d81a5411b472b03d8716dc909",
-      "license": "FAA government source; public information",
-      "status": "reference_only_currentness_unverified",
-      "operationallyAvailable": false
-    },
-    {
-      "id": "route_policy",
-      "path": "airspace/route_policy.json",
-      "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/airspace/route_policy.json",
-      "available": true,
-      "recordCount": 1,
-      "sizeBytes": 2075,
-      "sha256": "773b000d643bf8e4d82bbc6734ae439765d184d3154c32f1c8ac018db70ff88a",
-      "license": "FlightTempo original configuration",
-      "status": "route_preview_policy",
-      "operationallyAvailable": false
-    },
-    {
       "id": "easa_czibs",
       "path": "airspace/advisories/easa_czibs.json",
       "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/airspace/advisories/easa_czibs.json",
@@ -727,21 +703,40 @@
       "status": "reference_only_not_universal_no_fly"
     },
     {
+      "id": "faa_prn_notams",
+      "path": "airspace/faa_prn_notams.json",
+      "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/airspace/faa_prn_notams.json",
+      "available": true,
+      "recordCount": 16,
+      "sizeBytes": 59342,
+      "sha256": "95d40f52182e8a3cceecbc84b61c88f538bd781867c2b913e2f97c2571b63d57",
+      "license": "FAA government source; public information",
+      "status": "reference_only_currentness_unverified",
+      "operationallyAvailable": false
+    },
+    {
       "id": "airspace_filter",
       "path": "airspace/airspace_filter.json",
-      "available": false,
+      "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/airspace/airspace_filter.json",
+      "available": true,
       "recordCount": 16,
       "sizeBytes": 38045,
       "sha256": "21d2183bf2159d9ec3b2874f705c96978fca287c824c5ce5292f6a71b2961215",
-      "sourceProvider": "European Union Aviation Safety Agency (EASA)",
-      "sourceUrl": "https://www.easa.europa.eu/en/domains/air-operations/czibs",
-      "license": "EASA website copyright notice: reproduction authorised provided source is acknowledged",
-      "licenseStatus": "reproduction_authorised_with_source_acknowledgement",
-      "dataCycle": "not_applicable",
-      "downloadPurpose": "route_preview_advisory_filter_only",
-      "operationallyAvailable": false,
-      "status": "not_published_redistribution_rights_unconfirmed_or_non_commercial_only",
-      "downloadBlockReason": "Retained for research/provenance only. Do not publish through the app download manifest until redistribution rights suitable for the intended product have been confirmed in writing."
+      "license": "EASA acknowledgement + OpenAIP CC BY-NC 4.0 + FAA reference",
+      "status": "advisory_and_conditional_reference_only",
+      "operationallyAvailable": false
+    },
+    {
+      "id": "route_policy",
+      "path": "airspace/route_policy.json",
+      "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/airspace/route_policy.json",
+      "available": true,
+      "recordCount": 1,
+      "sizeBytes": 2075,
+      "sha256": "773b000d643bf8e4d82bbc6734ae439765d184d3154c32f1c8ac018db70ff88a",
+      "license": "FlightTempo original configuration",
+      "status": "route_preview_policy",
+      "operationallyAvailable": false
     }
   ],
   "downloadContract": {
