@@ -13,12 +13,12 @@ on:
       date:
         description: "UTC archive date (YYYY-MM-DD)"
         required: true
-        default: "2026-11-13"
+        default: "2026-11-17"
         type: string
       icao24:
         description: "Six-character benchmark ICAO24 hex"
         required: true
-        default: "440C1B"
+        default: "4CA2D5"
         type: string
 
 permissions:
@@ -41,8 +41,8 @@ jobs:
         run: python pipeline/compile_ftwg_graph.py
       - name: Fetch real archive trace and validate corridor
         env:
-          RUN_DATE: ${{ inputs.date || '2026-11-13' }}
-          ICAO24: ${{ inputs.icao24 || '440C1B' }}
+          RUN_DATE: ${{ inputs.date || '2026-11-17' }}
+          ICAO24: ${{ inputs.icao24 || '4CA2D5' }}
         run: |
           set -euo pipefail
           python pipeline/build_corridors.py --mode benchmark --date "$RUN_DATE" --icao24 "$ICAO24" --output /tmp/benchmark_evidence.json
