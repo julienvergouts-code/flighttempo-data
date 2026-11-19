@@ -271,7 +271,7 @@ def main():
         trace = Path(tmp) / "benchmark_trace.json"
         if args.trace_file:
             raw = Path(args.trace_file).read_bytes()
-            if raw[:2] == b"\\x1f\\x8b":
+            if raw[:2] == b"\x1f\x8b":
                 raw = gzip.decompress(raw)
             document = json.loads(raw)
             if not isinstance(document, dict) or not isinstance(document.get("trace"), list):
