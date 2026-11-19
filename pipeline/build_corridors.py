@@ -204,7 +204,8 @@ def find_trace(date: str, icao24: str, output: Path) -> dict:
         with io.BufferedReader(raw, buffer_size=CHUNK) as buffered:
             with tarfile.open(fileobj=buffered, mode="r|") as archive:
                 for member in archive:
-                    name = member.name.rsplit("/", 1)[-1]
+                    member_name = member.name.replace("\\", "/").strip().lower()
+                    name = member_name.rsplit("/", 1)[-1]
                     if not member.isfile() or not (name == wanted or name == wanted + ".gz"):
                         continue
                     source = archive.extractfile(member)
