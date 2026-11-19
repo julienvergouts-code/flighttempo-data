@@ -38,8 +38,21 @@ def read_points(path):
         if not (-90 <= lat <= 90 and -180 <= lon <= 180):
             continue
         flags = int(row[6]) if len(row) > 6 and row[6] is not None else 0
+        altitude_ft = None
+        groundspeed_kt = None
+        try:
+            if len(row) > 3 and row[3] is not None and row[3] != "ground":
+                altitude_ft = float(row[3])
+        except (TypeError, ValueError):
+            pass
+        try:
+            if len(row) > 4 and row[4] is not None:
+                groundspeed_kt = float(row[4])
+        except (TypeError, ValueError):
+            pass
         points.append({"t": epoch + sec, "lat": lat, "lon": lon,
-                       "ground": bool(flags & 2)})
+                       "ground": bool(flags & 2), "altitude_ft": altitude_ft,
+                       "groundspeed_kt": groundspeed_kt})
     points.sort(key=lambda p: p["t"])
     return obj, points
 
@@ -99,29 +112,43 @@ def anchor_airports(points, airports):
 
     return resolve_window(points[:10]), resolve_window(list(reversed(points[-10:])))
 
-def split_flight_legs(points):
-    """Split aircraft-day traces into airborne legs bounded by ground samples."""
+def split_flight_legs(points, max_gap_seconds=1200):
+    """Split aircraft-day traces on >20 min gaps and reliable ground transitions."""
     if not points:
         return []
-    if sum(1 for p in points if p["ground"]) < 2:
-        return [{"points": points, "segmentation": "NO_GROUND_FLAGS"}]
-    legs, in_air, start = [], False, None
-    for i, point in enumerate(points):
-        if not point["ground"] and not in_air:
-            in_air, start = True, i
-        elif point["ground"] and in_air:
-            airborne = points[start:i]
+    chunks, current = [], [points[0]]
+    for point in points[1:]:
+        if point["t"] - current[-1]["t"] > max_gap_seconds:
+            chunks.append(current)
+            current = [point]
+        else:
+            current.append(point)
+    if current:
+        chunks.append(current)
+    legs = []
+    for chunk in chunks:
+        if sum(1 for p in chunk if p["ground"]) < 2:
+            # Time-gap-separated segments remain candidates; endpoints may be partial.
+            if len(chunk) >= 2:
+                legs.append({"points": chunk, "segmentation": "TIME_GAP_OR_NO_GROUND_FLAGS"})
+            continue
+        in_air, start = False, None
+        for i, point in enumerate(chunk):
+            if not point["ground"] and not in_air:
+                in_air, start = True, i
+            elif point["ground"] and in_air:
+                airborne = chunk[start:i]
+                if len(airborne) >= 2:
+                    legs.append({"points": airborne,
+                                "before_ground": chunk[max(0, start-10):start],
+                                "after_ground": chunk[i:min(len(chunk), i+10)],
+                                "segmentation": "GROUND_TRANSITIONS"})
+                in_air, start = False, None
+        if in_air and start is not None:
+            airborne = chunk[start:]
             if len(airborne) >= 2:
-                legs.append({"points": airborne,
-                            "before_ground": points[max(0, start-10):start],
-                            "after_ground": points[i:min(len(points), i+10)],
-                            "segmentation": "GROUND_TRANSITIONS"})
-            in_air, start = False, None
-    if in_air and start is not None:
-        airborne = points[start:]
-        if len(airborne) >= 2:
-            legs.append({"points": airborne, "before_ground": points[max(0,start-10):start],
-                         "after_ground": [], "segmentation": "GROUND_TRANSITIONS_OPEN_END"})
+                legs.append({"points": airborne, "before_ground": chunk[max(0,start-10):start],
+                             "after_ground": [], "segmentation": "GROUND_TRANSITIONS_OPEN_END"})
     return legs or [{"points": points, "segmentation": "NO_USABLE_AIRBORNE_SEGMENTS"}]
 
 def airport_from_ground(window, airports, radius=25.0):
