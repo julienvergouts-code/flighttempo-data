@@ -15,6 +15,7 @@ import subprocess
 import sys
 import tarfile
 import tempfile
+import traceback
 from datetime import datetime
 from pathlib import Path
 from typing import Iterator
@@ -247,6 +248,85 @@ def find_trace(date: str, icao24: str | None, output: Path, auto_pick_4ca: bool 
     return {"release_tag": release.get("tag_name"), "release_url": release.get("html_url")}
 
 
+
+def _exception_text(exc: BaseException) -> str:
+    tb = exc.__traceback__ or sys.exc_info()[2]
+    return "".join(traceback.format_exception(type(exc), exc, tb)) if tb else f"{type(exc).__name__}: {exc}\\n"
+
+
+def _durable_json(path: Path, payload: dict) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("w", encoding="utf-8") as f:
+        json.dump(payload, f, indent=2, allow_nan=False, default=str)
+        f.write("\\n")
+        f.flush()
+        os.fsync(f.fileno())
+
+
+class BenchmarkRecorder:
+    def __init__(self, path: Path, metadata: dict):
+        self.path = path
+        self.state = {
+            "started_at_utc": datetime.utcnow().isoformat() + "Z",
+            "status": "running",
+            "failure_stage": "initialization",
+            "metadata": metadata,
+            "stages": {},
+            "leg_diagnostics": [],
+            "summary": {},
+            "error_type": None,
+            "error_message": None,
+            "traceback": None,
+        }
+        self.persist()
+
+    def persist(self):
+        self.state["updated_at_utc"] = datetime.utcnow().isoformat() + "Z"
+        self.path.parent.mkdir(parents=True, exist_ok=True)
+        fd, tmp = tempfile.mkstemp(prefix=".benchmark_evidence_", suffix=".tmp", dir=str(self.path.parent))
+        tmp_path = Path(tmp)
+        try:
+            with os.fdopen(fd, "w", encoding="utf-8") as f:
+                json.dump(self.state, f, indent=2, allow_nan=False, default=str)
+                f.write("\\n")
+                f.flush()
+                os.fsync(f.fileno())
+            os.replace(tmp_path, self.path)
+        except Exception:
+            try:
+                if tmp_path.exists():
+                    tmp_path.unlink()
+            except OSError:
+                pass
+            # Durable fallback; recorder errors are not allowed to hide pipeline errors.
+            _durable_json(self.path, {
+                "status": self.state.get("status", "failed"),
+                "failure_stage": self.state.get("failure_stage"),
+                "error_type": self.state.get("error_type"),
+                "error_message": self.state.get("error_message"),
+                "serialization_fallback": True,
+                "updated_at_utc": datetime.utcnow().isoformat() + "Z",
+            })
+
+    def stage(self, name: str):
+        self.state["failure_stage"] = name
+        self.state["stages"][name] = {"status": "running"}
+        self.persist()
+
+    def stage_done(self, name: str, metrics: dict | None = None):
+        self.state["stages"][name] = {"status": "completed", **(metrics or {})}
+        self.persist()
+
+    def fail(self, stage: str, exc: BaseException):
+        self.state.update(status="failed", failure_stage=stage, error_type=type(exc).__name__,
+                          error_message=str(exc), traceback=_exception_text(exc))
+        self.persist()
+
+    def succeed(self, summary: dict):
+        self.state.update(status="passed", failure_stage=None, summary=summary)
+        self.persist()
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--date", required=True, help="UTC archive date YYYY-MM-DD")
@@ -255,6 +335,7 @@ def main():
     parser.add_argument("--auto-pick-4ca", action="store_true", help="Select first qualifying Irish Ryanair 4CA trace (>100 KB)")
     parser.add_argument("--trace-file", help="Local extracted trace (raw or gzip-compressed)")
     parser.add_argument("--output", default="adsb/corridors/benchmark_evidence.json")
+    parser.add_argument("--evidence-out", default="/tmp/benchmark_evidence.json")
     args = parser.parse_args()
 
     datetime.strptime(args.date, "%Y-%m-%d")
@@ -267,79 +348,139 @@ def main():
     if not BUILDER.is_file():
         raise SystemExit(f"Existing corridor builder not found: {BUILDER}")
 
-    with tempfile.TemporaryDirectory(prefix="flighttempo-adsb-") as tmp:
-        trace = Path(tmp) / "benchmark_trace.json"
-        if args.trace_file:
-            raw = Path(args.trace_file).read_bytes()
-            if raw[:2] == b"\x1f\x8b":
-                raw = gzip.decompress(raw)
-            document = json.loads(raw)
-            if not isinstance(document, dict) or not isinstance(document.get("trace"), list):
-                raise RuntimeError(f"Local trace file is not a readsb trace document: {args.trace_file}")
-            trace.write_bytes(raw)
-            release = {"source": "workflow-local-extraction", "release_tag": f"v{args.date}"}
-            print(f"[archive] local trace loaded: {len(document['trace'])} rows", flush=True)
-        else:
-            release = find_trace(args.date, args.icao24, trace, args.auto_pick_4ca)
-        out = Path(args.output)
-        out.parent.mkdir(parents=True, exist_ok=True)
-        subprocess.run([sys.executable, str(BUILDER), "--trace", str(trace),
-                        "--output", str(out)], cwd=ROOT, check=True)
-        evidence = json.loads(out.read_text(encoding="utf-8"))
-        accepted = [r for r in evidence.get("traceResults", []) if not r.get("excluded")]
-        if not accepted:
-            raise RuntimeError("Benchmark produced no eligible non-excluded flight legs")
-        nav = RepositoryNavDatabase()
-        nav._load_airways()
-        comparisons = []
-        for result in accepted:
-            observed = result.get("matchedFixes", [])
-            diag = {
-                "leg": result.get("legNumber"),
-                "origin_airport": result.get("origin"),
-                "destination_airport": result.get("destination"),
-                "segmentation": result.get("segmentation"),
-                "position_count": result.get("positionCount"),
-                "matched_fix_count": len(observed),
-                "first_matched_fix": observed[0] if observed else None,
-                "last_matched_fix": observed[-1] if observed else None,
-                "first_fix_in_graph": observed[0] in nav.adj if observed else False,
-                "last_fix_in_graph": observed[-1] in nav.adj if observed else False,
+    recorder = BenchmarkRecorder(Path(args.evidence_out), {
+        "date": args.date, "icao24": args.icao24.lower() if args.icao24 else None,
+        "auto_pick_4ca": args.auto_pick_4ca,
+    })
+    stage = "trace_fetch"
+    try:
+        with tempfile.TemporaryDirectory(prefix="flighttempo-adsb-") as tmp:
+            trace = Path(tmp) / "benchmark_trace.json"
+            stage = "trace_fetch"
+            recorder.stage(stage)
+            if args.trace_file:
+                raw = Path(args.trace_file).read_bytes()
+                if raw[:2] == b"\\x1f\\x8b":
+                    raw = gzip.decompress(raw)
+                document = json.loads(raw)
+                if not isinstance(document, dict) or not isinstance(document.get("trace"), list):
+                    raise RuntimeError(f"Local trace file is not a readsb trace document: {args.trace_file}")
+                trace.write_bytes(raw)
+                release = {"source": "workflow-local-extraction", "release_tag": f"v{args.date}"}
+                trace_rows = len(document["trace"])
+                recorder.stage_done(stage, {"trace_rows": trace_rows, "source": "local_extraction"})
+                print(f"[archive] local trace loaded: {trace_rows} rows", flush=True)
+            else:
+                release = find_trace(args.date, args.icao24, trace, args.auto_pick_4ca)
+                document = json.loads(trace.read_text(encoding="utf-8"))
+                trace_rows = len(document["trace"])
+                recorder.stage_done(stage, {"trace_rows": trace_rows, "release_tag": release.get("release_tag")})
+
+            stage = "trace_decode"
+            recorder.stage(stage)
+            decoded = json.loads(trace.read_text(encoding="utf-8"))
+            recorder.stage_done(stage, {"decoded_rows": len(decoded.get("trace", []))})
+
+            stage = "segmentation_and_fix_matching"
+            recorder.stage(stage)
+            out = Path(args.output)
+            out.parent.mkdir(parents=True, exist_ok=True)
+            subprocess.run([sys.executable, str(BUILDER), "--trace", str(trace),
+                            "--output", str(out)], cwd=ROOT, check=True)
+            evidence = json.loads(out.read_text(encoding="utf-8"))
+            accepted = [r for r in evidence.get("traceResults", []) if not r.get("excluded")]
+            recorder.stage_done(stage, {"total_legs": len(evidence.get("traceResults", [])),
+                                        "eligible_legs": len(accepted),
+                                        "matched_fixes": sum(len(r.get("matchedFixes", [])) for r in accepted),
+                                        "excluded_legs": len(evidence.get("traceResults", [])) - len(accepted)})
+            if not accepted:
+                raise RuntimeError("Benchmark produced no eligible non-excluded flight legs")
+
+            stage = "node_resolution_and_graph_connectivity"
+            recorder.stage(stage)
+            nav = RepositoryNavDatabase()
+            nav._load_airways()
+            comparisons = []
+            resolved_total = 0
+            matched_total = 0
+            connected_legs = 0
+            for result in accepted:
+                observed = result.get("matchedFixes", [])
+                matched_total += len(observed)
+                resolved = [fix for fix in observed if fix in nav.adj]
+                resolved_total += len(resolved)
+                diag = {
+                    "leg": result.get("legNumber"),
+                    "origin_airport": result.get("origin"),
+                    "destination_airport": result.get("destination"),
+                    "segmentation": result.get("segmentation"),
+                    "position_count": result.get("positionCount"),
+                    "matched_fix_count": len(observed),
+                    "resolved_node_count": len(resolved),
+                    "unresolved_fixes": [fix for fix in observed if fix not in nav.adj],
+                    "first_matched_fix": observed[0] if observed else None,
+                    "last_matched_fix": observed[-1] if observed else None,
+                    "first_fix_in_graph": observed[0] in nav.adj if observed else False,
+                    "last_fix_in_graph": observed[-1] in nav.adj if observed else False,
+                }
+                status, overlap = "UNVERIFIED_ENDPOINTS", 0.0
+                path = None
+                if len(observed) >= 2:
+                    astar = nav.a_star_connected(observed[0], observed[-1])
+                    if astar:
+                        path, _distance = astar
+                        a, b = set(observed), set(path)
+                        overlap = round(len(a & b) / max(1, len(a | b)), 3)
+                        status = "CONNECTED_FTWG"
+                        connected_legs += 1
+                    else:
+                        status = "GRAPH_GAP_DETECTED"
+                diag["graph_path_node_count"] = len(path) if path else 0
+                result["graphComparison"] = {"graph_source": nav.graph_source, "status": status,
+                                             "fix_jaccard_overlap": overlap, "diagnostics": diag}
+                comparisons.append({"status": status, **diag, "overlap": overlap})
+            summary = {
+                "trace_rows": trace_rows,
+                "total_legs": len(evidence.get("traceResults", [])),
+                "eligible_legs": len(accepted),
+                "matched_fixes": matched_total,
+                "resolved_nodes": resolved_total,
+                "unresolved_nodes": matched_total - resolved_total,
+                "connected_legs": connected_legs,
+                "graph_source": nav.graph_source,
+                "graph_node_count": len(nav.fix_coords_by_ident),
+                "graph_adjacency_node_count": len(nav.adj),
             }
-            status, overlap = "UNVERIFIED_ENDPOINTS", 0.0
-            if len(observed) >= 2:
-                astar = nav.a_star_connected(observed[0], observed[-1])
-                if astar:
-                    path, _distance = astar
-                    a, b = set(observed), set(path)
-                    overlap = round(len(a & b) / max(1, len(a | b)), 3)
-                    status = "CONNECTED_FTWG"
-                else:
-                    status = "GRAPH_GAP_DETECTED"
-            result["graphComparison"] = {"graph_source": nav.graph_source, "status": status,
-                                         "fix_jaccard_overlap": overlap, "diagnostics": diag}
-            comparisons.append({"status": status, **diag, "overlap": overlap})
-        print("[BENCHMARK] Per-leg FTWG comparison: " + json.dumps(comparisons), flush=True)
-        if not any(x["status"] == "CONNECTED_FTWG" for x in comparisons):
-            raise RuntimeError(f"No flight leg connected through FTWG graph: {json.dumps(comparisons)}")
-        # Do not serialize aircraft identity or the source trace into the published artifact.
-        forbidden = {"hex", "icao", "registration", "callsign"}
-        def scan(value):
-            if isinstance(value, dict):
-                return any(str(k).lower() in forbidden or scan(v) for k, v in value.items())
-            if isinstance(value, list):
-                return any(scan(v) for v in value)
-            return False
-        if scan(evidence):
-            out.unlink(missing_ok=True)
-            raise RuntimeError("Privacy validation failed: aircraft identity field detected")
-        print(json.dumps({"status": "validated", "date": args.date,
-                          "release": release, "origin": result["origin"],
-                          "destination": result["destination"],
-                          "matched_fix_count": result.get("matchCount", 0),
-                          "graph_comparison": result["graphComparison"]["status"],
-                          "output": str(out)}, indent=2))
+            recorder.state["leg_diagnostics"] = comparisons
+            recorder.state["summary"] = summary
+            recorder.stage_done(stage, summary)
+            recorder.persist()
+            print("[BENCHMARK] Per-leg FTWG comparison: " + json.dumps(comparisons), flush=True)
+            if connected_legs == 0:
+                raise RuntimeError(f"No flight leg connected through FTWG graph: {json.dumps(comparisons)}")
 
+            # Do not serialize aircraft identity or the source trace into the public builder artifact.
+            forbidden = {"hex", "icao", "registration", "callsign"}
+            def scan(value):
+                if isinstance(value, dict):
+                    return any(str(k).lower() in forbidden or scan(v) for k, v in value.items())
+                if isinstance(value, list):
+                    return any(scan(v) for v in value)
+                return False
+            stage = "privacy_validation"
+            recorder.stage(stage)
+            if scan(evidence):
+                out.unlink(missing_ok=True)
+                raise RuntimeError("Privacy validation failed: aircraft identity field detected")
+            recorder.stage_done(stage)
+            print(json.dumps({"status": "validated", "date": args.date, "release": release,
+                              "summary": summary, "output": str(out)}, indent=2))
+            recorder.succeed(summary)
+    except Exception as exc:
+        original = exc
+        try:
+            recorder.fail(stage, original)
+        except Exception as recorder_exc:
+            print(f"[evidence] recorder failure while preserving original exception: {recorder_exc}", file=sys.stderr)
+        raise
 
-if __name__ == "__main__":
-    main()
