@@ -51,9 +51,27 @@ jobs:
           AUTO_PICK: ${{ inputs.auto_pick_4ca && 'true' || 'false' }}
         run: |
           set -euo pipefail
+          exec > >(tee -a /tmp/benchmark_run.log) 2>&1
+          STAGE="workflow_initialization"
+          on_failure() {
+            rc=$?
+            if [[ ! -s /tmp/benchmark_evidence.json ]]; then
+              python - "$STAGE" "$rc" <<'PY'
+import json, os, sys
+path="/tmp/benchmark_evidence.json"
+payload={"status":"failed","failure_stage":sys.argv[1],"workflow_exit_code":int(sys.argv[2]),
+         "error_message":"Workflow failed before pipeline recorder produced detailed evidence"}
+with open(path,"w",encoding="utf-8") as f:
+    json.dump(payload,f,indent=2); f.write("\\n"); f.flush(); os.fsync(f.fileno())
+PY
+            fi
+          }
+          trap on_failure ERR
           trap 'rm -f /tmp/archive.aa /tmp/archive.ab /tmp/benchmark_trace.raw' EXIT
+          STAGE="archive_release_lookup"
           if [[ "$AUTO_PICK" == "true" ]]; then
-            python pipeline/build_corridors.py --mode benchmark --date "$RUN_DATE" --auto-pick-4ca --output /tmp/benchmark_evidence.json
+            STAGE="pipeline_execution"
+            python pipeline/build_corridors.py --mode benchmark --date "$RUN_DATE" --auto-pick-4ca --output /tmp/benchmark_evidence.json --evidence-out /tmp/benchmark_evidence.json
           else
             HEX="$(echo "$ICAO24" | tr '[:upper:]' '[:lower:]')"
             YEAR="$(date -u -d "$RUN_DATE" +%Y)"
@@ -65,6 +83,7 @@ jobs:
               echo "Expected split archive assets .tar.aa and .tar.ab not found for $TAG" >&2
               exit 1
             fi
+            STAGE="archive_download"
             echo "Downloading split archive parts concurrently"
             curl -fL --retry 3 --retry-delay 2 -o /tmp/archive.aa "$URL_AA" &
             PID_AA=$!
@@ -72,6 +91,7 @@ jobs:
             PID_AB=$!
             wait "$PID_AA"
             wait "$PID_AB"
+            STAGE="archive_extraction"
             echo "Extracting target trace_full_$HEX.json"
             set +o pipefail
             cat /tmp/archive.aa /tmp/archive.ab | tar -xOf - --wildcards --occurrence=1 "*trace_full_$HEX.json*" > /tmp/benchmark_trace.raw
@@ -80,12 +100,16 @@ jobs:
             if [[ "$TAR_STATUS" -ne 0 ]]; then echo "tar extraction failed (exit $TAR_STATUS)" >&2; exit "$TAR_STATUS"; fi
             test -s /tmp/benchmark_trace.raw
             rm -f /tmp/archive.aa /tmp/archive.ab
-            python pipeline/build_corridors.py --mode benchmark --date "$RUN_DATE" --icao24 "$ICAO24" --trace-file /tmp/benchmark_trace.raw --output /tmp/benchmark_evidence.json
+            STAGE="pipeline_execution"
+            python pipeline/build_corridors.py --mode benchmark --date "$RUN_DATE" --icao24 "$ICAO24" --trace-file /tmp/benchmark_trace.raw --output /tmp/benchmark_evidence.json --evidence-out /tmp/benchmark_evidence.json
           fi
-      - name: Upload validated anonymised evidence
+      - name: Upload benchmark evidence and logs
+        if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: adsb-corridor-benchmark
-          path: /tmp/benchmark_evidence.json
-          if-no-files-found: error
+          name: benchmark-evidence-${{ github.run_id }}-${{ github.sha }}
+          path: |
+            /tmp/benchmark_evidence.json
+            /tmp/benchmark_run.log
+          if-no-files-found: ignore
           retention-days: 14
