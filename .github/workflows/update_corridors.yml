@@ -71,7 +71,7 @@ PY
           STAGE="archive_release_lookup"
           if [[ "$AUTO_PICK" == "true" ]]; then
             STAGE="pipeline_execution"
-            python pipeline/build_corridors.py --mode benchmark --date "$RUN_DATE" --auto-pick-4ca --output /tmp/benchmark_evidence.json --evidence-out /tmp/benchmark_evidence.json
+            python pipeline/build_corridors.py --mode benchmark --date "$RUN_DATE" --auto-pick-4ca --output /tmp/benchmark_result.json --evidence-out /tmp/benchmark_evidence.json
           else
             HEX="$(echo "$ICAO24" | tr '[:upper:]' '[:lower:]')"
             YEAR="$(date -u -d "$RUN_DATE" +%Y)"
@@ -101,7 +101,7 @@ PY
             test -s /tmp/benchmark_trace.raw
             rm -f /tmp/archive.aa /tmp/archive.ab
             STAGE="pipeline_execution"
-            python pipeline/build_corridors.py --mode benchmark --date "$RUN_DATE" --icao24 "$ICAO24" --trace-file /tmp/benchmark_trace.raw --output /tmp/benchmark_evidence.json --evidence-out /tmp/benchmark_evidence.json
+            python pipeline/build_corridors.py --mode benchmark --date "$RUN_DATE" --icao24 "$ICAO24" --trace-file /tmp/benchmark_trace.raw --output /tmp/benchmark_result.json --evidence-out /tmp/benchmark_evidence.json
           fi
       - name: Upload benchmark evidence and logs
         if: always()
