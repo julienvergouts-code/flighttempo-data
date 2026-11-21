@@ -66,7 +66,7 @@ jobs:
           STAGE=archive_release_lookup
           if [[ "$AUTO_PICK" == "true" ]]; then
             STAGE=pipeline_execution
-            python pipeline/build_corridors.py --mode benchmark --date "$RUN_DATE" --auto-pick-4ca --output /tmp/benchmark_result.json --evidence-out /tmp/benchmark_evidence.json
+            python -c 'from pipeline.build_corridors import main; main()' --mode benchmark --date "$RUN_DATE" --auto-pick-4ca --output /tmp/benchmark_result.json --evidence-out /tmp/benchmark_evidence.json
           else
             HEX="$(echo "$ICAO24" | tr '[:upper:]' '[:lower:]')"
             YEAR="$(date -u -d "$RUN_DATE" +%Y)"
@@ -106,7 +106,7 @@ jobs:
             fi
             STAGE=pipeline_execution
             echo "Handing archive streaming, trace selection, and JSON validation to the pipeline's existing reader"
-            python pipeline/build_corridors.py --mode benchmark --date "$RUN_DATE" --icao24 "$ICAO24" --output /tmp/benchmark_result.json --evidence-out /tmp/benchmark_evidence.json
+            python -c 'from pipeline.build_corridors import main; main()' --mode benchmark --date "$RUN_DATE" --icao24 "$ICAO24" --output /tmp/benchmark_result.json --evidence-out /tmp/benchmark_evidence.json
           fi
       - name: Upload benchmark evidence and logs
         if: always()
