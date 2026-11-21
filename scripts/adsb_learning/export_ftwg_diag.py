@@ -17,6 +17,8 @@ from typing import Any
 FIVE_LETTER_RE = re.compile(r"^[A-Z]{5}$")
 CODED_FIX_RE = re.compile(r"^[A-Z]{2,4}\d{1,3}$")
 FTWG_HEADER = struct.Struct("<4sHHII")
+FTWG_NODE = struct.Struct("<8siiB3x")
+FTWG_EDGE = struct.Struct("<IIH6s")
 DEFAULT_NAMED_FIXES = [
     "EKPEK", "LIZUM", "ROKIB", "LAMPO", "NIBAN", "TUSET", "VELIP",
     "OBALA", "LAMGO", "LIRSU", "NOSPA", "NTM01",
@@ -56,8 +58,8 @@ def read_ftwg_header(path: Path) -> dict[str, Any]:
         "present": True, "path": str(path), "file_bytes": path.stat().st_size,
         "magic": magic.decode("ascii", errors="replace"), "version": version,
         "flags": flags, "physical_node_count": nodes, "physical_edge_count": edges,
-        "expected_file_bytes": FTWG_HEADER.size + nodes * 16 + edges * 14,
-        "size_matches_header": path.stat().st_size == FTWG_HEADER.size + nodes * 16 + edges * 14,
+        "expected_file_bytes": FTWG_HEADER.size + nodes * FTWG_NODE.size + edges * FTWG_EDGE.size,
+        "size_matches_header": path.stat().st_size == FTWG_HEADER.size + nodes * FTWG_NODE.size + edges * FTWG_EDGE.size,
     }
 
 
