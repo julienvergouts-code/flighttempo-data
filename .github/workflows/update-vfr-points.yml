@@ -1,5 +1,11 @@
 name: Update FAA VFR Reporting Points
 on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'pipeline/fetch_vfr_points.py'
+      - '.github/workflows/update-vfr-points.yml'
   schedule:
     - cron: '0 6 * * 4'
   workflow_dispatch:
