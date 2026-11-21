@@ -49,6 +49,8 @@ jobs:
           RUN_DATE: ${{ inputs.date || '2026-11-16' }}
           ICAO24: ${{ inputs.icao24 || '4CA2D5' }}
           AUTO_PICK: ${{ inputs.auto_pick_4ca && 'true' || 'false' }}
+          USE_GH_TOKEN: "false"
+          GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
           exec > >(tee -a /tmp/benchmark_run.log) 2>&1
@@ -76,7 +78,163 @@ PY
             HEX="$(echo "$ICAO24" | tr '[:upper:]' '[:lower:]')"
             YEAR="$(date -u -d "$RUN_DATE" +%Y)"
             TAG="v$(date -u -d "$RUN_DATE" +%Y.%m.%d)-planes-readsb-prod-0"
-            RELEASE_JSON="$(curl -fsSL "https://api.github.com/repos/adsblol/globe_history_$YEAR/releases/tags/$TAG")"
+            RELEASE_TAG="${TAG}"
+            URL="https://api.github.com/repos/adsblol/globe_history_${YEAR}/releases/tags/${RELEASE_TAG}"
+
+            HDR_FILE="/tmp/gh_release_headers.txt"
+            BODY_RAW="/tmp/gh_release_body.raw"
+            BODY_JSON="/tmp/gh_release_body.json"
+            META_OUT="/tmp/release_meta.json"
+            CURL_STDERR="/tmp/gh_curl_stderr.txt"
+
+            : > "$HDR_FILE"
+            : > "$BODY_RAW"
+            : > "$CURL_STDERR"
+            : > "$BODY_JSON"
+
+            is_nonneg_int() {
+              python3 -c 'import sys; s=sys.argv[1].strip(); raise SystemExit(0 if s.isdigit() else 1)' "${1:-}" 2>/dev/null
+            }
+
+            CURL_ARGS=(
+              -sS
+              -L
+              -D "$HDR_FILE"
+              -o "$BODY_RAW"
+              -w "%{http_code}"
+              -H "Accept: application/vnd.github+json"
+              -H "X-GitHub-Api-Version: 2022-11-28"
+              -H "User-Agent: flighttempo-corridor-benchmark-diag"
+            )
+
+            AUTH_MODE="disabled"
+            if [ "${USE_GH_TOKEN:-false}" = "true" ] && [ -n "${GH_TOKEN:-}" ]; then
+              CURL_ARGS+=(-H "Authorization: Bearer ${GH_TOKEN}")
+              AUTH_MODE="enabled"
+            fi
+
+            set +e
+            HTTP_CODE="$(curl "${CURL_ARGS[@]}" "$URL" 2>"$CURL_STDERR")"
+            CURL_EXIT=$?
+            set -e
+
+            if ! is_nonneg_int "$HTTP_CODE"; then
+              HTTP_CODE="000"
+            fi
+
+            echo "Release metadata probe: repo=adsblol/globe_history_${YEAR} tag=${RELEASE_TAG} auth=${AUTH_MODE} curl_exit=${CURL_EXIT} http_status=${HTTP_CODE}"
+
+            if [ -s "$CURL_STDERR" ]; then
+              echo "=== curl stderr ==="
+              cat "$CURL_STDERR"
+            fi
+
+            echo "=== Key GitHub Headers ==="
+            grep -iE '^(x-ratelimit-|retry-after|x-github-request-id|x-github-media-type|www-authenticate|content-type):' "$HDR_FILE" || true
+
+            RESET_EPOCH="$(awk -F': ' 'tolower($1)=="x-ratelimit-reset"{gsub(/\\r/,"",$2); val=$2} END{print val}' "$HDR_FILE" 2>/dev/null || true)"
+
+            if is_nonneg_int "$RESET_EPOCH"; then
+              NOW_EPOCH="$(date -u +%s)"
+              RESET_UTC="$(date -u -d "@${RESET_EPOCH}" +"%Y-%m-%dT%H:%M:%SZ")"
+              REMAINING_SEC=$((RESET_EPOCH - NOW_EPOCH))
+              echo "Rate-limit reset: epoch=${RESET_EPOCH} utc=${RESET_UTC} seconds_until_reset=${REMAINING_SEC}"
+            fi
+
+            python3 - "$BODY_RAW" "$BODY_JSON" <<'PY'
+            import json
+            import pathlib
+            import sys
+
+            raw_path = pathlib.Path(sys.argv[1])
+            summary_path = pathlib.Path(sys.argv[2])
+
+            raw_bytes = raw_path.read_bytes() if raw_path.exists() else b""
+            decoded = raw_bytes.decode("utf-8", errors="replace")
+            byte_len = len(raw_bytes)
+            char_len = len(decoded)
+            stripped = decoded.strip()
+
+            escaped = json.dumps(decoded, ensure_ascii=True)[1:-1]
+            preview_limit = 1024
+            if len(escaped) > preview_limit:
+                preview = escaped[:preview_limit] + (
+                    "...[truncated {} escaped chars]".format(len(escaped) - preview_limit)
+                )
+            else:
+                preview = escaped
+
+            summary = {
+                "byte_len": byte_len,
+                "char_len": char_len,
+                "is_json": False,
+                "preview": preview,
+            }
+
+            if byte_len == 0:
+                summary["kind"] = "empty"
+            elif not stripped:
+                summary["kind"] = "whitespace_only"
+            else:
+                try:
+                    parsed = json.loads(stripped)
+                    summary["kind"] = "json"
+                    summary["is_json"] = True
+                    if isinstance(parsed, dict):
+                        for key in ("message", "documentation_url", "status"):
+                            value = parsed.get(key)
+                            if value is not None:
+                                summary["gh_" + key] = str(value)
+                except Exception as exc:
+                    summary["kind"] = (
+                        "html_or_xml" if stripped.startswith("<")
+                        else "plain_text_or_non_json"
+                    )
+                    summary["json_parse_error"] = repr(exc)
+
+            summary_path.write_text(
+                json.dumps(summary, indent=2, ensure_ascii=True) + "\\n",
+                encoding="utf-8",
+            )
+            print(
+                "Body inspection: kind={} byte_len={} char_len={} "
+                "is_json={} preview={!r}".format(
+                    summary["kind"], byte_len, char_len,
+                    summary["is_json"], preview,
+                )
+            )
+            print("Body summary saved to {}".format(summary_path))
+            PY
+
+            echo "=== HTTP Failure Diagnostics ==="
+            if [ "$CURL_EXIT" -ne 0 ] || [ "$HTTP_CODE" -lt 200 ] || [ "$HTTP_CODE" -ge 300 ]; then
+              echo "Release metadata retrieval failed: curl_exit=${CURL_EXIT} http_status=${HTTP_CODE}"
+              echo "=== Raw Response Headers ==="
+              if [ -s "$HDR_FILE" ]; then cat "$HDR_FILE"; else echo "(no response headers captured)"; fi
+              echo "=== Body Summary ==="
+              cat "$BODY_JSON"
+              echo "=== Raw Body Preview ==="
+              python3 - "$BODY_RAW" <<'PY'
+            import json
+            import pathlib
+            import sys
+            p = pathlib.Path(sys.argv[1])
+            data = p.read_bytes() if p.exists() else b""
+            text = data.decode("utf-8", errors="replace")
+            escaped = json.dumps(text, ensure_ascii=True)[1:-1]
+            print(escaped[:2048])
+            if len(escaped) > 2048:
+                print("[preview truncated]")
+            PY
+              exit 22
+            fi
+
+            cp "$BODY_RAW" "$META_OUT"
+            RELEASE_JSON="$(cat "$META_OUT")"
+            export RELEASE_JSON
+            echo "Release metadata saved to ${META_OUT}"
+            echo "RELEASE_JSON populated for downstream jq extraction"
+
             URL_AA="$(echo "$RELEASE_JSON" | jq -r '.assets[] | select(.name | endswith(".tar.aa")) | .browser_download_url' | head -n1)"
             URL_AB="$(echo "$RELEASE_JSON" | jq -r '.assets[] | select(.name | endswith(".tar.ab")) | .browser_download_url' | head -n1)"
             if [[ -z "$URL_AA" || -z "$URL_AB" || "$URL_AA" == "null" || "$URL_AB" == "null" ]]; then
@@ -111,5 +269,10 @@ PY
           path: |
             /tmp/benchmark_evidence.json
             /tmp/benchmark_run.log
+            /tmp/gh_release_headers.txt
+            /tmp/gh_release_body.raw
+            /tmp/gh_release_body.json
+            /tmp/gh_curl_stderr.txt
+            /tmp/release_meta.json
           if-no-files-found: ignore
           retention-days: 14
