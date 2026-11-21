@@ -2,6 +2,7 @@ import csv
 import io
 import json
 import sys
+import tempfile
 import zipfile
 from pathlib import Path
 import unittest
@@ -60,7 +61,6 @@ class VfrReportingPointPipelineTests(unittest.TestCase):
             {"FIX_ID": "KLAX", "LAT_DECIMAL": "33.9", "LONG_DECIMAL": "-118.4"},
         ])})
         outer = zip_bytes({"sub/fix.zip": inner})
-        archive = Path(self.id().split(".")[-1] + ".zip") if False else None
         with tempfile.TemporaryDirectory() as td:
             archive = Path(td) / "faa.zip"
             archive.write_bytes(outer)
