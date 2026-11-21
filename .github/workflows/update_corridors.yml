@@ -211,7 +211,7 @@ jobs:
                         "preview": preview,
                     }
 
-            json_path.write_text(json.dumps(summary, indent=2, ensure_ascii=True) + "\\n", encoding="utf-8")
+            json_path.write_text(json.dumps(summary, indent=2, ensure_ascii=True) + "\n", encoding="utf-8")
             print(
                 f"Body inspection: kind={summary['kind']} byte_len={byte_len} char_len={char_len} "
                 f"is_json={summary['is_json']} preview={preview!r}"
@@ -230,7 +230,7 @@ jobs:
             out = []
             for ch in data:
                 code = ord(ch)
-                if ch in ("\\n", "\\r", "\\t") or (32 <= code <= 126) or code > 159:
+                if ch in ("\n", "\r", "\t") or (32 <= code <= 126) or code > 159:
                     out.append(ch)
                 else:
                     out.append(f"{BS}u{code:04x}")
