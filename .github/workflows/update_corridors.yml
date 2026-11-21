@@ -142,69 +142,69 @@ PY
             fi
 
             python3 - "$BODY_RAW" "$BODY_JSON" <<'PY'
-            import json
-            import pathlib
-            import sys
+          import json
+          import pathlib
+          import sys
 
-            raw_path = pathlib.Path(sys.argv[1])
-            summary_path = pathlib.Path(sys.argv[2])
+          raw_path = pathlib.Path(sys.argv[1])
+          summary_path = pathlib.Path(sys.argv[2])
 
-            raw_bytes = raw_path.read_bytes() if raw_path.exists() else b""
-            decoded = raw_bytes.decode("utf-8", errors="replace")
-            byte_len = len(raw_bytes)
-            char_len = len(decoded)
-            stripped = decoded.strip()
+          raw_bytes = raw_path.read_bytes() if raw_path.exists() else b""
+          decoded = raw_bytes.decode("utf-8", errors="replace")
+          byte_len = len(raw_bytes)
+          char_len = len(decoded)
+          stripped = decoded.strip()
 
-            escaped = json.dumps(decoded, ensure_ascii=True)[1:-1]
-            preview_limit = 1024
-            if len(escaped) > preview_limit:
-                preview = escaped[:preview_limit] + (
-                    "...[truncated {} escaped chars]".format(len(escaped) - preview_limit)
-                )
-            else:
-                preview = escaped
+          escaped = json.dumps(decoded, ensure_ascii=True)[1:-1]
+          preview_limit = 1024
+          if len(escaped) > preview_limit:
+              preview = escaped[:preview_limit] + (
+                  "...[truncated {} escaped chars]".format(len(escaped) - preview_limit)
+              )
+          else:
+              preview = escaped
 
-            summary = {
-                "byte_len": byte_len,
-                "char_len": char_len,
-                "is_json": False,
-                "preview": preview,
-            }
+          summary = {
+              "byte_len": byte_len,
+              "char_len": char_len,
+              "is_json": False,
+              "preview": preview,
+          }
 
-            if byte_len == 0:
-                summary["kind"] = "empty"
-            elif not stripped:
-                summary["kind"] = "whitespace_only"
-            else:
-                try:
-                    parsed = json.loads(stripped)
-                    summary["kind"] = "json"
-                    summary["is_json"] = True
-                    if isinstance(parsed, dict):
-                        for key in ("message", "documentation_url", "status"):
-                            value = parsed.get(key)
-                            if value is not None:
-                                summary["gh_" + key] = str(value)
-                except Exception as exc:
-                    summary["kind"] = (
-                        "html_or_xml" if stripped.startswith("<")
-                        else "plain_text_or_non_json"
-                    )
-                    summary["json_parse_error"] = repr(exc)
+          if byte_len == 0:
+              summary["kind"] = "empty"
+          elif not stripped:
+              summary["kind"] = "whitespace_only"
+          else:
+              try:
+                  parsed = json.loads(stripped)
+                  summary["kind"] = "json"
+                  summary["is_json"] = True
+                  if isinstance(parsed, dict):
+                      for key in ("message", "documentation_url", "status"):
+                          value = parsed.get(key)
+                          if value is not None:
+                              summary["gh_" + key] = str(value)
+              except Exception as exc:
+                  summary["kind"] = (
+                      "html_or_xml" if stripped.startswith("<")
+                      else "plain_text_or_non_json"
+                  )
+                  summary["json_parse_error"] = repr(exc)
 
-            summary_path.write_text(
-                json.dumps(summary, indent=2, ensure_ascii=True) + "\\n",
-                encoding="utf-8",
-            )
-            print(
-                "Body inspection: kind={} byte_len={} char_len={} "
-                "is_json={} preview={!r}".format(
-                    summary["kind"], byte_len, char_len,
-                    summary["is_json"], preview,
-                )
-            )
-            print("Body summary saved to {}".format(summary_path))
-            PY
+          summary_path.write_text(
+              json.dumps(summary, indent=2, ensure_ascii=True) + "\\n",
+              encoding="utf-8",
+          )
+          print(
+              "Body inspection: kind={} byte_len={} char_len={} "
+              "is_json={} preview={!r}".format(
+                  summary["kind"], byte_len, char_len,
+                  summary["is_json"], preview,
+              )
+          )
+          print("Body summary saved to {}".format(summary_path))
+          PYPY
 
             echo "=== HTTP Failure Diagnostics ==="
             if [ "$CURL_EXIT" -ne 0 ] || [ "$HTTP_CODE" -lt 200 ] || [ "$HTTP_CODE" -ge 300 ]; then
@@ -215,17 +215,17 @@ PY
               cat "$BODY_JSON"
               echo "=== Raw Body Preview ==="
               python3 - "$BODY_RAW" <<'PY'
-            import json
-            import pathlib
-            import sys
-            p = pathlib.Path(sys.argv[1])
-            data = p.read_bytes() if p.exists() else b""
-            text = data.decode("utf-8", errors="replace")
-            escaped = json.dumps(text, ensure_ascii=True)[1:-1]
-            print(escaped[:2048])
-            if len(escaped) > 2048:
-                print("[preview truncated]")
-            PY
+          import json
+          import pathlib
+          import sys
+          p = pathlib.Path(sys.argv[1])
+          data = p.read_bytes() if p.exists() else b""
+          text = data.decode("utf-8", errors="replace")
+          escaped = json.dumps(text, ensure_ascii=True)[1:-1]
+          print(escaped[:2048])
+          if len(escaped) > 2048:
+              print("[preview truncated]")
+          PYPY
               exit 22
             fi
 
