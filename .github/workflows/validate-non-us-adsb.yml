@@ -1,0 +1,59 @@
+name: Validate non-US ADS-B corridor pipeline
+on:
+  workflow_dispatch:
+    inputs:
+      trace_urls:
+        description: Comma-separated direct URLs to individual readsb trace JSON files (never whole-sky archives)
+        required: true
+        type: string
+      altitude_ft:
+        description: Reference altitude for FTWG A* comparison
+        required: false
+        default: "35000"
+        type: string
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Download individual traces to temporary storage
+        env:
+          TRACE_URLS: ${{ inputs.trace_urls }}
+        run: |
+          python - <<'PY'
+          import os, urllib.request
+          urls=[u.strip() for u in os.environ["TRACE_URLS"].split(",") if u.strip()]
+          if not urls: raise SystemExit("No trace URLs supplied")
+          for i,url in enumerate(urls): urllib.request.urlretrieve(url,f"/tmp/trace_{i}.json")
+          with open("/tmp/trace_list.txt","w") as f: f.write("\n".join(f"/tmp/trace_{i}.json" for i in range(len(urls))))
+          PY
+      - name: Build anonymised evidence and compare with FTWG A*
+        run: |
+          args=()
+          while IFS= read -r f; do args+=(--trace "$f"); done < /tmp/trace_list.txt
+          python scripts/adsb_learning/build_corridors.py "${args[@]}" --output /tmp/corridor_evidence.json --altitude-ft "${{ inputs.altitude_ft }}"
+      - name: Verify no aircraft identifiers and FTWG route availability
+        run: |
+          python - <<'PY'
+          import json
+          p=json.load(open("/tmp/corridor_evidence.json"))
+          dump=json.dumps(p).lower()
+          forbidden=['"hex"', '"registration"', '"callsign"', '"flight"']
+          bad=[x for x in forbidden if x in dump]
+          if bad: raise SystemExit(f"Potential identifier fields found: {bad}")
+          accepted=[r for r in p["traceResults"] if not r.get("excluded")]
+          if not accepted: raise SystemExit("No non-US corridor evidence produced")
+          if any(r.get("graphComparison",{}).get("status")!="path_found" for r in accepted):
+              raise SystemExit("FTWG A* comparison failed")
+          print("PII field check and FTWG A* comparison passed")
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: non-us-corridor-evidence
+          path: /tmp/corridor_evidence.json
+          retention-days: 7

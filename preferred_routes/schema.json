@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "dataset": "preferred_routes",
+  "purpose": "Store generated route candidates and independently sourced route patterns separately from the navigation graph.",
+  "routeClasses": [
+    "generated_candidate",
+    "historical_observed",
+    "public_filed_route",
+    "operator_supplied_private"
+  ],
+  "statusValues": [
+    "candidate",
+    "validated_against_navigation_data",
+    "historically_observed",
+    "superseded",
+    "rejected"
+  ],
+  "requiredFields": [
+    "routeId",
+    "origin",
+    "destination",
+    "routeClass",
+    "status",
+    "waypoints",
+    "airwayLegs",
+    "source",
+    "observedOrGeneratedAtUtc",
+    "confidence",
+    "licence"
+  ],
+  "rules": {
+    "generatedRoutesAreNotFiledRoutes": true,
+    "observedTracksAreNotFiledRoutes": true,
+    "airwayMustBeSupportedByNavigationDataset": true,
+    "unknownFixesGoToCandidateEvidenceQueue": true,
+    "neverPromoteCandidatesAutomatically": true,
+    "keepDirectionalAndSeasonalPatternsSeparate": true,
+    "neverIncludeConfidentialOFPsInPublicRepository": true
+  }
+}

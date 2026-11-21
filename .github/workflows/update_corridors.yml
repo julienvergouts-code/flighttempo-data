@@ -1,0 +1,145 @@
+name: ADS-B corridor benchmark (real archive)
+
+on:
+  push:
+    branches: [feature/adsb-route-learning]
+    paths:
+      - "pipeline/**"
+      - "scripts/adsb_learning/**"
+      - "tests/test_adsb_corridor_builder.py"
+      - ".github/workflows/update_corridors.yml"
+  workflow_dispatch:
+    inputs:
+      date:
+        description: "UTC archive date (YYYY-MM-DD)"
+        required: true
+        default: "2026-11-16"
+        type: string
+      auto_pick_4ca:
+        description: "Automatically select first qualifying Ryanair Irish 4CA airframe"
+        required: true
+        default: false
+        type: boolean
+      icao24:
+        description: "Six-character benchmark ICAO24 hex (ignored in auto-pick mode)"
+        required: false
+        default: "4CA2D5"
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  benchmark:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - name: Checkout PR branch
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install pipeline dependency
+        run: python -m pip install -r pipeline/requirements.txt
+      - name: Compile FTWG binary from repository navigation CSVs
+        run: python pipeline/compile_ftwg_graph.py
+      - name: Fetch real archive trace and validate corridor
+        env:
+          RUN_DATE: ${{ inputs.date || '2026-11-16' }}
+          ICAO24: ${{ inputs.icao24 || '4CA2D5' }}
+          AUTO_PICK: ${{ inputs.auto_pick_4ca && 'true' || 'false' }}
+          USE_GH_TOKEN: "true"
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          exec > >(tee -a /tmp/benchmark_run.log) 2>&1
+          STAGE=workflow_initialization
+          on_failure() {
+            rc=$?
+            if [[ ! -s /tmp/benchmark_evidence.json ]]; then
+              printf '{"status":"failed","failure_stage":"%s","workflow_exit_code":%s}\n' "$STAGE" "$rc" > /tmp/benchmark_evidence.json
+            fi
+          }
+          trap on_failure ERR
+          trap 'rm -f /tmp/archive.aa /tmp/archive.ab /tmp/benchmark_trace.raw' EXIT
+          STAGE=archive_release_lookup
+          if [[ "$AUTO_PICK" == "true" ]]; then
+            STAGE=pipeline_execution
+            python -c 'from pipeline.build_corridors import main; main()' --mode benchmark --date "$RUN_DATE" --auto-pick-4ca --output /tmp/benchmark_result.json --evidence-out /tmp/benchmark_evidence.json
+          else
+            HEX="$(echo "$ICAO24" | tr '[:upper:]' '[:lower:]')"
+            YEAR="$(date -u -d "$RUN_DATE" +%Y)"
+            TAG="v$(date -u -d "$RUN_DATE" +%Y.%m.%d)-planes-readsb-prod-0"
+            URL="https://api.github.com/repos/adsblol/globe_history_${YEAR}/releases/tags/${TAG}"
+            HDR_FILE=/tmp/gh_release_headers.txt
+            BODY_RAW=/tmp/gh_release_body.raw
+            BODY_JSON=/tmp/gh_release_body.json
+            META_OUT=/tmp/release_meta.json
+            CURL_ARGS=(-sS -L -D "$HDR_FILE" -o "$BODY_RAW" -w "%{http_code}" -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" -H "User-Agent: flighttempo-corridor-benchmark")
+            AUTH_MODE=disabled
+            if [[ "${USE_GH_TOKEN:-false}" == true && -n "${GH_TOKEN:-}" ]]; then
+              CURL_ARGS+=(-H "Authorization: Bearer ${GH_TOKEN}")
+              AUTH_MODE=enabled
+            fi
+            set +e
+            HTTP_CODE=$(curl "${CURL_ARGS[@]}" "$URL" 2>/tmp/gh_curl_stderr.txt)
+            CURL_EXIT=$?
+            set -e
+            echo "Release lookup: tag=$TAG auth=$AUTH_MODE curl_exit=$CURL_EXIT http_status=$HTTP_CODE"
+            cat /tmp/gh_curl_stderr.txt 2>/dev/null || true
+            grep -iE '^(x-ratelimit-|retry-after|x-github-request-id|content-type):' "$HDR_FILE" || true
+            cp "$BODY_RAW" "$BODY_JSON"
+            if [[ "$CURL_EXIT" -ne 0 || ! "$HTTP_CODE" =~ ^[0-9]{3}$ || "$HTTP_CODE" -lt 200 || "$HTTP_CODE" -ge 300 ]]; then
+              echo "Release metadata retrieval failed; see raw body/header artifacts"
+              exit 22
+            fi
+            cp "$BODY_RAW" "$META_OUT"
+            RELEASE_JSON="$(cat "$META_OUT")"
+            export RELEASE_JSON
+            echo "Release metadata saved and exported"
+            URL_AA="$(echo "$RELEASE_JSON" | jq -r '.assets[] | select(.name | endswith(".tar.aa")) | .browser_download_url' | head -n1)"
+            URL_AB="$(echo "$RELEASE_JSON" | jq -r '.assets[] | select(.name | endswith(".tar.ab")) | .browser_download_url' | head -n1)"
+            if [[ -z "$URL_AA" || -z "$URL_AB" || "$URL_AA" == null || "$URL_AB" == null ]]; then
+              echo "Missing split archive assets (.tar.aa/.tar.ab) for $TAG"
+              exit 1
+            fi
+            STAGE=pipeline_execution
+            echo "Handing archive streaming, trace selection, and JSON validation to the pipeline's existing reader"
+            python -c 'from pipeline.build_corridors import main; main()' --mode benchmark --date "$RUN_DATE" --icao24 "$ICAO24" --output /tmp/benchmark_result.json --evidence-out /tmp/benchmark_evidence.json
+          fi
+      - name: Export read-only FTWG diagnostics
+        if: always()
+        run: |
+          set +e
+          if [[ -s /tmp/benchmark_result.json && -s /tmp/benchmark_evidence.json && -s navigation/graph/ftwg_navgraph.bin ]]; then
+            python scripts/adsb_learning/export_ftwg_diag.py \
+              --benchmark-result /tmp/benchmark_result.json \
+              --benchmark-evidence /tmp/benchmark_evidence.json \
+              --ftwg-bin navigation/graph/ftwg_navgraph.bin \
+              --out-json /tmp/ftwg_run_diag.json
+            rc=$?
+            if [[ $rc -ne 0 ]]; then
+              printf '{"status":"diagnostic_failed","exit_code":%s,"reason":"Exporter failed; see workflow logs"}\\n' "$rc" > /tmp/ftwg_run_diag.json
+            fi
+          else
+            printf '{"status":"diagnostic_unavailable","reason":"Benchmark result, evidence, or compiled FTWG binary missing"}\\n' > /tmp/ftwg_run_diag.json
+          fi
+          exit 0
+      - name: Upload benchmark evidence and logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: benchmark-evidence-${{ github.run_id }}-${{ github.sha }}
+          path: |
+            /tmp/benchmark_evidence.json
+            /tmp/benchmark_result.json
+            /tmp/benchmark_run.log
+            /tmp/gh_release_headers.txt
+            /tmp/gh_release_body.raw
+            /tmp/gh_release_body.json
+            /tmp/gh_curl_stderr.txt
+            /tmp/release_meta.json
+            /tmp/ftwg_run_diag.json
+          if-no-files-found: ignore
+          retention-days: 14
