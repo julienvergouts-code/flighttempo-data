@@ -21,7 +21,11 @@ from pathlib import Path
 from typing import Any, Iterable
 from urllib.parse import urljoin
 
-import requests
+try:
+    import requests
+except ImportError:  # Keep unittest discovery usable in the repo's minimal CI.
+    requests = None
+from urllib.request import Request, urlopen
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA_DIR = ROOT / "data"
@@ -88,8 +92,35 @@ def extract_cycle_pages(html: str, page_url: str) -> list[tuple[str, str | None]
     return list(found.items())
 
 
+class UrllibResponse:
+    def __init__(self, response):
+        self.response = response
+        self.status_code = getattr(response, "status", 200)
+        self._body: bytes | None = None
+    def raise_for_status(self) -> None:
+        if self.status_code >= 400:
+            raise RuntimeError(f"HTTP {self.status_code}")
+    @property
+    def text(self) -> str:
+        if self._body is None:
+            self._body = self.response.read()
+        return self._body.decode("utf-8", errors="replace")
+    def iter_content(self, chunk_size: int = 65536):
+        while chunk := self.response.read(chunk_size):
+            yield chunk
+    def __enter__(self):
+        return self
+    def __exit__(self, *args):
+        self.response.close()
+        return False
+
+
 def get(url: str, *, stream: bool = False):
-    return requests.get(url, stream=stream, timeout=REQUEST_TIMEOUT, headers={"User-Agent": USER_AGENT})
+    headers = {"User-Agent": USER_AGENT}
+    if requests is not None:
+        return requests.get(url, stream=stream, timeout=REQUEST_TIMEOUT, headers=headers)
+    request = Request(url, headers=headers)
+    return UrllibResponse(urlopen(request, timeout=REQUEST_TIMEOUT[1]))
 
 
 def discover_faa_archives() -> list[tuple[str, str]]:
@@ -111,7 +142,7 @@ def discover_faa_archives() -> list[tuple[str, str]]:
                 resolved = date or page_date
                 if resolved:
                     candidates[url] = resolved
-        except requests.RequestException as exc:
+        except Exception as exc:
             log.warning("Cycle subpage unavailable %s: %s", page_url, exc)
     if not candidates:
         raise RuntimeError("FAA NASR page contained no dated FIX_CSV.ZIP links")
