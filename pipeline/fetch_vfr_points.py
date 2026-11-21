@@ -291,6 +291,13 @@ def atomic_text(path: Path, content: str) -> None:
         raise
 
 
+def read_meta_status(path: Path = META_PATH) -> str | None:
+    try:
+        return json.loads(path.read_text(encoding="utf-8")).get("source_status", {}).get("FAA")
+    except (OSError, ValueError, AttributeError):
+        return None
+
+
 def publish_pair(csv_path: Path, meta_path: Path, records: list[dict[str, Any]], generated: str, status: str) -> None:
     """Stage both outputs; restore originals if either replacement fails."""
     csv_path.parent.mkdir(parents=True, exist_ok=True)
@@ -347,6 +354,9 @@ def main(argv: list[str] | None = None) -> int:
         if drop > 0.30 and not args.allow_drop:
             log.error("Dataset drop %.1f%% (%d -> %d); refusing. Use --allow-drop.", drop * 100, len(previous), len(new_rows))
             return 1
+    if dedupe_sort(previous) == new_rows and read_meta_status() == status:
+        log.info("Dataset unchanged; leaving committed files untouched.")
+        return 0
     generated = timestamp()
     if args.dry_run:
         out = io.StringIO(newline="")
