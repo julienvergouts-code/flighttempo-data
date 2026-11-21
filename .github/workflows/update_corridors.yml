@@ -49,7 +49,7 @@ jobs:
           RUN_DATE: ${{ inputs.date || '2026-11-16' }}
           ICAO24: ${{ inputs.icao24 || '4CA2D5' }}
           AUTO_PICK: ${{ inputs.auto_pick_4ca && 'true' || 'false' }}
-          USE_GH_TOKEN: "false"
+          USE_GH_TOKEN: "true"
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
