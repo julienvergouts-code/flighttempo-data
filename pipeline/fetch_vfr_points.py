@@ -291,7 +291,8 @@ def atomic_text(path: Path, content: str) -> None:
         raise
 
 
-def read_meta_status(path: Path = META_PATH) -> str | None:
+def read_meta_status(path: Path | None = None) -> str | None:
+    path = path or META_PATH
     try:
         return json.loads(path.read_text(encoding="utf-8")).get("source_status", {}).get("FAA")
     except (OSError, ValueError, AttributeError):
@@ -354,7 +355,7 @@ def main(argv: list[str] | None = None) -> int:
         if drop > 0.30 and not args.allow_drop:
             log.error("Dataset drop %.1f%% (%d -> %d); refusing. Use --allow-drop.", drop * 100, len(previous), len(new_rows))
             return 1
-    if dedupe_sort(previous) == new_rows and read_meta_status() == status:
+    if not args.dry_run and dedupe_sort(previous) == new_rows and read_meta_status() == status:
         log.info("Dataset unchanged; leaving committed files untouched.")
         return 0
     generated = timestamp()
