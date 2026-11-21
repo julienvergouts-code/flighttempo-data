@@ -50,9 +50,10 @@ class VfrReportingPointPipelineTests(unittest.TestCase):
         ])
 
     def test_cycle_pages_and_dates(self):
-        html = '<a href="cycle_26_Nov_2026.html">Cycle</a>'
+        html = '<a href="cycle_26_Nov_2026.html">Cycle</a><a href="2026-09-03">Current cycle</a>'
         self.assertEqual(mod.extract_cycle_pages(html, "https://faa.gov/sub/"), [
-            ("https://faa.gov/sub/cycle_26_Nov_2026.html", "2026-11-26")
+            ("https://faa.gov/sub/cycle_26_Nov_2026.html", "2026-11-26"),
+            ("https://faa.gov/sub/2026-09-03", "2026-09-03"),
         ])
 
     def test_nested_zip_parser_extracts_only_vp_points(self):
