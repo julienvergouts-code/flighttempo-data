@@ -104,23 +104,9 @@ jobs:
               echo "Missing split archive assets (.tar.aa/.tar.ab) for $TAG"
               exit 1
             fi
-            STAGE=archive_download
-            curl -fL --retry 3 --retry-delay 2 -o /tmp/archive.aa "$URL_AA" &
-            PID_AA=$!
-            curl -fL --retry 3 --retry-delay 2 -o /tmp/archive.ab "$URL_AB" &
-            PID_AB=$!
-            wait "$PID_AA"
-            wait "$PID_AB"
-            STAGE=archive_extraction
-            set +o pipefail
-            cat /tmp/archive.aa /tmp/archive.ab | tar -xOf - --wildcards --occurrence=1 "*trace_full_$HEX.json*" > /tmp/benchmark_trace.raw
-            TAR_STATUS=$?
-            set -o pipefail
-            if [[ "$TAR_STATUS" -ne 0 ]]; then echo "Trace extraction failed, tar exit=$TAR_STATUS"; exit "$TAR_STATUS"; fi
-            test -s /tmp/benchmark_trace.raw
-            rm -f /tmp/archive.aa /tmp/archive.ab
             STAGE=pipeline_execution
-            python pipeline/build_corridors.py --mode benchmark --date "$RUN_DATE" --icao24 "$ICAO24" --trace-file /tmp/benchmark_trace.raw --output /tmp/benchmark_result.json --evidence-out /tmp/benchmark_evidence.json
+            echo "Handing archive streaming, trace selection, and JSON validation to the pipeline's existing reader"
+            python pipeline/build_corridors.py --mode benchmark --date "$RUN_DATE" --icao24 "$ICAO24" --output /tmp/benchmark_result.json --evidence-out /tmp/benchmark_evidence.json
           fi
       - name: Upload benchmark evidence and logs
         if: always()
@@ -129,6 +115,7 @@ jobs:
           name: benchmark-evidence-${{ github.run_id }}-${{ github.sha }}
           path: |
             /tmp/benchmark_evidence.json
+            /tmp/benchmark_result.json
             /tmp/benchmark_run.log
             /tmp/gh_release_headers.txt
             /tmp/gh_release_body.raw
