@@ -83,7 +83,7 @@ def extract_cycle_pages(html: str, page_url: str) -> list[tuple[str, str | None]
     for href in links:
         url = urljoin(page_url, href)
         date = cycle_date_from_url(url)
-        if url != page_url and date and url.lower().endswith((".htm", ".html", "/")):
+        if url != page_url and date and not url.lower().endswith((".zip", ".pdf")):
             found[url] = date
     return list(found.items())
 
