@@ -54,220 +54,72 @@ jobs:
         run: |
           set -euo pipefail
           exec > >(tee -a /tmp/benchmark_run.log) 2>&1
-          STAGE="workflow_initialization"
+          STAGE=workflow_initialization
           on_failure() {
             rc=$?
             if [[ ! -s /tmp/benchmark_evidence.json ]]; then
-              python - "$STAGE" "$rc" <<'PY'
-          import json, os, sys
-          path="/tmp/benchmark_evidence.json"
-          payload={"status":"failed","failure_stage":sys.argv[1],"workflow_exit_code":int(sys.argv[2]),
-                   "error_message":"Workflow failed before pipeline recorder produced detailed evidence"}
-          with open(path,"w",encoding="utf-8") as f:
-              json.dump(payload,f,indent=2); f.write("\\n"); f.flush(); os.fsync(f.fileno())
-          PY
+              printf '{"status":"failed","failure_stage":"%s","workflow_exit_code":%s}\n' "$STAGE" "$rc" > /tmp/benchmark_evidence.json
             fi
           }
           trap on_failure ERR
           trap 'rm -f /tmp/archive.aa /tmp/archive.ab /tmp/benchmark_trace.raw' EXIT
-          STAGE="archive_release_lookup"
+          STAGE=archive_release_lookup
           if [[ "$AUTO_PICK" == "true" ]]; then
-            STAGE="pipeline_execution"
+            STAGE=pipeline_execution
             python pipeline/build_corridors.py --mode benchmark --date "$RUN_DATE" --auto-pick-4ca --output /tmp/benchmark_result.json --evidence-out /tmp/benchmark_evidence.json
           else
             HEX="$(echo "$ICAO24" | tr '[:upper:]' '[:lower:]')"
             YEAR="$(date -u -d "$RUN_DATE" +%Y)"
             TAG="v$(date -u -d "$RUN_DATE" +%Y.%m.%d)-planes-readsb-prod-0"
-            RELEASE_TAG="${TAG}"
-            URL="https://api.github.com/repos/adsblol/globe_history_${YEAR}/releases/tags/${RELEASE_TAG}"
-
-            HDR_FILE="/tmp/gh_release_headers.txt"
-            BODY_RAW="/tmp/gh_release_body.raw"
-            BODY_JSON="/tmp/gh_release_body.json"
-            META_OUT="/tmp/release_meta.json"
-
-            is_nonneg_int() {
-              python3 -c 'import sys; s = sys.argv[1].strip(); raise SystemExit(0 if s.isdigit() else 1)' "${1:-}" 2>/dev/null
-            }
-
-            CURL_ARGS=(
-              -sS
-              -L
-              -D "$HDR_FILE"
-              -o "$BODY_RAW"
-              -w "%{http_code}"
-              -H "Accept: application/vnd.github+json"
-              -H "X-GitHub-Api-Version: 2022-11-28"
-              -H "User-Agent: flighttempo-corridor-benchmark-diag"
-            )
-
-            AUTH_MODE="disabled"
-            if [ "${USE_GH_TOKEN:-false}" = "true" ] && [ -n "${GH_TOKEN:-}" ]; then
+            URL="https://api.github.com/repos/adsblol/globe_history_${YEAR}/releases/tags/${TAG}"
+            HDR_FILE=/tmp/gh_release_headers.txt
+            BODY_RAW=/tmp/gh_release_body.raw
+            BODY_JSON=/tmp/gh_release_body.json
+            META_OUT=/tmp/release_meta.json
+            CURL_ARGS=(-sS -L -D "$HDR_FILE" -o "$BODY_RAW" -w "%{http_code}" -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" -H "User-Agent: flighttempo-corridor-benchmark")
+            AUTH_MODE=disabled
+            if [[ "${USE_GH_TOKEN:-false}" == true && -n "${GH_TOKEN:-}" ]]; then
               CURL_ARGS+=(-H "Authorization: Bearer ${GH_TOKEN}")
-              AUTH_MODE="enabled"
+              AUTH_MODE=enabled
             fi
-
             set +e
             HTTP_CODE=$(curl "${CURL_ARGS[@]}" "$URL" 2>/tmp/gh_curl_stderr.txt)
             CURL_EXIT=$?
             set -e
-
-            if [ "$CURL_EXIT" -ne 0 ] || ! is_nonneg_int "$HTTP_CODE"; then
-              HTTP_CODE="000"
-            fi
-
-            echo "Release metadata probe: repo=adsblol/globe_history_${YEAR} tag=${RELEASE_TAG} auth=${AUTH_MODE} curl_exit=${CURL_EXIT} http_status=${HTTP_CODE}"
-            if [ -s /tmp/gh_curl_stderr.txt ]; then
-              echo "=== curl stderr ==="
-              cat /tmp/gh_curl_stderr.txt
-            fi
-
-            echo "=== Key Rate-Limit & GitHub Headers ==="
-            if [ -f "$HDR_FILE" ]; then
-              grep -iE '^(x-ratelimit-|retry-after|x-github-request-id|x-github-media-type|www-authenticate|content-type):' "$HDR_FILE" || true
-            fi
-
-            RESET_EPOCH=$(awk -F': ' 'tolower($1)=="x-ratelimit-reset"{gsub(/\\r/,"",$2); val=$2} END{print val}' "$HDR_FILE" 2>/dev/null || true)
-            if is_nonneg_int "$RESET_EPOCH"; then
-              NOW_EPOCH=$(date -u +%s)
-              RESET_UTC=$(date -u -d "@${RESET_EPOCH}" +"%Y-%m-%dT%H:%M:%SZ")
-              REMAINING_SEC=$((RESET_EPOCH - NOW_EPOCH))
-              echo "Rate-limit reset: epoch=${RESET_EPOCH} utc=${RESET_UTC} seconds_until_reset=${REMAINING_SEC}"
-            fi
-
-            python3 - "$BODY_RAW" "$BODY_JSON" <<'PY'
-            import json
-            import pathlib
-            import sys
-
-            raw_path = pathlib.Path(sys.argv[1])
-            json_path = pathlib.Path(sys.argv[2])
-
-            raw_bytes = raw_path.read_bytes() if raw_path.exists() else b""
-            byte_len = len(raw_bytes)
-            decoded = raw_bytes.decode("utf-8", errors="replace")
-            char_len = len(decoded)
-
-            BS = chr(92)
-
-            def sanitize_text(s: str) -> str:
-                out = []
-                for ch in s:
-                    code = ord(ch)
-                    if code < 32 or (127 <= code <= 159):
-                        out.append(f"{BS}u{code:04x}")
-                    else:
-                        out.append(ch)
-                return "".join(out)
-
-            safe_full = sanitize_text(decoded)
-            max_preview = 1024
-            if len(safe_full) > max_preview:
-                preview = safe_full[:max_preview] + f"...[truncated {len(safe_full) - max_preview} chars]"
-            else:
-                preview = safe_full
-
-            stripped = decoded.strip()
-
-            if byte_len == 0:
-                summary = {
-                    "kind": "empty",
-                    "byte_len": 0,
-                    "char_len": 0,
-                    "is_json": False,
-                    "preview": "",
-                }
-            elif not stripped:
-                summary = {
-                    "kind": "whitespace_only",
-                    "byte_len": byte_len,
-                    "char_len": char_len,
-                    "is_json": False,
-                    "preview": preview,
-                }
-            else:
-                try:
-                    parsed = json.loads(stripped)
-                    summary = {
-                        "kind": "json",
-                        "byte_len": byte_len,
-                        "char_len": char_len,
-                        "is_json": True,
-                        "preview": preview,
-                    }
-                    if isinstance(parsed, dict):
-                        for key in ("message", "documentation_url", "status"):
-                            val = parsed.get(key)
-                            if val is not None:
-                                summary[f"gh_{key}"] = sanitize_text(str(val))
-                except Exception as exc:
-                    kind = "html_or_xml" if stripped.startswith("<") else "plain_text_or_non_json"
-                    summary = {
-                        "kind": kind,
-                        "byte_len": byte_len,
-                        "char_len": char_len,
-                        "is_json": False,
-                        "json_parse_error": sanitize_text(f"{type(exc).__name__}: {exc}"),
-                        "preview": preview,
-                    }
-
-            json_path.write_text(json.dumps(summary, indent=2, ensure_ascii=True) + "\n", encoding="utf-8")
-            print(
-                f"Body inspection: kind={summary['kind']} byte_len={byte_len} char_len={char_len} "
-                f"is_json={summary['is_json']} preview={preview!r}"
-            )
-            PY
-
-            if [ "$HTTP_CODE" -lt 200 ] || [ "$HTTP_CODE" -ge 300 ]; then
-              echo "=== Raw Headers Dump ==="
-              if [ -f "$HDR_FILE" ]; then
-                python3 - "$HDR_FILE" <<'PY'
-            import pathlib
-            import sys
-
-            BS = chr(92)
-            data = pathlib.Path(sys.argv[1]).read_bytes().decode("utf-8", errors="replace")
-            out = []
-            for ch in data:
-                code = ord(ch)
-                if ch in ("\n", "\r", "\t") or (32 <= code <= 126) or code > 159:
-                    out.append(ch)
-                else:
-                    out.append(f"{BS}u{code:04x}")
-            print("".join(out))
-            PY
-              fi
+            echo "Release lookup: tag=$TAG auth=$AUTH_MODE curl_exit=$CURL_EXIT http_status=$HTTP_CODE"
+            cat /tmp/gh_curl_stderr.txt 2>/dev/null || true
+            grep -iE '^(x-ratelimit-|retry-after|x-github-request-id|content-type):' "$HDR_FILE" || true
+            cp "$BODY_RAW" "$BODY_JSON"
+            if [[ "$CURL_EXIT" -ne 0 || ! "$HTTP_CODE" =~ ^[0-9]{3}$ || "$HTTP_CODE" -lt 200 || "$HTTP_CODE" -ge 300 ]]; then
+              echo "Release metadata retrieval failed; see raw body/header artifacts"
               exit 22
             fi
-
             cp "$BODY_RAW" "$META_OUT"
             RELEASE_JSON="$(cat "$META_OUT")"
             export RELEASE_JSON
-            echo "Release metadata saved to ${META_OUT} and exported to RELEASE_JSON"
-
+            echo "Release metadata saved and exported"
             URL_AA="$(echo "$RELEASE_JSON" | jq -r '.assets[] | select(.name | endswith(".tar.aa")) | .browser_download_url' | head -n1)"
-            URL_AB="$(echo "$RELEASE_JSON" | jq -r '.assets[] | select(.name | endswith(".tar.ab")) | .browser_download_url' | head -n1)"            if [[ -z "$URL_AA" || -z "$URL_AB" || "$URL_AA" == "null" || "$URL_AB" == "null" ]]; then
-              echo "Expected split archive assets .tar.aa and .tar.ab not found for $TAG" >&2
+            URL_AB="$(echo "$RELEASE_JSON" | jq -r '.assets[] | select(.name | endswith(".tar.ab")) | .browser_download_url' | head -n1)"
+            if [[ -z "$URL_AA" || -z "$URL_AB" || "$URL_AA" == null || "$URL_AB" == null ]]; then
+              echo "Missing split archive assets (.tar.aa/.tar.ab) for $TAG"
               exit 1
             fi
-            STAGE="archive_download"
-            echo "Downloading split archive parts concurrently"
+            STAGE=archive_download
             curl -fL --retry 3 --retry-delay 2 -o /tmp/archive.aa "$URL_AA" &
             PID_AA=$!
             curl -fL --retry 3 --retry-delay 2 -o /tmp/archive.ab "$URL_AB" &
             PID_AB=$!
             wait "$PID_AA"
             wait "$PID_AB"
-            STAGE="archive_extraction"
-            echo "Extracting target trace_full_$HEX.json"
+            STAGE=archive_extraction
             set +o pipefail
             cat /tmp/archive.aa /tmp/archive.ab | tar -xOf - --wildcards --occurrence=1 "*trace_full_$HEX.json*" > /tmp/benchmark_trace.raw
             TAR_STATUS=$?
             set -o pipefail
-            if [[ "$TAR_STATUS" -ne 0 ]]; then echo "tar extraction failed (exit $TAR_STATUS)" >&2; exit "$TAR_STATUS"; fi
+            if [[ "$TAR_STATUS" -ne 0 ]]; then echo "Trace extraction failed, tar exit=$TAR_STATUS"; exit "$TAR_STATUS"; fi
             test -s /tmp/benchmark_trace.raw
             rm -f /tmp/archive.aa /tmp/archive.ab
-            STAGE="pipeline_execution"
+            STAGE=pipeline_execution
             python pipeline/build_corridors.py --mode benchmark --date "$RUN_DATE" --icao24 "$ICAO24" --trace-file /tmp/benchmark_trace.raw --output /tmp/benchmark_result.json --evidence-out /tmp/benchmark_evidence.json
           fi
       - name: Upload benchmark evidence and logs
