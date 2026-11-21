@@ -85,15 +85,9 @@ jobs:
             BODY_RAW="/tmp/gh_release_body.raw"
             BODY_JSON="/tmp/gh_release_body.json"
             META_OUT="/tmp/release_meta.json"
-            CURL_STDERR="/tmp/gh_curl_stderr.txt"
-
-            : > "$HDR_FILE"
-            : > "$BODY_RAW"
-            : > "$CURL_STDERR"
-            : > "$BODY_JSON"
 
             is_nonneg_int() {
-              python3 -c 'import sys; s=sys.argv[1].strip(); raise SystemExit(0 if s.isdigit() else 1)' "${1:-}" 2>/dev/null
+              python3 -c 'import sys; s = sys.argv[1].strip(); raise SystemExit(0 if s.isdigit() else 1)' "${1:-}" 2>/dev/null
             }
 
             CURL_ARGS=(
@@ -114,130 +108,145 @@ jobs:
             fi
 
             set +e
-            HTTP_CODE="$(curl "${CURL_ARGS[@]}" "$URL" 2>"$CURL_STDERR")"
+            HTTP_CODE=$(curl "${CURL_ARGS[@]}" "$URL" 2>/tmp/gh_curl_stderr.txt)
             CURL_EXIT=$?
             set -e
 
-            if ! is_nonneg_int "$HTTP_CODE"; then
+            if [ "$CURL_EXIT" -ne 0 ] || ! is_nonneg_int "$HTTP_CODE"; then
               HTTP_CODE="000"
             fi
 
             echo "Release metadata probe: repo=adsblol/globe_history_${YEAR} tag=${RELEASE_TAG} auth=${AUTH_MODE} curl_exit=${CURL_EXIT} http_status=${HTTP_CODE}"
-
-            if [ -s "$CURL_STDERR" ]; then
+            if [ -s /tmp/gh_curl_stderr.txt ]; then
               echo "=== curl stderr ==="
-              cat "$CURL_STDERR"
+              cat /tmp/gh_curl_stderr.txt
             fi
 
-            echo "=== Key GitHub Headers ==="
-            grep -iE '^(x-ratelimit-|retry-after|x-github-request-id|x-github-media-type|www-authenticate|content-type):' "$HDR_FILE" || true
+            echo "=== Key Rate-Limit & GitHub Headers ==="
+            if [ -f "$HDR_FILE" ]; then
+              grep -iE '^(x-ratelimit-|retry-after|x-github-request-id|x-github-media-type|www-authenticate|content-type):' "$HDR_FILE" || true
+            fi
 
-            RESET_EPOCH="$(awk -F': ' 'tolower($1)=="x-ratelimit-reset"{gsub(/\\r/,"",$2); val=$2} END{print val}' "$HDR_FILE" 2>/dev/null || true)"
-
+            RESET_EPOCH=$(awk -F': ' 'tolower($1)=="x-ratelimit-reset"{gsub(/\\r/,"",$2); val=$2} END{print val}' "$HDR_FILE" 2>/dev/null || true)
             if is_nonneg_int "$RESET_EPOCH"; then
-              NOW_EPOCH="$(date -u +%s)"
-              RESET_UTC="$(date -u -d "@${RESET_EPOCH}" +"%Y-%m-%dT%H:%M:%SZ")"
+              NOW_EPOCH=$(date -u +%s)
+              RESET_UTC=$(date -u -d "@${RESET_EPOCH}" +"%Y-%m-%dT%H:%M:%SZ")
               REMAINING_SEC=$((RESET_EPOCH - NOW_EPOCH))
               echo "Rate-limit reset: epoch=${RESET_EPOCH} utc=${RESET_UTC} seconds_until_reset=${REMAINING_SEC}"
             fi
 
             python3 - "$BODY_RAW" "$BODY_JSON" <<'PY'
-          import json
-          import pathlib
-          import sys
+            import json
+            import pathlib
+            import sys
 
-          raw_path = pathlib.Path(sys.argv[1])
-          summary_path = pathlib.Path(sys.argv[2])
+            raw_path = pathlib.Path(sys.argv[1])
+            json_path = pathlib.Path(sys.argv[2])
 
-          raw_bytes = raw_path.read_bytes() if raw_path.exists() else b""
-          decoded = raw_bytes.decode("utf-8", errors="replace")
-          byte_len = len(raw_bytes)
-          char_len = len(decoded)
-          stripped = decoded.strip()
+            raw_bytes = raw_path.read_bytes() if raw_path.exists() else b""
+            byte_len = len(raw_bytes)
+            decoded = raw_bytes.decode("utf-8", errors="replace")
+            char_len = len(decoded)
 
-          escaped = json.dumps(decoded, ensure_ascii=True)[1:-1]
-          preview_limit = 1024
-          if len(escaped) > preview_limit:
-              preview = escaped[:preview_limit] + (
-                  "...[truncated {} escaped chars]".format(len(escaped) - preview_limit)
-              )
-          else:
-              preview = escaped
+            BS = chr(92)
 
-          summary = {
-              "byte_len": byte_len,
-              "char_len": char_len,
-              "is_json": False,
-              "preview": preview,
-          }
+            def sanitize_text(s: str) -> str:
+                out = []
+                for ch in s:
+                    code = ord(ch)
+                    if code < 32 or (127 <= code <= 159):
+                        out.append(f"{BS}u{code:04x}")
+                    else:
+                        out.append(ch)
+                return "".join(out)
 
-          if byte_len == 0:
-              summary["kind"] = "empty"
-          elif not stripped:
-              summary["kind"] = "whitespace_only"
-          else:
-              try:
-                  parsed = json.loads(stripped)
-                  summary["kind"] = "json"
-                  summary["is_json"] = True
-                  if isinstance(parsed, dict):
-                      for key in ("message", "documentation_url", "status"):
-                          value = parsed.get(key)
-                          if value is not None:
-                              summary["gh_" + key] = str(value)
-              except Exception as exc:
-                  summary["kind"] = (
-                      "html_or_xml" if stripped.startswith("<")
-                      else "plain_text_or_non_json"
-                  )
-                  summary["json_parse_error"] = repr(exc)
+            safe_full = sanitize_text(decoded)
+            max_preview = 1024
+            if len(safe_full) > max_preview:
+                preview = safe_full[:max_preview] + f"...[truncated {len(safe_full) - max_preview} chars]"
+            else:
+                preview = safe_full
 
-          summary_path.write_text(
-              json.dumps(summary, indent=2, ensure_ascii=True) + "\n",
-              encoding="utf-8",
-          )
-          print(
-              "Body inspection: kind={} byte_len={} char_len={} "
-              "is_json={} preview={!r}".format(
-                  summary["kind"], byte_len, char_len,
-                  summary["is_json"], preview,
-              )
-          )
-          print("Body summary saved to {}".format(summary_path))
-          PY
+            stripped = decoded.strip()
 
-            echo "=== HTTP Failure Diagnostics ==="
-            if [ "$CURL_EXIT" -ne 0 ] || [ "$HTTP_CODE" -lt 200 ] || [ "$HTTP_CODE" -ge 300 ]; then
-              echo "Release metadata retrieval failed: curl_exit=${CURL_EXIT} http_status=${HTTP_CODE}"
-              echo "=== Raw Response Headers ==="
-              if [ -s "$HDR_FILE" ]; then cat "$HDR_FILE"; else echo "(no response headers captured)"; fi
-              echo "=== Body Summary ==="
-              cat "$BODY_JSON"
-              echo "=== Raw Body Preview ==="
-              python3 - "$BODY_RAW" <<'PY'
-          import json
-          import pathlib
-          import sys
-          p = pathlib.Path(sys.argv[1])
-          data = p.read_bytes() if p.exists() else b""
-          text = data.decode("utf-8", errors="replace")
-          escaped = json.dumps(text, ensure_ascii=True)[1:-1]
-          print(escaped[:2048])
-          if len(escaped) > 2048:
-              print("[preview truncated]")
-          PY
+            if byte_len == 0:
+                summary = {
+                    "kind": "empty",
+                    "byte_len": 0,
+                    "char_len": 0,
+                    "is_json": False,
+                    "preview": "",
+                }
+            elif not stripped:
+                summary = {
+                    "kind": "whitespace_only",
+                    "byte_len": byte_len,
+                    "char_len": char_len,
+                    "is_json": False,
+                    "preview": preview,
+                }
+            else:
+                try:
+                    parsed = json.loads(stripped)
+                    summary = {
+                        "kind": "json",
+                        "byte_len": byte_len,
+                        "char_len": char_len,
+                        "is_json": True,
+                        "preview": preview,
+                    }
+                    if isinstance(parsed, dict):
+                        for key in ("message", "documentation_url", "status"):
+                            val = parsed.get(key)
+                            if val is not None:
+                                summary[f"gh_{key}"] = sanitize_text(str(val))
+                except Exception as exc:
+                    kind = "html_or_xml" if stripped.startswith("<") else "plain_text_or_non_json"
+                    summary = {
+                        "kind": kind,
+                        "byte_len": byte_len,
+                        "char_len": char_len,
+                        "is_json": False,
+                        "json_parse_error": sanitize_text(f"{type(exc).__name__}: {exc}"),
+                        "preview": preview,
+                    }
+
+            json_path.write_text(json.dumps(summary, indent=2, ensure_ascii=True) + "\\n", encoding="utf-8")
+            print(
+                f"Body inspection: kind={summary['kind']} byte_len={byte_len} char_len={char_len} "
+                f"is_json={summary['is_json']} preview={preview!r}"
+            )
+            PY
+
+            if [ "$HTTP_CODE" -lt 200 ] || [ "$HTTP_CODE" -ge 300 ]; then
+              echo "=== Raw Headers Dump ==="
+              if [ -f "$HDR_FILE" ]; then
+                python3 - "$HDR_FILE" <<'PY'
+            import pathlib
+            import sys
+
+            BS = chr(92)
+            data = pathlib.Path(sys.argv[1]).read_bytes().decode("utf-8", errors="replace")
+            out = []
+            for ch in data:
+                code = ord(ch)
+                if ch in ("\\n", "\\r", "\\t") or (32 <= code <= 126) or code > 159:
+                    out.append(ch)
+                else:
+                    out.append(f"{BS}u{code:04x}")
+            print("".join(out))
+            PY
+              fi
               exit 22
             fi
 
             cp "$BODY_RAW" "$META_OUT"
             RELEASE_JSON="$(cat "$META_OUT")"
             export RELEASE_JSON
-            echo "Release metadata saved to ${META_OUT}"
-            echo "RELEASE_JSON populated for downstream jq extraction"
+            echo "Release metadata saved to ${META_OUT} and exported to RELEASE_JSON"
 
             URL_AA="$(echo "$RELEASE_JSON" | jq -r '.assets[] | select(.name | endswith(".tar.aa")) | .browser_download_url' | head -n1)"
-            URL_AB="$(echo "$RELEASE_JSON" | jq -r '.assets[] | select(.name | endswith(".tar.ab")) | .browser_download_url' | head -n1)"
-            if [[ -z "$URL_AA" || -z "$URL_AB" || "$URL_AA" == "null" || "$URL_AB" == "null" ]]; then
+            URL_AB="$(echo "$RELEASE_JSON" | jq -r '.assets[] | select(.name | endswith(".tar.ab")) | .browser_download_url' | head -n1)"            if [[ -z "$URL_AA" || -z "$URL_AB" || "$URL_AA" == "null" || "$URL_AB" == "null" ]]; then
               echo "Expected split archive assets .tar.aa and .tar.ab not found for $TAG" >&2
               exit 1
             fi
