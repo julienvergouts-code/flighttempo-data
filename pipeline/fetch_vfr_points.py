@@ -28,7 +28,8 @@ DATA_DIR = ROOT / "data"
 CSV_PATH = DATA_DIR / "vfr_points.csv"
 META_PATH = DATA_DIR / "vfr_points_meta.json"
 CSV_COLUMNS = ["icao", "code", "name", "lat", "lon", "role", "source", "updated_date"]
-VALID_SOURCES = {"FAA"}
+VALID_SOURCES = {"FAA", "OFMA"}
+SOURCE_PRIORITY = {"FAA": 30, "OFMA": 20}
 MAX_REJECTION_RATE = float(os.getenv("MAX_REJECTION_RATE", "0.25"))
 REQUEST_TIMEOUT = (15, 120)
 USER_AGENT = "FlightTempo-DataPipeline/2.2 (+https://github.com/julienvergouts-code/flighttempo-data)"
@@ -242,9 +243,12 @@ def dedupe_sort(records: list[dict[str, Any]]) -> list[dict[str, Any]]:
     for row in records:
         key = (row["icao"], row["code"])
         current = by_key.get(key)
-        if current is None or tuple(row.values()) < tuple(current.values()):
+        if current is None or SOURCE_PRIORITY[row["source"]] > SOURCE_PRIORITY[current["source"]]:
             by_key[key] = row
-    return sorted(by_key.values(), key=lambda r: (r["icao"], r["code"], r["name"]))
+        elif SOURCE_PRIORITY[row["source"]] == SOURCE_PRIORITY[current["source"]]:
+            if tuple(row[k] for k in CSV_COLUMNS) < tuple(current[k] for k in CSV_COLUMNS):
+                by_key[key] = row
+    return sorted(by_key.values(), key=lambda r: (r["icao"], r["code"], r["name"], r["source"]))
 
 
 def source_rows(records: list[dict[str, Any]]) -> list[dict[str, Any]]:
@@ -263,7 +267,7 @@ def write_csv(path: Path, records: list[dict[str, Any]], generated: str) -> None
 def write_meta(path: Path, records: list[dict[str, Any]], generated: str, status: str) -> None:
     meta = {
         "version": 1, "generated_utc": generated, "total_rows": len(records),
-        "rows_by_source": {"FAA": sum(r["source"] == "FAA" for r in records)},
+        "rows_by_source": {src: sum(r["source"] == src for r in records) for src in sorted(VALID_SOURCES)},
         "source_status": {"FAA": status, "OFMA": "disabled"},
         "sources": {"FAA": {"license": "US Government public-domain data",
           "attribution": "Federal Aviation Administration, Aeronautical Information Services, NASR FIX data."},
@@ -326,10 +330,11 @@ def main(argv: list[str] | None = None) -> int:
         validated, rejected = validate_records(fetched, guard=True)
         if not validated:
             raise RuntimeError("FAA produced zero valid reporting points")
-        new_rows = dedupe_sort(validated)
+        retained_disabled = [row for row in previous if row["source"] == "OFMA"]
+        new_rows = dedupe_sort(validated + retained_disabled)
     except Exception as exc:
         log.error("FAA source failed; retaining previous FAA rows: %s", exc)
-        new_rows, status = source_rows(previous), "failed"
+        new_rows, status = previous, "failed"
         if not args.allow_partial:
             log.error("Use --allow-partial to publish retained data with failure metadata")
             return 1
