@@ -180,5 +180,21 @@ class VfrReportingPointPipelineTests(unittest.TestCase):
         self.assertEqual(next(row for row in merged if row["code"] == "P1")["source"], "OFMA")
 
 
+
+    def test_unchanged_dataset_does_not_rewrite_metadata(self):
+        with tempfile.TemporaryDirectory() as td:
+            csvpath, metapath = Path(td) / "points.csv", Path(td) / "meta.json"
+            records = [{"icao": "", "code": "VP001", "name": "VP001", "lat": 40, "lon": -70,
+                        "role": "VRP", "source": "FAA", "updated_date": "2026-11-26"}]
+            mod.write_csv(csvpath, records, "old-generated")
+            mod.write_meta(metapath, records, "old-generated", "ok")
+            orig_csv, orig_meta, orig_fetch = mod.CSV_PATH, mod.META_PATH, mod.fetch_faa
+            mod.CSV_PATH, mod.META_PATH, mod.fetch_faa = csvpath, metapath, lambda: records
+            try:
+                self.assertEqual(mod.main([]), 0)
+                self.assertEqual(json.loads(metapath.read_text())["generated_utc"], "old-generated")
+            finally:
+                mod.CSV_PATH, mod.META_PATH, mod.fetch_faa = orig_csv, orig_meta, orig_fetch
+
 if __name__ == "__main__":
     unittest.main()
