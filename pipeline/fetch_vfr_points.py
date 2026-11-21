@@ -224,7 +224,8 @@ def validate_records(records: Iterable[dict[str, Any]], *, guard: bool = False) 
     return good, rejected
 
 
-def read_existing(path: Path = CSV_PATH) -> list[dict[str, Any]]:
+def read_existing(path: Path | None = None) -> list[dict[str, Any]]:
+    path = path or CSV_PATH
     if not path.exists():
         return []
     with path.open(encoding="utf-8-sig", newline="") as f:
