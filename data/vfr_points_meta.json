@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "generated_utc": "2026-11-21T23:18:04Z",
+  "total_rows": 681,
+  "rows_by_source": {
+    "FAA": 681,
+    "OFMA": 0
+  },
+  "source_status": {
+    "FAA": "ok",
+    "OFMA": "disabled"
+  },
+  "sources": {
+    "FAA": {
+      "license": "US Government public-domain data",
+      "attribution": "Federal Aviation Administration, Aeronautical Information Services, NASR FIX data."
+    },
+    "OFMA": {
+      "status": "disabled",
+      "reason": "Source/schema/redistribution terms not verified"
+    }
+  }
+}
