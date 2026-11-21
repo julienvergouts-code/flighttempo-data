@@ -193,7 +193,7 @@ PY
                   summary["json_parse_error"] = repr(exc)
 
           summary_path.write_text(
-              json.dumps(summary, indent=2, ensure_ascii=True) + "\\n",
+              json.dumps(summary, indent=2, ensure_ascii=True) + "\n",
               encoding="utf-8",
           )
           print(
@@ -204,7 +204,7 @@ PY
               )
           )
           print("Body summary saved to {}".format(summary_path))
-          PYPY
+          PY
 
             echo "=== HTTP Failure Diagnostics ==="
             if [ "$CURL_EXIT" -ne 0 ] || [ "$HTTP_CODE" -lt 200 ] || [ "$HTTP_CODE" -ge 300 ]; then
@@ -225,7 +225,7 @@ PY
           print(escaped[:2048])
           if len(escaped) > 2048:
               print("[preview truncated]")
-          PYPY
+          PY
               exit 22
             fi
 
