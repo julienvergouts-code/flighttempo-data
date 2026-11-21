@@ -152,3 +152,15 @@ def test_publish_pair_rolls_back_if_second_replace_fails(monkeypatch, tmp_path):
     with pytest.raises(OSError): mod.publish_pair(csvpath, metapath, records, "now", "ok")
     assert csvpath.read_text() == "old-csv"
     assert metapath.read_text() == "old-meta"
+
+def test_disabled_ofma_rows_are_retained_and_faa_wins_duplicates():
+    faa = {"icao": "", "code": "VP001", "name": "FAA point", "lat": 40, "lon": -70,
+           "role": "VRP", "source": "FAA", "updated_date": "2026-11-26"}
+    ofma = {"icao": "", "code": "VP001", "name": "OFMA point", "lat": 41, "lon": -71,
+            "role": "VRP", "source": "OFMA", "updated_date": "2026-11-20"}
+    retained = {"icao": "LFPG", "code": "P1", "name": "P1", "lat": 49, "lon": 2.5,
+                "role": "ENTRY", "source": "OFMA", "updated_date": "2026-11-20"}
+    merged = mod.dedupe_sort([ofma, faa, retained])
+    assert len(merged) == 2
+    assert next(row for row in merged if row["code"] == "VP001")["source"] == "FAA"
+    assert next(row for row in merged if row["code"] == "P1")["source"] == "OFMA"
