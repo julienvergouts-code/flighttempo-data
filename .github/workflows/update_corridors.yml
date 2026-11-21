@@ -59,13 +59,13 @@ jobs:
             rc=$?
             if [[ ! -s /tmp/benchmark_evidence.json ]]; then
               python - "$STAGE" "$rc" <<'PY'
-import json, os, sys
-path="/tmp/benchmark_evidence.json"
-payload={"status":"failed","failure_stage":sys.argv[1],"workflow_exit_code":int(sys.argv[2]),
-         "error_message":"Workflow failed before pipeline recorder produced detailed evidence"}
-with open(path,"w",encoding="utf-8") as f:
-    json.dump(payload,f,indent=2); f.write("\\n"); f.flush(); os.fsync(f.fileno())
-PY
+          import json, os, sys
+          path="/tmp/benchmark_evidence.json"
+          payload={"status":"failed","failure_stage":sys.argv[1],"workflow_exit_code":int(sys.argv[2]),
+                   "error_message":"Workflow failed before pipeline recorder produced detailed evidence"}
+          with open(path,"w",encoding="utf-8") as f:
+              json.dump(payload,f,indent=2); f.write("\\n"); f.flush(); os.fsync(f.fileno())
+          PY
             fi
           }
           trap on_failure ERR
