@@ -13,6 +13,11 @@ import struct
 from collections import Counter, defaultdict, deque
 from pathlib import Path
 from typing import Any
+import sys
+
+# Ensure repository-root imports work when this file is executed as a script in CI.REPO_ROOT = Path(__file__).resolve().parents[2]
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
 
 FIVE_LETTER_RE = re.compile(r"^[A-Z]{5}$")
 CODED_FIX_RE = re.compile(r"^[A-Z]{2,4}\d{1,3}$")
