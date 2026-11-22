@@ -24,7 +24,9 @@ class Tests(unittest.TestCase):
  def test_zip_member_selection(self):
   b=io.BytesIO()
   with zipfile.ZipFile(b,"w") as z:z.writestr("ofmx_ebbu/embedded/ofmx_ebbu","<OFMX-Snapshot/>")
-  self.assertEqual(xml_from_zip(b.getvalue(),"ebbu"),b"<OFMX-Snapshot/>")\n  with zipfile.ZipFile(b,"a") as z:z.writestr("other.xml","<OFMX-Snapshot/>")\n  with self.assertRaises(ValueError):xml_from_zip(b.getvalue(),"ebbu")
+  self.assertEqual(xml_from_zip(b.getvalue(),"ebbu"),b"<OFMX-Snapshot/>")
+  with zipfile.ZipFile(b,"a") as z:z.writestr("ofmx_ebbu/embedded/second.xml","<OFMX-Snapshot/>")
+  with self.assertRaises(ValueError):xml_from_zip(b.getvalue(),"ebbu")
  def test_empty_or_bad_schema_fails_closed(self):
   with self.assertRaises(ValueError):parse_xml(b"<OFMX-Snapshot/>",{"region":"EB"})
 if __name__=="__main__":unittest.main()
