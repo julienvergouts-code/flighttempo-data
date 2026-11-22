@@ -487,14 +487,44 @@ def main():
 
             for result in accepted:
                 observed = [str(f).strip().upper() for f in result.get("matchedFixes", []) if f]
+                details = result.get("matchedFixDetails", [])
+                detail_by_index = [d for d in details if isinstance(d,dict)] if isinstance(details,list) else []
                 matched_total += len(observed)
                 resolved = [fix for fix in observed if fix in nav.adj]
                 resolved_total += len(resolved)
-                # A* start must have outgoing edges; goal must have incoming edges.
-                usable_starts = [fix for fix in observed if out_degree.get(fix, 0) > 0 and fix in nav.fix_coords_by_ident]
-                usable_goals = [fix for fix in observed if in_degree.get(fix, 0) > 0 and fix in nav.fix_coords_by_ident]
-                start = usable_starts[0] if usable_starts else None
-                goal = usable_goals[-1] if usable_goals else None
+
+                def detail_coord(index):
+                    if index < len(detail_by_index):
+                        d=detail_by_index[index]
+                        try: return (float(d["lat"]),float(d["lon"]))
+                        except (KeyError,TypeError,ValueError): pass
+                    return None
+
+                start_candidates=[]; goal_candidates=[]
+                for i,fix in enumerate(observed):
+                    coord=detail_coord(i)
+                    if nav.physical_nodes:
+                        try:
+                            r=nav.resolve_physical_endpoint(fix,coord,"start")
+                            if r: start_candidates.append({"fix":fix,"match_index":i,"coord":coord,"resolution":r})
+                        except ValueError as exc:
+                            print(f"[NAV] endpoint candidate skipped {fix}: {exc}")
+                        try:
+                            r=nav.resolve_physical_endpoint(fix,coord,"goal")
+                            if r: goal_candidates.append({"fix":fix,"match_index":i,"coord":coord,"resolution":r})
+                        except ValueError as exc:
+                            print(f"[NAV] endpoint candidate skipped {fix}: {exc}")
+                    else:
+                        if out_degree.get(fix,0)>0 and fix in nav.fix_coords_by_ident:
+                            start_candidates.append({"fix":fix,"match_index":i,"coord":coord,"resolution":None})
+                        if in_degree.get(fix,0)>0 and fix in nav.fix_coords_by_ident:
+                            goal_candidates.append({"fix":fix,"match_index":i,"coord":coord,"resolution":None})
+                start_row=start_candidates[0] if start_candidates else None
+                goal_row=goal_candidates[-1] if goal_candidates else None
+                start=start_row["fix"] if start_row else None
+                goal=goal_row["fix"] if goal_row else None
+                start_coord=start_row["coord"] if start_row else None
+                goal_coord=goal_row["coord"] if goal_row else None
 
                 diag = {
                     "leg": result.get("legNumber"),
@@ -509,48 +539,54 @@ def main():
                     "last_matched_fix": observed[-1] if observed else None,
                     "first_fix_in_graph": observed[0] in nav.adj if observed else False,
                     "last_fix_in_graph": observed[-1] in nav.adj if observed else False,
-                    "usable_start_candidates": usable_starts,
-                    "usable_goal_candidates": usable_goals,
+                    "usable_start_candidates": [x["fix"] for x in start_candidates],
+                    "usable_goal_candidates": [x["fix"] for x in goal_candidates],
                     "selected_graph_endpoints": [start, goal],
+                    "selected_endpoint_coordinates": [start_coord, goal_coord],
+                    "selected_physical_endpoint_resolution": [start_row["resolution"] if start_row else None,
+                                                             goal_row["resolution"] if goal_row else None],
                 }
 
                 status, overlap = "UNVERIFIED_ENDPOINTS", 0.0
-                path = None
-                distance_nm = None
-                raw_endpoint_result = None
-                if len(observed) >= 2:
+                path = None; distance_nm = None; raw_endpoint_result = None
+                if len(observed)>=2:
                     try:
-                        raw_endpoint_result = nav.a_star_connected(observed[0], observed[-1])
+                        raw_endpoint_result=nav.a_star_connected(observed[0],observed[-1],
+                                                               detail_coord(0),detail_coord(len(observed)-1))
                     except Exception as exc:
-                        raw_endpoint_result = {"error": f"{type(exc).__name__}: {exc}"}
-                diag["raw_endpoint_probe"] = (
-                    {"connected": bool(raw_endpoint_result), "path_node_count": len(raw_endpoint_result[0]) if isinstance(raw_endpoint_result, tuple) and raw_endpoint_result and isinstance(raw_endpoint_result[0], (list, tuple)) else 0,
-                     "distance_nm": raw_endpoint_result[1] if isinstance(raw_endpoint_result, tuple) and len(raw_endpoint_result) > 1 else None}
-                    if not isinstance(raw_endpoint_result, dict) else raw_endpoint_result
-                )
+                        raw_endpoint_result={"error":f"{type(exc).__name__}: {exc}"}
+                diag["raw_endpoint_probe"]=(
+                    {"connected":bool(raw_endpoint_result),
+                     "path_node_count":len(raw_endpoint_result[0]) if isinstance(raw_endpoint_result,tuple) and raw_endpoint_result and isinstance(raw_endpoint_result[0],(list,tuple)) else 0,
+                     "distance_nm":raw_endpoint_result[1] if isinstance(raw_endpoint_result,tuple) and len(raw_endpoint_result)>1 else None,
+                     "physical_path":nav.last_route_physical_path if isinstance(raw_endpoint_result,tuple) else None,
+                     "endpoint_resolution":nav.last_route_endpoint_resolution if isinstance(raw_endpoint_result,tuple) else None}
+                    if not isinstance(raw_endpoint_result,dict) else raw_endpoint_result)
 
-                if start and goal and start != goal:
+                if start and goal:
                     try:
-                        astar = nav.a_star_connected(start, goal)
+                        astar=nav.a_star_connected(start,goal,start_coord,goal_coord)
                     except Exception as exc:
-                        astar = {"error": f"{type(exc).__name__}: {exc}"}
-                    if astar and not isinstance(astar, dict):
-                        path, distance_nm = astar
-                        a, b = set(observed), set(path)
-                        overlap = round(len(a & b) / max(1, len(a | b)), 3)
-                        status = "CONNECTED_FTWG_USABLE_ENDPOINTS"
-                        connected_legs += 1
+                        astar={"error":f"{type(exc).__name__}: {exc}"}
+                    if astar and not isinstance(astar,dict):
+                        path,distance_nm=astar
+                        a,b=set(observed),set(path)
+                        overlap=round(len(a&b)/max(1,len(a|b)),3)
+                        status="CONNECTED_FTWG_PHYSICAL_NODES" if nav.physical_nodes else "CONNECTED_CSV_FALLBACK_DIJKSTRA"
+                        connected_legs+=1
                     else:
-                        status = "GRAPH_GAP_DETECTED"
+                        status="GRAPH_GAP_DETECTED"
                 else:
-                    status = "UNVERIFIED_ENDPOINTS"
+                    status="UNVERIFIED_ENDPOINTS"
 
-                diag["graph_path_node_count"] = len(path) if path else 0
-                diag["graph_path_distance_nm"] = distance_nm
-                diag["graph_path_nodes"] = path
-                result["graphComparison"] = {"graph_source": nav.graph_source, "status": status,
-                                             "fix_jaccard_overlap": overlap, "diagnostics": diag}
-                comparisons.append({"status": status, **diag, "overlap": overlap})
+                diag["graph_path_node_count"]=len(path) if path else 0
+                diag["graph_path_distance_nm"]=distance_nm
+                diag["graph_path_nodes"]=path
+                diag["graph_path_physical_nodes"]=nav.last_route_physical_path if path else None
+                diag["graph_path_endpoint_resolution"]=nav.last_route_endpoint_resolution if path else None
+                result["graphComparison"]={"graph_source":nav.graph_source,"status":status,
+                                           "fix_jaccard_overlap":overlap,"diagnostics":diag}
+                comparisons.append({"status":status,**diag,"overlap":overlap})
             summary = {
                 "trace_rows": trace_rows,
                 "total_legs": len(evidence.get("traceResults", [])),
