@@ -40,14 +40,26 @@ def fetch(url):
         return r.status,r.url,body
 
 
+def scan_script_text(source):
+    patterns=re.findall(r"""["']((?:https?://|/)[^"'\s<>]{3,})["']""",source)
+    candidates=sorted(set(x for x in patterns if any(t in x.lower() for t in ("download","api","snapshot","ofmx","cup","openair","region","data","zip"))))
+    keywords=("download","ajax","snapshot","airac","api","region","file","ofmx","zip","cup","openair")
+    snippets=[]
+    for keyword in keywords:
+        for match in re.finditer(keyword,source,re.IGNORECASE):
+            snippets.append(source[max(0,match.start()-90):min(len(source),match.end()+140)].replace("\n"," "))
+            if len(snippets)>=100: break
+        if len(snippets)>=100: break
+    return candidates, list(dict.fromkeys(snippets))[:100]
+
 def inspect_script(url):
     try:
         status,final,raw=fetch(url)
         source=raw.decode("utf-8","replace")
-        patterns=re.findall(r"""["']((?:https?://|/)[^"'\\s<>]{3,})["']""",source)
-        candidates=sorted(set(x for x in patterns if any(t in x.lower() for t in ("download","api","snapshot","ofmx","cup","openair","region","data"))))
+        candidates,snippets=scan_script_text(source)
         return {"url":url,"status":status,"finalUrl":final,"bytes":len(raw),
-                "sha256":hashlib.sha256(raw).hexdigest(),"candidateStrings":candidates[:200]}
+                "sha256":hashlib.sha256(raw).hexdigest(),"candidateStrings":candidates[:200],
+                "keywordSnippets":snippets}
     except Exception as e:
         return {"url":url,"error":str(e)}
 
