@@ -13,7 +13,7 @@ on:
       - "docs/ofma_ofmx_vfr_import.md"
       - ".github/workflows/import-ofma-ofmx-vfr-points.yml"
 concurrency:
-  group: flighttempo-shared-manifest-updates
+  group: ${{ github.event_name == 'pull_request' && format('flighttempo-pr-{0}', github.workflow) || 'flighttempo-shared-manifest-updates' }}
   cancel-in-progress: false
 jobs:
   import:
@@ -47,7 +47,7 @@ jobs:
       - name: Register manifest dataset
         run: python scripts/register_ofma_ofmx_vfr_points_manifest.py
       - name: Publish generated data
-        if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
         run: |
           if git diff --quiet -- data/ofma_ofmx_vfr_points.csv data/ofma_ofmx_vfr_points_meta.json navigation_manifest.json; then
             echo "No data changes."
