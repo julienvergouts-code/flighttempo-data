@@ -41,7 +41,7 @@ def fetch(url):
 
 
 def scan_script_text(source):
-    patterns=re.findall(r"""["']((?:https?://|/)[^"'\s<>]{3,})["']""",source)
+    patterns=re.findall(r"""["']([^"'\s<>]{3,})["']""",source)
     candidates=sorted(set(x for x in patterns if any(t in x.lower() for t in ("download","api","snapshot","ofmx","cup","openair","region","data","zip"))))
     keywords=("download","ajax","snapshot","airac","api","region","file","ofmx","zip","cup","openair")
     snippets=[]
