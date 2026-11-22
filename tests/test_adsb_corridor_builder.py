@@ -23,8 +23,7 @@ class CorridorBuilderTests(unittest.TestCase):
             raw = path.read_text(encoding="utf-8")
             parsed = json.loads(raw, parse_constant=lambda value: (_ for _ in ()).throw(ValueError(value)))
             self.assertEqual(parsed["status"], "running")
-            self.assertTrue(raw.endswith("\\n"))
-            self.assertFalse(raw.endswith("\\\\n"))
+            self.assertTrue(raw.endswith("\n"))
 
     def test_readsb_epoch_relative_seconds_and_ground_flag(self):
         with tempfile.TemporaryDirectory() as d:
