@@ -25,6 +25,29 @@ class CorridorBuilderTests(unittest.TestCase):
         self.assertEqual(points[0]["t"], 1005)
         self.assertTrue(points[0]["ground"])
 
+    def test_process_trace_retains_matched_fix_coordinates_without_timestamps(self):
+        with tempfile.TemporaryDirectory() as d:
+            p=Path(d)/"trace.json"
+            trace=[]
+            for i in range(30):
+                if i<10:
+                    lat,lon=52.31+(i*0.0002),4.77
+                elif i<20:
+                    lat,lon=51.88+(i-10)*0.0002,5.10
+                else:
+                    lat,lon=51.46+(i-20)*0.0002,5.38
+                trace.append([i,lat,lon,10000,200,90,0])
+            p.write_text(json.dumps({"timestamp":1700000000,"trace":trace}))
+            airports=[("EHAM",52.3086,4.7639),("EHEH",51.4500,5.3740)]
+            fixes=[("FIXA",52.31,4.77),("FIXB",51.88,5.10),("FIXC",51.46,5.38)]
+            result=builder.process_trace(p,airports,fixes,{"EHAM":0,"EHEH":1})
+        self.assertEqual(result[0]["origin"],"EHAM")
+        self.assertEqual(result[0]["destination"],"EHEH")
+        details=result[0]["matchedFixDetails"]
+        self.assertGreaterEqual(len(details),2)
+        self.assertTrue(all({"fix","lat","lon","distanceNm"}<=set(x) for x in details))
+        self.assertTrue(all("t" not in x for x in details))
+
     def test_candidate_link_is_low_confidence(self):
         matches = [
             {"fix": "AAA", "lat": 50, "lon": 5, "t": 100},
