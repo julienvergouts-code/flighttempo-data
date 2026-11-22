@@ -113,7 +113,7 @@ class RepositoryNavDatabase:
         self.physical_nodes=[]; self.physical_adj={}; self.nodes_by_ident={}; self.physical_in_degree_nodes=set()
         for node_index in range(nodes):
             ident,lat,lon,kind=FTWG_NODE.unpack_from(raw,off); off+=FTWG_NODE.size
-            name=ident.split(b"\\x00",1)[0].decode("ascii","ignore").strip().upper()
+            name=ident.split(b"\x00",1)[0].decode("ascii","ignore").strip().upper()
             coord=(lat/1e6,lon/1e6)
             idx.append(name)
             self.physical_nodes.append({"ident":name,"coord":coord,"kind":kind})
@@ -125,7 +125,7 @@ class RepositoryNavDatabase:
             u,v,dist,awy=FTWG_EDGE.unpack_from(raw,off); off+=FTWG_EDGE.size
             if u>=nodes or v>=nodes: raise ValueError("edge index out of range")
             a,b=idx[u],idx[v]
-            airway=awy.split(b"\\x00",1)[0].decode("ascii","ignore").strip().upper()
+            airway=awy.split(b"\x00",1)[0].decode("ascii","ignore").strip().upper()
             weight=dist/10.0
             if a and b:
                 self.adj.setdefault(a,[]).append((b,weight,airway))
