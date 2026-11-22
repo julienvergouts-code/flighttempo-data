@@ -48,10 +48,18 @@ def _nm(a, b):
     return 2*3440.065*math.atan2(math.sqrt(q), math.sqrt(1-q))
 
 class RepositoryNavDatabase:
-    """FTWG v1 reader; CSV is a clearly tagged fallback only."""
+    """FTWG v1 reader preserving physical node identity; CSV is a tagged fallback."""
     def __init__(self):
+        # Legacy identifier maps are retained for coverage metrics only. Routing uses
+        # physical node indices so duplicate names cannot teleport between locations.
         self.fix_coords_by_ident = {}
         self.adj = {}
+        self.physical_nodes = []
+        self.physical_adj = {}
+        self.nodes_by_ident = {}
+        self.heuristic_scale = 0.0
+        self.last_route_physical_path = []
+        self.last_route_endpoint_resolution = {}
         self.graph_source = "UNAVAILABLE"
 
     def _load_airways(self):
@@ -96,38 +104,101 @@ class RepositoryNavDatabase:
         expected=FTWG_HEADER.size+nodes*FTWG_NODE.size+edges*FTWG_EDGE.size
         if len(raw)!=expected: raise ValueError(f"size {len(raw)} != expected {expected}")
         idx=[]; off=FTWG_HEADER.size
-        for _ in range(nodes):
+        self.physical_nodes=[]; self.physical_adj={}; self.nodes_by_ident={}
+        for node_index in range(nodes):
             ident,lat,lon,kind=FTWG_NODE.unpack_from(raw,off); off+=FTWG_NODE.size
-            name=ident.split(b"\x00",1)[0].decode("ascii","ignore").strip().upper()
+            name=ident.split(b"\\x00",1)[0].decode("ascii","ignore").strip().upper()
+            coord=(lat/1e6,lon/1e6)
             idx.append(name)
-            if name: self.fix_coords_by_ident.setdefault(name,(lat/1e6,lon/1e6))
-        loaded=0
+            self.physical_nodes.append({"ident":name,"coord":coord,"kind":kind})
+            if name:
+                self.fix_coords_by_ident.setdefault(name,coord)
+                self.nodes_by_ident.setdefault(name,[]).append(node_index)
+        loaded=0; ratios=[]; incoming=set()
         for _ in range(edges):
             u,v,dist,awy=FTWG_EDGE.unpack_from(raw,off); off+=FTWG_EDGE.size
             if u>=nodes or v>=nodes: raise ValueError("edge index out of range")
             a,b=idx[u],idx[v]
-            airway=awy.split(b"\x00",1)[0].decode("ascii","ignore").strip().upper()
+            airway=awy.split(b"\\x00",1)[0].decode("ascii","ignore").strip().upper()
+            weight=dist/10.0
             if a and b:
-                self.adj.setdefault(a,[]).append((b,dist/10.0,airway))
-                loaded+=1
+                self.adj.setdefault(a,[]).append((b,weight,airway))
+                self.physical_adj.setdefault(u,[]).append((v,weight,airway))
+                incoming.add(v); loaded+=1
+                physical_distance=_nm(self.physical_nodes[u]["coord"],self.physical_nodes[v]["coord"])
+                if physical_distance>1e-9:
+                    ratios.append(weight/physical_distance)
+        self.physical_in_degree_nodes=incoming
+        # Scale by the minimum edge-cost/geodesic ratio for an admissible heuristic.
+        self.heuristic_scale=min(ratios,default=0.0)
         self.graph_source=f"FTWG_BINARY_V{version}"
-        print(f"[NAV] Loaded {nodes:,} nodes and {loaded:,} directed edges from {bin_path.name}")
+        print(f"[NAV] Loaded {nodes:,} physical nodes and {loaded:,} directed edges from {bin_path.name}")
 
-    def a_star_connected(self,start,end):
-        if start not in self.adj or end not in self.adj: return None
-        goal=self.fix_coords_by_ident[end]; startpos=self.fix_coords_by_ident[start]
-        queue=[(_nm(startpos,goal),0.0,start,[start])]; visited=set()
+    def resolve_physical_endpoint(self, ident, coord=None, direction="either"):
+        name=str(ident or "").strip().upper()
+        candidates=self.nodes_by_ident.get(name,[])
+        if direction=="start":
+            candidates=[i for i in candidates if self.physical_adj.get(i)]
+        elif direction=="goal":
+            candidates=[i for i in candidates if i in self.physical_in_degree_nodes]
+        if not candidates: return None
+        if coord is not None:
+            candidates.sort(key=lambda i:_nm(self.physical_nodes[i]["coord"],coord))
+            chosen=candidates[0]; offset=_nm(self.physical_nodes[chosen]["coord"],coord)
+        elif len(candidates)==1:
+            chosen=candidates[0]; offset=None
+        else:
+            raise ValueError(f"Ambiguous physical fix identifier {name}: {len(candidates)} variants; matched coordinate required")
+        node=self.physical_nodes[chosen]
+        return {"node_index":chosen,"ident":name,"coord":node["coord"],"kind":node["kind"],
+                "candidate_count":len(candidates),"matched_coordinate":coord,"offset_nm":offset}
+
+    def a_star_connected(self,start,end,start_coord=None,goal_coord=None):
+        start_name=str(start or "").strip().upper(); goal_name=str(end or "").strip().upper()
+        self.last_route_physical_path=[]; self.last_route_endpoint_resolution={}
+        if self.physical_nodes and self.physical_adj:
+            start_res=self.resolve_physical_endpoint(start_name,start_coord,"start")
+            goal_res=self.resolve_physical_endpoint(goal_name,goal_coord,"goal")
+            if not start_res or not goal_res: return None
+            source=start_res["node_index"]; target=goal_res["node_index"]
+            self.last_route_endpoint_resolution={"start":start_res,"goal":goal_res}
+            goal_position=self.physical_nodes[target]["coord"]
+            queue=[(_nm(self.physical_nodes[source]["coord"],goal_position)*self.heuristic_scale,0.0,source)]
+            best={source:0.0}; previous={}; closed=set()
+            while queue:
+                _,cost,node=heapq.heappop(queue)
+                if cost!=best.get(node): continue
+                if node==target: break
+                if node in closed: continue
+                closed.add(node)
+                for nxt,weight,_ in self.physical_adj.get(node,[]):
+                    new_cost=cost+weight
+                    if new_cost<best.get(nxt,float("inf")):
+                        best[nxt]=new_cost; previous[nxt]=node
+                        h=_nm(self.physical_nodes[nxt]["coord"],goal_position)*self.heuristic_scale
+                        heapq.heappush(queue,(new_cost+h,new_cost,nxt))
+            if target not in best: return None
+            chain=[target]
+            while chain[-1]!=source: chain.append(previous[chain[-1]])
+            chain.reverse()
+            self.last_route_physical_path=[{"node_index":i,**self.physical_nodes[i]} for i in chain]
+            return [self.physical_nodes[i]["ident"] for i in chain],best[target]
+        # CSV fallback has identifier-only nodes; use Dijkstra, not an unsafe heuristic.
+        if start_name not in self.adj or goal_name not in self.adj: return None
+        queue=[(0.0,start_name)]; best={start_name:0.0}; previous={}
         while queue:
-            _,cost,node,path=heapq.heappop(queue)
-            if node==end: return path,cost
-            if node in visited: continue
-            visited.add(node)
+            cost,node=heapq.heappop(queue)
+            if cost!=best.get(node): continue
+            if node==goal_name: break
             for nxt,w,_ in self.adj.get(node,[]):
-                if nxt in visited: continue
                 nc=cost+w
-                heapq.heappush(queue,(nc+_nm(self.fix_coords_by_ident[nxt],goal),nc,nxt,path+[nxt]))
-        return None
-
+                if nc<best.get(nxt,float("inf")):
+                    best[nxt]=nc; previous[nxt]=node; heapq.heappush(queue,(nc,nxt))
+        if goal_name not in best: return None
+        chain=[goal_name]
+        while chain[-1]!=start_name: chain.append(previous[chain[-1]])
+        chain.reverse()
+        return chain,best[goal_name]
 
 
 class ConcatenatedHttpStream(io.RawIOBase):
