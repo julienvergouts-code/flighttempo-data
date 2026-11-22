@@ -175,8 +175,14 @@ def probe_astar(nav: Any, adj: dict[str, Any], start: str | None, goal: str | No
         return result
     result["start_in_ident_adj"] = start in adj
     result["goal_in_ident_adj"] = goal in adj
-    if start not in adj or goal not in adj:
-        result["reason"] = "endpoint_not_in_identifier_adjacency"
+    physical_nodes=getattr(nav,"nodes_by_ident",{})
+    result["start_physical_variant_count"]=len(physical_nodes.get(start,[]))
+    result["goal_physical_variant_count"]=len(physical_nodes.get(goal,[]))
+    if getattr(nav,"physical_nodes",[]) and (start not in physical_nodes or goal not in physical_nodes):
+        result["reason"]="endpoint_not_in_physical_graph"
+        return result
+    if not getattr(nav,"physical_nodes",[]) and (start not in adj or goal not in adj):
+        result["reason"]="endpoint_not_in_identifier_adjacency"
         return result
     result["attempted"] = True
     try:
