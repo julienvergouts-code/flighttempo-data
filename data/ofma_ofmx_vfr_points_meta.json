@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedUtc": "2026-11-22T12:58:31Z",
+  "generatedUtc": "2026-11-22T13:43:56Z",
   "airac": "2611",
   "count": 1786,
   "regions": [
@@ -74,7 +74,7 @@
   "commercialUseAllowed": true,
   "licenseNotes": "Commercial use is explicitly permitted by OFMA GUL. Preserve attribution; communicate alterations within 15 days. If an app lets users alter OFMA data, provide the GUL-required direct contribution interface. Reference-only, not primary navigation.",
   "attribution": "Contains information from the open flightmaps database, see www.openflightmaps.org",
-  "sha256": "8b95c04f1d053342d0317c6863b178fa3351b7694eb2fc4df06abce244f97cca",
+  "sha256": "b17621c4c3affbe5434b3c6c7f1365bd4ff4c6b9382793f88d78c20d8b0faa37",
   "sizeBytes": 156967,
   "operationalUse": false,
   "stablePointIds": true
