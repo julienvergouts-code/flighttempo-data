@@ -82,11 +82,15 @@ def enforce(manifest_path: Path = MANIFEST) -> list[str]:
         dataset["available"] = False
         dataset.pop("downloadUrl", None)
         dataset["operationallyAvailable"] = False
-        dataset["status"] = "not_published_commercial_reuse_unconfirmed_or_restricted"
+        dataset["status"] = (
+            "not_published_stale_legacy_source"
+            if stale else "not_published_commercial_reuse_unconfirmed_or_restricted"
+        )
         dataset["downloadBlockReason"] = (
-            "Retained for research/provenance only. Do not publish through the "
-            "app download manifest until redistribution rights suitable for "
-            "the intended product have been confirmed in writing."
+            "This global navigation snapshot is cycle 2012.08 and is not current. "
+            "It remains in repository history for provenance but is excluded from app downloads."
+            if stale else
+            "Retained for research/provenance only until commercial redistribution rights are confirmed."
         )
         for flag in CAPABILITY_FLAGS.get(dataset_id, ()):
             manifest.setdefault("capabilities", {})[flag] = False
