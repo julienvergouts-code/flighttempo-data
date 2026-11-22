@@ -21,11 +21,21 @@ def parse_coordinate(value):
   if len(parts) not in (2,3):raise ValueError(f"bad coordinate: {value!r}")
   deg=int(parts[0]);minutes=float(parts[1]);seconds=float(parts[2]) if len(parts)==3 else 0
  elif "." in body:
-  width=2 if hemi in "NS" else 3
-  deg=int(body[:width]);minutes=float(body[width:]);seconds=0
+  digits,fraction=body.split(".",1)[0],body.split(".",1)[0]
+  frac=body.split(".",1)[0]
+  decimal_part="."+body.split(".",1)[1]
+  if hemi in "NS" and len(digits)==4:
+   deg=int(digits[:2]);minutes=float(digits[2:]+decimal_part);seconds=0
+  elif hemi in "EW" and len(digits) in (4,5):
+   width=len(digits)-2;deg=int(digits[:width]);minutes=float(digits[width:]+decimal_part);seconds=0
+  else:
+   deg=float(body);minutes=seconds=0
  else:
-  width=2 if hemi in "NS" else 3
-  deg=int(body[:width]);tail=body[width:]
+  digits=body
+  if hemi in "NS":width=2
+  elif len(digits) in (4,6):width=2
+  else:width=3
+  deg=int(digits[:width]);tail=digits[width:]
   if len(tail)==4:minutes=int(tail[:2]);seconds=int(tail[2:])
   elif len(tail)==2:minutes=int(tail);seconds=0
   elif len(tail)==0:minutes=seconds=0
