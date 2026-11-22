@@ -30,6 +30,10 @@ The populated global fix and airway exports are `waypoints/flightgear_fixes.csv`
 
 The route graph is dynamic: it does not require a pre-populated list of popular city pairs. Airport connectors let the search join airport endpoints to the global airway network. The route results are demonstrations against stale data, not operational routes or clearances.
 
+## EUROCONTROL FRA source monitoring
+
+A daily CI monitor follows the latest ECAC and Maastricht UAC FRA point-list XLSX publications. It records publication URLs, checksums, workbook sheet names/row counts, candidate header rows and aggregate schema validation in a short-lived CI report. Source files and point records are temporary and are not published. FRA point-list reuse/redistribution rights remain under review.
+
 ## Procedures
 
 - FAA CIFP cycle 2611 contains US NAS SIDs, STARs and approaches.
