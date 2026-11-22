@@ -1,0 +1,37 @@
+name: Import OFMA OFMX VFR points
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "20 4 * * 1"
+  pull_request:
+    paths:
+      - "data/ofma_ofmx_sources.json"
+      - "pipeline/import_ofma_ofmx_vfr_points.py"
+      - "tests/test_import_ofma_ofmx_vfr_points.py"
+      - ".github/workflows/import-ofma-ofmx-vfr-points.yml"
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Unit tests
+        run: python -m unittest tests.test_import_ofma_ofmx_vfr_points
+      - name: Import OFMA reference VFR points
+        run: python pipeline/import_ofma_ofmx_vfr_points.py
+      - name: Publish generated data
+        if: github.event_name != 'pull_request'
+        run: |
+          if git diff --quiet -- data/ofma_ofmx_vfr_points.csv data/ofma_ofmx_vfr_points_meta.json; then
+            echo "No data changes."
+          else
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add data/ofma_ofmx_vfr_points.csv data/ofma_ofmx_vfr_points_meta.json
+            git commit -m "Update OFMA OFMX VFR reference points"
+            git push
+          fi
