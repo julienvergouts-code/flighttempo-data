@@ -100,4 +100,16 @@ def main():
     print(f"OFMA regions checked: {len(REGIONS)}; HTTP 200: {ok}; direct data links discovered: {total}")
     for code,x in report["regions"].items():
         print(f"{code}: {x.get('status',x.get('error'))}; direct links={x.get('downloadLinksFound',0)}; hints={','.join(x.get('formatHints',[]))}")
+        discovery = {
+            "region": code,
+            "scripts": x.get("scriptSrcs", []),
+            "candidateUrls": x.get("candidateEmbeddedUrls", []),
+            "scriptEndpoints": [
+                {"url": item.get("url"), "candidateStrings": item.get("candidateStrings", []),
+                 "keywordSnippets": item.get("keywordSnippets", [])}
+                for item in x.get("scriptEndpointAnalysis", [])
+            ],
+        }
+        if discovery["scripts"] or discovery["candidateUrls"] or discovery["scriptEndpoints"]:
+            print("OFMA_DISCOVERY " + json.dumps(discovery, ensure_ascii=False))
 if __name__=="__main__": main()
