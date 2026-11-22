@@ -32,6 +32,8 @@ class CorridorBuilderTests(unittest.TestCase):
 
     def test_batch_runner_callsign_and_europe_filter(self):
         self.assertEqual(batch_benchmark.flight_prefix({"flight": "RYR6TH"}), "RYR")
+        readsb_trace={"trace":[[0,52.0,4.0,30000,420,90,0,0,{"type":"adsb_icao","flight":"DLH7YA  "}]]}
+        self.assertEqual(batch_benchmark.flight_prefix(readsb_trace), "DLH")
         self.assertIn("RYR", batch_benchmark.EUROPE_AIRLINE_PREFIXES)
         self.assertTrue(batch_benchmark.eu_coord((51.5, 5.4)))
         self.assertFalse(batch_benchmark.eu_coord((40.0, -100.0)))
