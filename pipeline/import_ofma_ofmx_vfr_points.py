@@ -105,15 +105,36 @@ def atomic_pair(csv_path,meta_path,csvdata,metadata):
 def run(config=CONFIG,dry=False):
  cfg=json.loads(Path(config).read_text());airac=current_airac() if cfg.get("airac")=="auto" else str(cfg.get("airac"));sources=cfg.get("sources",[])
  if not sources:print("No OFMA OFMX sources configured; existing data retained.");return 0
+ archive_dir=ROOT/"data"/"ofma_source_archives"
+ archive_dir.mkdir(parents=True,exist_ok=True)
+ for old in archive_dir.glob("*.zip"):old.unlink()
  allrows=[];sm=[]
  for src in sources:
-  validate_source(src);url=src["url"].replace("{airac}",airac);raw=fetch(url);xml=xml_from_zip(raw,src["regionKey"],src);src["cycle"]=airac;records=parse_xml(xml,src);allrows.extend(records)
+  validate_source(src);url=src["url"].replace("{airac}",airac);raw=fetch(url)
+  (archive_dir/(src["region"].lower()+".zip")).write_bytes(raw)
+  xml=xml_from_zip(raw,src["regionKey"],src);src["cycle"]=airac;records=parse_xml(xml,src);allrows.extend(records)
   sm.append({"region":src["region"],"regionName":src["regionName"],"sourcePage":src["sourcePage"],"downloadUrl":url,"cycle":airac,"effectiveDate":None,"license":"OFMA General Users License","attribution":src.get("attribution","OpenFlightMaps Association (OFMA)"),"sha256":hashlib.sha256(raw).hexdigest(),"bytes":len(raw),"parsedVfrPoints":len(records)})
- uniq={(r["region"],r["code"],r["lat"],r["lon"],r["kind"]):r for r in allrows};rows=sorted(uniq.values(),key=lambda r:(r["region"],r["kind"],r["code"],r["lat"],r["lon"]))
- buf=io.StringIO();buf.write("#version=1,generated_utc="+stamp()+"\n");w=csv.DictWriter(buf,fieldnames=COLUMNS);w.writeheader();w.writerows(rows);csvdata=buf.getvalue().encode()
- meta={"schemaVersion":1,"generatedUtc":stamp(),"airac":airac,"count":len(rows),"regions":sorted({r["region"] for r in rows}),"sources":sm,"license":"OFMA General Users License","licenseNotes":"Commercial use subject to GUL conditions. Preserve attribution; report errors/alterations and provide user error-reporting route as required. Reference-only, not primary navigation.","attribution":"OpenFlightMaps Association (OFMA)","sha256":hashlib.sha256(csvdata).hexdigest(),"sizeBytes":len(csvdata),"operationalUse":False}
- if dry:print(json.dumps({"pointCount":len(rows),"regions":meta["regions"],"sources":sm},indent=2));return 0
- atomic_pair(OUT,META,csvdata,meta);print(f"Imported {len(rows)} OFMA OFMX VFR points across {len(meta['regions'])} regions");return 0
+ merged={}
+ for r in allrows:
+  key=(r["feature_region"] or r["region"],r["code"],r["lat"],r["lon"],r["kind"])
+  if key not in merged:merged[key]=r
+  else:merged[key]["source_regions"]=merged[key]["source_regions"]+";"+r["region"]
+ rows=sorted(merged.values(),key=lambda r:(r["feature_region"],r["kind"],r["code"],r["lat"],r["lon"]))
+ for r in rows:r["source_regions"]=";".join(sorted(set(r["source_regions"].split(";"))))
+ by_type={}
+ by_feature_region={}
+ for r in rows:
+  by_type[r["kind"]]=by_type.get(r["kind"],0)+1
+  by_feature_region[r["feature_region"] or "UNKNOWN"]=by_feature_region.get(r["feature_region"] or "UNKNOWN",0)+1
+ reused= {}
+ for r in rows:
+  key=(r["feature_region"] or r["region"],r["code"])
+  reused[key]=reused.get(key,0)+1
+ reused_codes=sum(1 for n in reused.values() if n>1)
+ buf=io.StringIO();buf.write("#version=2,generated_utc="+stamp()+"\n");w=csv.DictWriter(buf,fieldnames=COLUMNS);w.writeheader();w.writerows(rows);csvdata=buf.getvalue().encode()
+ meta={"schemaVersion":2,"generatedUtc":stamp(),"airac":airac,"count":len(rows),"regions":sorted({r["region"] for r in rows}),"featureRegions":by_feature_region,"countsByType":by_type,"reusedCodeGroups":reused_codes,"sources":sm,"license":"OFMA General Users License","licenseNotes":"Commercial use subject to GUL conditions. Preserve attribution; report errors/alterations and provide user error-reporting route as required. Reference-only, not primary navigation.","attribution":"OpenFlightMaps Association (OFMA)","sha256":hashlib.sha256(csvdata).hexdigest(),"sizeBytes":len(csvdata),"operationalUse":False,"stablePointIds":True}
+ if dry:print(json.dumps({"pointCount":len(rows),"regions":meta["regions"],"featureRegions":by_feature_region,"countsByType":by_type,"sources":sm},indent=2));return 0
+ atomic_pair(OUT,META,csvdata,meta);print(f"Imported {len(rows)} OFMA OFMX VFR points across {len(meta['regions'])} source regions; feature regions={len(by_feature_region)}; reused code groups={reused_codes}");return 0
 def main():
  p=argparse.ArgumentParser();p.add_argument("--config",type=Path,default=CONFIG);p.add_argument("--dry-run",action="store_true");a=p.parse_args();return run(a.config,a.dry_run)
 if __name__=="__main__":raise SystemExit(main())
