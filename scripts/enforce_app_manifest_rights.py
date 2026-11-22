@@ -23,6 +23,25 @@ BLOCKED_IDS = {
     "airport_reference",
 }
 
+STALE_DATASET_IDS = {
+    "flightgear_fixes",
+    "flightgear_navaids",
+    "flightgear_airway_segments",
+    "world_corridor_graph",
+}
+STALE_CAPABILITY_FLAGS = (
+    "legacyGlobalFixes", "legacyGlobalNavaids", "legacyGlobalAirways",
+    "legacyGlobalIlsFacilities", "worldCorridorGraph",
+    "independentWaypoints", "publishedAirways",
+)
+LEGACY_STATISTICS = {
+    "ifrWaypoints", "flightgearNavaids", "airwaySegments",
+    "lowAirwaySegments", "highAirwaySegments",
+    "flightgearIlsFacilities", "flightgearLocalizerFacilities",
+    "flightgearGlideslopeFacilities", "flightgearMarkerBeacons",
+    "flightgearDmeFacilities",
+}
+
 CAPABILITY_FLAGS = {
     "aerosors_vor_ndb": ("aerosors_vor_ndb",),
     "aerosors_ils": ("aerosors_ils", "aeroSorsIlsFacilities"),
@@ -57,8 +76,9 @@ def enforce(manifest_path: Path = MANIFEST) -> list[str]:
     for dataset in datasets:
         dataset_id = dataset.get("id")
         reason = rights_block_reason(dataset)
-        if dataset_id not in BLOCKED_IDS and not reason:
+        if dataset_id not in BLOCKED_IDS and dataset_id not in STALE_DATASET_IDS and not reason:
             continue
+        stale = dataset_id in STALE_DATASET_IDS
         dataset["available"] = False
         dataset.pop("downloadUrl", None)
         dataset["operationallyAvailable"] = False
@@ -70,6 +90,9 @@ def enforce(manifest_path: Path = MANIFEST) -> list[str]:
         )
         for flag in CAPABILITY_FLAGS.get(dataset_id, ()):
             manifest.setdefault("capabilities", {})[flag] = False
+        if stale:
+            for flag in STALE_CAPABILITY_FLAGS:
+                manifest.setdefault("capabilities", {})[flag] = False
         blocked.append(dataset_id)
 
     # These flags describe app-download availability, not the presence of
@@ -79,8 +102,14 @@ def enforce(manifest_path: Path = MANIFEST) -> list[str]:
         for flag in flags:
             manifest.setdefault("capabilities", {})[flag] = False
 
-    # Keep research counts out of the app-facing capability/statistics surface.
+    # Stale legacy IFR counts describe files kept for provenance, not current data.
     statistics = manifest.setdefault("statistics", {})
+    development_stats = manifest.setdefault("developmentOnlyStatistics", {})
+    for key in LEGACY_STATISTICS:
+        if key in statistics:
+            development_stats[key] = statistics.pop(key)
+
+    # Keep research counts out of the app-facing capability/statistics surface.
     research_keys = [
         key for key in list(statistics)
         if key.startswith("aerosors_") or key.startswith("aeroSors")
