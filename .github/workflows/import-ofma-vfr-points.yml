@@ -27,11 +27,12 @@ jobs:
       - name: Import configured regions
         run: python pipeline/import_ofma_cup_points.py
       - name: Register manifest
-        if: ${{ hashFiles('data/ofma_vfr_points.csv') != '' }}
+        if: \${{ hashFiles('data/ofma_vfr_points.csv') != '' }}
         run: python scripts/register_ofma_vfr_points_manifest.py
       - name: Commit updates
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/ofma_vfr_points.csv data/ofma_vfr_points_meta.json navigation_manifest.json
+          git add navigation_manifest.json
+          if [ -f data/ofma_vfr_points.csv ]; then git add data/ofma_vfr_points.csv data/ofma_vfr_points_meta.json; fi
           if git diff --cached --quiet; then echo "No changes."; else git commit -m "Update OFMA VFR reference points"; git push; fi
