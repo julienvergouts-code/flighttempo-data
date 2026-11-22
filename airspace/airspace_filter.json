@@ -1,0 +1,570 @@
+{
+  "faaRestrictions": [
+    {
+      "notamId": "A0029/21",
+      "title": "KICZ NOTAM A0029/21 — Security — United States of America Prohibition Against Certain Flights in the Kabul Flight Information Region ( OAKX )",
+      "restrictionType": "prohibition",
+      "pointerOnly": false,
+      "affectedFirs": [
+        {
+          "firCode": "OAKX",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        }
+      ],
+      "appliesTo": [
+        "US_AIR_CARRIERS",
+        "FAA_AIRMAN_CERTIFICATE_HOLDERS",
+        "US_REGISTERED_AIRCRAFT"
+      ],
+      "currentnessVerified": false,
+      "currentnessStatus": "listed_on_FAA_PRN_page; live NOTAM amendments/cancellations not independently checked",
+      "sourceUrl": "https://www.faa.gov/air_traffic/publications/us_restrictions/media/KICZ_A0029-21_NOTAM-Afghanistan_KABUL_FIR.pdf"
+    },
+    {
+      "notamId": "A0003/22",
+      "title": "KICZ NOTAM A0003/22 — Security — United States of America Prohibition Against Certain Flights in the Minsk Flight Information Region ( FIR ) ( UMMV )",
+      "restrictionType": "prohibition",
+      "pointerOnly": false,
+      "affectedFirs": [
+        {
+          "firCode": "UMMV",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        }
+      ],
+      "appliesTo": [
+        "US_AIR_CARRIERS",
+        "FAA_AIRMAN_CERTIFICATE_HOLDERS",
+        "US_REGISTERED_AIRCRAFT"
+      ],
+      "currentnessVerified": false,
+      "currentnessStatus": "listed_on_FAA_PRN_page; live NOTAM amendments/cancellations not independently checked",
+      "sourceUrl": "https://www.faa.gov/air_traffic/publications/us_restrictions/media/KICZ_A0003-22_Prohibitory_NOTAM-Belarus_MINSK_FIR_(UMMV)_(2022024_1930Z).pdf"
+    },
+    {
+      "notamId": "A0050/20",
+      "title": "KICZ NOTAM A0050/20 — Security — Iran Pointer NOTAM",
+      "restrictionType": "pointer_only",
+      "pointerOnly": true,
+      "affectedFirs": [
+        {
+          "firCode": "OIIX",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        }
+      ],
+      "appliesTo": [],
+      "currentnessVerified": false,
+      "currentnessStatus": "listed_on_FAA_PRN_page; live NOTAM amendments/cancellations not independently checked",
+      "sourceUrl": "https://www.faa.gov/air_traffic/publications/us_restrictions/media/KICZ_Pointer_NOTAM_A0050-20_Iran_SFAR_117.pdf"
+    },
+    {
+      "notamId": "A0008/22",
+      "title": "KICZ NOTAM A0008/22 — Security — United States of America Advisory for Kenya",
+      "restrictionType": "advisory",
+      "pointerOnly": false,
+      "affectedFirs": [],
+      "appliesTo": [
+        "US_AIR_CARRIERS",
+        "FAA_AIRMAN_CERTIFICATE_HOLDERS",
+        "US_REGISTERED_AIRCRAFT"
+      ],
+      "currentnessVerified": false,
+      "currentnessStatus": "listed_on_FAA_PRN_page; live NOTAM amendments/cancellations not independently checked",
+      "sourceUrl": "https://www.faa.gov/air_traffic/publications/us_restrictions/media/KICZ_A0008-22_USA_ADVISORY_FOR_KENYA_(20220228_1430Z).pdf"
+    },
+    {
+      "notamId": "A0045/20",
+      "title": "KICZ NOTAM A0045/20 — Security — North Korea Pointer NOTAM",
+      "restrictionType": "pointer_only",
+      "pointerOnly": true,
+      "affectedFirs": [
+        {
+          "firCode": "ZKKP",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        }
+      ],
+      "appliesTo": [],
+      "currentnessVerified": false,
+      "currentnessStatus": "listed_on_FAA_PRN_page; live NOTAM amendments/cancellations not independently checked",
+      "sourceUrl": "https://www.faa.gov/air_traffic/publications/us_restrictions/media/KICZ_Pointer_NOTAM_A0045-20_Pyongyang_SFAR_79.pdf"
+    },
+    {
+      "notamId": "A0042/20",
+      "title": "KICZ NOTAM A0042/20 — Security — Libya Pointer NOTAM",
+      "restrictionType": "pointer_only",
+      "pointerOnly": true,
+      "affectedFirs": [
+        {
+          "firCode": "HLLL",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        }
+      ],
+      "appliesTo": [],
+      "currentnessVerified": false,
+      "currentnessStatus": "listed_on_FAA_PRN_page; live NOTAM amendments/cancellations not independently checked",
+      "sourceUrl": "https://www.faa.gov/air_traffic/publications/us_restrictions/media/KICZ_Pointer_NOTAM_A0042-20_Libya-SFAR_112.pdf"
+    },
+    {
+      "notamId": "A0009/22",
+      "title": "KICZ NOTAM A0009/22 — Security — United States of America Advisory for Mali",
+      "restrictionType": "advisory",
+      "pointerOnly": false,
+      "affectedFirs": [],
+      "appliesTo": [
+        "US_AIR_CARRIERS",
+        "FAA_AIRMAN_CERTIFICATE_HOLDERS",
+        "US_REGISTERED_AIRCRAFT"
+      ],
+      "currentnessVerified": false,
+      "currentnessStatus": "listed_on_FAA_PRN_page; live NOTAM amendments/cancellations not independently checked",
+      "sourceUrl": "https://www.faa.gov/air_traffic/publications/us_restrictions/media/KICZ_A0009-22_USA_ADVISORY_FOR_MALI_(20220228_1430Z).pdf"
+    },
+    {
+      "notamId": "A0016/20",
+      "title": "KICZ NOTAM A0016/20 — Security — United States of America Advisory for Overwater Airspace Above the Persian Gulf and the Gulf of Oman",
+      "restrictionType": "advisory",
+      "pointerOnly": false,
+      "affectedFirs": [
+        {
+          "firCode": "OBBB",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "OEJD",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "OKAC",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "OMAE",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "OOMM",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        }
+      ],
+      "appliesTo": [
+        "US_AIR_CARRIERS",
+        "FAA_AIRMAN_CERTIFICATE_HOLDERS",
+        "US_REGISTERED_AIRCRAFT"
+      ],
+      "currentnessVerified": false,
+      "currentnessStatus": "listed_on_FAA_PRN_page; live NOTAM amendments/cancellations not independently checked",
+      "sourceUrl": "https://www.faa.gov/air_traffic/publications/us_restrictions/media/KICZ_A0016-20_Advisory_NOTAM-Persian_Gulf_and_Gulf_of_Oman.pdf"
+    },
+    {
+      "notamId": "A0005/22",
+      "title": "KICZ NOTAM A0005/22 — Security — United States of America Prohibition Against Certain Flights in the specified areas of the Moscow ( UUWV ), Samara ( UWWW ) and Rostov-Na Donu ( URRV ) Flight Information Regions ( FIR )",
+      "restrictionType": "prohibition",
+      "pointerOnly": false,
+      "affectedFirs": [
+        {
+          "firCode": "URRV",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "UUWV",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "UWWW",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        }
+      ],
+      "appliesTo": [
+        "US_AIR_CARRIERS",
+        "FAA_AIRMAN_CERTIFICATE_HOLDERS",
+        "US_REGISTERED_AIRCRAFT"
+      ],
+      "currentnessVerified": false,
+      "currentnessStatus": "listed_on_FAA_PRN_page; live NOTAM amendments/cancellations not independently checked",
+      "sourceUrl": "https://www.faa.gov/air_traffic/publications/us_restrictions/media/KICZ_A0005-22_Prohibitory_NOTAM-Russia_MOSCOW_SAMARA_and_ROSTOV_FIRs_(20220224_1930Z).pdf"
+    },
+    {
+      "notamId": "A0028/19",
+      "title": "KICZ NOTAM A0028/19 — Security — Somalia Pointer NOTAM",
+      "restrictionType": "pointer_only",
+      "pointerOnly": true,
+      "affectedFirs": [],
+      "appliesTo": [],
+      "currentnessVerified": false,
+      "currentnessStatus": "listed_on_FAA_PRN_page; live NOTAM amendments/cancellations not independently checked",
+      "sourceUrl": "https://www.faa.gov/air_traffic/publications/us_restrictions/media/KICZ_Pointer_NOTAM_A0028-19_Somalia_FIR_SFAR_107.pdf"
+    },
+    {
+      "notamId": "A0053/20",
+      "title": "KICZ NOTAM A0053/20 — Security — Damascus Pointer NOTAM",
+      "restrictionType": "pointer_only",
+      "pointerOnly": true,
+      "affectedFirs": [
+        {
+          "firCode": "OSTT",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        }
+      ],
+      "appliesTo": [],
+      "currentnessVerified": false,
+      "currentnessStatus": "listed_on_FAA_PRN_page; live NOTAM amendments/cancellations not independently checked",
+      "sourceUrl": "https://www.faa.gov/air_traffic/publications/us_restrictions/media/KICZ_Pointer_NOTAM_A0053-20_Syria-SFAR_114.pdf"
+    },
+    {
+      "notamId": "A0009/18",
+      "title": "KICZ NOTAM A0009/18 — Security — United States of America Advisory for Airspace Immediately Adjacent to Damascus Flight Information Region ( OSTT FIR )",
+      "restrictionType": "advisory",
+      "pointerOnly": false,
+      "affectedFirs": [
+        {
+          "firCode": "OSTT",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        }
+      ],
+      "appliesTo": [
+        "US_AIR_CARRIERS",
+        "FAA_AIRMAN_CERTIFICATE_HOLDERS",
+        "US_REGISTERED_AIRCRAFT"
+      ],
+      "currentnessVerified": false,
+      "currentnessStatus": "listed_on_FAA_PRN_page; live NOTAM amendments/cancellations not independently checked",
+      "sourceUrl": "https://www.faa.gov/air_traffic/publications/us_restrictions/media/KICZ_Advisory_NOTAM_A0009-18-Syria.pdf"
+    },
+    {
+      "notamId": "A0030/21",
+      "title": "KICZ NOTAM A0030/21 — Security — Ukraine Pointer NOTAM",
+      "restrictionType": "pointer_only",
+      "pointerOnly": true,
+      "affectedFirs": [
+        {
+          "firCode": "UKDV",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        }
+      ],
+      "appliesTo": [],
+      "currentnessVerified": false,
+      "currentnessStatus": "listed_on_FAA_PRN_page; live NOTAM amendments/cancellations not independently checked",
+      "sourceUrl": "https://www.faa.gov/air_traffic/publications/us_restrictions/media/KICZ_Pointer_NOTAM_A0030-21_Ukraine_SFAR_113_(20211006-1430Z).pdf"
+    },
+    {
+      "notamId": "A0004/22",
+      "title": "KICZ NOTAM A0004/22 — Security — United States of America Prohibition Against Certain Flights in the Lviv ( UKLV ), Kyiv ( UKBV ), Dnipro ( UKDV ), Simferopol ( UKFV ), and Odesa ( UKOV ) Flight Information Regions ( FIR ), as well as, the Kyiv Upper Information Region ( UIR ) ( UKBU )",
+      "restrictionType": "prohibition",
+      "pointerOnly": false,
+      "affectedFirs": [
+        {
+          "firCode": "UKBU",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "UKBV",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "UKDV",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "UKFV",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "UKLV",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "UKOV",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        }
+      ],
+      "appliesTo": [
+        "US_AIR_CARRIERS",
+        "FAA_AIRMAN_CERTIFICATE_HOLDERS",
+        "US_REGISTERED_AIRCRAFT"
+      ],
+      "currentnessVerified": false,
+      "currentnessStatus": "listed_on_FAA_PRN_page; live NOTAM amendments/cancellations not independently checked",
+      "sourceUrl": "https://www.faa.gov/air_traffic/publications/us_restrictions/media/KICZ_A0004-22_Prohibitory_NOTAM-Ukraine_all_FIRs_and_UIR_(2022024_1930Z).pdf"
+    },
+    {
+      "notamId": "A0013/19",
+      "title": "KICZ NOTAM A0013/19 — Security — United States of America Prohibition for Venezuela",
+      "restrictionType": "prohibition",
+      "pointerOnly": false,
+      "affectedFirs": [],
+      "appliesTo": [
+        "US_AIR_CARRIERS",
+        "FAA_AIRMAN_CERTIFICATE_HOLDERS",
+        "US_REGISTERED_AIRCRAFT"
+      ],
+      "currentnessVerified": false,
+      "currentnessStatus": "listed_on_FAA_PRN_page; live NOTAM amendments/cancellations not independently checked",
+      "sourceUrl": "https://www.faa.gov/air_traffic/publications/us_restrictions/media/KICZ_A0013-19_Prohibition_NOTAM-Venezuela.pdf"
+    },
+    {
+      "notamId": "A0038/21",
+      "title": "KICZ NOTAM A0038/21 — Security — Yemen Pointer NOTAM",
+      "restrictionType": "pointer_only",
+      "pointerOnly": true,
+      "affectedFirs": [
+        {
+          "firCode": "OYSC",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        }
+      ],
+      "appliesTo": [],
+      "currentnessVerified": false,
+      "currentnessStatus": "listed_on_FAA_PRN_page; live NOTAM amendments/cancellations not independently checked",
+      "sourceUrl": "https://www.faa.gov/air_traffic/publications/us_restrictions/media/KICZ_Yemen-Sanaa_NOTAM_A0038-21_Plain_Text_20211207_2100Z.pdf"
+    }
+  ],
+  "conditionalRestrictions": [
+    {
+      "notamId": "A0029/21",
+      "affectedFirs": [
+        {
+          "firCode": "OAKX",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        }
+      ],
+      "appliesTo": [
+        "US_AIR_CARRIERS",
+        "FAA_AIRMAN_CERTIFICATE_HOLDERS",
+        "US_REGISTERED_AIRCRAFT"
+      ],
+      "restrictionType": "prohibition",
+      "pointerOnly": false,
+      "currentnessVerified": false,
+      "action": "warn_and_suggest_avoid_pending_live_NOTAM_check",
+      "userOverrideAllowed": false
+    },
+    {
+      "notamId": "A0003/22",
+      "affectedFirs": [
+        {
+          "firCode": "UMMV",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        }
+      ],
+      "appliesTo": [
+        "US_AIR_CARRIERS",
+        "FAA_AIRMAN_CERTIFICATE_HOLDERS",
+        "US_REGISTERED_AIRCRAFT"
+      ],
+      "restrictionType": "prohibition",
+      "pointerOnly": false,
+      "currentnessVerified": false,
+      "action": "warn_and_suggest_avoid_pending_live_NOTAM_check",
+      "userOverrideAllowed": false
+    },
+    {
+      "notamId": "A0008/22",
+      "affectedFirs": [],
+      "appliesTo": [
+        "US_AIR_CARRIERS",
+        "FAA_AIRMAN_CERTIFICATE_HOLDERS",
+        "US_REGISTERED_AIRCRAFT"
+      ],
+      "restrictionType": "advisory",
+      "pointerOnly": false,
+      "currentnessVerified": false,
+      "action": "advisory_avoid_preference",
+      "userOverrideAllowed": true
+    },
+    {
+      "notamId": "A0009/22",
+      "affectedFirs": [],
+      "appliesTo": [
+        "US_AIR_CARRIERS",
+        "FAA_AIRMAN_CERTIFICATE_HOLDERS",
+        "US_REGISTERED_AIRCRAFT"
+      ],
+      "restrictionType": "advisory",
+      "pointerOnly": false,
+      "currentnessVerified": false,
+      "action": "advisory_avoid_preference",
+      "userOverrideAllowed": true
+    },
+    {
+      "notamId": "A0016/20",
+      "affectedFirs": [
+        {
+          "firCode": "OBBB",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "OEJD",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "OKAC",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "OMAE",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "OOMM",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        }
+      ],
+      "appliesTo": [
+        "US_AIR_CARRIERS",
+        "FAA_AIRMAN_CERTIFICATE_HOLDERS",
+        "US_REGISTERED_AIRCRAFT"
+      ],
+      "restrictionType": "advisory",
+      "pointerOnly": false,
+      "currentnessVerified": false,
+      "action": "advisory_avoid_preference",
+      "userOverrideAllowed": true
+    },
+    {
+      "notamId": "A0005/22",
+      "affectedFirs": [
+        {
+          "firCode": "URRV",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "UUWV",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "UWWW",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        }
+      ],
+      "appliesTo": [
+        "US_AIR_CARRIERS",
+        "FAA_AIRMAN_CERTIFICATE_HOLDERS",
+        "US_REGISTERED_AIRCRAFT"
+      ],
+      "restrictionType": "prohibition",
+      "pointerOnly": false,
+      "currentnessVerified": false,
+      "action": "warn_and_suggest_avoid_pending_live_NOTAM_check",
+      "userOverrideAllowed": false
+    },
+    {
+      "notamId": "A0009/18",
+      "affectedFirs": [
+        {
+          "firCode": "OSTT",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        }
+      ],
+      "appliesTo": [
+        "US_AIR_CARRIERS",
+        "FAA_AIRMAN_CERTIFICATE_HOLDERS",
+        "US_REGISTERED_AIRCRAFT"
+      ],
+      "restrictionType": "advisory",
+      "pointerOnly": false,
+      "currentnessVerified": false,
+      "action": "advisory_avoid_preference",
+      "userOverrideAllowed": true
+    },
+    {
+      "notamId": "A0004/22",
+      "affectedFirs": [
+        {
+          "firCode": "UKBU",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "UKBV",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "UKDV",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "UKFV",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "UKLV",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        },
+        {
+          "firCode": "UKOV",
+          "geometryFeatureIds": [],
+          "geometryAvailable": false
+        }
+      ],
+      "appliesTo": [
+        "US_AIR_CARRIERS",
+        "FAA_AIRMAN_CERTIFICATE_HOLDERS",
+        "US_REGISTERED_AIRCRAFT"
+      ],
+      "restrictionType": "prohibition",
+      "pointerOnly": false,
+      "currentnessVerified": false,
+      "action": "warn_and_suggest_avoid_pending_live_NOTAM_check",
+      "userOverrideAllowed": false
+    },
+    {
+      "notamId": "A0013/19",
+      "affectedFirs": [],
+      "appliesTo": [
+        "US_AIR_CARRIERS",
+        "FAA_AIRMAN_CERTIFICATE_HOLDERS",
+        "US_REGISTERED_AIRCRAFT"
+      ],
+      "restrictionType": "prohibition",
+      "pointerOnly": false,
+      "currentnessVerified": false,
+      "action": "warn_and_suggest_avoid_pending_live_NOTAM_check",
+      "userOverrideAllowed": false
+    }
+  ],
+  "faaRestrictionSource": {
+    "provider": "FAA",
+    "sourcePage": "https://www.faa.gov/air_traffic/publications/us_restrictions/index.cfm",
+    "status": "official_PRN_index_scraped; live_NOTAM_currentness_not_verified",
+    "recordCount": 16,
+    "sfarReferenceCount": 7
+  },
+  "hardNoFlyFirs": []
+}
