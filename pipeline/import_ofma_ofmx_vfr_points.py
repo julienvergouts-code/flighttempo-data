@@ -30,11 +30,11 @@ def parse_coord(s):
  body=s[:-1]
  limit=90 if hem in "NS" else 180
  # OFMX commonly uses decimal degrees with hemisphere (e.g. 48.98444444N).
- if re.fullmatch(r"\\d{1,3}\\.\\d+",body):
+ if re.fullmatch(r"\d{1,3}\.\d+",body):
   v=float(body)
   if v>limit:raise ValueError(f"coordinate degrees out of range: {s}")
  else:
-  m=re.fullmatch(r"(\\d{2,3})(\\d{2})(?:(\\d{2}(?:\\.\\d+)?))?",body)
+  m=re.fullmatch(r"(\d{2,3})(\d{2})(?:(\d{2}(?:\.\d+)?))?",body)
   if not m:raise ValueError(f"bad OFMX coordinate {s!r}")
   deg=int(m.group(1));mins=int(m.group(2));secs=float(m.group(3) or 0)
   if mins>=60 or secs>=60:raise ValueError(f"coordinate minute/second out of range: {s}")
@@ -99,12 +99,12 @@ def atomic_pair(csv_path,meta_path,csvdata,metadata):
    else:meta_path.write_bytes(oldm)
    raise
 def run(config=CONFIG,dry=False):
- cfg=json.loads(Path(config).read_text());sources=cfg.get("sources",[])
+ cfg=json.loads(Path(config).read_text());airac=current_airac() if cfg.get("airac")=="auto" else str(cfg.get("airac"));sources=cfg.get("sources",[])
  if not sources:print("No OFMA OFMX sources configured; existing data retained.");return 0
  allrows=[];sm=[]
  for src in sources:
-  validate_source(src);raw=fetch(src["url"]);xml=xml_from_zip(raw,src["regionKey"]);records=parse_xml(xml,src);allrows.extend(records)
-  sm.append({"region":src["region"],"regionName":src["regionName"],"sourcePage":src["sourcePage"],"downloadUrl":src["url"].replace("/live/2611/","/live/"+airac+"/"),"cycle":airac,"effectiveDate":src.get("effectiveDate"),"license":"OFMA General Users License","attribution":src.get("attribution","OpenFlightMaps Association (OFMA)"),"sha256":hashlib.sha256(raw).hexdigest(),"bytes":len(raw),"parsedVfrPoints":len(records)})
+  validate_source(src);url=src["url"].replace("/live/2611/","/live/"+airac+"/");raw=fetch(url);xml=xml_from_zip(raw,src["regionKey"]);src["effectiveDate"]=airac;records=parse_xml(xml,src);allrows.extend(records)
+  sm.append({"region":src["region"],"regionName":src["regionName"],"sourcePage":src["sourcePage"],"downloadUrl":url,"cycle":airac,"effectiveDate":src.get("effectiveDate"),"license":"OFMA General Users License","attribution":src.get("attribution","OpenFlightMaps Association (OFMA)"),"sha256":hashlib.sha256(raw).hexdigest(),"bytes":len(raw),"parsedVfrPoints":len(records)})
  uniq={(r["region"],r["code"],r["lat"],r["lon"],r["kind"]):r for r in allrows};rows=sorted(uniq.values(),key=lambda r:(r["region"],r["kind"],r["code"],r["lat"],r["lon"]))
  buf=io.StringIO();buf.write("#version=1,generated_utc="+stamp()+"\n");w=csv.DictWriter(buf,fieldnames=COLUMNS);w.writeheader();w.writerows(rows);csvdata=buf.getvalue().encode()
  meta={"schemaVersion":1,"generatedUtc":stamp(),"airac":airac,"count":len(rows),"regions":sorted({r["region"] for r in rows}),"sources":sm,"license":"OFMA General Users License","licenseNotes":"Commercial use subject to GUL conditions. Preserve attribution; report errors/alterations and provide user error-reporting route as required. Reference-only, not primary navigation.","attribution":"OpenFlightMaps Association (OFMA)","sha256":hashlib.sha256(csvdata).hexdigest(),"sizeBytes":len(csvdata),"operationalUse":False}
