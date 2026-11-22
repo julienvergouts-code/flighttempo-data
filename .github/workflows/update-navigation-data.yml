@@ -332,6 +332,10 @@ jobs:
         run: python3 scripts/check_faa_cifp_currentness.py
       - name: Register FAA VFR reporting points in navigation manifest
         run: python3 scripts/register_faa_vfr_points_manifest.py
+      - name: Register OFMA VFR reporting points in navigation manifest
+        run: python3 scripts/register_ofma_ofmx_vfr_points_manifest.py
+      - name: Validate OFMA VFR artifact integrity and coverage
+        run: python3 scripts/validate_vfr_data_artifacts.py
       - name: Validate every downloadable CSV in the app manifest
         run: python3 scripts/validate_navigation_csvs.py --manifest navigation_manifest.json
       - name: Verify generated datasets and manifest

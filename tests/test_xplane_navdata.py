@@ -436,6 +436,34 @@ class XPlaneNavdataTests(unittest.TestCase):
             self.assertTrue(result["capabilities"]["globalAirlineDirectory"])
             self.assertEqual(result["statistics"]["globalAirlineDirectory"], 3846)
 
+    def test_ofma_vfr_dataset_is_preserved_when_navigation_manifest_rebuilds(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            ofma_dataset = {
+                "id": "ofma_ofmx_vfr_reference_points",
+                "path": "data/ofma_ofmx_vfr_points.csv",
+                "available": True,
+                "recordCount": 4736,
+                "sizeBytes": 454573,
+                "sha256": "verified-ofma-sha256",
+                "downloadPurpose": "reference_only",
+                "operationallyAvailable": False,
+            }
+            manifest_path = root / "navigation_manifest.json"
+            manifest_path.write_text(json.dumps({
+                "schemaVersion": 13,
+                "datasets": [ofma_dataset],
+                "capabilities": {"ofmaOfmxVfrReferencePoints": True},
+                "statistics": {"ofmaOfmxVfrReferencePoints": 4736},
+            }), encoding="utf-8")
+
+            result = update_manifest(manifest_path, root)
+            preserved = next(
+                item for item in result["datasets"]
+                if item["id"] == "ofma_ofmx_vfr_reference_points"
+            )
+            self.assertEqual(preserved, ofma_dataset)
+            self.assertEqual(result["statistics"]["ofmaOfmxVfrReferencePoints"], 4736)
 
 
 if __name__ == "__main__":
