@@ -1,0 +1,74 @@
+name: Update commercially reusable France IFR procedures
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "40 4 * * *"
+  pull_request:
+    paths:
+      - "scripts/fetch_sia_eaip_procedure_data.py"
+      - "scripts/import_sia_eaip_procedures.py"
+      - "scripts/enforce_app_manifest_rights.py"
+      - "scripts/validate_navigation_csvs.py"
+      - "procedures/source-registry.json"
+      - "tests/test_fetch_sia_eaip_procedure_data.py"
+      - "tests/test_sia_eaip_procedures.py"
+      - "requirements-sia-procedures.txt"
+      - ".github/workflows/update-commercial-fr-procedures.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: flighttempo-shared-manifest-updates
+  cancel-in-progress: false
+
+jobs:
+  import-france-sid-star:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: ${{ github.event.pull_request.head.repo.full_name || github.repository }}
+          ref: ${{ github.event.pull_request.head.ref || github.ref }}
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install PDF readers
+        run: python -m pip install -r requirements-sia-procedures.txt
+      - name: Test SIA cycle selection and table extraction
+        run: |
+          python -m unittest tests.test_fetch_sia_eaip_procedure_data -v
+          python -m unittest tests.test_sia_eaip_procedures -v
+      - name: Build current French SID and STAR reference data
+        run: python scripts/fetch_sia_eaip_procedure_data.py
+      - name: Enforce commercial redistribution rights
+        run: python scripts/enforce_app_manifest_rights.py
+      - name: Validate every downloadable CSV
+        run: python scripts/validate_navigation_csvs.py
+      - name: Upload generated French procedure data for review
+        if: github.event_name == 'pull_request'
+        uses: actions/upload-artifact@v4
+        with:
+          name: france-sia-current-sid-star-data
+          path: |
+            procedures/europe/france/sid_star_legs.csv
+            procedures/europe/france/meta.json
+            procedures/europe/meta.json
+            navigation_manifest.json
+            procedures/source-registry.json
+          if-no-files-found: error
+          retention-days: 14
+      - name: Publish the validated data update
+        if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+        run: |
+          if git diff --quiet -- procedures/europe/france/sid_star_legs.csv procedures/europe/france/meta.json procedures/europe/meta.json procedures/source-registry.json navigation_manifest.json; then
+            echo "No French procedure data changes."
+          else
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add procedures/europe/france/sid_star_legs.csv procedures/europe/france/meta.json procedures/europe/meta.json procedures/source-registry.json navigation_manifest.json
+            git commit -m "Update French SIA SID and STAR reference data"
+            git push
+          fi
