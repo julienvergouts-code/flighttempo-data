@@ -26,6 +26,16 @@ jobs:
         run: python -m unittest discover -s tests -p 'test_import_ofma_ofmx_vfr_points.py'
       - name: Import OFMA reference VFR points
         run: python pipeline/import_ofma_ofmx_vfr_points.py
+      - name: Upload imported reference data for review
+        if: github.event_name == 'pull_request'
+        uses: actions/upload-artifact@v4
+        with:
+          name: ofma-ofmx-vfr-reference-data
+          path: |
+            data/ofma_ofmx_vfr_points.csv
+            data/ofma_ofmx_vfr_points_meta.json
+          if-no-files-found: error
+          retention-days: 14
       - name: Register manifest dataset
         run: python scripts/register_ofma_ofmx_vfr_points_manifest.py
       - name: Publish generated data
