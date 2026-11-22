@@ -1,8 +1,16 @@
 import io,unittest,zipfile
-from pipeline.import_ofma_ofmx_vfr_points import parse_coord,parse_xml,xml_from_zip,current_airac\nfrom datetime import date
+from pipeline.import_ofma_ofmx_vfr_points import parse_coord,parse_xml,xml_from_zip,current_airac
+from datetime import date
 class Tests(unittest.TestCase):
- def test_airac_cycle_rollover(self):\n  self.assertEqual(current_airac(date(2026,11,22)),"2611")\n  self.assertEqual(current_airac(date(2026,11,26)),"2612")\n  self.assertEqual(current_airac(date(2027,1,21)),"2701")\n def test_coordinate_formats_and_hemispheres(self):
-  self.assertAlmostEqual(parse_coord("491234.50N"),49+12/60+34.5/3600)\n  self.assertAlmostEqual(parse_coord("48.98444444N"),48.98444444)\n  self.assertAlmostEqual(parse_coord("015.29111111E"),15.29111111)\n  self.assertAlmostEqual(parse_coord("4.755879W"),-4.755879)
+ def test_airac_cycle_rollover(self):
+  self.assertEqual(current_airac(date(2026,11,22)),"2611")
+  self.assertEqual(current_airac(date(2026,11,26)),"2612")
+  self.assertEqual(current_airac(date(2027,1,21)),"2701")
+ def test_coordinate_formats_and_hemispheres(self):
+  self.assertAlmostEqual(parse_coord("491234.50N"),49+12/60+34.5/3600)
+  self.assertAlmostEqual(parse_coord("48.98444444N"),48.98444444)
+  self.assertAlmostEqual(parse_coord("015.29111111E"),15.29111111)
+  self.assertAlmostEqual(parse_coord("4.755879W"),-4.755879)
   self.assertAlmostEqual(parse_coord("0041234E"),4+12/60+34/3600)
   self.assertAlmostEqual(parse_coord("4912N"),49+12/60)
   self.assertAlmostEqual(parse_coord("491234S"),-(49+12/60+34/3600))
