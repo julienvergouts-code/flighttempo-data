@@ -145,6 +145,26 @@ def weak_components(undirected: dict[str, set[str]]) -> tuple[dict[str, int], di
     return ids, sizes
 
 
+def physical_weak_components(nav: Any) -> tuple[dict[int,int],dict[int,int]]:
+    nodes=getattr(nav,"physical_nodes",[])
+    adj=getattr(nav,"physical_adj",{})
+    undirected={i:set() for i in range(len(nodes))}
+    for source,edges in adj.items():
+        for target,_,_ in edges:
+            undirected.setdefault(source,set()).add(target)
+            undirected.setdefault(target,set()).add(source)
+    ids={}; sizes={}; component=0
+    for start in undirected:
+        if start in ids: continue
+        component+=1; queue=deque([start]); ids[start]=component; size=0
+        while queue:
+            node=queue.popleft(); size+=1
+            for nxt in undirected.get(node,()):
+                if nxt not in ids: ids[nxt]=component; queue.append(nxt)
+        sizes[component]=size
+    return ids,sizes
+
+
 def probe_astar(nav: Any, adj: dict[str, Any], start: str | None, goal: str | None,
                 label: str, start_coord: tuple[float,float] | None = None,
                 goal_coord: tuple[float,float] | None = None) -> dict[str, Any]:
@@ -219,6 +239,7 @@ def build_report(result_payload: Any, evidence_payload: Any, nav: Any,
     adj = {normalize(k): v for k, v in adj_raw.items()} if isinstance(adj_raw, dict) else {}
     indegree, outdegree, undirected, edge_count = graph_metrics(adj)
     wcc_ids, wcc_sizes = weak_components(undirected)
+    physical_wcc_ids, physical_wcc_sizes = physical_weak_components(nav)
     legs = extract_legs(result_payload)
     diag_map = diagnostics_by_leg(evidence_payload)
 
@@ -253,6 +274,8 @@ def build_report(result_payload: Any, evidence_payload: Any, nav: Any,
                 "kind": nav.physical_nodes[node_index]["kind"],
                 "out_degree": len(nav.physical_adj.get(node_index,[])),
                 "has_incoming": node_index in getattr(nav,"physical_in_degree_nodes",set()),
+                "physical_wcc_id": physical_wcc_ids.get(node_index),
+                "physical_wcc_size": physical_wcc_sizes.get(physical_wcc_ids.get(node_index),0),
             } for node_index in physical_variants]
             fix_rows.append({
                 "leg_index": leg_index, "leg_number": leg_number, "route": route,
@@ -335,6 +358,8 @@ def build_report(result_payload: Any, evidence_payload: Any, nav: Any,
             "physical_node_count": len(getattr(nav,"physical_nodes",[])),
             "physical_adjacency_node_count": len(getattr(nav,"physical_adj",{})),
             "physical_directed_edge_count": sum(len(v) for v in getattr(nav,"physical_adj",{}).values()),
+            "physical_weak_component_count": len(physical_wcc_sizes),
+            "largest_physical_weak_component_size": max(physical_wcc_sizes.values(),default=0),
             "duplicate_identifier_count": sum(1 for v in getattr(nav,"nodes_by_ident",{}).values() if len(v)>1),
             "admissible_heuristic_scale": getattr(nav,"heuristic_scale",0.0),
             "identifier_directed_edge_count": edge_count, "identifier_wcc_node_count": len(undirected),
