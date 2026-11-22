@@ -1,6 +1,6 @@
 {
   "schemaVersion": 13,
-  "generatedAtUtc": "2026-11-22T16:05:44.963864+00:00",
+  "generatedAtUtc": "2026-11-22T16:08:15.896788+00:00",
   "procedureAiracCycle": "2611",
   "navaidTypeCounts": {
     "DME": 167,
@@ -776,7 +776,7 @@
       "available": true,
       "recordCount": 4736,
       "sizeBytes": 454573,
-      "sha256": "9c048ff66b06c457a9c2d4444fcb2e1bee082d345c0223791b20d9c2956b6691",
+      "sha256": "922fc915bb27a75894476cb8a17b10a476db1316595b4d98122a14e09af18ef1",
       "sourceProvider": "OpenFlightMaps Association",
       "sourceUrl": "https://openflightmaps.org/",
       "coverage": "21 official OFMA regions (EB, ED, EF, EH, EK, EP, ES, FA, FY, LD, LF, LG, LH, LI, LJ, LK, LM, LO, LR, LS, LZ); regional coverage only, not worldwide geographic coverage; VFR-designated points.",
