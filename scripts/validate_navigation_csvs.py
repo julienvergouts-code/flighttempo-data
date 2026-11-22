@@ -115,30 +115,10 @@ def validate_dataset(root: Path, dataset: dict) -> dict:
     return result
 
 
-def redistribution_block_reason(dataset: dict) -> str | None:
-    license_text = " ".join(
-        str(dataset.get(key, "")) for key in ("license", "licenseStatus", "status")
-    ).lower()
-    blocked_markers = (
-        "cc by-nc",
-        "cc_by_nc",
-        "non_commercial_only",
-        "not_confirmed",
-        "redistribution_not_confirmed",
-        "derivative_redistribution",
-        "personal_development_test_only",
-        "mixed_source_review_required",
-        "declared_redistributable_check_required",
-        "public_redistribution_not_confirmed",
-        "permission_required",
-        "permission_review_required",
-        "scope_to_confirm",
-        "scope_pending",
-        "rights_unconfirmed",
-        "non-commercial-only",
-        "non_commercial_only",
-    )
-    return next((marker for marker in blocked_markers if marker in license_text), None)
+try:
+    from .commercial_rights import redistribution_block_reason
+except ImportError:
+    from commercial_rights import redistribution_block_reason
 
 
 def validate_manifest(root: Path, manifest_path: Path) -> list[dict]:

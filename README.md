@@ -1,64 +1,35 @@
 # FlightTempo Data
 
-Worldwide aviation reference data for personal FlightTempo development, route-building experiments and flight-preparation practice.
+Reference data for the FlightTempo application and its development pipelines.
 
-**This is not an approved operational navigation database.** Some datasets are old, incomplete, community-maintained or advisory-only. Always verify against current official AIPs, NOTAMs and operator procedures before real-world use.
+The app-facing download contract is `navigation_manifest.json`. Only datasets with verified commercial reuse rights and valid source-cycle dates may be marked `available: true`. Each downloadable dataset includes its source, licence, attribution, cycle, checksum and record count.
 
-## App download contract
+**This is not an approved operational navigation database.** Reference records may be incomplete and must not replace official AIPs, NOTAMs or operator procedures.
 
-The app reads:
+## Current IFR and VFR coverage
 
-`https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/navigation_manifest.json`
+- **Global reference tables:** OurAirports airport, runway and navaid records are CC0/public domain and refreshed by the navigation-data workflow. Mixed-source airport exports are blocked.
+- **US IFR:** FAA AeroNav CIFP cycle 2611 SIDs, STARs and approach records are in the repository. They are US-only, reference-only, and expire after 2026-11-25. A daily monitor checks for new cycles; no verified automatic ARINC 424 import currently exists.
+- **France IFR:** the official SIA eAIP lists SID/STAR DATA sheets under its Open Licence, which permits commercial reuse with attribution. A daily pipeline selects the current cycle, accounts for every indexed sheet, and imports only supported tables. Partial coverage and skipped sheets are disclosed in generated metadata.
+- **US VFR:** FAA NASR VFR reporting points are public domain. The current file is effective 2026-11-26 and the manifest keeps it unavailable before that date.
+- **Regional VFR:** OFMA OFMX reference points are commercially usable under the OFMA General Users' License, subject to its attribution and other conditions. Coverage is limited to the regions listed in the metadata.
+- **Worldwide IFR fixes and airways:** the legacy cycle 2012.08 snapshot is stale and excluded from app downloads. There is no complete worldwide IFR data source in this repository.
 
-The manifest lists downloadable datasets, relative paths, SHA-256 checksums, record counts, source provenance and cycle status. The app should download only datasets marked `available: true` and verify each checksum.
+See [IFR database status](IFR_DATABASE_STATUS.md) and [VFR database status](VFR_DATABASE_STATUS.md) for coverage details and matching rules.
 
-## Current data packages
+## Data rights and attribution
 
-| Dataset | Coverage / contents | Current status |
-| --- | --- | --- |
-| `navigation/airports/ourairports_airports.csv` | 86,371 worldwide airport records | OurAirports CC0 |
-| `navigation/runways/runways_parsed.csv` | 47,127 runway records | OurAirports CC0 |
-| `navigation/navaids/navaids.csv` | 11,008 navaids | OurAirports CC0 |
-| `navigation/waypoints/flightgear_fixes.csv` | 113,356 IFR fixes | Legacy X-Plane snapshot, cycle token 2012.08, GPL-3.0 |
-| `navigation/navaids/flightgear_navaids.csv` | 26,599 navaids, including ILS-related facilities | Legacy X-Plane snapshot, cycle token 2012.08, GPL-3.0 |
-| `navigation/airways/flightgear_airway_segments.csv` | 70,291 airway segments | Legacy X-Plane snapshot, cycle token 2012.08, GPL-3.0 |
-| `navigation/graph/world_corridor_graph.bin` | 59,073 nodes and 156,701 edges, including airport connectors | Built from the legacy global navigation baseline |
-| `procedures/sids/sids.csv` | 33,349 SIDs | FAA CIFP cycle 2611; United States NAS only |
-| `procedures/stars/stars.csv` | 44,197 STARs | FAA CIFP cycle 2611; United States NAS only |
-| `procedures/approaches/approaches.csv` | 114,966 approaches | FAA CIFP cycle 2611; United States NAS only |
-| `airspace/advisories/easa_czibs.json` | 34 EASA CZIB records, including 16 active at the latest refresh | Daily refresh |
-| `navigation/airspace/openaip_fir_boundaries.geojson` | 170 FIR/UIR polygons | OpenAIP CC BY-NC 4.0; partial coverage |
-| `airspace/faa_prn_notams.json` | 16 KICZ NOTAM references and 7 SFAR links | FAA PRN index; live cancellation status not verified |
+There is no blanket licence for this repository. The licence and conditions belong to each dataset:
 
-The graph is not a list of popular city pairs. It is an airway graph used to calculate routes dynamically between airport nodes, so uncommon pairs such as EBBR–RJAA can be routed without a hardcoded passenger-route entry.
+- OurAirports: [data terms](https://ourairports.com/data/)
+- FAA CIFP/NASR: US government public-domain sources; verify current cycle and source notices.
+- SIA France eAIP: [eAIP listing](https://www.sia.aviation-civile.gouv.fr/produits-numeriques-en-libre-disposition/eaip.html) and [SIA Open Licence](https://www.sia.aviation-civile.gouv.fr/produits-numeriques-en-libre-disposition.html)
+- OFMA: [General Users' License](https://www.openflightmaps.org/live/downloads/20150306-GUL.pdf)
 
-## Conflict-zone and restriction data
-
-- EASA CZIB records are imported automatically. The route policy defaults to avoiding active advisory FIRs and exposes one user control: **Avoid Conflict / Advisory FIRs**.
-- OpenAIP supplies FIR/UIR geometry where available. Current coverage is partial: 170 polygons from 130 country exports; not every advisory has a matching polygon.
-- FAA KICZ notices are imported from the official FAA Prohibitions, Restrictions and Notices page. The importer preserves the notice's affected FIR codes and applicability scope. KICZ is a NOTAM series/identifier, not a FIR code.
-- The FAA PRN page is not a live NOTAM amendment/cancellation API. FAA references are marked as currentness-unverified and must not be used as a hard legal block without checking the current NOTAM.
-- Restrictions are matched by applicability (operator, pilot certificate or aircraft registration where specified), not inferred from airline nationality. EASA advisories remain advisories; they are not automatically promoted to universal legal prohibitions.
-
-## Important limitations
-
-1. The worldwide fixes, navaids, ILS facilities and airways come from a legacy 2012.08 X-Plane/FlightGear-format snapshot. They are useful for development and A* route testing, not current operational navigation.
-2. Published SIDs, STARs and approaches are currently populated from FAA CIFP for the US NAS only. No complete worldwide or Europe-wide redistributable procedure database has been confirmed.
-3. OpenAIP FIR/UIR coverage is partial and non-commercial. Required attribution is recorded in `LICENSES/OpenAIP.md`.
-4. FAA PRN/KICZ records are an official reference index, not a live cancellation feed. The FAA live NOTAM API is not connected; access is required.
-5. Aero.Sors-derived CSVs are isolated as experimental personal-development data. Permission to redistribute the derived CSVs has not been confirmed.
-6. The legacy app-facing `airports/airports.csv` has mixed upstream provenance; see its `meta.json`.
+The pipeline does not treat public accessibility as permission. On each run, the French eAIP workflow checks the exact free current-cycle product and re-reads the SIA terms for commercial reuse, redistribution and required attribution. Any new country or AIP source must pass its own product-specific rights check before import. Sources with non-commercial or unverified redistribution terms are excluded from the app download manifest. No paid navigation data is used.
 
 ## Updating data
 
-- OurAirports airport, runway and navaid reference tables refresh daily.
-- The legacy global IFR source is imported and the world corridor graph is rebuilt by GitHub Actions.
-- EASA CZIB advisories and FAA PRN references refresh daily.
-- OpenAIP FIR/UIR exports refresh weekly.
-- FAA CIFP procedures remain cycle-pinned until the next verified import.
+GitHub Actions refreshes OurAirports and FAA VFR reference data, imports OFMA reference points, checks the published FAA CIFP cycle and fetches the current French eAIP SID/STAR sheets. IFR cycle data is not replaced unless the import succeeds and validation passes.
 
-## Provenance and licensing
-
-There is no blanket licence for all data in this repository. Each dataset has a `meta.json` and a source-specific licence/attribution note under `LICENSES/`. The root `manifest.json` is the repository-wide provenance catalogue; `navigation_manifest.json` is the app-facing download contract.
-
-Do not infer a licence from a file format, filename or public URL. Do not treat any dataset in this repository as an approved AIP or operational flight-planning source.
+The exact-name/exact-coordinate matcher is implemented for source-backed point records. Procedure legs without their own coordinates are never assigned VFR coordinates by ident alone.

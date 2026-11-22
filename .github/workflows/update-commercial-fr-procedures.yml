@@ -9,7 +9,11 @@ on:
       - "scripts/fetch_sia_eaip_procedure_data.py"
       - "scripts/import_sia_eaip_procedures.py"
       - "scripts/enforce_app_manifest_rights.py"
+      - "scripts/commercial_rights.py"
+      - "scripts/exact_point_matching.py"
       - "scripts/validate_navigation_csvs.py"
+      - "tests/test_commercial_rights_gate.py"
+      - "tests/test_exact_point_matching.py"
       - "procedures/source-registry.json"
       - "tests/test_fetch_sia_eaip_procedure_data.py"
       - "tests/test_sia_eaip_procedures.py"
@@ -41,6 +45,8 @@ jobs:
         run: |
           python -m unittest discover -s tests -p 'test_fetch_sia_eaip_procedure_data.py' -v
           python -m unittest discover -s tests -p 'test_sia_eaip_procedures.py' -v
+          python -m unittest discover -s tests -p 'test_exact_point_matching.py' -v
+          python -m unittest discover -s tests -p 'test_commercial_rights_gate.py' -v
       - name: Build current French SID and STAR reference data
         run: python scripts/fetch_sia_eaip_procedure_data.py
       - name: Enforce commercial redistribution rights

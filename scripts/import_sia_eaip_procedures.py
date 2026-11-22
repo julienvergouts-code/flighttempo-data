@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """Extract structured IFR procedure legs from official French SIA AIP DATA PDFs.
 
-The importer deliberately stores published leg attributes without generating
-coordinates, paths, or missing constraints. Optional fix coordinates are linked
-only when a supplied source-backed fix file has exactly one matching ident.
-This is reference-data ingestion for simulator development, not an operational
-navigation database.
+The importer stores published leg attributes without generating paths or
+constraints. The published procedure rows do not contain fix coordinates, so
+coordinates are left blank. VFR points may be reused for IFR only in a separate
+cross-source join that proves the same name and exact decimal coordinates.
+This output is a reference dataset, not an operational navigation database.
 """
 
 from __future__ import annotations
@@ -17,7 +17,6 @@ import json
 import re
 import sys
 import unicodedata
-from collections import defaultdict
 from datetime import datetime
 from pathlib import Path
 from typing import Iterable
@@ -158,7 +157,6 @@ def parse_table_rows(
     source_document_date: str,
     airac_effective_date: str,
     source_sha256: str,
-    fix_index: dict[str, list[tuple[str, str]]] | None = None,
 ) -> list[dict[str, str]]:
     """Convert one pdfplumber table to row-preserving procedure-leg records."""
     rows = [[clean(v) for v in (row or [])] for row in table]
@@ -200,14 +198,9 @@ def parse_table_rows(
         # scope and is never expanded into multiple synthetic runway branches.
         selector = "" if selector == "-" else selector
 
-        fix_matches = (fix_index or {}).get(waypoint.upper(), [])
-        if len(fix_matches) == 1:
-            fix_lat, fix_lon = fix_matches[0]
-            fix_resolution = "unique_source_fix"
-        elif len(fix_matches) > 1:
-            fix_lat, fix_lon, fix_resolution = "", "", "ambiguous_source_fix"
-        else:
-            fix_lat, fix_lon, fix_resolution = "", "", "not_linked"
+        # The source table has no coordinates; an ident-only lookup cannot prove a point match.
+        fix_lat, fix_lon = "", ""
+        fix_resolution = "not_linked_no_procedure_source_coordinates"
 
         raw_values = {
             "procedure_heading": active_procedure,
@@ -247,23 +240,6 @@ def parse_table_rows(
             "raw_row_json": json.dumps(raw_values, ensure_ascii=False, separators=(",", ":")),
         })
     return records
-
-
-def load_fix_index(path: Path | None) -> dict[str, list[tuple[str, str]]]:
-    index: dict[str, list[tuple[str, str]]] = defaultdict(list)
-    if path is None:
-        return index
-    with path.open("r", encoding="utf-8-sig", newline="") as handle:
-        reader = csv.DictReader(handle)
-        required = {"ident", "latitude", "longitude"}
-        if not reader.fieldnames or not required.issubset(set(reader.fieldnames)):
-            raise ValueError("Fix CSV must contain ident, latitude and longitude columns")
-        for row in reader:
-            ident = clean(row.get("ident", "")).upper()
-            lat, lon = clean(row.get("latitude", "")), clean(row.get("longitude", ""))
-            if ident and lat and lon:
-                index[ident].append((lat, lon))
-    return index
 
 
 def pdf_tables(path: Path) -> tuple[list[list[list[str | None]]], str]:
@@ -317,7 +293,6 @@ def source_url_for(base_url: str, airport: str, filename: str) -> str:
 
 
 def read_files(args) -> tuple[list[dict[str, str]], list[dict[str, str]]]:
-    fix_index = load_fix_index(args.fixes_csv)
     all_rows: list[dict[str, str]] = []
     source_records: list[dict[str, str]] = []
     pdf_paths = sorted(args.pdf_dir.glob("*.pdf"))
@@ -341,7 +316,6 @@ def read_files(args) -> tuple[list[dict[str, str]], list[dict[str, str]]]:
                 source_document_date=doc_date,
                 airac_effective_date=args.airac_effective_date,
                 source_sha256=digest,
-                fix_index=fix_index,
             ))
         if not rows_for_file:
             source_records.append({
@@ -375,7 +349,6 @@ def main() -> int:
     parser.add_argument("--airac-effective-date", required=True, help="AIP package effective date YYYY-MM-DD")
     parser.add_argument("--output", type=Path, required=True, help="Output CSV path")
     parser.add_argument("--manifest", type=Path, help="Optional JSON provenance report path")
-    parser.add_argument("--fixes-csv", type=Path, help="Optional source-backed fix file with ident/latitude/longitude")
     parser.add_argument(
         "--source-base-url",
         default="",
@@ -423,7 +396,8 @@ def main() -> int:
             "sourceDocuments": sources,
             "notes": [
                 "Leg attributes are transcribed from SIA AIP DATA tables.",
-                "Fix coordinates are linked only when a supplied fix source has a unique exact ident match.",
+                "Procedure PDF rows contain no fix coordinates, so no coordinates are copied by ident alone.",
+                "A VFR point can support IFR reuse only through exact normalized-name and exact decimal coordinate matching across source-backed records.",
                 "Shared/blank runway selectors are preserved and are not expanded into guessed branches.",
                 "Missing values remain blank; no synthetic route legs or constraints are generated.",
                 "Source charts, AIP text, fix coordinates, procedure sequencing and cycle validity require validation before any operational use.",

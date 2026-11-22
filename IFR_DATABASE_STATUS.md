@@ -1,31 +1,27 @@
-# FlightTempo IFR navigation data — status audit
+# FlightTempo IFR database status
 
 **Audit date:** 2026-11-22  
-**Bottom line:** FlightTempo does **not** currently have an active, current worldwide IFR navigation database. It has a mixed reference dataset with daily airport/runway/navaid refreshes, a legacy 2012.08 worldwide fix/airway baseline, and a current-ish FAA CIFP package that is not automatically imported.
+**Coverage:** Regional and cycle-pinned reference data only. There is no complete worldwide IFR database.
 
-| Data class | Packaged source / cycle | Refresh | Coverage | Status |
-|---|---|---|---|---|
-| Airports | OurAirports CC0 | Daily workflow | Worldwide | Active refresh; community reference |
-| Runways | OurAirports CC0 | Daily workflow | Worldwide | Active refresh; community reference |
-| Community navaids | OurAirports CC0 | Daily workflow | Worldwide | Active refresh; incomplete/not authoritative |
-| IFR fixes | X-Plane mirror snapshot 2012.08, GPL-3.0 | Manual legacy importer | Worldwide | **Stale; not current AIRAC** |
-| Airways | X-Plane mirror snapshot 2012.08, GPL-3.0 | Manual legacy importer | Worldwide | **Stale; not current AIRAC** |
-| SID/STAR | FAA CIFP 2611, effective 2026-10-29, expires 2026-11-25 | Currentness monitor only; no auto-import | US NAS | Package is one cycle behind next published cycle 261126 (effective 2026-11-26); US-only |
-| Approaches | FAA CIFP parsing incomplete | Not auto-imported | US NAS only where parser supports | Not an active complete approach DB |
-| European IFR procedures | France SIA AIXM 4.5/XML Open Licence source identified | Not ingested | France candidate | Reusable source confirmed, parser/integration not built |
-| EUROCONTROL FRA points | Official source monitor | Not ingested | ECAC | Candidate; licensing/format integration gate |
-| Global current IFR procedures | No free, redistributable, complete feed confirmed | — | Worldwide | **Missing** |
+| Data | Source and licence | Coverage / cycle | Refresh and current status |
+|---|---|---|---|
+| Airports, runways and community navaids | OurAirports, CC0 / public domain | Worldwide reference records | Daily source refresh. The mixed-provenance airport export is blocked; only the OurAirports tables are downloadable. |
+| US SIDs and STARs | FAA AeroNav CIFP, US government public-domain data | United States NAS, cycle 2611; effective 2026-10-29 through 2026-11-25 | Existing CSVs are in the repository and marked reference-only. A daily currentness monitor checks the FAA cycle. There is no verified automatic ARINC 424 importer; the next cycle 2612 is effective 2026-11-26. |
+| US approaches | FAA AeroNav CIFP, US government public-domain data | United States NAS, cycle 2611 | Existing CSV is incomplete/test-only and must not be treated as complete approach coverage. |
+| French SIDs and STARs | Official SIA eAIP DATA PDFs under the SIA Open Licence; commercial reuse, adaptation and redistribution are permitted with attribution | France only; current eAIP cycle selected from the official catalogue | A daily GitHub workflow imports sheets it can parse, records every indexed sheet and skips unsupported layouts. It publishes only if both SID and STAR data are extracted. It is regional reference data, not operational. |
+| Worldwide fixes, legacy navaids and airways | X-Plane/FlightGear-format snapshot, cycle token 2012.08 | Worldwide but stale | Kept only for history/provenance; excluded from app downloads and route-planning capabilities. No longer a live IFR feed. |
+| Other country procedures | No additional source admitted without commercial redistribution terms verified for the exact product/country | Missing | No paid source is used. EUROCONTROL EAD redistribution requires negotiated fees and is excluded. |
 
-## Important product boundary
+## VFR points reused for IFR
 
-The 2012.08 fixes/airways and graph are **development route-preview data only**. The route graph must not be advertised as current IFR route planning or operational navigation. It currently contains synthetic airport connectors, bidirectional airway assumptions, and no complete current restrictions/NOTAM integration.
+A VFR point may be cross-referenced to an IFR point only when both source records provide the same normalized name and exactly equal latitude and longitude. There is no tolerance, nearest-point match, alias match or ident-only match.
 
-## Prioritized build plan
+The current French procedure tables identify fixes but do not provide their coordinates. FAA procedure CSVs also lack coordinates. The repository currently has no current, coordinate-bearing IFR fix source suitable for proving those matches, so the pipeline leaves procedure coordinates blank and creates no VFR-to-IFR coordinate links.
 
-1. Replace stale worldwide fixes/airways with a source-by-source legally reusable current feed, prioritizing official/open data.
-2. Ingest and regression-test the France SIA AIXM 4.5 data as the first current regional IFR dataset.
-3. Investigate the EUROCONTROL FRA points list and licence/redistribution scope; build FRA edges separately from published airways.
-4. Upgrade FAA CIFP import to automatic cycle detection, verified ARINC 424 parsing, regression comparisons and safe publication before replacing cycle 2611 with 261126.
-5. Keep legacy sources available only as clearly labelled fallback/reference data, with provenance and age visible.
+## Commercial reuse gate
 
-No current package should be represented as a complete worldwide IFR database.
+The app download manifest fails closed unless a dataset has an explicit commercial-use grant or a recognized public-domain/CC0 status. It also blocks datasets before their effective date and after their cycle expiry. Source-specific attribution and licence conditions remain in the dataset metadata.
+
+OpenAIP CC BY-NC data, mixed-source airport exports, unconfirmed derivatives and other records without confirmed commercial redistribution rights are not app-downloadable. No non-commercial or paid data source is used in the active IFR/VFR database.
+
+**Operational boundary:** These are reference datasets for product development and planning practice. They are not an approved operational navigation database and do not replace current AIPs, NOTAMs or operator procedures.

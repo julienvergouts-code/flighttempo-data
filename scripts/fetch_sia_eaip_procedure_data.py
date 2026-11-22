@@ -19,6 +19,7 @@ import sys
 import tempfile
 from datetime import date, datetime
 from html.parser import HTMLParser
+import unicodedata
 from pathlib import Path
 from urllib.error import URLError
 from urllib.request import Request, urlopen
@@ -30,7 +31,6 @@ PROCEDURE_META = ROOT / "procedures/europe/france/meta.json"
 NAV_MANIFEST = ROOT / "navigation_manifest.json"
 DATASET_ID = "france_sia_sid_star_legs"
 DOWNLOAD_URL = "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/procedures/europe/france/sid_star_legs.csv"
-LICENSE_URL = "https://www.sia.aviation-civile.gouv.fr/produits-numeriques-en-libre-disposition/eaip/zip-eaip-complet-airac-11-26.html"
 OPEN_LICENSE_URL = "https://www.sia.aviation-civile.gouv.fr/produits-numeriques-en-libre-disposition.html"
 MAX_INDEX_BYTES = 20 * 1024 * 1024
 MAX_PDF_BYTES = 20 * 1024 * 1024
@@ -67,6 +67,51 @@ def parse_catalog_issues(catalog_text: str) -> list[dict]:
             "expiryDate": expiry.isoformat(),
         })
     return issues
+
+
+def _normalise_legal_text(text: str) -> str:
+    text = unicodedata.normalize("NFKD", text)
+    text = "".join(character for character in text if not unicodedata.combining(character))
+    return re.sub(r"\s+", " ", text).casefold()
+
+
+def verify_sia_commercial_reuse(catalog_text: str, license_text: str, issue: dict) -> dict:
+    """Re-check the exact free eAIP product and its current SIA Open Licence terms."""
+    catalog = _normalise_legal_text(catalog_text)
+    terms = _normalise_legal_text(license_text)
+    cycle = str(issue["cycle"]).casefold()
+    product_marker = f"zip eaip complet airac {cycle}"
+    product_at = catalog.find(product_marker)
+    if product_at < 0:
+        raise ValueError(f"Current eAIP AIRAC {cycle} product is not listed in the SIA catalogue")
+    product_text = catalog[product_at:product_at + 800]
+    if not re.search(r"0[,\.]00\s*€", product_text):
+        raise ValueError(f"SIA eAIP AIRAC {cycle} product is not listed as free")
+
+    required_terms = {
+        "open-licence scope": "tous les produits des sous rubriques",
+        "commercial reuse": "commerciales ou non",
+        "redistribution": "redistribuer",
+        "commercial product inclusion": "produit ou application",
+        "source and update-date attribution": "date de derniere mise a jour",
+    }
+    missing = [label for label, phrase in required_terms.items() if phrase not in terms]
+    if "licence ouverte" not in terms:
+        missing.append("Licence Ouverte")
+    if "zones geographiques uas" not in terms:
+        missing.append("UAS exception scope")
+    if missing:
+        raise ValueError(
+            "SIA licence page no longer proves commercial eAIP reuse; missing: "
+            + ", ".join(missing)
+        )
+    return {
+        "product": f"eAIP AIRAC {cycle}",
+        "productPrice": "EUR 0",
+        "license": "SIA Licence Ouverte",
+        "commercialUseAllowed": True,
+        "verification": "live_SIA_catalogue_and_licence_terms",
+    }
 
 
 def select_current_issue(issues: list[dict], today: date | None = None) -> dict:
@@ -111,6 +156,45 @@ def discover_documents(index_text: str) -> list[dict]:
             "filename": filename,
         }
     return sorted(found.values(), key=lambda item: (item["airport"], item["kind"], item["filename"]))
+
+
+def validate_parse_coverage(documents: list[dict], parser_sources: list[dict]) -> dict:
+    """Require each indexed sheet to be accounted for and both procedures parsed."""
+    expected = {item["filename"]: item["kind"] for item in documents}
+    actual = {item.get("source_file"): item for item in parser_sources}
+    if len(actual) != len(parser_sources) or set(actual) != set(expected):
+        raise ValueError(
+            f"parser source accounting mismatch: indexed={len(expected)}, "
+            f"reported={len(parser_sources)}"
+        )
+
+    parsed_by_kind = {"SID": 0, "STAR": 0}
+    parsed_documents = 0
+    record_count = 0
+    for filename, source in actual.items():
+        count = int(source.get("record_count", 0))
+        record_count += count
+        if count > 0:
+            parsed_documents += 1
+            kind = expected[filename]
+            parsed_by_kind[kind] = parsed_by_kind.get(kind, 0) + 1
+    if not all(parsed_by_kind.get(kind, 0) > 0 for kind in ("SID", "STAR")):
+        raise ValueError(
+            "refusing publish: parser must extract at least one indexed SID and STAR sheet; "
+            f"parsed documents={parsed_by_kind}"
+        )
+    if record_count <= 0:
+        raise ValueError("refusing empty French procedure dataset")
+
+    skipped = len(expected) - parsed_documents
+    return {
+        "indexedDocumentCount": len(expected),
+        "parsedDocumentCount": parsed_documents,
+        "skippedDocumentCount": skipped,
+        "documentCoverageRatio": round(parsed_documents / len(expected), 4) if expected else 0.0,
+        "parsedDocumentCountsByType": parsed_by_kind,
+        "partialExtraction": skipped > 0,
+    }
 
 
 def fetch(url: str, limit: int) -> bytes:
@@ -182,7 +266,11 @@ def register_manifest(csv_path: Path, meta: dict) -> dict:
         "sha256": hashlib.sha256(raw).hexdigest(),
         "sourceProvider": "Service de l'Information Aeronautique (SIA France)",
         "sourceUrl": meta["indexUrl"],
-        "coverage": "France AIP aerodromes represented by current GEN 0.4 DATA SID/STAR index",
+        "coverage": (
+            f"France reference coverage: parser extracted "
+            f"{meta.get('parsedDocumentCount', 0)} of {meta.get('indexedDocumentCount', 0)} "
+            "indexed current-cycle DATA SID/STAR sheets."
+        ),
         "license": "SIA Licence Ouverte / Open Licence",
         "licenseUrl": OPEN_LICENSE_URL,
         "licenseStatus": "verified_exact_eAIP_product_linked_to_open_license",
@@ -194,7 +282,10 @@ def register_manifest(csv_path: Path, meta: dict) -> dict:
         "provenanceVerification": "official_SIA_eAIP_GEN_0_4_index",
         "downloadPurpose": "regional_reference_only",
         "operationallyAvailable": False,
-        "status": "current_cycle_regional_reference_dataset",
+        "status": (
+            "partial_current_cycle_regional_reference_dataset"
+            if meta.get("partialExtraction") else "current_cycle_regional_reference_dataset"
+        ),
     }
     manifest = json.loads(NAV_MANIFEST.read_text(encoding="utf-8"))
     datasets = [item for item in manifest.get("datasets", []) if item.get("id") != DATASET_ID]
@@ -204,14 +295,19 @@ def register_manifest(csv_path: Path, meta: dict) -> dict:
     manifest.setdefault("capabilities", {})["franceSids"] = counts["SID"] > 0
     manifest["capabilities"]["franceStars"] = counts["STAR"] > 0
     coverage = manifest.setdefault("regionalProcedureCoverage", {}).setdefault("europe", {})
-    coverage["status"] = "partial_current_france_sia_ingested"
+    coverage["status"] = (
+        "partial_current_france_sia_ingested"
+        if meta.get("partialExtraction") else "current_france_sia_ingested"
+    )
     coverage["operationallyAvailable"] = False
     coverage["confirmedProcedureCountries"] = ["FR"]
     coverage["candidateProcedureCountries"] = []
     coverage["summary"] = (
-        "France SID/STAR reference legs are imported from the current SIA eAIP "
-        "under its commercial-use Open Licence. This is partial national coverage; "
-        "no complete Europe-wide IFR database is available."
+        f"France SID/STAR reference legs were extracted from "
+        f"{meta.get('parsedDocumentCount', 0)} of {meta.get('indexedDocumentCount', 0)} "
+        "current SIA eAIP DATA sheets under its commercial-use Open Licence. "
+        "Unsupported sheets are listed in source metadata and excluded; no complete "
+        "Europe-wide IFR database is available."
     )
     coverage["vfrOnlyProviders"] = ["OpenFlightMaps"]
     coverage["sources"] = [
@@ -234,15 +330,21 @@ def register_manifest(csv_path: Path, meta: dict) -> dict:
         "effectiveDate": meta["airacEffectiveDate"],
         "expiryDate": meta["expiryDate"],
         "sourceStatus": "official_eAIP_DATA_procedure_source_commercial_reuse_confirmed",
-        "dataStatus": "current_cycle_imported",
+        "dataStatus": (
+            "partial_current_cycle_imported"
+            if meta.get("partialExtraction") else "current_cycle_imported"
+        ),
         "recordCount": len(rows),
         "procedureTypeCounts": counts,
         "sourceDocumentCount": len(meta["sourceDocuments"]),
+        "parsedDocumentCount": meta.get("parsedDocumentCount", 0),
+        "skippedDocumentCount": meta.get("skippedDocumentCount", 0),
+        "documentCoverageRatio": meta.get("documentCoverageRatio", 0),
         "operationallyAvailable": False,
         "notes": "Do not treat regional reference procedure legs as an approved operational navigation database."
     })
     manifest["procedureCoverageStatus"] = (
-        "FAA_US_NAS_CYCLE_PINNED; FRANCE_SIA_CURRENT_SIDS_STARS; "
+        "FAA_US_NAS_CYCLE_PINNED; FRANCE_SIA_PARTIAL_CURRENT_SIDS_STARS; "
         "NO_COMPLETE_WORLDWIDE_IFR_PROCEDURES"
     )
     manifest["generatedAtUtc"] = datetime.utcnow().replace(microsecond=0).isoformat() + "Z"
@@ -264,9 +366,16 @@ def register_manifest(csv_path: Path, meta: dict) -> dict:
         "effectiveDate": meta["airacEffectiveDate"],
         "expiryDate": meta["expiryDate"],
         "sourceStatus": "official_eAIP_DATA_procedure_source_commercial_reuse_confirmed",
-        "dataStatus": "current_cycle_imported",
+        "dataStatus": (
+            "partial_current_cycle_imported"
+            if meta.get("partialExtraction") else "current_cycle_imported"
+        ),
         "recordCount": len(rows),
         "procedureTypeCounts": counts,
+        "sourceDocumentCount": len(meta["sourceDocuments"]),
+        "parsedDocumentCount": meta.get("parsedDocumentCount", 0),
+        "skippedDocumentCount": meta.get("skippedDocumentCount", 0),
+        "documentCoverageRatio": meta.get("documentCoverageRatio", 0),
     })
     registry_path.write_text(
         json.dumps(registry, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
@@ -288,6 +397,9 @@ def register_manifest(csv_path: Path, meta: dict) -> dict:
         "recordCount": len(rows),
         "procedureTypeCounts": counts,
         "sourceDocumentCount": len(meta["sourceDocuments"]),
+        "parsedDocumentCount": meta.get("parsedDocumentCount", 0),
+        "skippedDocumentCount": meta.get("skippedDocumentCount", 0),
+        "documentCoverageRatio": meta.get("documentCoverageRatio", 0),
         "coverage": dataset["coverage"],
         "operationallyAvailable": False,
         "notes": "Current regional reference data. Do not use as approved operational navigation data.",
@@ -304,6 +416,9 @@ def run(dry_run: bool = False) -> dict:
     parser = TextExtractor()
     parser.feed(catalog)
     issue = select_current_issue(parse_catalog_issues(parser.text))
+    license_parser = TextExtractor()
+    license_parser.feed(fetch(OPEN_LICENSE_URL, MAX_INDEX_BYTES).decode("utf-8", errors="replace"))
+    license_check = verify_sia_commercial_reuse(parser.text, license_parser.text, issue)
     base = issue_base_url(issue)
     index_url = f"{base}/pdf/FR-GEN-0.4-fr-FR.pdf"
     charts_base_url = f"{base}/html/eAIP/Cartes"
@@ -331,21 +446,25 @@ def run(dry_run: bool = False) -> dict:
         subprocess.run(command, check=True, cwd=ROOT, capture_output=not dry_run, text=True)
         meta = json.loads(output_meta.read_text(encoding="utf-8"))
         parser_sources = meta.get("sourceDocuments", [])
-        if len(parser_sources) != len(documents):
-            raise ValueError(
-                f"parser saw {len(parser_sources)} of {len(documents)} indexed SID/STAR PDFs"
-            )
-        unparsed = [item for item in parser_sources if item.get("record_count", 0) <= 0]
-        if unparsed:
-            raise ValueError(
-                "SIA format/layout changed or parser missed indexed PDFs; refusing partial publish: "
-                + ", ".join(item["source_file"] for item in unparsed[:10])
+        coverage = validate_parse_coverage(documents, parser_sources)
+        meta.update(coverage)
+        if coverage["partialExtraction"]:
+            skipped_names = [
+                item["source_file"] for item in parser_sources
+                if int(item.get("record_count", 0)) <= 0
+            ]
+            print(
+                f"Partial SIA extraction: parsed {coverage['parsedDocumentCount']} of "
+                f"{coverage['indexedDocumentCount']} indexed documents; skipped "
+                f"{coverage['skippedDocumentCount']}: {', '.join(skipped_names[:20])}",
+                file=sys.stderr,
             )
         meta.update({
             "license": "SIA Licence Ouverte / Open Licence",
             "licenseUrl": OPEN_LICENSE_URL,
             "licenseStatus": "verified_exact_eAIP_product_linked_to_open_license",
             "commercialUseAllowed": True,
+            "licenseVerification": license_check,
             "attribution": "Service de l'Information Aeronautique (SIA France); include source and last update date; do not imply SIA endorsement.",
             "catalogUrl": CATALOG_URL,
             "indexUrl": index_url,
