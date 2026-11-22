@@ -1,0 +1,126 @@
+name: ADS-B multi-aircraft scale benchmark
+
+on:
+  workflow_dispatch:
+    inputs:
+      date:
+        description: "UTC archive date (YYYY-MM-DD)"
+        required: true
+        default: "2026-11-16"
+        type: string
+      max_aircraft:
+        description: "Maximum distinct commercial aircraft"
+        required: true
+        default: 50
+        type: number
+      minimum_aircraft:
+        description: "Minimum qualifying batch size"
+        required: true
+        default: 25
+        type: number
+
+permissions:
+  contents: read
+
+concurrency:
+  group: adsb-scale-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  scale-benchmark:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: python -m pip install -r pipeline/requirements.txt
+      - name: Compile batch runner
+        run: python -m py_compile pipeline/batch_archive_benchmark.py pipeline/build_corridors.py scripts/adsb_learning/build_corridors.py
+      - name: Compile physical FTWG graph
+        run: python pipeline/compile_ftwg_graph.py
+      - name: Stream archive and benchmark multi-aircraft batch
+        env:
+          RUN_DATE: ${{ inputs.date || '2026-11-16' }}
+          MAX_AIRCRAFT: ${{ inputs.max_aircraft || 50 }}
+          MIN_AIRCRAFT: ${{ inputs.minimum_aircraft || 25 }}
+        run: |
+          set -euo pipefail
+          exec > >(tee -a /tmp/adsb_scale_run.log) 2>&1
+          python pipeline/batch_archive_benchmark.py \
+            --date "$RUN_DATE" \
+            --max-aircraft "$MAX_AIRCRAFT" \
+            --minimum-aircraft "$MIN_AIRCRAFT" \
+            --evidence-out /tmp/adsb_scale_evidence.json \
+            --summary-out /tmp/adsb_scale_summary.json
+      - name: Confirm trusted navigation sources remain unchanged
+        if: always()
+        run: git diff --exit-code -- navigation/waypoints/flightgear_fixes.csv navigation/airways/flightgear_airway_segments.csv navigation_manifest.json
+      - name: Strictly validate all scale JSON
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          files = [Path("/tmp/adsb_scale_evidence.json"), Path("/tmp/adsb_scale_summary.json")]
+          forbidden = {
+              "id", "icao24", "icao_24", "hex", "aircraft_id", "aircraft_hex",
+              "registration", "registration_id", "registration_number",
+              "callsign", "call_sign", "flight", "flight_number",
+              "trace", "raw_trace", "trace_data", "trace_points", "trace_endpoints",
+              "_observed_trace_endpoints", "observed_trace_endpoints", "geometry",
+              "positions", "position_data", "timestamp", "timestamps",
+          }
+          def audit_privacy(value, path="$"):
+              if isinstance(value, dict):
+                  for key, child in value.items():
+                      normalized = str(key).casefold().replace("-", "_")
+                      if normalized in forbidden:
+                          raise SystemExit(f"PRIVACY_AUDIT_FAIL: forbidden field {path}.{key}")
+                      audit_privacy(child, f"{path}.{key}")
+              elif isinstance(value, list):
+                  for index, child in enumerate(value):
+                      audit_privacy(child, f"{path}[{index}]")
+          parsed = {}
+          for p in files:
+              if not p.exists():
+                  raise SystemExit(f"STRICT_JSON_FAIL: missing {p}")
+              with p.open(encoding="utf-8") as f:
+                  parsed[p] = json.load(f, parse_constant=lambda value: (_ for _ in ()).throw(ValueError(value)))
+              print(f"STRICT_JSON_OK: {p}")
+              audit_privacy(parsed[p])
+              print(f"PRIVACY_AUDIT_OK: {p}")
+          summary = parsed[files[1]]
+          if summary.get("promotion_enabled") is not False:
+              raise SystemExit("Candidate promotion must remain disabled")
+          if summary.get("trusted_navigation_modified") is not False:
+              raise SystemExit("Trusted navigation source mutation reported")
+          if summary.get("status") != "passed":
+              raise SystemExit("Scale benchmark did not meet its aircraft minimum")
+          evidence = parsed[files[0]]
+          for link in evidence.get("candidate_links", []):
+              if link.get("promotion") != "DISABLED":
+                  raise SystemExit("Candidate promotion must remain disabled")
+              samples = int(link.get("independent_samples", 0))
+              if samples < 1:
+                  raise SystemExit("Candidate link has no independent observations")
+              expected_confidence = "HIGH" if samples >= 5 else "MEDIUM" if samples >= 3 else "LOW"
+              if link.get("confidence") != expected_confidence:
+                  raise SystemExit("Candidate confidence tier does not match its sample count")
+          PY
+      - name: Upload scale evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: adsb-scale-evidence-${{ github.run_id }}-${{ github.sha }}
+          path: |
+            /tmp/adsb_scale_evidence.json
+            /tmp/adsb_scale_summary.json
+            /tmp/adsb_scale_run.log
+          if-no-files-found: ignore
+          retention-days: 14
+
+
