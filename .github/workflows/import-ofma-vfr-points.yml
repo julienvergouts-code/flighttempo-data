@@ -12,7 +12,7 @@ on:
 permissions:
   contents: write
 concurrency:
-  group: ofma-vfr-import
+  group: flighttempo-shared-manifest-updates
   cancel-in-progress: false
 jobs:
   import:
