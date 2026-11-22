@@ -46,6 +46,8 @@ jobs:
           retention-days: 14
       - name: Register layer in shared navigation manifest
         run: python scripts/register_ofma_ofmx_vfr_points_manifest.py
+      - name: Validate generated VFR data and manifest
+        run: python scripts/validate_vfr_data_artifacts.py
       - name: Publish generated database layer
         if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' || (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository)
         run: |
