@@ -83,7 +83,7 @@ def discover_region(code):
                 "finalUrl":final,"pageBytes":len(raw),"sha256":hashlib.sha256(raw).hexdigest(),
                 "directDownloadLinks":sorted(set(links)),"formatHints":format_hints,
                 "scriptSrcs":sorted(set(urljoin(final,x) for x in parser.srcs)),
-                "scriptEndpointAnalysis":[inspect_script(urljoin(final,x)) for x in parser.srcs if "download.js" in x.lower() or "ofmTileMap.js" in x.lower()],
+                "scriptEndpointAnalysis":[inspect_script(urljoin(final,x)) for x in parser.srcs if any(name in x.lower() for name in ("download.js","ofmtilemap.js","ofmtemplate.js"))],
                 "dataAttributes":parser.data_attrs[:100],"candidateEmbeddedUrls":candidate_urls[:100],
                 "downloadLinksFound":len(set(links))}
     except Exception as e:
