@@ -1,0 +1,66 @@
+{
+  "schemaVersion": 1,
+  "dataset": "operator_route_reference_examples",
+  "visibility": "sanitised_reference_only",
+  "notes": [
+    "Contains route text explicitly supplied by the user for FlightTempo database development.",
+    "No flight number, registration, date, operator identity, OFP, crew, timing or other operational details are stored.",
+    "This example is route intelligence only; it does not establish current airway validity, ATC clearance, or operational suitability.",
+    "Validate every fix and airway against the selected navigation-data cycle before using it in a generated route."
+  ],
+  "routes": [
+    {
+      "routeId": "EDDV-EBLG-USER-REFERENCE-001",
+      "origin": "EDDV",
+      "destination": "EBLG",
+      "direction": "EDDV->EBLG",
+      "routeClass": "operator_supplied_private",
+      "status": "candidate",
+      "waypoints": [
+        "VAXEV",
+        "OSNAD",
+        "HMM",
+        "IRBUP",
+        "NEREL"
+      ],
+      "airwayLegs": [
+        {
+          "from": "VAXEV",
+          "airway": "Z718",
+          "to": "OSNAD"
+        },
+        {
+          "from": "OSNAD",
+          "airway": "M170",
+          "to": "HMM"
+        },
+        {
+          "from": "HMM",
+          "airway": "N853",
+          "to": "IRBUP"
+        },
+        {
+          "from": "IRBUP",
+          "airway": "Z717",
+          "to": "NEREL"
+        }
+      ],
+      "routeString": "VAXEV Z718 OSNAD M170 HMM N853 IRBUP Z717 NEREL",
+      "source": {
+        "type": "user_supplied_route_reference",
+        "description": "Route sequence supplied by user; anonymised for database development",
+        "licence": "user_provided_internal_development_use",
+        "sourceCycle": null
+      },
+      "observedOrGeneratedAtUtc": null,
+      "confidence": "unverified_against_graph",
+      "licence": "user_provided_internal_development_use",
+      "validation": {
+        "navigationGraphChecked": false,
+        "airwayGeometryChecked": false,
+        "adsbTrackMatched": false,
+        "notes": "Awaiting automated fix/airway validation against the legacy graph and a historical ADS-B track."
+      }
+    }
+  ]
+}

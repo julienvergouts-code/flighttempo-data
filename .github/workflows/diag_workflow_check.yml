@@ -1,0 +1,25 @@
+name: Diagnostic Workflow Check
+
+on:
+  workflow_dispatch:
+    inputs:
+      note:
+        description: "Optional diagnostic tag"
+        required: false
+        default: "run25-triage"
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check runner allocation and environment
+        run: |
+          echo "Actor: ${{ github.actor }}"
+          echo "Ref: ${{ github.ref }}"
+          echo "SHA: ${{ github.sha }}"
+          echo "Run ID: ${{ github.run_id }}"
+          echo "Input note: ${{ inputs.note }}"
+          python3 --version
