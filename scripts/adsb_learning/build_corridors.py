@@ -248,6 +248,10 @@ def process_trace(path, airports, fixes, graph_airports):
                         "maxDistanceFromAirportNm": round(max_distance_from_origin, 1),
                         "maxAltitudeFt": max_alt, "maxGroundspeedKt": max_speed,
                         "positionCount": len(leg_points), "matchedFixes": [m["fix"] for m in matches],
+                        # Coordinates disambiguate same-name physical FTWG fixes during routing.
+                        # Do not retain per-point timestamps or raw aircraft trace rows here.
+                        "matchedFixDetails": [{"fix": m["fix"], "lat": m["lat"], "lon": m["lon"],
+                                              "distanceNm": m["distanceNm"]} for m in matches],
                         "matchCount": len(matches),
                         "geometry": [[round(p["lat"], 4), round(p["lon"], 4)] for p in leg_points[::max(1, len(leg_points)//100)]],
                         "candidateLinks": candidate_links(matches), "graphComparison": "pending"})
