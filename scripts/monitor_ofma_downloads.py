@@ -109,7 +109,7 @@ def discover_region(code):
                 "scriptSrcs":sorted(set(urljoin(final,x) for x in parser.srcs)),
                 "scriptEndpointAnalysis":[inspect_script(urljoin(final,x)) for x in parser.srcs if any(name in x.lower() for name in ("download.js","ofmtilemap.js","ofmtemplate.js"))],
                 "dataAttributes":parser.data_attrs[:100],"candidateEmbeddedUrls":candidate_urls[:100],
-                "downloadLinksFound":len(set(links)}
+                "downloadLinksFound":len(set(links))}
     except Exception as e:
         return {"region":code,"regionName":REGIONS[code],"pageUrl":url,"error":str(e)}
 
