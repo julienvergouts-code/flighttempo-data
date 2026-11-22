@@ -66,8 +66,8 @@
       "provider": "FAA Aeronautical Information Services",
       "license": "US Government public-domain data",
       "downloadedAt": "2026-11-21T23:18:04Z",
-      "sizeBytes": 35570,
-      "sha256": "d535faaa3e2ca5eb63ff3681fa26a249cb5519ee45b0827480937616bd1d94ff",
+      "sizeBytes": 41699,
+      "sha256": "7c6a856b61bf74178f285992967a360d2e786438c8f7885c4e0fb34c9df14c67",
       "recordCount": 681
     }
   ],
@@ -113,19 +113,19 @@
     "franceSids": true,
     "franceStars": true
   },
-  "procedureCoverageStatus": "FAA_US_NAS_ONLY_TEST_DATA; EUROPE_FRANCE_SOURCE_NOT_INGESTED; ASIA_NO_PUBLIC_REDISTRIBUTABLE_SOURCE_CONFIRMED",
+  "procedureCoverageStatus": "FAA_US_NAS_ONLY_TEST_DATA; FRANCE_PARTIAL_AIRAC_2611_SID_STAR_REFERENCE_DATA; EUROPE_NOT_COMPLETE; ASIA_NO_PUBLIC_REDISTRIBUTABLE_SOURCE_CONFIRMED",
   "procedureOperationalUse": false,
   "procedureSourceRegistryVersion": 1,
-  "procedureSourceRegistryCheckedAtUtc": "2026-11-14",
+  "procedureSourceRegistryCheckedAtUtc": "2026-11-22",
   "regionalProcedureCoverage": {
     "europe": {
-      "status": "partial_public_source_confirmed_not_ingested",
+      "status": "partial_france_procedures_imported_reference_only_europe_incomplete",
       "operationallyAvailable": false,
-      "summary": "France publishes current procedure DATA sheets in its eAIP, including structured SID and STAR leg tables and some RNP approach precoding tables. Its separate SIA AIXM4.5/XML export is openly reusable reference data but is not yet treated as a complete IFPD feed. No complete Europe-wide IFR procedure dataset has been established.",
-      "confirmedProcedureCountries": [],
-      "candidateProcedureCountries": [
+      "summary": "France SIA eAIP AIRAC 2611 SID/STAR reference data is published: 7,988 rows (4,665 SID and 3,323 STAR) parsed from 239 of 380 source documents; 141 documents were skipped (62.89% document coverage). This is partial French coverage, not complete coverage of France or Europe, and is not operationally available. Separately, the OFMA reference feed contains 4,736 VFR points across 21 source regions and 23 feature regions for AIRAC 2611; it is reference-only and subject to OFMA attribution, modification-reporting, and correction-reporting conditions.",
+      "confirmedProcedureCountries": [
         "FR"
       ],
+      "candidateProcedureCountries": [],
       "vfrOnlyProviders": [
         "OpenFlightMaps"
       ],
@@ -178,8 +178,8 @@
             "instrument approaches"
           ],
           "sourceStatus": "candidate_vfr_source",
-          "dataStatus": "not_imported",
-          "notes": "OFMA FAQ permits use in an app that is sold when the General Users' License is followed. Coverage and completeness differ by region; do not promote these VFR vectors to IFR procedures."
+          "dataStatus": "reference_points_imported_reference_only",
+          "notes": "The main manifest publishes 4,736 OFMA reference VFR points for AIRAC 2611, from 21 source regions and 23 feature regions. They remain reference-only and not for primary navigation. OFMA GUL conditions include attribution, reporting modifications within the licence period, and providing a correction-report route; regional coverage and completeness vary."
         },
         {
           "id": "DFS_INSPIRE",
@@ -564,7 +564,7 @@
       "sha256": "be974a777fe0da70bb143bedce4f05d5744c2c62ad382691937c4b35494bf3cf",
       "sourceProvider": "FAA AeroNav",
       "sourceUrl": "https://aeronav.faa.gov/Upload_313-d/cifp/CIFP_261029.zip",
-      "coverage": "United States / FAA National Airspace System \u2014 departure procedures",
+      "coverage": "United States / FAA National Airspace System — departure procedures",
       "sourceTag": "FAA_CIFP_2611",
       "license": "US Government Public Domain (FAA AeroNav)",
       "licenseStatus": "public_domain",
@@ -587,7 +587,7 @@
       "sha256": "6bf123c683e442c1a07fbc46f4f11ad45045f8322a1b2506d65f6719055c0c06",
       "sourceProvider": "FAA AeroNav",
       "sourceUrl": "https://aeronav.faa.gov/Upload_313-d/cifp/CIFP_261029.zip",
-      "coverage": "United States / FAA National Airspace System \u2014 arrival procedures",
+      "coverage": "United States / FAA National Airspace System — arrival procedures",
       "sourceTag": "FAA_CIFP_2611",
       "license": "US Government Public Domain (FAA AeroNav)",
       "licenseStatus": "public_domain",
@@ -609,7 +609,7 @@
       "sha256": "ff7b9121e79b56ff616a77e285c9cba764575fd2c58335b3281124813362d3dd",
       "sourceProvider": "FAA AeroNav",
       "sourceUrl": "https://aeronav.faa.gov/Upload_313-d/cifp/CIFP_261029.zip",
-      "coverage": "United States / FAA National Airspace System \u2014 instrument approaches",
+      "coverage": "United States / FAA National Airspace System — instrument approaches",
       "sourceTag": "FAA_CIFP_2611",
       "license": "US Government Public Domain (FAA AeroNav)",
       "licenseStatus": "public_domain",
@@ -746,8 +746,8 @@
       "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/data/vfr_points.csv",
       "available": true,
       "recordCount": 681,
-      "sizeBytes": 35570,
-      "sha256": "d535faaa3e2ca5eb63ff3681fa26a249cb5519ee45b0827480937616bd1d94ff",
+      "sizeBytes": 41699,
+      "sha256": "7c6a856b61bf74178f285992967a360d2e786438c8f7885c4e0fb34c9df14c67",
       "sourceProvider": "FAA Aeronautical Information Services / NASR FIX",
       "sourceUrl": "https://www.faa.gov/air_traffic/flight_info/aeronav/Aero_Data/NASR_Subscription/",
       "coverage": "United States NASR VFR reporting points (VP-prefixed FIX records)",
