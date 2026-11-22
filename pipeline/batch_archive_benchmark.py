@@ -101,11 +101,33 @@ def read_fixes(path):
     return fixes
 
 def flight_prefix(doc):
-    value=doc.get("flight") or doc.get("callsign") or ""
-    if isinstance(value,list):
-        value="".join(str(x) for x in value)
-    value=re.sub(r"[^A-Z0-9]","",str(value).upper())
-    return value[:3] if len(value)>=4 else ""
+    """Return an allowed airline prefix from a readsb trace, if present.
+
+    Historical trace files store callsign under each point's nested aircraft
+    object (trace row index 8); it is not normally a top-level field. Keep
+    compatibility with older exports while scanning nested observations.
+    Only the transient prefix is returned; no callsign is serialized.
+    """
+    candidates=[doc.get("flight"),doc.get("callsign")]
+    trace=doc.get("trace",[])
+    if isinstance(trace,list):
+        for row in trace:
+            if isinstance(row,(list,tuple)) and len(row)>8 and isinstance(row[8],dict):
+                aircraft=row[8]
+                candidates.extend((aircraft.get("flight"),aircraft.get("callsign")))
+    first_prefix=""
+    for value in candidates:
+        if isinstance(value,list):
+            value="".join(str(x) for x in value)
+        normalized=re.sub(r"[^A-Z0-9]","",str(value or "").upper())
+        prefix=normalized[:3] if len(normalized)>=4 else ""
+        if not prefix:
+            continue
+        if not first_prefix:
+            first_prefix=prefix
+        if prefix in EUROPE_AIRLINE_PREFIXES:
+            return prefix
+    return first_prefix
 
 def diag_leg(leg, nav):
     observed=leg.get("_observed_trace_endpoints")
