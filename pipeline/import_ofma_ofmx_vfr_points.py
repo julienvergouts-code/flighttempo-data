@@ -10,7 +10,7 @@ ROOT=Path(__file__).resolve().parents[1]
 CONFIG=ROOT/"data/ofma_ofmx_sources.json"
 OUT=ROOT/"data/ofma_ofmx_vfr_points.csv"
 META=ROOT/"data/ofma_ofmx_vfr_points_meta.json"
-COLUMNS=["region","code","name","lat","lon","kind","source","license","cycle"]
+COLUMNS=["region","feature_region","point_id","code","name","lat","lon","kind","source_regions","source","license","cycle"]
 VFR_TYPES={"VFR-RP","VFR-MRP","VFR-ENR","VFR-GLDR","VFR-HELI"}
 MAX_BYTES=80*1024*1024
 UA="FlightTempo-OFMA-OFMX-VFR-Importer/1.0 (+https://github.com/julienvergouts-code/flighttempo-data)"
@@ -64,7 +64,10 @@ def parse_xml(raw,src):
   lat=parse_coord(lat_s);lon=parse_coord(lon_s)
   if not -90<=lat<=90 or not -180<=lon<=180 or (lat==0 and lon==0):raise ValueError(f"invalid point coordinates: {code or name}")
   if not code and not name:continue
-  records.append({"region":src["region"],"code":code or name[:32],"name":name or code,"lat":round(lat,6),"lon":round(lon,6),"kind":typ,"source":"OFMA","license":"OFMA_GUL","cycle":src.get("cycle") or stamp()[:10]})
+  feature_region=clean(uid.attrib.get("region") or dpn.attrib.get("region")).upper()
+  identity="|".join((feature_region or src["region"],code or name,typ,f"{lat:.6f}",f"{lon:.6f}"))
+  point_id=hashlib.sha256(identity.encode("utf-8")).hexdigest()[:16]
+  records.append({"region":src["region"],"feature_region":feature_region,"point_id":point_id,"code":code or name[:32],"name":name or code,"lat":round(lat,6),"lon":round(lon,6),"kind":typ,"source_regions":src["region"],"source":"OFMA","license":"OFMA_GUL","cycle":src.get("cycle") or stamp()[:10]})
  if not records:raise ValueError(f"no VFR Dpn records parsed for {src['region']}; schema/endpoint may have changed")
  return records
 def xml_from_zip(raw,region_key,source=None):
