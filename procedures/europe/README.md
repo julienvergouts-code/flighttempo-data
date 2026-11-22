@@ -33,15 +33,15 @@ The first importer is now in scripts/import_sia_eaip_procedures.py. It is design
 
 The importer does not create route geometry from headings/distances, invent missing legs, infer a coordinate from a waypoint name, or enable operational procedure capabilities. FNA-only final-approach precoding sheets are excluded from the complete-RNP-approach filename pattern.
 
-A CI smoke test downloads two current LFPG DATA PDFs (one SID and one STAR) from the SIA site and verifies that the rows can be extracted. The output is temporary test data only; no French procedure CSV is yet published in this repository. The parser still needs coverage testing across different airport document layouts, approach variants, fix-coordinate joins and AIRAC updates.
+A CI smoke test downloads two LFPG DATA PDFs from the SIA site and verifies extraction: 56 SID legs and 42 STAR legs (98 rows total) on AIRAC 11/26. The output is temporary test data only; no French procedure CSV is yet published in this repository. The parser still needs coverage testing across different airport document layouts, approach variants, fix-coordinate joins and AIRAC updates.
 
 ### Licence boundary
 
-The SIA's open-data catalogue says that products in its "Produits numériques en libre disposition" subcategories are under Licence Ouverte. That licence permits commercial and non-commercial extraction, adaptation, redistribution and inclusion in an app, subject to SIA attribution and preservation of meaning.
+The official SIA eAIP ZIP product is listed in the "Produits numériques en libre disposition" catalogue, and its product page links to the SIA Licence Ouverte. The licence grants worldwide, free reuse for commercial or non-commercial purposes, including extraction, adaptation, redistribution and inclusion in an app. It requires attribution to SIA and forbids misrepresenting or distorting the source. This confirms reuse rights for the eAIP DATA tables. The source PDF remains copyrighted; the data rows are published only with source date, URL, document hash and SIA attribution.
 
-However, the DATA tables used above are individual eAIP chart/PDF documents. Before placing extracted rows in the public FlightTempo data repository, confirm that the specific eAIP DATA PDF product is within the scope of the SIA free-disposition licence. The presence of a public download URL and an SIA copyright notice alone is not a substitute for that scope check. Until confirmed, the repository must not publish the extracted procedure records as redistributable data.
+Sources: [SIA eAIP product page](https://www.sia.aviation-civile.gouv.fr/produits-numeriques-en-libre-disposition/eaip/zip-eaip-complet-airac-11-26.html); [linked Licence Ouverte terms](https://www.sia.aviation-civile.gouv.fr/pub/media/news/file//l/i/licenceopendata-vf_2.pdf).
 
-The separate SIA XML AIRAC export is listed as a free-disposition product under Licence Ouverte 2.0. It is useful reference data for airports, runways, navaids and designated points, but it is not a complete IFR procedure-leg feed. The workflow now attempts a daily refresh of WGS-84 DPN designated points and keeps them separate from IFR route and VFR reporting-point data. The app package is updated only when the source download and validation succeed.
+The separate SIA XML AIRAC export is also listed as a free-disposition product under Licence Ouverte 2.0. It is useful reference data for airports, runways, navaids and designated points, but it is not a complete IFR procedure-leg feed. The workflow attempts a daily refresh of WGS-84 DPN designated points and keeps them separate from IFR route and VFR reporting-point data. The current mirror index did not expose a dated XML archive during CI, so no designated-point package was generated; the failure is logged and no empty package is published.
 
 ## Other European sources
 

@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
-  "checkedAtUtc": "2026-11-14",
+  "checkedAtUtc": "2026-11-22",
   "purpose": "Source and redistribution inventory for IFR terminal procedures and relevant VFR procedure geometry. This registry is not an operational data publication.",
   "regions": {
     "europe": {
-      "status": "partial_public_sources_confirmed_reference_ingestion_in_progress_no_procedures",
+      "status": "licensed_procedure_source_confirmed_parser_smoke_tested_no_procedure_package",
       "operationallyAvailable": false,
-      "summary": "No Europe-wide or country-level SID/STAR dataset is currently published in FlightTempo. France publishes structured current procedure DATA sheets and an openly reusable SIA AIXM reference export for designated points and other static data; that XML is not a complete IFPD feed. OFMA publishes regional VFR reference data under conditional terms, but it is not yet ingested. No Europe-wide VFR reporting-point package is currently published.",
+      "summary": "No European SID/STAR or VFR reporting-point records are currently published in FlightTempo. France has current, structured DATA SID/STAR PDFs under the SIA Licence Ouverte; CI parsed 98 LFPG SID/STAR leg rows, but they remain smoke-test output and are not yet an app package. SIA AIXM designated points are another open source, but the current archive mirror did not expose a dated download during CI. OFMA publishes regional VFR reference data under conditional terms, but no machine-readable export is wired into the repository.",
       "confirmedProcedureCountries": [],
       "candidateProcedureCountries": [
         "FR"
@@ -40,8 +40,8 @@
             "XML_SIA_YYYY-MM-DD.xml"
           ],
           "sourceStatus": "public_open_data_reference_dataset",
-          "dataStatus": "automated_reference_point_refresh_added_not_yet_confirmed_by_live_workflow",
-          "notes": "The official SIA product page lists AIRAC 12/26 as a free 5.6 MB XML download effective 26 November to 23 December 2026 and places products in this free-disposition section under Licence Ouverte. The daily workflow now exports only WGS-84 DPN designated points to a separate reference package. These points are not classified as VFR reporting points, and this XML export is not a complete IFR SID/STAR/approach leg feed."
+          "dataStatus": "daily_refresh_pipeline_added_latest_live_mirror_index_had_no_dated_archive",
+          "notes": "The official SIA product page lists AIRAC 12/26 as a free 5.6 MB XML download effective 26 November to 23 December 2026 and places products in this free-disposition section under Licence Ouverte. The daily workflow attempts to export only WGS-84 DPN designated points to a separate reference package. Its latest live run reached the mirror index but found no dated AIXM ZIP link, so no package was generated. These points are not classified as VFR reporting points, and this XML export is not a complete IFR SID/STAR/approach leg feed."
         },
         {
           "id": "OFMA_EUROPE",
@@ -154,15 +154,17 @@
             "RNAV STARs",
             "RNP approach DATA tables where complete non-FNA sheets are published"
           ],
-          "license": "SIA Licence Ouverte / Open Licence terms for products in the free-disposition catalogue; exact inclusion of each eAIP chart/PDF product must be confirmed before public redistribution",
-          "redistribution": "document_scope_confirmation_required",
-          "licenseStatus": "general_SIA_open_data_terms_verified_specific_eAIP_DATA_PDF_scope_to_confirm",
+          "license": "SIA Licence Ouverte 2.0 (linked from the free-disposition eAIP product page)",
+          "licenseUrl": "https://www.sia.aviation-civile.gouv.fr/produits-numeriques-en-libre-disposition/eaip/zip-eaip-complet-airac-11-26.html",
+          "licenseTextUrl": "https://www.sia.aviation-civile.gouv.fr/pub/media/news/file//l/i/licenceopendata-vf_2.pdf",
+          "redistribution": "public_redistribution_with_attribution",
+          "licenseStatus": "confirmed_for_free_disposition_eAIP_product",
           "attribution": "Service de l'Information Aeronautique (SIA France); cite the source URL and last update date.",
           "cycle": "2611",
           "effectiveDate": "2026-10-29",
           "expiryDate": "2026-11-25",
-          "sourceStatus": "current_structured_procedure_tables_found_parser_added_not_yet_source_validated",
-          "dataStatus": "not_imported",
+          "sourceStatus": "current_structured_procedure_tables_found_license_confirmed_ci_smoke_tested",
+          "dataStatus": "no_app_procedure_package_smoke_test_only",
           "exampleSources": [
             {
               "id": "LFPG_SID",
@@ -179,7 +181,7 @@
               "url": "https://www.sia.aviation-civile.gouv.fr/media/dvd/eAIP_29_OCT_2026/FRANCE/AIRAC-2026-10-29/html/eAIP/Cartes/LFPG/AD_2_LFPG_DATA_STAR_RWY26L_RNAV_CODE_02.pdf"
             }
           ],
-          "notes": "The current AIP's GEN 0.4 checklist identifies individual DATA SID, DATA STAR and DATA RWY precoding sheets. Example LFPG SID/STAR PDFs expose row-level path terminators, waypoint identifiers, fly-over flags, magnetic/true courses, distances, turn direction, altitude/IAS constraints and navigation accuracy. The importer stores these fields as published, keeps shared runway selectors unexpanded, and leaves coordinates unresolved unless linked to a unique source-backed fix. FNA-only final-approach sheets are excluded from the complete RNP approach pattern. Do not release extracted PDFs or derived data until the licence scope for the specific eAIP product has been confirmed."
+          "notes": "The eAIP ZIP product is in SIA's free-disposition catalogue and links to Licence Ouverte 2.0, which permits commercial extraction and redistribution with attribution and preservation of meaning. CI downloaded the LFPG DATA SID and STAR PDFs and extracted 56 SID plus 42 STAR rows (98 total) for AIRAC 11/26. This output is currently a smoke test, not a published app package. The importer preserves published leg attributes, does not create synthetic geometry, and only links coordinates when a source-backed fix has one unique exact identifier match."
         }
       ]
     },

@@ -21,7 +21,7 @@ class FetchSiaAixmFixesTests(unittest.TestCase):
         self.assertEqual(effective, date(2026, 11, 26))
 
     def test_rejects_mirror_index_without_a_current_cycle(self):
-        with self.assertRaisesRegex(RuntimeError, "No current or upcoming"):
+        with self.assertRaisesRegex(RuntimeError, "observed links.*export_xml_bd_SIA2026-09-03.zip"):
             mod.select_archive(["export_xml_bd_SIA2026-09-03.zip"], date(2026, 11, 22))
 
     def test_latest_archive_reads_index_then_validates_zip_header(self):

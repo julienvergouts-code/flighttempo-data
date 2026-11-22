@@ -62,7 +62,12 @@ def select_archive(hrefs: list[str], today: date) -> tuple[str, date]:
             continue
         candidates.append((effective, href))
     if not candidates:
-        raise RuntimeError("No current or upcoming dated SIA AIXM ZIP was found in the public mirror index")
+        observed = [href for href in hrefs if any(token in href.lower() for token in (".zip", "sia", "aixm", "xml"))]
+        observed = (observed or hrefs)[:20]
+        raise RuntimeError(
+            "No current or upcoming dated SIA AIXM ZIP was found in the public mirror index; "
+            f"observed links: {observed}"
+        )
     effective, href = max(candidates)
     return href, effective
 

@@ -132,6 +132,7 @@ jobs:
           assert all(row["path_terminator"] for row in rows)
           manifest = json.loads(Path("/tmp/flighttempo-sia-pilot-manifest.json").read_text())
           assert manifest["operationallyAvailable"] is False
+          assert "Licence Ouverte 2.0" in manifest["license"]
           print(f"SIA LFPG procedure table smoke test passed: {counts}; total={len(rows)}")
           PY
       - name: Build OurAirports reference datasets

@@ -14,7 +14,7 @@ This repository is a development/reference data source for FlightTempo. It is no
 | French SIA AIXM designated points | Daily, in the main navigation workflow | Reads the public AIXM archive mirror and extracts WGS-84 DPN points | Separate France/overseas reference package only when download and validation succeed; not classified as VFR reporting points or complete IFR fixes |
 | EUROCONTROL FRA ECAC + MUAC | Daily, 04:45 UTC | Downloads latest FRA XLSX to ephemeral CI storage; reports publication URL, workbook structure, aggregate counts and checksum | Metadata/schema monitoring only; source XLSX and point records are not retained or redistributed; rights review required |
 | OFMA regional downloads | Daily, 04:50 UTC | Checks 21 regional pages and download-plugin scripts for endpoints and format hints | Endpoint metadata only; no data imported or republished until importer and compliance obligations verified |
-| French SIA eAIP | CI smoke test in the main workflow | Tests extraction from pinned official LFPG SID/STAR DATA PDFs | Test only; not a global/current procedure import |
+| French SIA eAIP | CI smoke test in the main workflow | Tests extraction from official LFPG SID/STAR DATA PDFs under the confirmed SIA Licence Ouverte | 98 LFPG rows validated in CI; smoke-test output only, not yet a packaged procedure dataset |
 | Legacy 2012.08 IFR data | No automatic source refresh | Preserves the existing global fixes, navaids, airway segments and graph | Development-only and blocked from app downloads; never label as current AIRAC |
 
 All workflows that write shared manifests use the same GitHub Actions concurrency group so scheduled jobs do not overwrite one another's manifest updates.
