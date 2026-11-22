@@ -74,13 +74,34 @@ jobs:
           import json
           from pathlib import Path
           files = [Path("/tmp/adsb_scale_evidence.json"), Path("/tmp/adsb_scale_summary.json")]
+          forbidden = {
+              "id", "icao24", "icao_24", "hex", "aircraft_id", "aircraft_hex",
+              "registration", "registration_id", "registration_number",
+              "callsign", "call_sign", "flight", "flight_number",
+              "trace", "raw_trace", "trace_data", "trace_points", "trace_endpoints",
+              "_observed_trace_endpoints", "observed_trace_endpoints", "geometry",
+              "positions", "position_data", "timestamp", "timestamps",
+          }
+          def audit_privacy(value, path="$"):
+              if isinstance(value, dict):
+                  for key, child in value.items():
+                      normalized = str(key).casefold().replace("-", "_")
+                      if normalized in forbidden:
+                          raise SystemExit(f"PRIVACY_AUDIT_FAIL: forbidden field {path}.{key}")
+                      audit_privacy(child, f"{path}.{key}")
+              elif isinstance(value, list):
+                  for index, child in enumerate(value):
+                      audit_privacy(child, f"{path}[{index}]")
+          parsed = {}
           for p in files:
               if not p.exists():
                   raise SystemExit(f"STRICT_JSON_FAIL: missing {p}")
               with p.open(encoding="utf-8") as f:
-                  json.load(f, parse_constant=lambda value: (_ for _ in ()).throw(ValueError(value)))
+                  parsed[p] = json.load(f, parse_constant=lambda value: (_ for _ in ()).throw(ValueError(value)))
               print(f"STRICT_JSON_OK: {p}")
-          summary = json.loads(files[1].read_text(encoding="utf-8"))
+              audit_privacy(parsed[p])
+              print(f"PRIVACY_AUDIT_OK: {p}")
+          summary = parsed[files[1]]
           if summary.get("promotion_enabled") is not False:
               raise SystemExit("Candidate promotion must remain disabled")
           if summary.get("trusted_navigation_modified") is not False:
@@ -97,3 +118,4 @@ jobs:
             /tmp/adsb_scale_run.log
           if-no-files-found: ignore
           retention-days: 14
+
