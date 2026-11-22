@@ -40,6 +40,7 @@ FTWG_MAGIC = b"FTWG"
 FTWG_HEADER = struct.Struct("<4sHHII")
 FTWG_NODE = struct.Struct("<8siiB3x")
 FTWG_EDGE = struct.Struct("<IIH6s")
+PHYSICAL_FIX_RESOLUTION_RADIUS_NM = 5.0
 
 def _nm(a, b):
     p1, p2 = math.radians(a[0]), math.radians(b[0])
@@ -512,8 +513,6 @@ def main():
                 details = result.get("matchedFixDetails", [])
                 detail_by_index = [d for d in details if isinstance(d,dict)] if isinstance(details,list) else []
                 matched_total += len(observed)
-                resolved = [fix for fix in observed if fix in nav.adj]
-                resolved_total += len(resolved)
 
                 def detail_coord(index):
                     if index < len(detail_by_index):
@@ -522,18 +521,40 @@ def main():
                         except (KeyError,TypeError,ValueError): pass
                     return None
 
+                physical_resolved=[]; physical_unresolved=[]; identifier_resolved=[]
+                for i,fix in enumerate(observed):
+                    coord=detail_coord(i)
+                    if fix in nav.adj: identifier_resolved.append(fix)
+                    if nav.physical_nodes:
+                        try:
+                            r=nav.resolve_physical_endpoint(fix,coord,"either")
+                            if r and (r["offset_nm"] is None or r["offset_nm"]<=PHYSICAL_FIX_RESOLUTION_RADIUS_NM):
+                                physical_resolved.append({"fix":fix,"match_index":i,"resolution":r})
+                            else:
+                                physical_unresolved.append(fix)
+                        except ValueError:
+                            physical_unresolved.append(fix)
+                    elif fix in nav.adj:
+                        physical_resolved.append({"fix":fix,"match_index":i,"resolution":None})
+                    else:
+                        physical_unresolved.append(fix)
+                resolved=physical_resolved
+                resolved_total+=len(resolved)
+
                 start_candidates=[]; goal_candidates=[]
                 for i,fix in enumerate(observed):
                     coord=detail_coord(i)
                     if nav.physical_nodes:
                         try:
                             r=nav.resolve_physical_endpoint(fix,coord,"start")
-                            if r: start_candidates.append({"fix":fix,"match_index":i,"coord":coord,"resolution":r})
+                            if r and (r["offset_nm"] is None or r["offset_nm"]<=PHYSICAL_FIX_RESOLUTION_RADIUS_NM):
+                                start_candidates.append({"fix":fix,"match_index":i,"coord":coord,"resolution":r})
                         except ValueError as exc:
                             print(f"[NAV] endpoint candidate skipped {fix}: {exc}")
                         try:
                             r=nav.resolve_physical_endpoint(fix,coord,"goal")
-                            if r: goal_candidates.append({"fix":fix,"match_index":i,"coord":coord,"resolution":r})
+                            if r and (r["offset_nm"] is None or r["offset_nm"]<=PHYSICAL_FIX_RESOLUTION_RADIUS_NM):
+                                goal_candidates.append({"fix":fix,"match_index":i,"coord":coord,"resolution":r})
                         except ValueError as exc:
                             print(f"[NAV] endpoint candidate skipped {fix}: {exc}")
                     else:
@@ -556,11 +577,17 @@ def main():
                     "position_count": result.get("positionCount"),
                     "matched_fix_count": len(observed),
                     "resolved_node_count": len(resolved),
-                    "unresolved_fixes": [fix for fix in observed if fix not in nav.adj],
+                    "physical_resolved_fixes": resolved,
+                    "unresolved_fixes": physical_unresolved,
+                    "identifier_resolved_count": len(identifier_resolved),
+                    "identifier_unresolved_fixes": [fix for fix in observed if fix not in nav.adj],
+                    "physical_fix_resolution_radius_nm": PHYSICAL_FIX_RESOLUTION_RADIUS_NM,
                     "first_matched_fix": observed[0] if observed else None,
                     "last_matched_fix": observed[-1] if observed else None,
                     "first_fix_in_graph": observed[0] in nav.adj if observed else False,
                     "last_fix_in_graph": observed[-1] in nav.adj if observed else False,
+                    "first_fix_physical_resolution": resolved[0]["resolution"] if resolved else None,
+                    "last_fix_physical_resolution": resolved[-1]["resolution"] if resolved else None,
                     "usable_start_candidates": [x["fix"] for x in start_candidates],
                     "usable_goal_candidates": [x["fix"] for x in goal_candidates],
                     "selected_graph_endpoints": [start, goal],
@@ -614,8 +641,9 @@ def main():
                 "total_legs": len(evidence.get("traceResults", [])),
                 "eligible_legs": len(accepted),
                 "matched_fixes": matched_total,
-                "resolved_nodes": resolved_total,
-                "unresolved_nodes": matched_total - resolved_total,
+                "physical_resolved_nodes": resolved_total,
+                "physical_unresolved_nodes": matched_total - resolved_total,
+                "identifier_resolved_nodes_legacy": sum(len(c.get("unresolved_fixes",[]))==0 for c in comparisons),
                 "connected_legs": connected_legs,
                 "graph_source": nav.graph_source,
                 "graph_node_count": len(nav.fix_coords_by_ident),
