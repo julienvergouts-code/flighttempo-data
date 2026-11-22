@@ -13,7 +13,7 @@ on:
       - "docs/ofma_ofmx_vfr_import.md"
       - ".github/workflows/import-ofma-ofmx-vfr-points.yml"
 concurrency:
-  group: ${{ github.event_name == 'pull_request' && format('flighttempo-pr-{0}', github.workflow) || 'flighttempo-shared-manifest-updates' }}
+  group: \${{ github.event_name == 'pull_request' && format('flighttempo-pr-{0}', github.workflow) || 'flighttempo-shared-manifest-updates' }}
   cancel-in-progress: false
 jobs:
   import:
@@ -23,17 +23,17 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          repository: ${{ github.event.pull_request.head.repo.full_name || github.repository }}
-          ref: ${{ github.event.pull_request.head.ref || github.ref }}
+          repository: \${{ github.event.pull_request.head.repo.full_name || github.repository }}
+          ref: \${{ github.event.pull_request.head.ref || github.ref }}
           fetch-depth: 0
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
       - name: Unit tests
-        run: python -m unittest discover -s tests -p 'test_import_ofma_ofmx_vfr_points.py'
-      - name: Import OFMA reference VFR points
+        run: python -m unittest discover -s tests -p 'test_import_ofma_ofmx_vfr_points.py' -v
+      - name: Import every current OFMA catalogue region
         run: python pipeline/import_ofma_ofmx_vfr_points.py
-      - name: Upload imported reference data for review
+      - name: Upload data and source packages for review
         if: github.event_name == 'pull_request'
         uses: actions/upload-artifact@v4
         with:
@@ -44,10 +44,10 @@ jobs:
             data/ofma_source_archives/*.zip
           if-no-files-found: error
           retention-days: 14
-      - name: Register manifest dataset
+      - name: Register layer in shared navigation manifest
         run: python scripts/register_ofma_ofmx_vfr_points_manifest.py
-      - name: Publish generated data
-        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+      - name: Publish generated database layer
+        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' || (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository)
         run: |
           if git diff --quiet -- data/ofma_ofmx_vfr_points.csv data/ofma_ofmx_vfr_points_meta.json navigation_manifest.json; then
             echo "No data changes."
@@ -55,6 +55,10 @@ jobs:
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git add data/ofma_ofmx_vfr_points.csv data/ofma_ofmx_vfr_points_meta.json navigation_manifest.json
-            git commit -m "Update OFMA OFMX VFR reference points"
-            git push
+            git commit -m "Update OFMA VFR reference points"
+            if [ -n "\${{ github.head_ref }}" ]; then
+              git push origin "HEAD:\${{ github.head_ref }}"
+            else
+              git push
+            fi
           fi

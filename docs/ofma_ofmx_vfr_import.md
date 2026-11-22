@@ -1,53 +1,34 @@
 # OFMA OFMX VFR reference-point import
 
-This pipeline imports only OpenFlightMaps designated points whose `Dpn.codeType`
-is one of `VFR-RP`, `VFR-MRP`, `VFR-ENR`, `VFR-GLDR`, or `VFR-HELI`.
-It deliberately excludes generic/IFR designated points, navaids, aerodromes,
-airspace, and all procedure data.
+This importer fetches VFR-designated points from every current regional product published by OFMA. It does not use or scrape AIP pages or AIP files.
 
-## Sources and endpoints
+The current official OFMA catalogue lists 21 regional products: EB, ED, EF, EH, EK, EP, ES, FA, FY, LD, LF, LG, LH, LI, LJ, LK, LM, LO, LR, LS, and LZ. The catalogue is regional and does not provide worldwide geographic coverage; it covers only regions OFMA has published.
 
-The download endpoint pattern and archive member layout are cross-checked against
-the public WairToNow OFM downloader implementation. The source files themselves
-are official OFMA snapshots, and each regional download page is recorded in
-`data/ofma_ofmx_sources.json`.
+## Source discovery and refresh
 
-Active regions for the initial pipeline:
-- EB — Belgium (`ebbu`)
-- ED — Germany (`ed`)
-- EH — Netherlands (`ehaa`)
+For each region, the pipeline checks the official download page's regionCode, reads the current AIRAC publication XML from OFMA's publicationServices, selects the official OFMX ZIP URL from the OFMX product, then downloads that package from snapshots.openflightmaps.org.
 
-France (LF) is intentionally excluded pending confirmation of its current
-snapshot region key and publication availability.
+It imports Dpn.codeType values VFR-RP, VFR-MRP, VFR-ENR, VFR-GLDR, and VFR-HELI. It excludes IFR procedure definitions, navaids, aerodromes, airspace, and unrelated OFMX records. Data is merged only on matching feature region, code, exact coordinates, and VFR type, while preserving source-region provenance.
 
-The workflow resolves the AIRAC cycle dynamically from the 28-day cycle anchor
-for 2601 and downloads that cycle. It runs weekly and can be manually dispatched.
-If a source fails, the pipeline fails closed and does not publish a partial
-replacement dataset.
+A missing or ambiguous current publication, unexpected redirect, invalid package, schema change, or malformed VFR coordinate fails the build before replacing the point CSV and metadata. A region package with Dpn records but no VFR-coded points is explicitly recorded as an empty VFR region. If all packages are empty, the existing dataset is retained.
 
-## Outputs
+The workflow tests the parser, downloads all configured official publications, validates each package, uploads the data and source archives for review, registers the layer in the shared navigation_manifest.json, and writes generated data back to the PR branch when the PR comes from this repository. Scheduled and manually dispatched refreshes update their checked-out branch.
 
-- `data/ofma_ofmx_vfr_points.csv`
-- `data/ofma_ofmx_vfr_points_meta.json`
-- `navigation_manifest.json` registration (reference dataset; not operationally available)
+## Outputs and architecture
 
-CSV coordinates are normalized to decimal degrees and include region, code,
-name, VFR type, source and license.
+- data/ofma_ofmx_vfr_points.csv
+- data/ofma_ofmx_vfr_points_meta.json
+- data/ofma_source_archives/*.zip (temporary CI review artifacts; not an app-download layer)
+- navigation_manifest.json registration
 
-## License and product boundary
+The OFMA points are an independently versioned, attributed reference layer in the existing shared navigation data foundation. They do not create a separate IFR/VFR app or replace current IFR datasets.
 
-Source: OpenFlightMaps Association, OFMA General Users License (GUL). Commercial
-use is permitted only subject to the GUL terms. Keep attribution and source
-provenance. The GUL also requires reporting errors/alterations and a user error
-reporting mechanism; FlightTempo must implement/verify that reporting route
-before distributing this dataset in the commercial app.
+A VFR point may be shared with an IFR point only when the independently licensed IFR record has the same normalized name and exactly the same latitude and longitude. The existing matcher in scripts/exact_point_matching.py enforces this rule and rejects ident-only, approximate-coordinate, and fuzzy matches. The current repository has no current commercially reusable worldwide IFR fix layer to match; its 2012.08 global legacy baseline is stale and excluded from app downloads.
 
-OFMA explicitly disclaims certification and says the data must never be used as
-a primary navigation source. This pipeline is reference-only; it is not an IFR
-dataset, not an AIP replacement, and not suitable for operational navigation.
+## Commercial license and use boundary
 
-## Validation
+Source data: OpenFlightMaps Association, [OFMA General Users' License](https://www.openflightmaps.org/live/downloads/20150306-GUL.pdf). OFMA explicitly permits commercial use, worldwide and royalty-free, subject to the license. Every output includes attribution and official source provenance. Before commercial app distribution, FlightTempo must honor the GUL requirement to communicate data alterations within 15 days and, if users can alter OFMA data, provide the direct contributor interface required by section 4.4.
 
-Unit tests cover coordinates (decimal degrees and compact DMS), hemispheres,
-bounds, VFR-only filtering, ZIP member selection, empty-input fail-closed
-behavior, and AIRAC rollover.
+OFMA states that its database is provided without accuracy or completeness warranty and must not be used as a primary source for navigation. This layer is reference-only and is not operational IFR or VFR navigation data.
+
+The importer does not acquire chart imagery, AIP documents, maps, or OFMA's proprietary client software.
