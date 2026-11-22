@@ -169,9 +169,14 @@ def main():
                         # A member is read only when its size is bounded; tar iteration stays streaming.
                         source=tar.extractfile(member)
                         if source is None: continue
-                        payload=source.read()
-                        if payload[:2]==b"\x1f\x8b":
-                            payload=gzip.decompress(payload)
+                        if name.endswith(".json.gz"):
+                            with gzip.GzipFile(fileobj=source, mode="rb") as gz:
+                                payload=gz.read(MAX_TRACE_MEMBER_BYTES+1)
+                        else:
+                            payload=source.read(MAX_TRACE_MEMBER_BYTES+1)
+                        if len(payload)>MAX_TRACE_MEMBER_BYTES:
+                            rejected["oversize_decoded_trace"]+=1
+                            continue
                         try: doc=json.loads(payload)
                         except Exception:
                             rejected["invalid_json"]+=1; continue
