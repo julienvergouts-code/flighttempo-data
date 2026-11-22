@@ -211,7 +211,7 @@ def main():
                         source=tar.extractfile(member)
                         if source is None: continue
                         prefix=source.read(2)
-                        if prefix==b"\x1f\x8b"
+                        if prefix==b"\x1f\x8b":
                             with gzip.GzipFile(fileobj=io.BytesIO(prefix+source.read()), mode="rb") as gz:
                                 payload=gz.read(MAX_TRACE_MEMBER_BYTES+1)
                         else:
@@ -322,5 +322,6 @@ def main():
         raise SystemExit("Batch produced zero eligible European legs")
 if __name__=="__main__":
     main()
+
 
 

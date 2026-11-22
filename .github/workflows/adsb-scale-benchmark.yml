@@ -106,6 +106,18 @@ jobs:
               raise SystemExit("Candidate promotion must remain disabled")
           if summary.get("trusted_navigation_modified") is not False:
               raise SystemExit("Trusted navigation source mutation reported")
+          if summary.get("status") != "passed":
+              raise SystemExit("Scale benchmark did not meet its aircraft minimum")
+          evidence = parsed[files[0]]
+          for link in evidence.get("candidate_links", []):
+              if link.get("promotion") != "DISABLED":
+                  raise SystemExit("Candidate promotion must remain disabled")
+              samples = int(link.get("independent_samples", 0))
+              if samples < 1:
+                  raise SystemExit("Candidate link has no independent observations")
+              expected_confidence = "HIGH" if samples >= 5 else "MEDIUM" if samples >= 3 else "LOW"
+              if link.get("confidence") != expected_confidence:
+                  raise SystemExit("Candidate confidence tier does not match its sample count")
           PY
       - name: Upload scale evidence
         if: always()
@@ -118,4 +130,5 @@ jobs:
             /tmp/adsb_scale_run.log
           if-no-files-found: ignore
           retention-days: 14
+
 
