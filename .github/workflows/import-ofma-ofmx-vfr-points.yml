@@ -20,13 +20,13 @@ jobs:
         with:
           python-version: "3.12"
       - name: Unit tests
-        run: python -m unittest tests.test_import_ofma_ofmx_vfr_points
+        run: python -m unittest discover -s tests -p 'test_import_ofma_ofmx_vfr_points.py'
       - name: Import OFMA reference VFR points
         run: python pipeline/import_ofma_ofmx_vfr_points.py
       - name: Publish generated data
         if: github.event_name != 'pull_request'
         run: |
-          if git diff --quiet -- data/ofma_ofmx_vfr_points.csv data/ofma_ofmx_vfr_points_meta.json; then
+          if git diff --quiet -- data/ofma_ofmx_vfr_points.csv data/ofma_ofmx_vfr_points_meta.json navigation_manifest.json; then
             echo "No data changes."
           else
             git config user.name "github-actions[bot]"
