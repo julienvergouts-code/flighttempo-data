@@ -85,7 +85,7 @@ def verify_sia_commercial_reuse(catalog_text: str, license_text: str, issue: dic
     if product_at < 0:
         raise ValueError(f"Current eAIP AIRAC {cycle} product is not listed in the SIA catalogue")
     product_text = catalog[product_at:product_at + 800]
-    if not re.search(r"0[,\.]00\s*€", product_text):
+    if not re.search(r"(?<![0-9])0[,\.]00\s*€", product_text):
         raise ValueError(f"SIA eAIP AIRAC {cycle} product is not listed as free")
 
     required_terms = {
