@@ -8,16 +8,13 @@ on:
       - "tests/test_adsb_corridor_builder.py"
       - "tests/test_ftwg_binary_reader.py"
       - ".github/workflows/test-adsb-corridor-builder.yml"
-  push:
-    branches: [feature/adsb-route-learning]
-    paths:
-      - "scripts/adsb_learning/**"
-      - "scripts/route_preview.py"
-      - "pipeline/**"
-      - "tests/test_adsb_corridor_builder.py"
-      - ".github/workflows/test-adsb-corridor-builder.yml"
 permissions:
   contents: read
+
+concurrency:
+  group: adsb-unit-tests-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
   unit-tests:
     runs-on: ubuntu-latest
