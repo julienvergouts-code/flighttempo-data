@@ -154,15 +154,15 @@
             "RNAV STARs",
             "RNP approach DATA tables where complete non-FNA sheets are published"
           ],
-          "license": "SIA Licence Ouverte / Open Licence (the eAIP product is listed in the free-disposition eAIP subcategory)",
+          "license": "SIA Licence Ouverte / Open Licence",
           "redistribution": "commercial_public_redistribution",
           "licenseStatus": "verified_exact_eAIP_product_linked_to_open_license",
           "attribution": "Service de l'Information Aeronautique (SIA France); include source and last update date; do not imply SIA endorsement.",
-          "cycle": "2611",
+          "cycle": "11/26",
           "effectiveDate": "2026-10-29",
           "expiryDate": "2026-11-25",
           "sourceStatus": "official_eAIP_DATA_procedure_source_commercial_reuse_confirmed",
-          "dataStatus": "not_imported",
+          "dataStatus": "partial_current_cycle_imported",
           "exampleSources": [
             {
               "id": "LFPG_SID",
@@ -179,7 +179,18 @@
               "url": "https://www.sia.aviation-civile.gouv.fr/media/dvd/eAIP_29_OCT_2026/FRANCE/AIRAC-2026-10-29/html/eAIP/Cartes/LFPG/AD_2_LFPG_DATA_STAR_RWY26L_RNAV_CODE_02.pdf"
             }
           ],
-          "notes": "The exact free eAIP ZIP product page links its licence to the SIA Open Licence. The SIA free-disposition catalogue says every product in its subcategories is under that licence except UAS-zone data. The licence explicitly permits commercial reuse, extraction, adaptation, derivative products and redistribution worldwide, subject to attribution (SIA and last update date) and not distorting the information. Current GEN 0.4 index lists DATA SID/STAR files; parser output remains reference-only and must retain AIRAC, per-file hashes and source links."
+          "notes": "The exact free eAIP ZIP product page links its licence to the SIA Open Licence. The SIA free-disposition catalogue says every product in its subcategories is under that licence except UAS-zone data. The licence explicitly permits commercial reuse, extraction, adaptation, derivative products and redistribution worldwide, subject to attribution (SIA and last update date) and not distorting the information. Current GEN 0.4 index lists DATA SID/STAR files; parser output remains reference-only and must retain AIRAC, per-file hashes and source links.",
+          "licenseUrl": "https://www.sia.aviation-civile.gouv.fr/produits-numeriques-en-libre-disposition.html",
+          "commercialUseAllowed": true,
+          "recordCount": 7988,
+          "procedureTypeCounts": {
+            "SID": 4665,
+            "STAR": 3323
+          },
+          "sourceDocumentCount": 380,
+          "parsedDocumentCount": 239,
+          "skippedDocumentCount": 141,
+          "documentCoverageRatio": 0.6289
         }
       ]
     },

@@ -1,6 +1,6 @@
 {
   "schemaVersion": 13,
-  "generatedAtUtc": "2026-11-22T13:48:48.715163+00:00",
+  "generatedAtUtc": "2026-11-22T13:56:22Z",
   "procedureAiracCycle": "2611",
   "navaidTypeCounts": {
     "DME": 167,
@@ -26,7 +26,8 @@
     "airportReferenceOurAirportsMetadataMatches": 29747,
     "globalAirlineDirectory": 3846,
     "faaVfrReportingPoints": 681,
-    "ofmaOfmxVfrReferencePoints": 1786
+    "ofmaOfmxVfrReferencePoints": 1786,
+    "franceSiaSidStarLegs": 7988
   },
   "dataSources": [
     {
@@ -108,21 +109,23 @@
     "aerosors_ge_airports": false,
     "globalAirlineDirectory": true,
     "easaSafetyDirectives": false,
-    "ofmaOfmxVfrReferencePoints": true
+    "ofmaOfmxVfrReferencePoints": true,
+    "franceSids": true,
+    "franceStars": true
   },
-  "procedureCoverageStatus": "FAA_US_NAS_ONLY_TEST_DATA; EUROPE_FRANCE_SOURCE_NOT_INGESTED; ASIA_NO_PUBLIC_REDISTRIBUTABLE_SOURCE_CONFIRMED",
+  "procedureCoverageStatus": "FAA_US_NAS_CYCLE_PINNED; FRANCE_SIA_PARTIAL_CURRENT_SIDS_STARS; NO_COMPLETE_WORLDWIDE_IFR_PROCEDURES",
   "procedureOperationalUse": false,
   "procedureSourceRegistryVersion": 1,
   "procedureSourceRegistryCheckedAtUtc": "2026-11-14",
   "regionalProcedureCoverage": {
     "europe": {
-      "status": "partial_public_source_confirmed_not_ingested",
+      "status": "partial_current_france_sia_ingested",
       "operationallyAvailable": false,
-      "summary": "France publishes current procedure DATA sheets in its eAIP, including structured SID and STAR leg tables and some RNP approach precoding tables. Its separate SIA AIXM4.5/XML export is openly reusable reference data but is not yet treated as a complete IFPD feed. No complete Europe-wide IFR procedure dataset has been established.",
-      "confirmedProcedureCountries": [],
-      "candidateProcedureCountries": [
+      "summary": "France SID/STAR reference legs were extracted from 239 of 380 current SIA eAIP DATA sheets under its commercial-use Open Licence. Unsupported sheets are listed in source metadata and excluded; no complete Europe-wide IFR database is available.",
+      "confirmedProcedureCountries": [
         "FR"
       ],
+      "candidateProcedureCountries": [],
       "vfrOnlyProviders": [
         "OpenFlightMaps"
       ],
@@ -256,42 +259,36 @@
           "id": "FR_SIA_EAIP_DATA_PDFS",
           "jurisdiction": "FR",
           "provider": "Service de l'Information Aeronautique (SIA France)",
-          "sourceUrl": "https://www.sia.aviation-civile.gouv.fr/media/dvd/eAIP_29_OCT_2026/FRANCE/AIRAC-2026-10-29/html/eAIP/Cartes/",
-          "indexUrl": "https://www.sia.aviation-civile.gouv.fr/media/dvd/eAIP_29_OCT_2026/FRANCE/AIRAC-2026-10-29/pdf/FR-GEN-0.4-fr-FR.pdf",
+          "sourceUrl": "https://www.sia.aviation-civile.gouv.fr/media/dvd/eAIP_29_OCT_2026/FRANCE/AIRAC-2026-10-29/pdf/FR-GEN-0.4-fr-FR.pdf",
           "format": [
-            "PDF DATA tables embedded in official eAIP chart package"
+            "official eAIP GEN 0.4 index",
+            "PDF DATA SID/STAR tables"
           ],
           "procedureScope": [
-            "RNAV SIDs",
-            "RNAV STARs",
-            "RNP approach DATA tables where complete non-FNA sheets are published"
+            "SIDs",
+            "STARs"
           ],
-          "license": "SIA Licence Ouverte / Open Licence terms for products in the free-disposition catalogue; exact inclusion of each eAIP chart/PDF product must be confirmed before public redistribution",
-          "redistribution": "document_scope_confirmation_required",
-          "licenseStatus": "general_SIA_open_data_terms_verified_specific_eAIP_DATA_PDF_scope_to_confirm",
-          "attribution": "Service de l'Information Aeronautique (SIA France); cite the source URL and last update date.",
-          "cycle": "2611",
+          "license": "SIA Licence Ouverte / Open Licence",
+          "licenseUrl": "https://www.sia.aviation-civile.gouv.fr/produits-numeriques-en-libre-disposition.html",
+          "redistribution": "commercial_public_redistribution",
+          "licenseStatus": "verified_exact_eAIP_product_linked_to_open_license",
+          "attribution": "Service de l'Information Aeronautique (SIA France); include source and last update date; do not imply SIA endorsement.",
+          "cycle": "2026-10-29",
           "effectiveDate": "2026-10-29",
           "expiryDate": "2026-11-25",
-          "sourceStatus": "current_structured_procedure_tables_found_parser_added_not_yet_source_validated",
-          "dataStatus": "not_imported",
-          "exampleSources": [
-            {
-              "id": "LFPG_SID",
-              "airport": "LFPG",
-              "file": "AD_2_LFPG_DATA_SID_RWY26L-26R_RNAV_CODE_02.pdf",
-              "documentDate": "2026-10-01",
-              "url": "https://www.sia.aviation-civile.gouv.fr/media/dvd/eAIP_29_OCT_2026/FRANCE/AIRAC-2026-10-29/html/eAIP/Cartes/LFPG/AD_2_LFPG_DATA_SID_RWY26L-26R_RNAV_CODE_02.pdf"
-            },
-            {
-              "id": "LFPG_STAR",
-              "airport": "LFPG",
-              "file": "AD_2_LFPG_DATA_STAR_RWY26L_RNAV_CODE_02.pdf",
-              "documentDate": "2026-06-11",
-              "url": "https://www.sia.aviation-civile.gouv.fr/media/dvd/eAIP_29_OCT_2026/FRANCE/AIRAC-2026-10-29/html/eAIP/Cartes/LFPG/AD_2_LFPG_DATA_STAR_RWY26L_RNAV_CODE_02.pdf"
-            }
-          ],
-          "notes": "The current AIP's GEN 0.4 checklist identifies individual DATA SID, DATA STAR and DATA RWY precoding sheets. Example LFPG SID/STAR PDFs expose row-level path terminators, waypoint identifiers, fly-over flags, magnetic/true courses, distances, turn direction, altitude/IAS constraints and navigation accuracy. The importer stores these fields as published, keeps shared runway selectors unexpanded, and leaves coordinates unresolved unless linked to a unique source-backed fix. FNA-only final-approach sheets are excluded from the complete RNP approach pattern. Do not release extracted PDFs or derived data until the licence scope for the specific eAIP product has been confirmed."
+          "sourceStatus": "official_eAIP_DATA_procedure_source_commercial_reuse_confirmed",
+          "dataStatus": "partial_current_cycle_imported",
+          "recordCount": 7988,
+          "procedureTypeCounts": {
+            "SID": 4665,
+            "STAR": 3323
+          },
+          "sourceDocumentCount": 380,
+          "parsedDocumentCount": 239,
+          "skippedDocumentCount": 141,
+          "documentCoverageRatio": 0.6289,
+          "operationallyAvailable": false,
+          "notes": "Do not treat regional reference procedure legs as an approved operational navigation database."
         }
       ]
     },
@@ -550,7 +547,7 @@
       "sha256": "be974a777fe0da70bb143bedce4f05d5744c2c62ad382691937c4b35494bf3cf",
       "sourceProvider": "FAA AeroNav",
       "sourceUrl": "https://aeronav.faa.gov/Upload_313-d/cifp/CIFP_261029.zip",
-      "coverage": "United States / FAA National Airspace System \u2014 departure procedures",
+      "coverage": "United States / FAA National Airspace System — departure procedures",
       "sourceTag": "FAA_CIFP_2611",
       "license": "US Government Public Domain (FAA AeroNav)",
       "licenseStatus": "public_domain",
@@ -573,7 +570,7 @@
       "sha256": "6bf123c683e442c1a07fbc46f4f11ad45045f8322a1b2506d65f6719055c0c06",
       "sourceProvider": "FAA AeroNav",
       "sourceUrl": "https://aeronav.faa.gov/Upload_313-d/cifp/CIFP_261029.zip",
-      "coverage": "United States / FAA National Airspace System \u2014 arrival procedures",
+      "coverage": "United States / FAA National Airspace System — arrival procedures",
       "sourceTag": "FAA_CIFP_2611",
       "license": "US Government Public Domain (FAA AeroNav)",
       "licenseStatus": "public_domain",
@@ -595,7 +592,7 @@
       "sha256": "ff7b9121e79b56ff616a77e285c9cba764575fd2c58335b3281124813362d3dd",
       "sourceProvider": "FAA AeroNav",
       "sourceUrl": "https://aeronav.faa.gov/Upload_313-d/cifp/CIFP_261029.zip",
-      "coverage": "United States / FAA National Airspace System \u2014 instrument approaches",
+      "coverage": "United States / FAA National Airspace System — instrument approaches",
       "sourceTag": "FAA_CIFP_2611",
       "license": "US Government Public Domain (FAA AeroNav)",
       "licenseStatus": "public_domain",
@@ -775,6 +772,30 @@
       "downloadPurpose": "reference_only",
       "operationallyAvailable": false,
       "status": "regional_reference_dataset"
+    },
+    {
+      "id": "france_sia_sid_star_legs",
+      "path": "procedures/europe/france/sid_star_legs.csv",
+      "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/procedures/europe/france/sid_star_legs.csv",
+      "available": true,
+      "recordCount": 7988,
+      "sizeBytes": 7133218,
+      "sha256": "0dcfd2d2b2633de45976bb6ec4a10e4a5204a4b01e40505f82be7ba5c7f99f41",
+      "sourceProvider": "Service de l'Information Aeronautique (SIA France)",
+      "sourceUrl": "https://www.sia.aviation-civile.gouv.fr/media/dvd/eAIP_29_OCT_2026/FRANCE/AIRAC-2026-10-29/pdf/FR-GEN-0.4-fr-FR.pdf",
+      "coverage": "France reference coverage: parser extracted 239 of 380 indexed current-cycle DATA SID/STAR sheets.",
+      "license": "SIA Licence Ouverte / Open Licence",
+      "licenseUrl": "https://www.sia.aviation-civile.gouv.fr/produits-numeriques-en-libre-disposition.html",
+      "licenseStatus": "verified_exact_eAIP_product_linked_to_open_license",
+      "commercialUseAllowed": true,
+      "attribution": "Service de l'Information Aeronautique (SIA France); include source and last update date; do not imply SIA endorsement.",
+      "dataCycle": "2026-10-29",
+      "effectiveDate": "2026-10-29",
+      "expiryDate": "2026-11-25",
+      "provenanceVerification": "official_SIA_eAIP_GEN_0_4_index",
+      "downloadPurpose": "regional_reference_only",
+      "operationallyAvailable": false,
+      "status": "partial_current_cycle_regional_reference_dataset"
     }
   ],
   "downloadContract": {
