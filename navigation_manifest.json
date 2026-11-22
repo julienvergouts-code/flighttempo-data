@@ -111,7 +111,8 @@
     "aerosors_ge_navaids": false,
     "aerosors_ge_airports": false,
     "globalAirlineDirectory": true,
-    "easaSafetyDirectives": true
+    "easaSafetyDirectives": true,
+    "faaVfrReportingPoints": true
   },
   "procedureCoverageStatus": "FAA_US_NAS_ONLY_TEST_DATA; EUROPE_FRANCE_SOURCE_NOT_INGESTED; ASIA_NO_PUBLIC_REDISTRIBUTABLE_SOURCE_CONFIRMED",
   "procedureOperationalUse": false,

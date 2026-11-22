@@ -66,6 +66,9 @@ def register():
     stats=manifest.setdefault("statistics",{})
     if stats.get("faaVfrReportingPoints")!=len(rows):
         stats["faaVfrReportingPoints"]=len(rows);changed=True
+    capabilities=manifest.setdefault("capabilities",{})
+    if capabilities.get("faaVfrReportingPoints") is not True:
+        capabilities["faaVfrReportingPoints"]=True;changed=True
     manifest.setdefault("dataSources",[])
     source={
         "dataset":"faa_vfr_reporting_points","url":SOURCE_URL,"provider":"FAA Aeronautical Information Services",

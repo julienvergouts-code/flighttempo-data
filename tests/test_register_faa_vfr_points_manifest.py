@@ -45,4 +45,5 @@ class Tests(unittest.TestCase):
             self.assertFalse(dataset["operationallyAvailable"])
             self.assertEqual(dataset["coverage"],"United States NASR VFR waypoints (VP-prefixed FIX records; visual-checkpoint association varies)")
             self.assertEqual(dataset["licenseStatus"],"public_domain")
+            self.assertTrue(json.loads(manifest_path.read_text(encoding="utf-8"))["capabilities"]["faaVfrReportingPoints"])
 if __name__=="__main__": unittest.main()
