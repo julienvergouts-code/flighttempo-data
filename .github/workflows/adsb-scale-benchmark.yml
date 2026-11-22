@@ -3,6 +3,11 @@ name: ADS-B multi-aircraft scale benchmark
 on:
   workflow_dispatch:
     inputs:
+      ref:
+        description: "Branch or commit containing the benchmark implementation"
+        required: true
+        default: "feature/adsb-route-learning"
+        type: string
       date:
         description: "UTC archive date (YYYY-MM-DD)"
         required: true
@@ -32,6 +37,8 @@ jobs:
     timeout-minutes: 120
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref || github.event.pull_request.head.sha || github.sha }}
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
