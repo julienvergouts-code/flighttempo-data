@@ -1,0 +1,30 @@
+name: Discover OpenFlightMaps regional download endpoints
+on:
+  schedule:
+    - cron: '50 4 * * *'
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - scripts/monitor_ofma_downloads.py
+      - tests/test_monitor_ofma_downloads.py
+      - .github/workflows/monitor-ofma-downloads.yml
+permissions:
+  contents: read
+jobs:
+  discover:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run tests
+        run: python -m unittest discover -s tests -p 'test_monitor_ofma_downloads.py' -v
+      - name: Check live regional pages
+        run: python scripts/monitor_ofma_downloads.py
+      - name: Upload endpoint metadata only
+        uses: actions/upload-artifact@v4
+        with:
+          name: ofma-download-endpoint-discovery
+          path: ofma_download_discovery_report.json
+          retention-days: 14
