@@ -34,6 +34,10 @@ The route graph is dynamic: it does not require a pre-populated list of popular 
 
 A daily CI monitor follows the latest ECAC and Maastricht UAC FRA point-list XLSX publications. It records publication URLs, checksums, workbook sheet names/row counts, candidate header rows and aggregate schema validation in a short-lived CI report. Source files and point records are temporary and are not published. FRA point-list reuse/redistribution rights remain under review.
 
+## OFMA VFR source discovery
+
+A daily CI monitor checks 21 OFMA regional download pages and inspects download-plugin scripts for data endpoints. It currently discovers no direct data URLs in the region-page markup; endpoint discovery is ongoing. No source data is imported or republished by this monitor. The OFMA GUL allows commercial use subject to attribution, alteration-reporting and correction-reporting obligations.
+
 ## Procedures
 
 - FAA CIFP cycle 2611 contains US NAS SIDs, STARs and approaches.
