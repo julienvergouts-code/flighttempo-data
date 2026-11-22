@@ -12,6 +12,9 @@ on:
       - "navigation_manifest.json"
       - "docs/ofma_ofmx_vfr_import.md"
       - ".github/workflows/import-ofma-ofmx-vfr-points.yml"
+concurrency:
+  group: flighttempo-shared-manifest-updates
+  cancel-in-progress: false
 jobs:
   import:
     runs-on: ubuntu-latest
