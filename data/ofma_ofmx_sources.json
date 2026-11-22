@@ -9,7 +9,8 @@
       "url": "https://snapshots.openflightmaps.org/live/{airac}/ofmx/ebbu/latest/ofmx_eb.zip",
       "sourcePage": "https://openflightmaps.org/downloads/eb/",
       "license": "OFMA_GUL",
-      "attribution": "OpenFlightMaps Association (OFMA)"
+      "attribution": "OpenFlightMaps Association (OFMA)",
+      "archiveKey": "eb"
     },
     {
       "region": "ED",
@@ -18,7 +19,8 @@
       "url": "https://snapshots.openflightmaps.org/live/{airac}/ofmx/ed/latest/ofmx_ed.zip",
       "sourcePage": "https://openflightmaps.org/downloads/ed/",
       "license": "OFMA_GUL",
-      "attribution": "OpenFlightMaps Association (OFMA)"
+      "attribution": "OpenFlightMaps Association (OFMA)",
+      "archiveKey": "ed"
     },
     {
       "region": "EH",
@@ -27,7 +29,8 @@
       "url": "https://snapshots.openflightmaps.org/live/{airac}/ofmx/ehaa/latest/ofmx_eh.zip",
       "sourcePage": "https://openflightmaps.org/downloads/eh/",
       "license": "OFMA_GUL",
-      "attribution": "OpenFlightMaps Association (OFMA)"
+      "attribution": "OpenFlightMaps Association (OFMA)",
+      "archiveKey": "eh"
     }
   ]
 }
