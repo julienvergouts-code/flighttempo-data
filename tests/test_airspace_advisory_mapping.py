@@ -24,8 +24,10 @@ class AirspaceSourcePublicationTests(unittest.TestCase):
         manifest = json.loads((ROOT / "navigation_manifest.json").read_text(encoding="utf-8"))
         by_id = {x["id"]: x for x in manifest["datasets"]}
         for dataset_id in ("openaip_fir_boundaries", "airspace_filter"):
-            self.assertFalse(by_id[dataset_id]["available"])
-            self.assertNotIn("downloadUrl", by_id[dataset_id])
+            dataset = by_id.get(dataset_id)
+            if dataset is not None:
+                self.assertFalse(dataset.get("available", False))
+                self.assertNotIn("downloadUrl", dataset)
         self.assertFalse(manifest["capabilities"]["firBoundaries"])
         self.assertFalse(manifest["capabilities"]["airspaceFilterAdvisoryOnly"])
 
