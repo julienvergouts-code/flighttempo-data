@@ -23,7 +23,10 @@ class Tests(unittest.TestCase):
   self.assertEqual(len(rows),1);self.assertEqual(rows[0]["code"],"AB123");self.assertEqual(rows[0]["kind"],"VFR-RP")
  def test_zip_member_selection(self):
   b=io.BytesIO()
-  with zipfile.ZipFile(b,"w") as z:z.writestr("ofmx_ebbu/embedded/ofmx_ebbu","<OFMX-Snapshot/>")
+  with zipfile.ZipFile(b,"w") as z:
+   z.writestr("ofmx_ebbu/embedded/ofmx_ebbu","<OFMX-Snapshot/>")
+   z.writestr("ofmx_ebbu/embedded/ofmx_ebbu_ofmShapeExtension.xml","<Shape/>")
+   z.writestr("ofmx_ebbu/isolated/ofmx_ebbu","<OFMX-Snapshot/>")
   self.assertEqual(xml_from_zip(b.getvalue(),"ebbu"),b"<OFMX-Snapshot/>")
   with zipfile.ZipFile(b,"a") as z:z.writestr("another/embedded/ofmx_ebbu","<OFMX-Snapshot/>")
   with self.assertRaises(ValueError):xml_from_zip(b.getvalue(),"ebbu")
