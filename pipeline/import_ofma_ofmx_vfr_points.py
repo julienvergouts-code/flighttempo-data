@@ -2,7 +2,7 @@
 """Import OFMA OFMX designated points classified as VFR; reference-only."""
 from __future__ import annotations
 import argparse,csv,hashlib,io,json,os,re,tempfile,urllib.request,zipfile
-from datetime import datetime,timezone
+from datetime import datetime,timezone,date
 from pathlib import Path
 import xml.etree.ElementTree as ET
 
@@ -15,6 +15,13 @@ VFR_TYPES={"VFR-RP","VFR-MRP","VFR-ENR","VFR-GLDR","VFR-HELI"}
 MAX_BYTES=80*1024*1024
 UA="FlightTempo-OFMA-OFMX-VFR-Importer/1.0 (+https://github.com/julienvergouts-code/flighttempo-data)"
 def stamp():return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+def current_airac(today=None):
+ today=today or datetime.now(timezone.utc).date()
+ anchor=date(2026,1,22) # AIRAC 2601 start; 28-day cycles
+ n=(today-anchor).days//28
+ if n<0:raise ValueError("date predates AIRAC anchor")
+ year=2026+n//13;cycle=n%13+1
+ return f"{year%100:02d}{cycle:02d}"
 def clean(x):return re.sub(r"\s+"," ",str(x or "")).strip()
 def parse_coord(s):
  s=clean(s).upper()
@@ -97,10 +104,10 @@ def run(config=CONFIG,dry=False):
  allrows=[];sm=[]
  for src in sources:
   validate_source(src);raw=fetch(src["url"]);xml=xml_from_zip(raw,src["regionKey"]);records=parse_xml(xml,src);allrows.extend(records)
-  sm.append({"region":src["region"],"regionName":src["regionName"],"sourcePage":src["sourcePage"],"downloadUrl":src["url"],"cycle":cfg.get("airac"),"effectiveDate":src.get("effectiveDate"),"license":"OFMA General Users License","attribution":src.get("attribution","OpenFlightMaps Association (OFMA)"),"sha256":hashlib.sha256(raw).hexdigest(),"bytes":len(raw),"parsedVfrPoints":len(records)})
+  sm.append({"region":src["region"],"regionName":src["regionName"],"sourcePage":src["sourcePage"],"downloadUrl":src["url"].replace("/live/2611/","/live/"+airac+"/"),"cycle":airac,"effectiveDate":src.get("effectiveDate"),"license":"OFMA General Users License","attribution":src.get("attribution","OpenFlightMaps Association (OFMA)"),"sha256":hashlib.sha256(raw).hexdigest(),"bytes":len(raw),"parsedVfrPoints":len(records)})
  uniq={(r["region"],r["code"],r["lat"],r["lon"],r["kind"]):r for r in allrows};rows=sorted(uniq.values(),key=lambda r:(r["region"],r["kind"],r["code"],r["lat"],r["lon"]))
  buf=io.StringIO();buf.write("#version=1,generated_utc="+stamp()+"\n");w=csv.DictWriter(buf,fieldnames=COLUMNS);w.writeheader();w.writerows(rows);csvdata=buf.getvalue().encode()
- meta={"schemaVersion":1,"generatedUtc":stamp(),"airac":cfg.get("airac"),"count":len(rows),"regions":sorted({r["region"] for r in rows}),"sources":sm,"license":"OFMA General Users License","licenseNotes":"Commercial use subject to GUL conditions. Preserve attribution; report errors/alterations and provide user error-reporting route as required. Reference-only, not primary navigation.","attribution":"OpenFlightMaps Association (OFMA)","sha256":hashlib.sha256(csvdata).hexdigest(),"sizeBytes":len(csvdata),"operationalUse":False}
+ meta={"schemaVersion":1,"generatedUtc":stamp(),"airac":airac,"count":len(rows),"regions":sorted({r["region"] for r in rows}),"sources":sm,"license":"OFMA General Users License","licenseNotes":"Commercial use subject to GUL conditions. Preserve attribution; report errors/alterations and provide user error-reporting route as required. Reference-only, not primary navigation.","attribution":"OpenFlightMaps Association (OFMA)","sha256":hashlib.sha256(csvdata).hexdigest(),"sizeBytes":len(csvdata),"operationalUse":False}
  if dry:print(json.dumps({"pointCount":len(rows),"regions":meta["regions"],"sources":sm},indent=2));return 0
  atomic_pair(OUT,META,csvdata,meta);print(f"Imported {len(rows)} OFMA OFMX VFR points across {len(meta['regions'])} regions");return 0
 def main():
