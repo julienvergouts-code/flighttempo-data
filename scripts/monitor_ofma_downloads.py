@@ -79,8 +79,8 @@ def discover_region(code):
         format_hints=sorted(set(ext[1:] for ext in FORMATS if ext in html.lower()))
         absolute_urls=sorted(set(re.findall(r"https?://[^\s<>]+",html)))
         candidate_urls=[x for x in absolute_urls if any(term in x.lower() for term in ("openflightmaps","snapshot","download","api"))]
-        region_code_candidates=sorted(set(re.findall(r"""\\bregionCode\\s*=\\s*['"]([^'"]+)['"]""",html,re.IGNORECASE)))
-        region_code_snippets=[html[max(0,m.start()-100):min(len(html),m.end()+180)].replace("\\n"," ") for m in list(re.finditer("regionCode",html,re.IGNORECASE))[:12]]
+        region_code_candidates=sorted(set(re.findall(r"""\bregionCode\s*=\s*['"]([^'"]+)['"]""",html,re.IGNORECASE)))
+        region_code_snippets=[html[max(0,m.start()-100):min(len(html),m.end()+180)].replace("\n"," ") for m in list(re.finditer("regionCode",html,re.IGNORECASE))[:12]]
         return {"region":code,"regionName":REGIONS[code],"pageUrl":url,"status":status,
                 "finalUrl":final,"pageBytes":len(raw),"sha256":hashlib.sha256(raw).hexdigest(),
                 "regionCodeCandidates":region_code_candidates,"regionCodeSnippets":region_code_snippets,
