@@ -31,7 +31,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: adsb-scale-\${{ github.event.pull_request.number || github.ref }}
+  group: adsb-scale-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -52,9 +52,9 @@ jobs:
         run: python pipeline/compile_ftwg_graph.py
       - name: Stream archive and benchmark multi-aircraft batch
         env:
-          RUN_DATE: \${{ inputs.date || '2026-11-16' }}
-          MAX_AIRCRAFT: \${{ inputs.max_aircraft || 50 }}
-          MIN_AIRCRAFT: \${{ inputs.minimum_aircraft || 25 }}
+          RUN_DATE: ${{ inputs.date || '2026-11-16' }}
+          MAX_AIRCRAFT: ${{ inputs.max_aircraft || 50 }}
+          MIN_AIRCRAFT: ${{ inputs.minimum_aircraft || 25 }}
         run: |
           set -euo pipefail
           exec > >(tee -a /tmp/adsb_scale_run.log) 2>&1
@@ -82,7 +82,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: adsb-scale-evidence-\${{ github.run_id }}-\${{ github.sha }}
+          name: adsb-scale-evidence-${{ github.run_id }}-${{ github.sha }}
           path: |
             /tmp/adsb_scale_evidence.json
             /tmp/adsb_scale_summary.json
