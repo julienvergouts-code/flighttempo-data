@@ -86,6 +86,17 @@ Sources:
 
 ## Free navigation / traffic sources
 
+### FAA NASR VFR waypoint reference layer
+
+- FAA Order 8260.19K defines VFR waypoints as five-character names beginning with `VP` and explicitly keeps them out of instrument procedures and routes. FAA's Aeronautical Information Manual describes them as a supplementary VFR position-awareness tool; only some are collocated with charted visual checkpoints. The importer publishes them as a separate visual reference layer and does not merge them into the IFR airway/procedure graph.
+- The maintained source is the FAA 28-day NASR FIX subscription. The pipeline currently extracts 681 VP-prefixed records for the United States; the committed CSV is 41,699 bytes and carries the NASR effective date, source attribution, row count and SHA-256 in the app manifest.
+- The package is reference-only and not operational navigation data. It does not provide worldwide VFR waypoint coverage.
+
+Sources:
+- FAA Order 8260.19K: https://www.faa.gov/documentLibrary/media/Order/Order_8260.19K.pdf
+- FAA Aeronautical Information Manual, VFR Waypoints: https://www.faa.gov/air_traffic/publications/aim_html/chap1_section_1.html
+- FAA 28-day NASR subscription: https://www.faa.gov/air_traffic/flight_info/aeronav/Aero_Data/NASR_Subscription/
+
 ### OpenFlightMaps (OFMA)
 
 - OFMA's General Users' License explicitly allows commercial use and derivative databases, subject to its conditions.
@@ -115,6 +126,7 @@ Sources:
 ## Existing navigation data that remains in place
 
 - OurAirports airport/runway/navaid data: CC0/Public Domain as stated by provider; refresh through the existing pipeline.
+- The legacy `airports/airports.csv` table includes IATA and time-zone fields with mixed upstream provenance. It remains in the repository for compatibility/research but is blocked from app downloads until those fields' redistribution rights are confirmed. The separate normalized OurAirports airport, runway and navaid tables remain the app-downloadable source.
 - Legacy global X-Plane/FlightGear fixes, navaids, airway segments and corridor graph: retained as stale development baseline, clearly labelled and not operational.
 - FAA CIFP: current US NAS procedure test/reference data only; not Europe or worldwide procedures.
 - French SIA XML: open reference data, but do not assume it contains complete SID/STAR/approach legs.

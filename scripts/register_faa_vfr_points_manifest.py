@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""Register the FAA VFR reporting-point CSV in the app navigation manifest."""
+"""Register the FAA VFR waypoint reference CSV in the app navigation manifest."""
 from __future__ import annotations
-import csv, hashlib, json
+import csv, hashlib, json, re
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -12,6 +12,7 @@ MANIFEST_PATH=ROOT/"navigation_manifest.json"
 DATASET_ID="faa_vfr_reporting_points"
 DOWNLOAD_URL="https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/data/vfr_points.csv"
 SOURCE_URL="https://www.faa.gov/air_traffic/flight_info/aeronav/Aero_Data/NASR_Subscription/"
+VFR_CODE_PATTERN=re.compile(r"VP[A-Z0-9]{3}")
 
 def parse_rows(raw:bytes):
     text=raw.decode("utf-8-sig")
@@ -22,10 +23,13 @@ def parse_rows(raw:bytes):
         raise ValueError(f"VFR CSV schema missing required columns: {required-set(reader.fieldnames or [])}")
     if not rows: raise ValueError("VFR CSV has no data records")
     for row in rows:
+        if not VFR_CODE_PATTERN.fullmatch(row["code"].strip().upper()):
+            raise ValueError(f"Invalid FAA VFR waypoint identifier: {row.get('code')}")
         lat,lon=float(row["lat"]),float(row["lon"])
         if not (-90<=lat<=90 and -180<=lon<=180) or (lat==0 and lon==0):
             raise ValueError(f"Invalid coordinate for point {row.get('code')}")
         if row["source"]!="FAA": raise ValueError(f"Unexpected source in FAA dataset: {row['source']}")
+        if row["role"]!="VFR_WAYPOINT": raise ValueError(f"Invalid FAA VFR waypoint role: {row['role']}")
     return rows
 
 def register():
@@ -41,7 +45,7 @@ def register():
         "sha256":hashlib.sha256(raw).hexdigest(),
         "sourceProvider":"FAA Aeronautical Information Services / NASR FIX",
         "sourceUrl":SOURCE_URL,
-        "coverage":"United States NASR VFR reporting points (VP-prefixed FIX records)",
+        "coverage":"United States NASR VFR waypoints (VP-prefixed FIX records; visual-checkpoint association varies)",
         "sourceTag":f"FAA_NASR_FIX_{updated}",
         "license":"US Government public-domain data",
         "licenseStatus":"public_domain","dataCycle":updated,
@@ -80,7 +84,7 @@ def register():
         MANIFEST_PATH.write_text(json.dumps(manifest,indent=2,ensure_ascii=False)+"\n",encoding="utf-8")
     else:
         print("Manifest VFR entry already current; no changes.")
-    print(f"Registered {len(rows)} FAA VFR reporting points; {len(raw)} bytes; sha256={dataset['sha256']}; source date={updated}")
+    print(f"Registered {len(rows)} FAA VFR waypoints; {len(raw)} bytes; sha256={dataset['sha256']}; source date={updated}")
     return dataset
 
 if __name__=="__main__": register()

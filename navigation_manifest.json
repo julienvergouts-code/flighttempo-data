@@ -13,7 +13,7 @@
   },
   "targetProfile": "FlightTempo downloadable aviation reference data",
   "statistics": {
-    "airports": 29747,
+    "airports": 86377,
     "runways": 47131,
     "navaids": 11008,
     "ifrWaypoints": 113356,
@@ -29,11 +29,6 @@
     "flightgearGlideslopeFacilities": 3159,
     "flightgearMarkerBeacons": 3375,
     "flightgearDmeFacilities": 5755,
-    "airportReferenceRecords": 29747,
-    "airportReferenceOurAirportsElevationMatches": 28488,
-    "airportReferenceRunwayMatches": 24175,
-    "airportReferenceMultipleRunwayAirports": 3906,
-    "airportReferenceOurAirportsMetadataMatches": 29747,
     "globalAirlineDirectory": 3846,
     "faaVfrReportingPoints": 681
   },
@@ -74,8 +69,8 @@
       "provider": "FAA Aeronautical Information Services",
       "license": "US Government public-domain data",
       "downloadedAt": "2026-11-21T23:18:04Z",
-      "sizeBytes": 35570,
-      "sha256": "d535faaa3e2ca5eb63ff3681fa26a249cb5519ee45b0827480937616bd1d94ff",
+      "sizeBytes": 41699,
+      "sha256": "7c6a856b61bf74178f285992967a360d2e786438c8f7885c4e0fb34c9df14c67",
       "recordCount": 681
     }
   ],
@@ -410,8 +405,7 @@
     {
       "id": "airport_reference",
       "path": "airports/airports.csv",
-      "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/airports/airports.csv",
-      "available": true,
+      "available": false,
       "recordCount": 29747,
       "sizeBytes": 7125340,
       "sha256": "7a879d57f41ee428b5bd64dd8b1046feb6588e2edbdb11c3d50e70ee2670df0a",
@@ -424,7 +418,10 @@
       "dataCycle": "daily_source_snapshot",
       "effectiveDate": "",
       "expiryDate": "",
-      "provenanceVerification": "partial"
+      "provenanceVerification": "partial",
+      "operationallyAvailable": false,
+      "status": "not_published_redistribution_rights_unconfirmed_or_non_commercial_only",
+      "downloadBlockReason": "Legacy IATA and time-zone fields have mixed upstream provenance; keep this table in the repository until redistribution rights are confirmed. Use the separate OurAirports CC0 dataset for app downloads."
     },
     {
       "id": "ourairports_airports",
@@ -733,11 +730,11 @@
       "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/data/vfr_points.csv",
       "available": true,
       "recordCount": 681,
-      "sizeBytes": 35570,
-      "sha256": "d535faaa3e2ca5eb63ff3681fa26a249cb5519ee45b0827480937616bd1d94ff",
+      "sizeBytes": 41699,
+      "sha256": "7c6a856b61bf74178f285992967a360d2e786438c8f7885c4e0fb34c9df14c67",
       "sourceProvider": "FAA Aeronautical Information Services / NASR FIX",
       "sourceUrl": "https://www.faa.gov/air_traffic/flight_info/aeronav/Aero_Data/NASR_Subscription/",
-      "coverage": "United States NASR VFR reporting points (VP-prefixed FIX records)",
+      "coverage": "United States NASR VFR waypoints (VP-prefixed FIX records; visual-checkpoint association varies)",
       "sourceTag": "FAA_NASR_FIX_2026-11-26",
       "license": "US Government public-domain data",
       "licenseStatus": "public_domain",
@@ -868,10 +865,20 @@
       "allRunwayHEHeadingsDegT"
     ],
     "runwaySelection": "All matched open runway ends with a usable length are retained in aligned pipe-delimited airport reference columns; complete individual runway records are retained in navigation/runways/runways_parsed.csv.",
-    "limitations": "Community-maintained source data; no guarantee of accuracy or operational fitness. Full source snapshots and normalized records are retained separately."
+    "limitations": "Community-maintained source data; no guarantee of accuracy or operational fitness. Full source snapshots and normalized records are retained separately.",
+    "appDownloadable": false,
+    "downloadBlockReason": "Legacy IATA and time-zone fields have mixed upstream provenance; keep this table in the repository until redistribution rights are confirmed. Use the separate OurAirports CC0 dataset for app downloads."
   },
   "developmentOnlySources": [
     "Aero.Sors derivative exports: redistribution not confirmed",
+    "Legacy airport reference IATA/time-zone fields: source redistribution rights under review",
     "OpenAIP FIR geometry and derived airspace filter: CC BY-NC 4.0"
-  ]
+  ],
+  "developmentOnlyStatistics": {
+    "airportReferenceRecords": 29747,
+    "airportReferenceOurAirportsElevationMatches": 28488,
+    "airportReferenceRunwayMatches": 24175,
+    "airportReferenceMultipleRunwayAirports": 3906,
+    "airportReferenceOurAirportsMetadataMatches": 29747
+  }
 }

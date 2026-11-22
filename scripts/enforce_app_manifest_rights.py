@@ -14,12 +14,24 @@ ROOT = Path(__file__).resolve().parents[1]
 MANIFEST = ROOT / "navigation_manifest.json"
 
 BLOCKED_IDS = {
+    # This app-facing table carries legacy IATA and time-zone fields whose
+    # redistribution provenance is still unresolved. The separate normalized
+    # OurAirports tables remain available under the provider's CC0 terms.
+    "airport_reference",
     "aerosors_vor_ndb",
     "aerosors_ils",
     "aerosors_ge_navaids",
     "aerosors_ge_airports",
     "openaip_fir_boundaries",
     "airspace_filter",
+}
+
+BLOCK_REASONS = {
+    "airport_reference": (
+        "Legacy IATA and time-zone fields have mixed upstream provenance; "
+        "keep this table in the repository until redistribution rights are "
+        "confirmed. Use the separate OurAirports CC0 dataset for app downloads."
+    ),
 }
 
 CAPABILITY_FLAGS = {
@@ -47,11 +59,11 @@ def enforce() -> list[str]:
         dataset.pop("downloadUrl", None)
         dataset["operationallyAvailable"] = False
         dataset["status"] = "not_published_redistribution_rights_unconfirmed_or_non_commercial_only"
-        dataset["downloadBlockReason"] = (
+        dataset["downloadBlockReason"] = BLOCK_REASONS.get(dataset_id, (
             "Retained for research/provenance only. Do not publish through the "
             "app download manifest until redistribution rights suitable for "
             "the intended product have been confirmed in writing."
-        )
+        ))
         for flag in CAPABILITY_FLAGS.get(dataset_id, ()):
             manifest.setdefault("capabilities", {})[flag] = False
         blocked.append(dataset_id)
@@ -67,17 +79,30 @@ def enforce() -> list[str]:
     statistics = manifest.setdefault("statistics", {})
     research_keys = [
         key for key in list(statistics)
-        if key.startswith("aerosors_") or key.startswith("aeroSors")
+        if key.startswith("aerosors_")
+        or key.startswith("aeroSors")
+        or key.startswith("airportReference")
     ]
     if research_keys:
         research = manifest.setdefault("developmentOnlyStatistics", {})
         for key in research_keys:
             research[key] = statistics.pop(key)
 
+    if "airport_reference" in blocked:
+        # The app-facing airport count should describe the clean OurAirports
+        # table that remains downloadable, not the excluded mixed-source copy.
+        if statistics.get("ourairportsAirports") is not None:
+            statistics["airports"] = statistics["ourairportsAirports"]
+        enrichment = manifest.get("airportReferenceEnrichment")
+        if isinstance(enrichment, dict):
+            enrichment["appDownloadable"] = False
+            enrichment["downloadBlockReason"] = BLOCK_REASONS["airport_reference"]
+
     manifest["developmentOnlySources"] = sorted(
         set(manifest.get("developmentOnlySources", []))
         | {"Aero.Sors derivative exports: redistribution not confirmed",
-           "OpenAIP FIR geometry and derived airspace filter: CC BY-NC 4.0"}
+           "OpenAIP FIR geometry and derived airspace filter: CC BY-NC 4.0",
+           "Legacy airport reference IATA/time-zone fields: source redistribution rights under review"}
     )
     MANIFEST.write_text(
         json.dumps(manifest, indent=2, ensure_ascii=False) + "\n",

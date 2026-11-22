@@ -6,7 +6,7 @@ This repository is a development/reference data source for FlightTempo. It is no
 
 | Source / task | Schedule | What is refreshed | Publication status |
 | --- | --- | --- | --- |
-| OurAirports | Daily, 04:15 UTC | Global airport, runway and navaid snapshots; airport reference enrichment | App-downloadable; CC0/Public Domain as stated by provider |
+| OurAirports | Daily, 04:15 UTC | Global airport, runway and navaid snapshots; airport reference enrichment | Normalized OurAirports tables are app-downloadable under the provider's CC0 terms. The legacy enriched `airport_reference` table remains research-only while IATA/time-zone provenance is under review. |
 | EASA CZIB export | Daily, 04:23 UTC | Official advisory records and advisory metadata | App-downloadable reference only; source acknowledgement required |
 | OpenAIP FIR/UIR geometry | Weekly, Monday 04:41 UTC | Research/reference geometry and associated airspace review metadata | Repository research only; CC BY-NC 4.0, excluded from app download manifest |
 | FAA PRN KICZ index | Daily, in the main navigation workflow | FAA PRN notice references and source PDFs/checksums | FAA reference only; not live NOTAM status and not a hard restriction feed |
@@ -17,6 +17,8 @@ This repository is a development/reference data source for FlightTempo. It is no
 | Legacy 2012.08 IFR data | No automatic source refresh | Preserves the existing global fixes, navaids, airway segments and graph | Stale development baseline; never label as current AIRAC |
 
 All workflows that write shared manifests use the same GitHub Actions concurrency group so scheduled jobs do not overwrite one another's manifest updates.
+
+The app manifest rights guard runs after airport enrichment and blocks the mixed-source legacy airport table before package validation. The full OurAirports tables remain separately available with their provider license and checksums.
 
 ## Deliberate non-automation
 

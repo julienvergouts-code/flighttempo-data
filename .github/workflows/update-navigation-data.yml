@@ -330,7 +330,7 @@ jobs:
         run: python3 scripts/enforce_app_manifest_rights.py
       - name: Check current FAA CIFP publication and packaged cycle
         run: python3 scripts/check_faa_cifp_currentness.py
-      - name: Register FAA VFR reporting points in navigation manifest
+      - name: Register FAA VFR waypoints in navigation manifest
         run: python3 scripts/register_faa_vfr_points_manifest.py
       - name: Validate every downloadable CSV in the app manifest
         run: python3 scripts/validate_navigation_csvs.py --manifest navigation_manifest.json
