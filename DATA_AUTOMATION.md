@@ -6,7 +6,7 @@ This repository is a development/reference data source for FlightTempo. It is no
 
 | Source / task | Schedule | What is refreshed | Publication status |
 | --- | --- | --- | --- |
-| OurAirports | Daily, 04:15 UTC | Global airport, runway and navaid snapshots; airport reference enrichment | App-downloadable; CC0/Public Domain as stated by provider |
+| OurAirports | Daily, 04:15 UTC | Global airport, runway and navaid snapshots; airport reference enrichment | App-downloadable; CC0/Public Domain as stated by provider |\n| FAA VFR reporting points | Weekly, Thursdays 06:00 UTC | NASR FIX CSV; extracts VP-prefixed records; 681 current records at last published snapshot | Separate `data/vfr_points.csv` pipeline; FAA public-domain. Not currently registered in the navigation manifest |
 | EASA CZIB export | Daily, 04:23 UTC | Official advisory records and advisory metadata | App-downloadable reference only; source acknowledgement required |
 | OpenAIP FIR/UIR geometry | Weekly, Monday 04:41 UTC | Research/reference geometry and associated airspace review metadata | Repository research only; CC BY-NC 4.0, excluded from app download manifest |
 | FAA PRN KICZ index | Daily, in the main navigation workflow | FAA PRN notice references and source PDFs/checksums | FAA reference only; not live NOTAM status and not a hard restriction feed |
