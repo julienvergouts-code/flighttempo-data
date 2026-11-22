@@ -63,6 +63,26 @@ def inspect_script(url):
     except Exception as e:
         return {"url":url,"error":str(e)}
 
+def parse_publication_xml_metadata(xml):
+    urls=sorted(set(re.findall(r"https?://[^\s<>\"']+",xml)))
+    relative=sorted(set(re.findall(r"""(?:href|url|download|link)[^>]*=\s*["']([^"']+)["']""",xml,re.IGNORECASE)))
+    products=sorted(set(re.findall(r"\b(?:OFMX|CUP|OPENAIR|ARINC|XML|ZIP)\b",xml,re.IGNORECASE)))
+    return urls[:100],relative[:100],products
+
+def inspect_publication_xml(code,airac):
+    url=f"https://snapshots.openflightmaps.org/publicationServices/{code}_{airac}.xml"
+    try:
+        status,final,raw=fetch(url)
+        xml=raw.decode("utf-8","replace")
+        urls=sorted(set(re.findall(r"https?://[^\s<>\"']+",xml)))
+        relative=sorted(set(re.findall(r"""(?:href|url|download|link)[^>]*=\s*["']([^"']+)["']""",xml,re.IGNORECASE)))
+        products=sorted(set(re.findall(r"\b(?:OFMX|CUP|OPENAIR|ARINC|XML|ZIP)\b",xml,re.IGNORECASE)))
+        return {"url":url,"status":status,"finalUrl":final,"bytes":len(raw),
+                "sha256":hashlib.sha256(raw).hexdigest(),"candidateUrls":urls[:100],
+                "candidateRelativeLinks":relative[:100],"formatMentions":products}
+    except Exception as e:
+        return {"url":url,"error":str(e)}
+
 def discover_region(code):
     slug={"LD":"lb"}.get(code,code.lower())
     url=f"https://openflightmaps.org/downloads/{slug}/"
@@ -79,8 +99,12 @@ def discover_region(code):
         format_hints=sorted(set(ext[1:] for ext in FORMATS if ext in html.lower()))
         absolute_urls=sorted(set(re.findall(r"https?://[^\s<>]+",html)))
         candidate_urls=[x for x in absolute_urls if any(term in x.lower() for term in ("openflightmaps","snapshot","download","api"))]
+        manifest=json.loads((ROOT/"navigation_manifest.json").read_text(encoding="utf-8"))
+        airac=str(manifest.get("procedureAiracCycle","")).strip()
         return {"region":code,"regionName":REGIONS[code],"pageUrl":url,"status":status,
                 "finalUrl":final,"pageBytes":len(raw),"sha256":hashlib.sha256(raw).hexdigest(),
+                "airacCycle":airac,
+                "publicationXml":inspect_publication_xml(code,airac) if airac else {"error":"No AIRAC token in navigation manifest"},
                 "directDownloadLinks":sorted(set(links)),"formatHints":format_hints,
                 "scriptSrcs":sorted(set(urljoin(final,x) for x in parser.srcs)),
                 "scriptEndpointAnalysis":[inspect_script(urljoin(final,x)) for x in parser.srcs if any(name in x.lower() for name in ("download.js","ofmtilemap.js","ofmtemplate.js"))],

@@ -1,5 +1,5 @@
 import unittest
-from scripts.monitor_ofma_downloads import Links, REGIONS, FORMATS, scan_script_text
+from scripts.monitor_ofma_downloads import Links, REGIONS, FORMATS, scan_script_text, parse_publication_xml_metadata
 class Tests(unittest.TestCase):
     def test_region_registry_includes_key_european_regions(self):
         for code in ("EB","ED","EH","LF","LO","LI","LG"):
@@ -15,6 +15,12 @@ class Tests(unittest.TestCase):
         self.assertTrue(any("download" in value for value in candidates))
         self.assertTrue(any("snapshots" in value for value in candidates))
         self.assertTrue(snippets)
+    def test_publication_xml_candidate_extract(self):
+        xml='<publication><download url="https://snapshots.example/data.zip"/><product type="CUP"/><link href="/region/ofmx.xml"/></publication>'
+        urls,links,formats=parse_publication_xml_metadata(xml)
+        self.assertIn("https://snapshots.example/data.zip",urls)
+        self.assertIn("/region/ofmx.xml",links)
+        self.assertIn("CUP",formats)
     def test_supported_format_hints(self):
         self.assertIn(".cup",FORMATS);self.assertIn(".ofmx",FORMATS)
 if __name__=="__main__":unittest.main()
