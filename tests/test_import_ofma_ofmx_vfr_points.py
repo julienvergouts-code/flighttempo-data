@@ -29,7 +29,7 @@ class Tests(unittest.TestCase):
    z.writestr("ofmx_eb/isolated/ofmx_eb","<OFMX-Snapshot/>")
   self.assertEqual(xml_from_zip(b.getvalue(),"ebbu",{"archiveKey":"eb"}),b"<OFMX-Snapshot/>")
   with zipfile.ZipFile(b,"a") as z:z.writestr("another/embedded/ofmx_eb","<OFMX-Snapshot/>")
-  with self.assertRaises(ValueError):xml_from_zip(b.getvalue(),"ebbu")
+  with self.assertRaises(ValueError):xml_from_zip(b.getvalue(),"ebbu",{"archiveKey":"eb"})
  def test_empty_or_bad_schema_fails_closed(self):
   with self.assertRaises(ValueError):parse_xml(b"<OFMX-Snapshot/>",{"region":"EB"})
 if __name__=="__main__":unittest.main()
