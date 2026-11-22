@@ -1,0 +1,89 @@
+name: ADS-B multi-aircraft scale benchmark
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "pipeline/batch_archive_benchmark.py"
+      - "pipeline/build_corridors.py"
+      - "scripts/adsb_learning/**"
+      - "navigation/graph/**"
+      - ".github/workflows/adsb-scale-benchmark.yml"
+  workflow_dispatch:
+    inputs:
+      date:
+        description: "UTC archive date (YYYY-MM-DD)"
+        required: true
+        default: "2026-11-16"
+        type: string
+      max_aircraft:
+        description: "Maximum distinct commercial aircraft"
+        required: true
+        default: 50
+        type: number
+      minimum_aircraft:
+        description: "Minimum qualifying batch size"
+        required: true
+        default: 25
+        type: number
+
+permissions:
+  contents: read
+
+concurrency:
+  group: adsb-scale-\${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  scale-benchmark:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: python -m pip install -r pipeline/requirements.txt
+      - name: Compile physical FTWG graph
+        run: python pipeline/compile_ftwg_graph.py
+      - name: Stream archive and benchmark multi-aircraft batch
+        env:
+          RUN_DATE: \${{ inputs.date || '2026-11-16' }}
+          MAX_AIRCRAFT: \${{ inputs.max_aircraft || 50 }}
+          MIN_AIRCRAFT: \${{ inputs.minimum_aircraft || 25 }}
+        run: |
+          set -euo pipefail
+          exec > >(tee -a /tmp/adsb_scale_run.log) 2>&1
+          python pipeline/batch_archive_benchmark.py \
+            --date "$RUN_DATE" \
+            --max-aircraft "$MAX_AIRCRAFT" \
+            --minimum-aircraft "$MIN_AIRCRAFT" \
+            --evidence-out /tmp/adsb_scale_evidence.json \
+            --summary-out /tmp/adsb_scale_summary.json
+      - name: Strictly validate all scale JSON
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          files = [Path("/tmp/adsb_scale_evidence.json"), Path("/tmp/adsb_scale_summary.json")]
+          for p in files:
+              if not p.exists():
+                  raise SystemExit(f"STRICT_JSON_FAIL: missing {p}")
+              with p.open(encoding="utf-8") as f:
+                  json.load(f, parse_constant=lambda value: (_ for _ in ()).throw(ValueError(value)))
+              print(f"STRICT_JSON_OK: {p}")
+          PY
+      - name: Upload scale evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: adsb-scale-evidence-\${{ github.run_id }}-\${{ github.sha }}
+          path: |
+            /tmp/adsb_scale_evidence.json
+            /tmp/adsb_scale_summary.json
+            /tmp/adsb_scale_run.log
+          if-no-files-found: ignore
+          retention-days: 14
