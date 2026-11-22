@@ -112,6 +112,24 @@ jobs:
             echo "Handing archive streaming, trace selection, and JSON validation to the pipeline's existing reader"
             python -c 'from pipeline.build_corridors import main; main()' --mode benchmark --date "$RUN_DATE" --icao24 "$ICAO24" --output /tmp/benchmark_result.json --evidence-out /tmp/benchmark_evidence.json
           fi
+      - name: Strictly validate benchmark JSON
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          def reject_constant(value):
+              raise ValueError(f"Non-standard JSON constant: {value}")
+
+          for path in (Path("/tmp/benchmark_evidence.json"), Path("/tmp/benchmark_result.json")):
+              if path.exists():
+                  with path.open(encoding="utf-8") as f:
+                      json.load(f, parse_constant=reject_constant)
+                  print(f"STRICT_JSON_OK: {path}")
+              elif path.name == "benchmark_evidence.json":
+                  raise SystemExit("STRICT_JSON_FAIL: benchmark_evidence.json missing")
+          PY
       - name: Export read-only FTWG diagnostics
         if: always()
         run: |
