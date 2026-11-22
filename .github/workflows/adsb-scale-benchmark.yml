@@ -1,4 +1,5 @@
 name: ADS-B multi-aircraft scale benchmark
+# Trigger validation on the current PR head; benchmark settings remain the workflow defaults.
 
 on:
   pull_request:
