@@ -142,12 +142,24 @@ jobs:
               --out-json /tmp/ftwg_run_diag.json
             rc=$?
             if [[ $rc -ne 0 ]]; then
-              printf '{"status":"diagnostic_failed","exit_code":%s,"reason":"Exporter failed; see workflow logs"}\\n' "$rc" > /tmp/ftwg_run_diag.json
+              printf '{"status":"diagnostic_failed","exit_code":%s,"reason":"Exporter failed; see workflow logs"}\n' "$rc" > /tmp/ftwg_run_diag.json
             fi
           else
-            printf '{"status":"diagnostic_unavailable","reason":"Benchmark result, evidence, or compiled FTWG binary missing"}\\n' > /tmp/ftwg_run_diag.json
+            printf '{"status":"diagnostic_unavailable","reason":"Benchmark result, evidence, or compiled FTWG binary missing"}\n' > /tmp/ftwg_run_diag.json
           fi
           exit 0
+      - name: Strictly validate every uploaded JSON artifact
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          for path in (Path("/tmp/benchmark_evidence.json"), Path("/tmp/benchmark_result.json"), Path("/tmp/ftwg_run_diag.json")):
+              if path.exists():
+                  with path.open(encoding="utf-8") as f:
+                      json.load(f, parse_constant=lambda value: (_ for _ in ()).throw(ValueError(value)))
+                  print(f"STRICT_JSON_OK: {path}")
+          PY
       - name: Upload benchmark evidence and logs
         if: always()
         uses: actions/upload-artifact@v4
