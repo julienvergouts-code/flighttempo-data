@@ -23,11 +23,14 @@ MAX_PAGE_BYTES = 3 * 1024 * 1024
 
 class Links(HTMLParser):
     def __init__(self):
-        super().__init__(); self.hrefs=[]; self.srcs=[]
+        super().__init__(); self.hrefs=[]; self.srcs=[]; self.data_attrs=[]
     def handle_starttag(self,tag,attrs):
         d=dict(attrs)
         if d.get("href"): self.hrefs.append(d["href"])
         if d.get("src"): self.srcs.append(d["src"])
+        for key,value in attrs:
+            if key.startswith("data-") and value and any(term in key.lower() for term in ("url","download","region","file","api")):
+                self.data_attrs.append({"attribute":key,"value":value})
 
 def fetch(url):
     req=Request(url,headers={"User-Agent":UA})
@@ -37,7 +40,7 @@ def fetch(url):
         return r.status,r.url,body
 
 def discover_region(code):
-    url=f"https://openflightmaps.org/downloads/{code.lower()}/"
+    slug={"LD":"lb"}.get(code,code.lower())\n    url=f"https://openflightmaps.org/downloads/{slug}/"
     try:
         status,final,raw=fetch(url)
         html=raw.decode("utf-8","replace")
@@ -49,9 +52,13 @@ def discover_region(code):
                 links.append(resolved)
         # Capture format hints from the visible text/source without retaining page contents.
         format_hints=sorted(set(ext[1:] for ext in FORMATS if ext in html.lower()))
+        absolute_urls=sorted(set(re.findall(r"https?://[^\\s\\"'<>]+",html)))
+        candidate_urls=[x for x in absolute_urls if any(term in x.lower() for term in ("openflightmaps","snapshot","download","api"))]
         return {"region":code,"regionName":REGIONS[code],"pageUrl":url,"status":status,
                 "finalUrl":final,"pageBytes":len(raw),"sha256":hashlib.sha256(raw).hexdigest(),
                 "directDownloadLinks":sorted(set(links)),"formatHints":format_hints,
+                "scriptSrcs":sorted(set(urljoin(final,x) for x in parser.srcs)),
+                "dataAttributes":parser.data_attrs[:100],"candidateEmbeddedUrls":candidate_urls[:100],
                 "downloadLinksFound":len(set(links))}
     except Exception as e:
         return {"region":code,"regionName":REGIONS[code],"pageUrl":url,"error":str(e)}
