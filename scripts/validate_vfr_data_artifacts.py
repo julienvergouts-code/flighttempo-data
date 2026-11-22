@@ -7,6 +7,7 @@ import hashlib
 import io
 import json
 import math
+from collections import Counter
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -63,13 +64,23 @@ data_lines = [line for line in text.splitlines() if line and not line.startswith
 if not data_lines:
     fail("CSV contains no header or data")
 reader = csv.DictReader(io.StringIO("\n".join(data_lines)))
-required = {"point_id", "code", "lat", "lon", "kind", "source", "license", "cycle"}
+required = {"point_id", "code", "lat", "lon", "kind", "source", "license", "cycle", "feature_region", "source_regions"}
 if not reader.fieldnames or not required.issubset(set(reader.fieldnames)):
     fail(f"CSV is missing required columns: {sorted(required - set(reader.fieldnames or []))}")
 
 count = 0
+feature_region_counts: Counter[str] = Counter()
+source_regions_seen: set[str] = set()
 for line_number, row in enumerate(reader, start=2):
     count += 1
+    feature_region = (row.get("feature_region") or "").strip()
+    if not feature_region:
+        fail(f"row {line_number}: empty feature_region")
+    feature_region_counts[feature_region] += 1
+    source_regions = {item.strip() for item in (row.get("source_regions") or "").split(";") if item.strip()}
+    if not source_regions:
+        fail(f"row {line_number}: empty source_regions")
+    source_regions_seen.update(source_regions)
     if not (row.get("point_id") or "").strip() or not (row.get("code") or "").strip():
         fail(f"row {line_number}: empty point_id or code")
     try:
@@ -89,7 +100,26 @@ if count == 0 or count != dataset.get("recordCount"):
 if manifest.get("statistics", {}).get("ofmaOfmxVfrReferencePoints") != count:
     fail("manifest statistics count does not match the CSV")
 
+expected_source_regions = set(metadata.get("sourceRegionsWithVfrPoints", []))
+expected_feature_regions = metadata.get("featureRegions", {})
+if not expected_source_regions:
+    fail("metadata contains no sourceRegionsWithVfrPoints")
+if source_regions_seen != expected_source_regions:
+    fail(
+        "CSV source-region coverage does not match metadata: "
+        f"actual={len(source_regions_seen)} expected={len(expected_source_regions)}"
+    )
+if len(source_regions_seen) != 21:
+    fail(f"source-region coverage changed: actual={len(source_regions_seen)} expected=21")
+if set(feature_region_counts) != set(expected_feature_regions):
+    fail("CSV feature-region names do not match metadata")
+if dict(feature_region_counts) != expected_feature_regions:
+    fail("CSV feature-region counts do not match metadata")
+if len(feature_region_counts) != 23:
+    fail(f"feature-region coverage changed: actual={len(feature_region_counts)} expected=23")
+
 print(
-    f"OFMA VFR artifact valid: {count} rows, AIRAC {metadata['airac']}, "
+    f"OFMA VFR artifact valid: {count} rows, {len(source_regions_seen)} source regions, "
+    f"{len(feature_region_counts)} feature regions, AIRAC {metadata['airac']}, "
     f"{actual_size} bytes, SHA-256 {actual_sha}"
 )
