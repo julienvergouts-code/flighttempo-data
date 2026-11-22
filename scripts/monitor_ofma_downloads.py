@@ -63,6 +63,12 @@ def inspect_script(url):
     except Exception as e:
         return {"url":url,"error":str(e)}
 
+def parse_publication_xml_metadata(xml):
+    urls=sorted(set(re.findall(r"https?://[^\s<>\"']+",xml)))
+    relative=sorted(set(re.findall(r"""(?:href|url|download|link)[^>]*=\s*["']([^"']+)["']""",xml,re.IGNORECASE)))
+    products=sorted(set(re.findall(r"\b(?:OFMX|CUP|OPENAIR|ARINC|XML|ZIP)\b",xml,re.IGNORECASE)))
+    return urls[:100],relative[:100],products
+
 def inspect_publication_xml(code,airac):
     url=f"https://snapshots.openflightmaps.org/publicationServices/{code}_{airac}.xml"
     try:
