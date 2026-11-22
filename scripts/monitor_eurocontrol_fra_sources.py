@@ -100,6 +100,118 @@ def inspect_workbook(raw: bytes) -> dict:
     return {"sheetCount": len(sheets), "sheets": sheets}
 
 
+def parse_dms_coordinate(value, axis: str):
+    """Parse EUROCONTROL FRA coordinate notation (hemisphere + DMS) or decimal."""
+    if value is None or str(value).strip() == "":
+        return None
+    text = str(value).strip().upper().replace("°", " ").replace("'", " ").replace('"', " ")
+    text = re.sub(r"\\s+", " ", text)
+    if re.fullmatch(r"[+-]?\\d+(?:\\.\\d+)?", text):
+        number = float(text)
+        limit = 90 if axis == "lat" else 180
+        return number if abs(number) <= limit else None
+    match = re.fullmatch(r"([NSEW])\\s*(\\d{6,7})", text.replace(" ", ""))
+    if match:
+        hemi, digits = match.groups()
+        if axis == "lat" and hemi not in "NS" or axis == "lon" and hemi not in "EW":
+            return None
+        deg_digits = 2 if axis == "lat" else 3
+        deg, minute, second = int(digits[:deg_digits]), int(digits[deg_digits:deg_digits+2]), int(digits[deg_digits+2:deg_digits+4])
+    else:
+        match = re.fullmatch(r"([NSEW])\\s*(\\d{1,3})\\s+(\\d{1,2})\\s+(\\d{1,2}(?:\\.\\d+)?)", text)
+        if not match:
+            return None
+        hemi, deg_s, minute_s, second_s = match.groups()
+        if axis == "lat" and hemi not in "NS" or axis == "lon" and hemi not in "EW":
+            return None
+        deg, minute, second = int(deg_s), int(minute_s), float(second_s)
+    limit = 90 if axis == "lat" else 180
+    if deg > limit or minute >= 60 or second >= 60:
+        return None
+    result = deg + minute / 60 + second / 3600
+    if (axis == "lat" and hemi == "S") or (axis == "lon" and hemi == "W"):
+        result = -result
+    return result
+
+
+def analyze_ecac_workbook(workbook) -> dict:
+    ws = next((sheet for sheet in workbook.worksheets if sheet.title.strip().lower() == "fra points"), None)
+    if ws is None:
+        raise RuntimeError("ECAC workbook has no 'FRA Points' worksheet")
+    header = [str(v).strip() if v is not None else "" for v in next(ws.iter_rows(min_row=1, max_row=1, values_only=True))]
+    positions = {name: idx for idx, name in enumerate(header) if name}
+    required = {"FRA Point", "FRA Point Latitude", "FRA Point Longitude"}
+    if not required.issubset(positions):
+        raise RuntimeError(f"Unexpected ECAC FRA sheet schema; missing {sorted(required - set(positions))}")
+    count = 0
+    identifiers = set()
+    valid_coordinates = 0
+    missing_coordinates = 0
+    invalid_coordinates = 0
+    point_types, enroute_relevance, arrdep_relevance, level_availability, time_availability = set(), set(), set(), set(), set()
+    arrival_associations = departure_associations = 0
+    for row in ws.iter_rows(min_row=2, values_only=True):
+        point = row[positions["FRA Point"]] if positions["FRA Point"] < len(row) else None
+        if point is None or not str(point).strip():
+            continue
+        count += 1
+        identifiers.add(str(point).strip().upper())
+        lat = row[positions["FRA Point Latitude"]] if positions["FRA Point Latitude"] < len(row) else None
+        lon = row[positions["FRA Point Longitude"]] if positions["FRA Point Longitude"] < len(row) else None
+        if lat is None or lon is None or not str(lat).strip() or not str(lon).strip():
+            missing_coordinates += 1
+        elif parse_dms_coordinate(lat, "lat") is None or parse_dms_coordinate(lon, "lon") is None:
+            invalid_coordinates += 1
+        else:
+            valid_coordinates += 1
+        for col, target in (("Point Type", point_types), ("FRA Relevance En-Route", enroute_relevance), ("FRA Relevance ARR/DEP", arrdep_relevance), ("Level Availability", level_availability), ("Time Availability", time_availability)):
+            if col in positions and positions[col] < len(row) and row[positions[col]] not in (None, ""):
+                target.add(str(row[positions[col]]).strip())
+        if "Arrival Airport" in positions and row[positions["Arrival Airport"]] not in (None, ""):
+            arrival_associations += 1
+        if "Departure Airport" in positions and row[positions["Departure Airport"]] not in (None, ""):
+            departure_associations += 1
+    return {
+        "rowCount": count,
+        "uniquePointIdentifiers": len(identifiers),
+        "validCoordinatePairs": valid_coordinates,
+        "missingCoordinatePairs": missing_coordinates,
+        "invalidCoordinatePairs": invalid_coordinates,
+        "distinctPointTypes": len(point_types),
+        "distinctEnRouteRelevanceValues": len(enroute_relevance),
+        "distinctArrivalDepartureRelevanceValues": len(arrdep_relevance),
+        "distinctLevelAvailabilityValues": len(level_availability),
+        "distinctTimeAvailabilityValues": len(time_availability),
+        "arrivalAirportAssociations": arrival_associations,
+        "departureAirportAssociations": departure_associations,
+        "schemaColumns": header,
+    }
+
+
+def analyze_muac_workbook(workbook) -> dict:
+    ws = next((sheet for sheet in workbook.worksheets if sheet.title.strip().lower() == "fra points"), None)
+    if ws is None:
+        raise RuntimeError("MUAC workbook has no 'FRA Points' worksheet")
+    header = [str(v).strip() if v is not None else "" for v in next(ws.iter_rows(min_row=1, max_row=1, values_only=True))]
+    positions = {name: idx for idx, name in enumerate(header) if name}
+    if "FRA Point" not in positions or "FRA Relevance" not in positions:
+        raise RuntimeError(f"Unexpected MUAC FRA sheet schema: {header}")
+    points, relevance, sources = set(), set(), set()
+    rows = 0
+    for row in ws.iter_rows(min_row=2, values_only=True):
+        point = row[positions["FRA Point"]] if positions["FRA Point"] < len(row) else None
+        if point is None or not str(point).strip():
+            continue
+        rows += 1
+        points.add(str(point).strip().upper())
+        rel = row[positions["FRA Relevance"]]
+        if rel not in (None, ""):
+            relevance.add(str(rel).strip())
+        if "Source AIP" in positions and row[positions["Source AIP"]] not in (None, ""):
+            sources.add(str(row[positions["Source AIP"]]).strip())
+    return {"rowCount": rows, "uniquePointIdentifiers": len(points), "distinctRelevanceValues": len(relevance), "distinctSourceAipValues": len(sources), "schemaColumns": header}
+
+
 def build_report() -> dict:
     report = {
         "generatedAtUtc": datetime.now(timezone.utc).isoformat(),
@@ -112,6 +224,11 @@ def build_report() -> dict:
         raw = fetch(link["url"])
         if len(raw) < 10_000:
             raise RuntimeError(f"{key}: suspiciously small workbook ({len(raw)} bytes)")
+        import io
+        from openpyxl import load_workbook
+        workbook = load_workbook(io.BytesIO(raw), read_only=True, data_only=True)
+        analysis = analyze_ecac_workbook(workbook) if key == "ECAC" else analyze_muac_workbook(workbook)
+        workbook.close()
         report["sources"][key] = {
             "publicationPage": page,
             "downloadUrl": link["url"],
@@ -119,6 +236,7 @@ def build_report() -> dict:
             "downloadedBytes": len(raw),
             "sha256": hashlib.sha256(raw).hexdigest(),
             "workbook": inspect_workbook(raw),
+            "aggregateAnalysis": analysis,
         }
     return report
 
