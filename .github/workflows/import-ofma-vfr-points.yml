@@ -27,7 +27,7 @@ jobs:
       - name: Import configured regions
         run: python pipeline/import_ofma_cup_points.py
       - name: Register manifest
-        if: \${{ hashFiles('data/ofma_vfr_points.csv') != '' }}
+        if: ${{ hashFiles('data/ofma_vfr_points.csv') != '' }}
         run: python scripts/register_ofma_vfr_points_manifest.py
       - name: Commit updates
         run: |
