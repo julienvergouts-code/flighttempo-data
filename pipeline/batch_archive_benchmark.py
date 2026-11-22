@@ -23,6 +23,10 @@ EUROPE_AIRLINE_PREFIXES = {
 }
 EU_BOUNDS = (32.0, 72.0, -20.0, 45.0)
 MAX_TRACE_MEMBER_BYTES = 50 * 1024 * 1024
+
+def trace_member_size_is_readable(size: int) -> bool:
+    """Bound memory use without dropping otherwise valid small traces."""
+    return 0 < size <= MAX_TRACE_MEMBER_BYTES
 TARGET_AIRCRAFT = 50
 CONFIDENCE_THRESHOLDS = {"LOW": [1, 2], "MEDIUM": [3, 4], "HIGH": [5]}
 FORBIDDEN_ARTIFACT_KEYS = {
@@ -205,7 +209,7 @@ def main():
                             continue
                         scanned_trace_members+=1
                         hex_id=match.group(1)
-                        if hex_id in selected_hex or member.size<100_000 or member.size>MAX_TRACE_MEMBER_BYTES:
+                        if hex_id in selected_hex or not trace_member_size_is_readable(member.size):
                             continue
                         # A member is read only when its size is bounded; tar iteration stays streaming.
                         source=tar.extractfile(member)
