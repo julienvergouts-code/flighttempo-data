@@ -166,6 +166,15 @@ class CorridorBuilderTests(unittest.TestCase):
         self.assertEqual(builder.EXCLUDED_AIRPORT_PREFIXES, ("K", "P", "T"))
 
 
+    def test_batch_accepts_small_trace_members_and_rejects_oversize_members(self):
+        self.assertTrue(batch_benchmark.trace_member_size_is_readable(1))
+        self.assertTrue(batch_benchmark.trace_member_size_is_readable(99_999))
+        self.assertFalse(batch_benchmark.trace_member_size_is_readable(0))
+        self.assertFalse(batch_benchmark.trace_member_size_is_readable(
+            batch_benchmark.MAX_TRACE_MEMBER_BYTES + 1
+        ))
+
+
 if __name__ == "__main__":
     unittest.main()
 
