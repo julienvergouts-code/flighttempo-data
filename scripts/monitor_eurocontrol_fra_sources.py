@@ -80,7 +80,15 @@ def inspect_workbook(raw: bytes) -> dict:
             values = [str(v).strip() if v is not None else "" for v in row]
             norm = [re.sub(r"[^a-z0-9]+", " ", v.lower()).strip() for v in values]
             joined = " ".join(norm)
-            if any(k in joined for k in ("point", "waypoint", "significant")) and any(k in joined for k in ("lat", "latitude", "lon", "longitude", "coord")):
+            # Keep only rows that look like column labels, never data rows.
+            header_terms = (
+                "point", "waypoint", "significant", "ident", "identifier", "name", "code",
+                "lat", "latitude", "lon", "longitude", "coord", "availability", "level",
+                "time", "route", "connection", "airport", "entry", "exit", "remarks",
+                "description", "flos", "relevance",
+            )
+            matches = sum(any(term in cell for term in header_terms) for cell in norm if cell)
+            if matches >= 2 and len(values) > 1:
                 header_candidates.append({"row": row_idx, "columns": values})
         sheets.append({
             "sheetName": ws.title,
