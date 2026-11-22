@@ -404,11 +404,27 @@ def main():
             resolved_total = 0
             matched_total = 0
             connected_legs = 0
+
+            # Build identifier-keyed in/out degree metrics matching the A* adjacency representation.
+            in_degree = {}
+            out_degree = {}
+            for source, edges in nav.adj.items():
+                out_degree[source] = len(edges)
+                for edge in edges:
+                    target = edge[0]
+                    in_degree[target] = in_degree.get(target, 0) + 1
+
             for result in accepted:
-                observed = result.get("matchedFixes", [])
+                observed = [str(f).strip().upper() for f in result.get("matchedFixes", []) if f]
                 matched_total += len(observed)
                 resolved = [fix for fix in observed if fix in nav.adj]
                 resolved_total += len(resolved)
+                # A* start must have outgoing edges; goal must have incoming edges.
+                usable_starts = [fix for fix in observed if out_degree.get(fix, 0) > 0 and fix in nav.fix_coords_by_ident]
+                usable_goals = [fix for fix in observed if in_degree.get(fix, 0) > 0 and fix in nav.fix_coords_by_ident]
+                start = usable_starts[0] if usable_starts else None
+                goal = usable_goals[-1] if usable_goals else None
+
                 diag = {
                     "leg": result.get("legNumber"),
                     "origin_airport": result.get("origin"),
@@ -422,23 +438,48 @@ def main():
                     "last_matched_fix": observed[-1] if observed else None,
                     "first_fix_in_graph": observed[0] in nav.adj if observed else False,
                     "last_fix_in_graph": observed[-1] in nav.adj if observed else False,
+                    "usable_start_candidates": usable_starts,
+                    "usable_goal_candidates": usable_goals,
+                    "selected_graph_endpoints": [start, goal],
                 }
+
                 status, overlap = "UNVERIFIED_ENDPOINTS", 0.0
                 path = None
+                distance_nm = None
+                raw_endpoint_result = None
                 if len(observed) >= 2:
-                    astar = nav.a_star_connected(observed[0], observed[-1])
-                    if astar:
-                        path, _distance = astar
+                    try:
+                        raw_endpoint_result = nav.a_star_connected(observed[0], observed[-1])
+                    except Exception as exc:
+                        raw_endpoint_result = {"error": f"{type(exc).__name__}: {exc}"}
+                diag["raw_endpoint_probe"] = (
+                    {"connected": bool(raw_endpoint_result), "path_node_count": len(raw_endpoint_result[0]) if isinstance(raw_endpoint_result, tuple) and raw_endpoint_result and isinstance(raw_endpoint_result[0], (list, tuple)) else 0,
+                     "distance_nm": raw_endpoint_result[1] if isinstance(raw_endpoint_result, tuple) and len(raw_endpoint_result) > 1 else None}
+                    if not isinstance(raw_endpoint_result, dict) else raw_endpoint_result
+                )
+
+                if start and goal and start != goal:
+                    try:
+                        astar = nav.a_star_connected(start, goal)
+                    except Exception as exc:
+                        astar = {"error": f"{type(exc).__name__}: {exc}"}
+                    if astar and not isinstance(astar, dict):
+                        path, distance_nm = astar
                         a, b = set(observed), set(path)
                         overlap = round(len(a & b) / max(1, len(a | b)), 3)
-                        status = "CONNECTED_FTWG"
+                        status = "CONNECTED_FTWG_USABLE_ENDPOINTS"
                         connected_legs += 1
                     else:
                         status = "GRAPH_GAP_DETECTED"
+                else:
+                    status = "UNVERIFIED_ENDPOINTS"
+
                 diag["graph_path_node_count"] = len(path) if path else 0
+                diag["graph_path_distance_nm"] = distance_nm
+                diag["graph_path_nodes"] = path
                 result["graphComparison"] = {"graph_source": nav.graph_source, "status": status,
                                              "fix_jaccard_overlap": overlap, "diagnostics": diag}
-                comparisons.append({"status": status, **diag, "overlap": overlap})
+                comparisons.append({"status": status, **diag, "overlap": overlap}
             summary = {
                 "trace_rows": trace_rows,
                 "total_legs": len(evidence.get("traceResults", [])),
