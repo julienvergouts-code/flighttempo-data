@@ -1,36 +1,40 @@
 #!/usr/bin/env python3
 """Import explicitly configured OpenFlightMaps CUP reference points (not operational navigation)."""
-import argparse,csv,hashlib,io,json,re,tempfile,urllib.request,zipfile
+import argparse,csv,hashlib,io,json,os,re,tempfile,urllib.request,zipfile
 from datetime import datetime,timezone
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]; CONFIG=ROOT/"data/ofma_sources.json"; OUT=ROOT/"data/ofma_vfr_points.csv"; META=ROOT/"data/ofma_vfr_points_meta.json"
 COLUMNS=["region","code","name","lat","lon","kind","source","license","updated_date"]; MAX_BYTES=40*1024*1024
 UA="FlightTempo-OFMA-VFR-Importer/1.0 (+https://github.com/julienvergouts-code/flighttempo-data)"
 def stamp():return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
-def clean(x):return re.sub(r"\\s+"," ",str(x or "")).strip()
+def clean(x):return re.sub(r"\s+"," ",str(x or "")).strip()
 def parse_coordinate(value):
  s=clean(value).upper()
  if not s:raise ValueError("empty coordinate")
  try:return float(s)
  except ValueError:pass
- m=re.fullmatch(r"(\\d{2,3})(?::(\\d{2}(?:\\.\\d+)?)(?:')?(?:\\s*(\\d{2}(?:\\.\\d+)?)(?:\\")?)?|(?:(\\d{2})(?:\\.(\\d+))?))(?:\\s*([NSEW]))",s)
- if not m:raise ValueError(f"unsupported CUP coordinate: {value!r}")
- deg=int(m.group(1)); hemi=m.group(6)
- if m.group(2):
-  minutes=float(m.group(2)); seconds=float(m.group(3) or 0)
- elif m.group(4):
-  minutes=float(m.group(4)); seconds=0
-  # A six-digit integer DDMMSS is parsed as minutes+seconds only when the
-  # numeric minutes field exceeds 59; otherwise standard DDMM[.fraction] is used.
-  if minutes>=60:
-   minutes=int(m.group(4)[:2]);seconds=int(m.group(4)[2:])+(float("0."+m.group(5)) if m.group(5) else 0)
- else:minutes=0;seconds=0
+ hemi=s[-1] if s[-1] in "NSEW" else ""
+ if not hemi:raise ValueError(f"coordinate hemisphere missing: {value!r}")
+ body=s[:-1].strip().replace(" ","")
+ if ":" in body:
+  parts=body.split(":")
+  if len(parts) not in (2,3):raise ValueError(f"bad coordinate: {value!r}")
+  deg=int(parts[0]);minutes=float(parts[1]);seconds=float(parts[2]) if len(parts)==3 else 0
+ elif "." in body:
+  width=2 if hemi in "NS" else 3
+  deg=int(body[:width]);minutes=float(body[width:]);seconds=0
+ else:
+  width=2 if hemi in "NS" else 3
+  deg=int(body[:width]);tail=body[width:]
+  if len(tail)==4:minutes=int(tail[:2]);seconds=int(tail[2:])
+  elif len(tail)==2:minutes=int(tail);seconds=0
+  elif len(tail)==0:minutes=seconds=0
+  else:raise ValueError(f"unsupported coordinate digits: {value!r}")
  if minutes>=60 or seconds>=60:raise ValueError("minutes/seconds out of range")
- result=deg+minutes/60+seconds/3600
- if hemi in "SW":result=-result
  limit=90 if hemi in "NS" else 180
- if deg>limit or result>limit:raise ValueError("coordinate degrees out of range")
- return result
+ if deg>limit or (deg==limit and (minutes or seconds)):raise ValueError("coordinate degrees out of range")
+ result=deg+minutes/60+seconds/3600
+ return -result if hemi in "SW" else result
 def payload(raw):
  if len(raw)>MAX_BYTES:raise ValueError("source exceeds byte cap")
  if raw.startswith(b"PK"):
@@ -65,9 +69,9 @@ def fetch(url):
 def atomic_pair(csv_path,meta_path,csvdata,metadata):
  csv_path.parent.mkdir(parents=True,exist_ok=True);meta_path.parent.mkdir(parents=True,exist_ok=True)
  with tempfile.TemporaryDirectory(dir=csv_path.parent) as td:
-  c=Path(td)/"points.csv";m=Path(td)/"meta.json";c.write_bytes(csvdata);m.write_text(json.dumps(metadata,indent=2)+"\\n",encoding="utf-8")
+  c=Path(td)/"points.csv";m=Path(td)/"meta.json";c.write_bytes(csvdata);m.write_text(json.dumps(metadata,indent=2)+"\n",encoding="utf-8")
   oldc=csv_path.read_bytes() if csv_path.exists() else None;oldm=meta_path.read_bytes() if meta_path.exists() else None
-  try:csv_path.replace(c) if False else None;csv_path.write_bytes(c.read_bytes());meta_path.write_bytes(m.read_bytes())
+  try:os.replace(c,csv_path);os.replace(m,meta_path)
   except Exception:
    if oldc is None:csv_path.unlink(missing_ok=True)
    else:csv_path.write_bytes(oldc)
@@ -82,7 +86,7 @@ def run(config=CONFIG,dry=False):
   validate_source(src);raw=fetch(src["url"]);records=parse_cup(payload(raw),src);rows+=records
   sm.append({"region":src["region"],"regionName":src["regionName"],"sourcePage":src["sourcePage"],"downloadUrl":src["url"],"cycle":src.get("cycle"),"effectiveDate":src.get("effectiveDate"),"license":"OFMA General Users License","attribution":src.get("attribution","OpenFlightMaps Association (OFMA)"),"sha256":hashlib.sha256(raw).hexdigest(),"bytes":len(raw),"parsedPoints":len(records)})
  uniq={(r["region"],r["code"],r["lat"],r["lon"]):r for r in rows};rows=sorted(uniq.values(),key=lambda r:(r["region"],r["code"],r["lat"],r["lon"]))
- buf=io.StringIO();buf.write("#version=1,generated_utc="+stamp()+"\\n");w=csv.DictWriter(buf,fieldnames=COLUMNS);w.writeheader();w.writerows(rows);csvdata=buf.getvalue().encode()
+ buf=io.StringIO();buf.write("#version=1,generated_utc="+stamp()+"\n");w=csv.DictWriter(buf,fieldnames=COLUMNS);w.writeheader();w.writerows(rows);csvdata=buf.getvalue().encode()
  meta={"schemaVersion":1,"generatedUtc":stamp(),"count":len(rows),"regions":sorted({r["region"] for r in rows}),"sources":sm,"license":"OFMA General Users License","licenseNotes":"Commercial use is permitted subject to GUL conditions. Preserve attribution; report alterations and user corrections as required. Reference-only, not primary navigation.","attribution":"OpenFlightMaps Association (OFMA)","sha256":hashlib.sha256(csvdata).hexdigest(),"sizeBytes":len(csvdata),"operationalUse":False}
  if dry:print(json.dumps({"pointCount":len(rows),"regions":meta["regions"],"sources":sm},indent=2));return 0
  atomic_pair(OUT,META,csvdata,meta);print(f"Imported {len(rows)} OFMA CUP points in {len(meta['regions'])} regions");return 0
