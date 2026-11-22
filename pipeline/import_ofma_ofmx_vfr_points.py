@@ -34,7 +34,9 @@ def parse_coord(s):
   v=float(body)
   if v>limit:raise ValueError(f"coordinate degrees out of range: {s}")
  else:
-  m=re.fullmatch(r"(\d{2,3})(\d{2})(?:(\d{2}(?:\.\d+)?))?",body)
+  degree_digits=2 if hem in "NS" else 3
+  pattern=r"(\\d{"+str(degree_digits)+r"})(\\d{2})(?:(\\d{2}(?:\\.\\d+)?))?"
+  m=re.fullmatch(pattern,body)
   if not m:raise ValueError(f"bad OFMX coordinate {s!r}")
   deg=int(m.group(1));mins=int(m.group(2));secs=float(m.group(3) or 0)
   if mins>=60 or secs>=60:raise ValueError(f"coordinate minute/second out of range: {s}")
