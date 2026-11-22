@@ -106,11 +106,11 @@ def parse_dms_coordinate(value, axis: str):
         return None
     text = str(value).strip().upper().replace("°", " ").replace("'", " ").replace('"', " ")
     text = re.sub(r"\s+", " ", text)
-    if re.fullmatch(r"[+-]?\\d+(?:\\.\\d+)?", text):
+    if re.fullmatch(r"[+-]?\d+(?:\.\d+)?", text):
         number = float(text)
         limit = 90 if axis == "lat" else 180
         return number if abs(number) <= limit else None
-    match = re.fullmatch(r"([NSEW])\\s*(\\d{6,7})", text.replace(" ", ""))
+    match = re.fullmatch(r"([NSEW])\s*(\d{6,7})", text.replace(" ", ""))
     if match:
         hemi, digits = match.groups()
         if axis == "lat" and hemi not in "NS" or axis == "lon" and hemi not in "EW":
@@ -118,7 +118,7 @@ def parse_dms_coordinate(value, axis: str):
         deg_digits = 2 if axis == "lat" else 3
         deg, minute, second = int(digits[:deg_digits]), int(digits[deg_digits:deg_digits+2]), int(digits[deg_digits+2:deg_digits+4])
     else:
-        match = re.fullmatch(r"([NSEW])\\s*(\\d{1,3})\\s+(\\d{1,2})\\s+(\\d{1,2}(?:\\.\\d+)?)", text)
+        match = re.fullmatch(r"([NSEW])\s*(\d{1,3})\s+(\d{1,2})\s+(\d{1,2}(?:\.\d+)?)", text)
         if not match:
             return None
         hemi, deg_s, minute_s, second_s = match.groups()
