@@ -60,6 +60,7 @@ class RepositoryNavDatabase:
         self.heuristic_scale = 0.0
         self.last_route_physical_path = []
         self.last_route_endpoint_resolution = {}
+        self.physical_in_degree_nodes = set()
         self.graph_source = "UNAVAILABLE"
 
     def _load_airways(self):
@@ -109,7 +110,7 @@ class RepositoryNavDatabase:
         expected=FTWG_HEADER.size+nodes*FTWG_NODE.size+edges*FTWG_EDGE.size
         if len(raw)!=expected: raise ValueError(f"size {len(raw)} != expected {expected}")
         idx=[]; off=FTWG_HEADER.size
-        self.physical_nodes=[]; self.physical_adj={}; self.nodes_by_ident={}
+        self.physical_nodes=[]; self.physical_adj={}; self.nodes_by_ident={}; self.physical_in_degree_nodes=set()
         for node_index in range(nodes):
             ident,lat,lon,kind=FTWG_NODE.unpack_from(raw,off); off+=FTWG_NODE.size
             name=ident.split(b"\\x00",1)[0].decode("ascii","ignore").strip().upper()
