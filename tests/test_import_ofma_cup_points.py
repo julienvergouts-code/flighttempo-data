@@ -7,7 +7,7 @@ class Tests(unittest.TestCase):
  def test_coordinates(self):
   self.assertAlmostEqual(m.parse_coordinate("4812.345N"),48+12.345/60,places=5)
   self.assertAlmostEqual(m.parse_coordinate("48:12.345N"),48+12.345/60,places=5)
-  self.assertAlmostEqual(m.parse_coordinate("0112.500E"),1+12.5/60,places=5)
+  self.assertAlmostEqual(m.parse_coordinate("0112.500E"),1+12.5/60,places=5)\n        self.assertAlmostEqual(m.parse_coordinate("00112.500E"),1+12.5/60,places=5)\n        self.assertAlmostEqual(m.parse_coordinate("011234E"),1+12/60+34/3600,places=5)\n        self.assertAlmostEqual(m.parse_coordinate("0011234E"),1+12/60+34/3600,places=5)
   self.assertAlmostEqual(m.parse_coordinate("48.2"),48.2)
   self.assertAlmostEqual(m.parse_coordinate("0123.000W"),-(1+23/60),places=5)
   self.assertAlmostEqual(m.parse_coordinate("504901N"),50+49/60+1/3600,places=5)
