@@ -34,6 +34,7 @@ jobs:
           path: |
             data/ofma_ofmx_vfr_points.csv
             data/ofma_ofmx_vfr_points_meta.json
+            data/ofma_source_archives/*.zip
           if-no-files-found: error
           retention-days: 14
       - name: Register manifest dataset
