@@ -1,26 +1,33 @@
-name: Validate VFR data artifacts
+name: Validate FlightTempo Data Artifacts
 
 on:
-  pull_request:
-    branches: [main]
-    paths:
-      - "data/ofma_ofmx_vfr_points.csv"
-      - "data/ofma_ofmx_vfr_points_meta.json"
-      - "navigation_manifest.json"
-      - "scripts/validate_vfr_data_artifacts.py"
-      - ".github/workflows/validate_data_artifacts.yml"
-      - ".github/workflows/import-ofma-ofmx-vfr-points.yml"
-      - "data/ofma_ofmx_sources.json"
   push:
     branches: [main]
     paths:
-      - "data/ofma_ofmx_vfr_points.csv"
-      - "data/ofma_ofmx_vfr_points_meta.json"
-      - "navigation_manifest.json"
-      - "scripts/validate_vfr_data_artifacts.py"
-      - ".github/workflows/validate_data_artifacts.yml"
-      - ".github/workflows/import-ofma-ofmx-vfr-points.yml"
-      - "data/ofma_ofmx_sources.json"
+      - "**/*manifest*.json"
+      - "**/*meta*.json"
+      - "**/*.csv"
+      - "**/*.bin"
+      - ".github/workflows/**"
+      - "scripts/**"
+
+  pull_request:
+    branches: [main]
+    paths:
+      - "**/*manifest*.json"
+      - "**/*meta*.json"
+      - "**/*.csv"
+      - "**/*.bin"
+      - ".github/workflows/**"
+      - "scripts/**"
+
+  workflow_dispatch:
+    inputs:
+      reason:
+        description: "Optional context for this validation run"
+        required: false
+        type: string
+        default: "manual-validation"
 
 permissions:
   contents: read
@@ -33,5 +40,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+      - name: Show validation context
+        run: echo "Validation reason: ${{ inputs.reason || 'triggered automatically' }}"
       - name: Validate OFMA CSV, provenance, and manifest integrity
         run: python scripts/validate_vfr_data_artifacts.py
