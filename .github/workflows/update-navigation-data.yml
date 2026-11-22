@@ -92,6 +92,8 @@ jobs:
           manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
           print(f"Reconciled EASA directives reference: {item['recordCount']} records, {item['sizeBytes']} bytes, sha256={item['sha256']}")
           PY
+      - name: Enforce app manifest redistribution rights before tests
+        run: python3 scripts/enforce_app_manifest_rights.py
       - name: Run IFR importer unit tests
         run: python3 -m unittest discover -s tests -v
       - name: Install French SIA procedure PDF parser
