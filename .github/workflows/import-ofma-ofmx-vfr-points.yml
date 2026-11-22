@@ -7,7 +7,10 @@ on:
     paths:
       - "data/ofma_ofmx_sources.json"
       - "pipeline/import_ofma_ofmx_vfr_points.py"
-      - "tests/test_import_ofma_ofmx_vfr_points.py"\n      - "scripts/register_ofma_ofmx_vfr_points_manifest.py"\n      - "navigation_manifest.json"
+      - "tests/test_import_ofma_ofmx_vfr_points.py"
+      - "scripts/register_ofma_ofmx_vfr_points_manifest.py"
+      - "navigation_manifest.json"
+      - "docs/ofma_ofmx_vfr_import.md"
       - ".github/workflows/import-ofma-ofmx-vfr-points.yml"
 jobs:
   import:
@@ -23,7 +26,9 @@ jobs:
         run: python -m unittest discover -s tests -p 'test_import_ofma_ofmx_vfr_points.py'
       - name: Import OFMA reference VFR points
         run: python pipeline/import_ofma_ofmx_vfr_points.py
-      - name: Register manifest dataset\n        run: python scripts/register_ofma_ofmx_vfr_points_manifest.py\n      - name: Publish generated data
+      - name: Register manifest dataset
+        run: python scripts/register_ofma_ofmx_vfr_points_manifest.py
+      - name: Publish generated data
         if: github.event_name != 'pull_request'
         run: |
           if git diff --quiet -- data/ofma_ofmx_vfr_points.csv data/ofma_ofmx_vfr_points_meta.json navigation_manifest.json; then
