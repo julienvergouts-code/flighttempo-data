@@ -328,7 +328,7 @@ def find_trace(date: str, icao24: str | None, output: Path, auto_pick_4ca: bool 
 
 def _exception_text(exc: BaseException) -> str:
     tb = exc.__traceback__ or sys.exc_info()[2]
-    return "".join(traceback.format_exception(type(exc), exc, tb)) if tb else f"{type(exc).__name__}: {exc}\\n"
+    return "".join(traceback.format_exception(type(exc), exc, tb)) if tb else f"${type(exc).__name__}: ${exc}\n"
 
 
 def _durable_json(path: Path, payload: dict) -> None:
