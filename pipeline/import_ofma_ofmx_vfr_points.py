@@ -67,7 +67,7 @@ def parse_xml(raw,src):
   records.append({"region":src["region"],"code":code or name[:32],"name":name or code,"lat":round(lat,6),"lon":round(lon,6),"kind":typ,"source":"OFMA","license":"OFMA_GUL","cycle":src.get("cycle") or stamp()[:10]})
  if not records:raise ValueError(f"no VFR Dpn records parsed for {src['region']}; schema/endpoint may have changed")
  return records
-def xml_from_zip(raw,region_key):
+def xml_from_zip(raw,region_key,source=None):
  if len(raw)>MAX_BYTES:raise ValueError("download exceeds size cap")
  with zipfile.ZipFile(io.BytesIO(raw)) as z:
   names=[n for n in z.namelist() if "/embedded/" in n.lower()]
