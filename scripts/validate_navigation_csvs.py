@@ -127,6 +127,16 @@ def redistribution_block_reason(dataset: dict) -> str | None:
         "redistribution_not_confirmed",
         "derivative_redistribution",
         "personal_development_test_only",
+        "mixed_source_review_required",
+        "declared_redistributable_check_required",
+        "public_redistribution_not_confirmed",
+        "permission_required",
+        "permission_review_required",
+        "scope_to_confirm",
+        "scope_pending",
+        "rights_unconfirmed",
+        "non-commercial-only",
+        "non_commercial_only",
     )
     return next((marker for marker in blocked_markers if marker in license_text), None)
 
@@ -142,6 +152,12 @@ def validate_manifest(root: Path, manifest_path: Path) -> list[dict]:
         if not isinstance(dataset, dict):
             raise ValueError("Manifest dataset entry must be an object")
         blocked_reason = redistribution_block_reason(dataset)
+        if dataset.get("available", False) and "ofma_gul" in str(dataset.get("licenseStatus", "")).lower():
+            if not dataset.get("commercialUseAllowed") or not dataset.get("licenseUrl") or not dataset.get("attribution"):
+                raise ValueError(
+                    f"{dataset.get('id', dataset.get('path'))}: OFMA GUL data must declare "
+                    "commercial permission, licence URL and attribution before download"
+                )
         if dataset.get("available", False) and blocked_reason:
             raise ValueError(
                 f"{dataset.get('id', dataset.get('path'))}: marked downloadable "
