@@ -26,9 +26,9 @@ Treat cycle 2611 as expired after 25 November 2026 unless a newer, verified file
 
 ## Europe
 
-**No complete Europe-wide IFR dataset is currently available in FlightTempo.** The current French eAIP (AIRAC 11/26) publishes DATA SID and DATA STAR PDFs with structured leg tables, and a parser has been added for testing against official LFPG examples. No French procedure CSV has yet been published. The SIA XML export is a separate open-licensed reference-data product; it is not assumed to contain complete IFR procedure legs. The exact Licence Ouverte scope for the eAIP DATA PDFs must be confirmed before the derived rows are released publicly. OpenFlightMaps is a viable conditional source for VFR routes/traffic circuits, not IFR SIDs/STARs. DFS INSPIRE provides German baseline geodata, not the German IFR terminal procedure set. EAD and other national AIPs have separate paid, personal-use or permission requirements.
+**FlightTempo currently publishes no European SID/STAR/approach records and no European VFR reporting-point records.** France's official AIRAC 12/26 SIA XML export is a free, open-licensed reference-data source; a scheduled workflow now extracts its WGS-84 designated points into a separate package when the mirror refresh succeeds. These designated points are not assumed to be VFR reporting points or complete IFR fixes. The SIA XML does not provide complete SID/STAR procedure legs. The French eAIP also publishes structured DATA SID/STAR PDFs, but the reuse licence for those specific PDFs must be confirmed before procedure rows can be redistributed. OpenFlightMaps has regional VFR point/route exports under conditional GUL terms, but no raw current download endpoint is yet wired into FlightTempo. DFS Germany's WFS includes waypoints and routes but the current catalogue marks its licence as restricted use. EAD and other national AIPs require a commercial agreement or specific reuse permission.
 
-See [European procedure source status](europe/README.md).
+See [European procedure source status](europe/README.md) and the source registry for the country-by-country detail.
 
 ## Asia
 

@@ -7,6 +7,7 @@ on:
     paths:
       - 'scripts/**'
       - 'tests/**'
+      - 'pipeline/**'
       - 'navigation/**'
       - 'procedures/**'
       - 'airports/**'
@@ -32,6 +33,7 @@ on:
     paths:
       - 'scripts/**'
       - 'tests/**'
+      - 'pipeline/**'
       - 'navigation/**'
       - 'procedures/**'
       - 'airports/**'
@@ -326,6 +328,17 @@ jobs:
           PY
       - name: Enrich airport reference with OurAirports runway and elevation data
         run: python3 scripts/enrich_airport_reference.py
+      - name: Refresh French SIA AIXM designated-point reference package
+        continue-on-error: true
+        run: python3 pipeline/fetch_sia_aixm_fixes.py
+      - name: Register French SIA designated points when the source refresh succeeds
+        if: always()
+        run: |
+          if [ -s navigation/waypoints/fr_sia_designated_points.csv ] && [ -s navigation/waypoints/fr_sia_designated_points_meta.json ]; then
+            python3 scripts/register_sia_designated_points_manifest.py
+          else
+            echo "French SIA AIXM source is not reachable; no package registered."
+          fi
       - name: Enforce app manifest redistribution rights
         run: python3 scripts/enforce_app_manifest_rights.py
       - name: Check current FAA CIFP publication and packaged cycle

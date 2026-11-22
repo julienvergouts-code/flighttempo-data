@@ -86,11 +86,20 @@ Sources:
 
 ## Free navigation / traffic sources
 
+### AIRAC.net global navigation API
+
+- The public API documentation describes cycle-updated worldwide waypoints, navaids, airway segments and SID/STAR/approach data. A development downloader exists at `scripts/download_airacnet_world.py`.
+- The API documentation does not state a redistribution licence or grant commercial republication rights. Treat its output as a development probe only and do not put its data in the app download manifest until reuse terms are confirmed.
+- It is a technically available global candidate, not a verified legal source for FlightTempo's offline package.
+
+Source: https://airac.net/
+
 ### FAA NASR VFR waypoint reference layer
 
 - FAA Order 8260.19K defines VFR waypoints as five-character names beginning with `VP` and explicitly keeps them out of instrument procedures and routes. FAA's Aeronautical Information Manual describes them as a supplementary VFR position-awareness tool; only some are collocated with charted visual checkpoints. The importer publishes them as a separate visual reference layer and does not merge them into the IFR airway/procedure graph.
 - The maintained source is the FAA 28-day NASR FIX subscription. The pipeline currently extracts 681 VP-prefixed records for the United States; the committed CSV is 41,699 bytes and carries the NASR effective date, source attribution, row count and SHA-256 in the app manifest.
 - The package is reference-only and not operational navigation data. It does not provide worldwide VFR waypoint coverage.
+- Current coverage is the United States only. Europe has no VFR reporting-point records in the app package.
 
 Sources:
 - FAA Order 8260.19K: https://www.faa.gov/documentLibrary/media/Order/Order_8260.19K.pdf
@@ -104,7 +113,7 @@ Sources:
 - Alterations to OFMA data used in a public derivative/collective database must be communicated or contributed within the stated licence period (15 days in the current licence text); the application must provide an end-user mechanism for error reports/corrections.
 - OFMA explicitly says its data is not certified and must not be used as a primary navigation source.
 - Its stated mission is VFR aeronautical mapping. Treat its routes as VFR reference geometry; do not turn them into IFR SIDs/STARs or airways.
-- The current downloads index lists regions including Belgium (EB), Germany (ED), France (LF), Netherlands (EH), Denmark (EK), Italy (LI), Austria (LO), and others. Current region pages must be checked individually; a map preview is not proof that a machine-readable data export is available for that region.
+- The current downloads index lists regions including Belgium (EB), Germany (ED), France (LF), Netherlands (EH), Denmark (EK), Italy (LI), Austria (LO), and others. OFMA is a viable conditional source for regional VFR points and geometry, but raw current exports are not yet wired into the repository; do not represent this candidate as installed data.
 
 Sources:
 - Downloads/regions: https://openflightmaps.org/downloads/
@@ -139,9 +148,9 @@ Sources:
 
 - OurAirports airport/runway/navaid data: CC0/Public Domain as stated by provider; refresh through the existing pipeline.
 - The legacy `airports/airports.csv` table includes IATA and time-zone fields with mixed upstream provenance. It remains in the repository for compatibility/research but is blocked from app downloads until those fields' redistribution rights are confirmed. The separate normalized OurAirports airport, runway and navaid tables remain the app-downloadable source.
-- Legacy global X-Plane/FlightGear fixes, navaids, airway segments and corridor graph: retained as stale development baseline, clearly labelled and not operational.
+- Legacy global X-Plane/FlightGear fixes, navaids, airway segments and corridor graph: retained as stale 2012.08 development baseline and now blocked from app downloads. No current global or European published airway/fix package is present.
 - FAA CIFP: current US NAS procedure test/reference data only; not Europe or worldwide procedures.
-- French SIA XML: open reference data, but do not assume it contains complete SID/STAR/approach legs.
+- French SIA XML AIRAC 12/26: open reference data, effective 26 November–23 December 2026; the workflow now attempts to publish its designated points as a separate reference layer. Do not assume it contains VFR reporting-point classification or complete SID/STAR/approach legs.
 - National AIP / EAD / simulator / Jeppesen data: do not redistribute without a verified licence covering the intended use.
 
 ## Implementation order

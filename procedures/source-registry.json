@@ -4,9 +4,9 @@
   "purpose": "Source and redistribution inventory for IFR terminal procedures and relevant VFR procedure geometry. This registry is not an operational data publication.",
   "regions": {
     "europe": {
-      "status": "partial_public_source_confirmed_not_ingested",
+      "status": "partial_public_sources_confirmed_reference_ingestion_in_progress_no_procedures",
       "operationallyAvailable": false,
-      "summary": "France publishes current procedure DATA sheets in its eAIP, including structured SID and STAR leg tables and some RNP approach precoding tables. Its separate SIA AIXM4.5/XML export is openly reusable reference data but is not yet treated as a complete IFPD feed. No complete Europe-wide IFR procedure dataset has been established.",
+      "summary": "No Europe-wide or country-level SID/STAR dataset is currently published in FlightTempo. France publishes structured current procedure DATA sheets and an openly reusable SIA AIXM reference export for designated points and other static data; that XML is not a complete IFPD feed. OFMA publishes regional VFR reference data under conditional terms, but it is not yet ingested. No Europe-wide VFR reporting-point package is currently published.",
       "confirmedProcedureCountries": [],
       "candidateProcedureCountries": [
         "FR"
@@ -19,7 +19,7 @@
           "id": "FR_SIA_XML",
           "jurisdiction": "FR",
           "provider": "Service de l'Information Aeronautique (DGAC France)",
-          "sourceUrl": "https://www.sia.aviation-civile.gouv.fr/produits-numeriques-en-libre-disposition/les-bases-de-donnees-sia/donnees-aeronautiques-xml-airac-11-26.html",
+          "sourceUrl": "https://www.sia.aviation-civile.gouv.fr/produits-numeriques-en-libre-disposition/les-bases-de-donnees-sia/donnees-aeronautiques-xml-airac-12-26.html",
           "mirrorUrl": "https://data.cquest.org/dgac/aip/",
           "format": [
             "AIXM 4.5 XML",
@@ -30,18 +30,18 @@
           "redistribution": "public_redistribution",
           "licenseStatus": "verified_from_official_SIA_open_data_terms",
           "attribution": "Service de l'Information Aeronautique (SIA France); include the source and last update date.",
-          "cycle": "2611",
-          "effectiveDate": "2026-10-29",
-          "expiryDate": "2026-11-25",
+          "cycle": "2612",
+          "effectiveDate": "2026-11-26",
+          "expiryDate": "2026-12-23",
           "downloadPrice": "EUR 0",
-          "packageSize": "5.8 MB",
+          "packageSize": "5.6 MB",
           "fileMembers": [
             "AIXM4.5_all_FR_OM_YYYY-MM-DD.xml",
             "XML_SIA_YYYY-MM-DD.xml"
           ],
           "sourceStatus": "public_open_data_reference_dataset",
-          "dataStatus": "not_available_in_FlightTempo",
-          "notes": "The SIA XML export is an openly reusable reference-data source (Licence Ouverte 2.0), useful for airports, runways, navaids and designated-point coordinates. Do not assume that this XML package contains complete IFR SID/STAR/approach leg sequences. France's published procedure tables are available separately as eAIP DATA PDFs and must be ingested and validated independently."
+          "dataStatus": "automated_reference_point_refresh_added_not_yet_confirmed_by_live_workflow",
+          "notes": "The official SIA product page lists AIRAC 12/26 as a free 5.6 MB XML download effective 26 November to 23 December 2026 and places products in this free-disposition section under Licence Ouverte. The daily workflow now exports only WGS-84 DPN designated points to a separate reference package. These points are not classified as VFR reporting points, and this XML export is not a complete IFR SID/STAR/approach leg feed."
         },
         {
           "id": "OFMA_EUROPE",
@@ -64,7 +64,7 @@
           ],
           "sourceStatus": "candidate_vfr_source",
           "dataStatus": "not_imported",
-          "notes": "OFMA FAQ permits use in an app that is sold when the General Users' License is followed. Coverage and completeness differ by region; do not promote these VFR vectors to IFR procedures."
+          "notes": "OFMA FAQ permits use in a commercial app when the General Users' License is followed. Its documented exports include CUP and OpenAir, while current regional coverage differs. Conditions include attribution, reporting modifications within the licence period and providing a correction-report route. OFMA says its data is not certified and must not be a primary navigation source. Its current live region pages did not expose machine-readable file links to the FlightTempo source monitor, so no OFMA point or route records are imported yet."
         },
         {
           "id": "DFS_INSPIRE",
@@ -78,11 +78,11 @@
           ],
           "license": "GeoZG / INSPIRE open geodata framework",
           "redistribution": "public_reference_geodata",
-          "licenseStatus": "public_geodata_source",
+          "licenseStatus": "restricted_reuse_terms_require_confirmation",
           "procedureScope": [],
           "sourceStatus": "geodata_only",
           "dataStatus": "not_imported",
-          "notes": "The published air transport network includes airports, runways, navaids, points, routes and airspace; it is not the German IFR SID/STAR/approach publication. DFS states updates twice yearly and warns the data may contain errors or be incomplete."
+          "notes": "The published air transport network includes airports, runways, navaids, points, routes and airspace; it is not the German IFR SID/STAR/approach publication. DFS states updates twice yearly and warns the data may contain errors or be incomplete. GovData currently classifies the dataset licence as restricted use, so redistribution in FlightTempo is not confirmed."
         },
         {
           "id": "EUROCONTROL_EAD",

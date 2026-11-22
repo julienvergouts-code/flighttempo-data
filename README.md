@@ -16,13 +16,14 @@ The manifest lists downloadable datasets, relative paths, SHA-256 checksums, rec
 
 | Dataset | Coverage / contents | Current status |
 | --- | --- | --- |
-| `navigation/airports/ourairports_airports.csv` | 86,371 worldwide airport records | OurAirports CC0 |
-| `navigation/runways/runways_parsed.csv` | 47,127 runway records | OurAirports CC0 |
+| `navigation/airports/ourairports_airports.csv` | 86,377 worldwide airport records | OurAirports CC0 |
+| `navigation/runways/runways_parsed.csv` | 47,131 runway records | OurAirports CC0 |
 | `navigation/navaids/navaids.csv` | 11,008 navaids | OurAirports CC0 |
-| `navigation/waypoints/flightgear_fixes.csv` | 113,356 IFR fixes | Legacy X-Plane snapshot, cycle token 2012.08, GPL-3.0 |
-| `navigation/navaids/flightgear_navaids.csv` | 26,599 navaids, including ILS-related facilities | Legacy X-Plane snapshot, cycle token 2012.08, GPL-3.0 |
-| `navigation/airways/flightgear_airway_segments.csv` | 70,291 airway segments | Legacy X-Plane snapshot, cycle token 2012.08, GPL-3.0 |
-| `navigation/graph/world_corridor_graph.bin` | 59,073 nodes and 156,701 edges, including airport connectors | Built from the legacy global navigation baseline |
+| `data/vfr_points.csv` | 681 VFR waypoints | FAA NASR; United States only; reference-only |
+| `navigation/waypoints/flightgear_fixes.csv` | 113,356 old fix records | Repository-only development data; cycle token 2012.08; excluded from app downloads |
+| `navigation/navaids/flightgear_navaids.csv` | 26,599 old navaid records, including ILS-related facilities | Repository-only development data; cycle token 2012.08; excluded from app downloads |
+| `navigation/airways/flightgear_airway_segments.csv` | 70,291 old airway segments | Repository-only development data; cycle token 2012.08; excluded from app downloads |
+| `navigation/graph/world_corridor_graph.bin` | 59,073 nodes and 156,701 edges, including synthetic airport connectors | Development graph built from 2012.08 airways; excluded from app downloads |
 | `procedures/sids/sids.csv` | 33,349 SIDs | FAA CIFP cycle 2611; United States NAS only |
 | `procedures/stars/stars.csv` | 44,197 STARs | FAA CIFP cycle 2611; United States NAS only |
 | `procedures/approaches/approaches.csv` | 114,966 approaches | FAA CIFP cycle 2611; United States NAS only |
@@ -42,8 +43,8 @@ The graph is not a list of popular city pairs. It is an airway graph used to cal
 
 ## Important limitations
 
-1. The worldwide fixes, navaids, ILS facilities and airways come from a legacy 2012.08 X-Plane/FlightGear-format snapshot. They are useful for development and A* route testing, not current operational navigation.
-2. Published SIDs, STARs and approaches are currently populated from FAA CIFP for the US NAS only. No complete worldwide or Europe-wide redistributable procedure database has been confirmed.
+1. The only global fixes and published airway segments in the repository are from a 2012.08 X-Plane/FlightGear-format snapshot. They are now blocked from the app download manifest. There is no current worldwide or Europe-wide airway/fix dataset in the app package.
+2. Published SIDs, STARs and approaches are currently populated from FAA CIFP for the US NAS only. The app has no European procedures or VFR reporting points. No complete worldwide or Europe-wide redistributable procedure database has been confirmed.
 3. OpenAIP FIR/UIR coverage is partial and non-commercial. Required attribution is recorded in `LICENSES/OpenAIP.md`.
 4. FAA PRN/KICZ records are an official reference index, not a live cancellation feed. The FAA live NOTAM API is not connected; access is required.
 5. Aero.Sors-derived CSVs are isolated as experimental personal-development data. Permission to redistribute the derived CSVs has not been confirmed.
@@ -52,10 +53,12 @@ The graph is not a list of popular city pairs. It is an airway graph used to cal
 ## Updating data
 
 - OurAirports airport, runway and navaid reference tables refresh daily.
-- The legacy global IFR source is imported and the world corridor graph is rebuilt by GitHub Actions.
+- The legacy global IFR source is retained for development and the corridor graph is rebuilt by GitHub Actions; both are blocked from app downloads because their source cycle is 2012.08.
 - EASA CZIB advisories and FAA PRN references refresh daily.
 - OpenAIP FIR/UIR exports refresh weekly.
 - FAA CIFP procedures remain cycle-pinned until the next verified import.
+- FAA VFR waypoints refresh on the NASR publication cycle and currently cover the United States only.
+- A separate France/overseas SIA designated-point package refresh is attempted from the open AIXM feed. These points are not classified as VFR reporting points or a current airway network.
 
 ## Provenance and licensing
 

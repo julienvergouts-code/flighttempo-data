@@ -18,6 +18,14 @@ BLOCKED_IDS = {
     # redistribution provenance is still unresolved. The separate normalized
     # OurAirports tables remain available under the provider's CC0 terms.
     "airport_reference",
+    # The X-Plane/FlightGear-format snapshot is from 2012.08. It is kept for
+    # parser and graph experiments, but is not a maintained current source.
+    # Its upstream licence is GPL-3.0 and source-data redistribution has not
+    # been reviewed for FlightTempo's app package.
+    "flightgear_fixes",
+    "flightgear_navaids",
+    "flightgear_airway_segments",
+    "world_corridor_graph",
     "aerosors_vor_ndb",
     "aerosors_ils",
     "aerosors_ge_navaids",
@@ -32,9 +40,34 @@ BLOCK_REASONS = {
         "keep this table in the repository until redistribution rights are "
         "confirmed. Use the separate OurAirports CC0 dataset for app downloads."
     ),
+    "flightgear_fixes": (
+        "The only bundled global fixes are from the stale 2012.08 X-Plane/"
+        "FlightGear snapshot. Keep them for development and parser tests; "
+        "do not offer them as current app data. A maintained source and its "
+        "redistribution terms must be verified first."
+    ),
+    "flightgear_navaids": (
+        "The bundled X-Plane/FlightGear navaid snapshot is from 2012.08. "
+        "Use the separate maintained OurAirports navaid reference dataset "
+        "where appropriate; do not offer this stale snapshot to the app."
+    ),
+    "flightgear_airway_segments": (
+        "The only bundled global airway segments are from the stale 2012.08 "
+        "X-Plane/FlightGear snapshot. Keep them for development experiments; "
+        "do not offer them as current app route data."
+    ),
+    "world_corridor_graph": (
+        "This generated graph is built from the stale 2012.08 airway snapshot "
+        "and synthetic airport connectors. It is development-only and is not "
+        "a current published airway network."
+    ),
 }
 
 CAPABILITY_FLAGS = {
+    "flightgear_fixes": ("independentWaypoints", "legacyGlobalFixes"),
+    "flightgear_navaids": ("flightgearNavaids", "legacyGlobalNavaids", "legacyGlobalIlsFacilities"),
+    "flightgear_airway_segments": ("publishedAirways", "legacyGlobalAirways"),
+    "world_corridor_graph": ("worldCorridorGraph",),
     "aerosors_vor_ndb": ("aerosors_vor_ndb",),
     "aerosors_ils": ("aerosors_ils", "aeroSorsIlsFacilities"),
     "aerosors_ge_navaids": ("aerosors_ge_navaids",),
@@ -58,7 +91,10 @@ def enforce() -> list[str]:
         dataset["available"] = False
         dataset.pop("downloadUrl", None)
         dataset["operationallyAvailable"] = False
-        dataset["status"] = "not_published_redistribution_rights_unconfirmed_or_non_commercial_only"
+        if dataset_id in {"airport_reference", "aerosors_vor_ndb", "aerosors_ils", "aerosors_ge_navaids", "aerosors_ge_airports", "openaip_fir_boundaries", "airspace_filter"}:
+            dataset["status"] = "not_published_redistribution_rights_unconfirmed_or_non_commercial_only"
+        else:
+            dataset["status"] = "development_reference_only_stale_or_unverified"
         dataset["downloadBlockReason"] = BLOCK_REASONS.get(dataset_id, (
             "Retained for research/provenance only. Do not publish through the "
             "app download manifest until redistribution rights suitable for "
@@ -82,6 +118,8 @@ def enforce() -> list[str]:
         if key.startswith("aerosors_")
         or key.startswith("aeroSors")
         or key.startswith("airportReference")
+        or key.startswith("flightgear")
+        or key in {"ifrWaypoints", "airwaySegments", "lowAirwaySegments", "highAirwaySegments"}
     ]
     if research_keys:
         research = manifest.setdefault("developmentOnlyStatistics", {})
@@ -102,7 +140,8 @@ def enforce() -> list[str]:
         set(manifest.get("developmentOnlySources", []))
         | {"Aero.Sors derivative exports: redistribution not confirmed",
            "OpenAIP FIR geometry and derived airspace filter: CC BY-NC 4.0",
-           "Legacy airport reference IATA/time-zone fields: source redistribution rights under review"}
+           "Legacy airport reference IATA/time-zone fields: source redistribution rights under review",
+           "Legacy global X-Plane/FlightGear fixes, navaids, airways and derived graph: 2012.08 stale development data; excluded from app downloads"}
     )
     MANIFEST.write_text(
         json.dumps(manifest, indent=2, ensure_ascii=False) + "\n",

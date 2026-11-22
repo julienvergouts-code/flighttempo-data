@@ -52,6 +52,54 @@ class AppManifestRightsTests(unittest.TestCase):
             self.assertEqual(manifest["developmentOnlyStatistics"]["airportReferenceRecords"], 29747)
             self.assertFalse(manifest["airportReferenceEnrichment"]["appDownloadable"])
 
+    def test_stale_global_navdata_and_derived_graph_are_not_app_downloads(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "navigation_manifest.json"
+            ids = ["flightgear_fixes", "flightgear_navaids", "flightgear_airway_segments", "world_corridor_graph"]
+            path.write_text(json.dumps({
+                "datasets": [
+                    {"id": dataset_id, "available": True, "downloadUrl": "https://example.test/data"}
+                    for dataset_id in ids
+                ],
+                "capabilities": {
+                    "independentWaypoints": True,
+                    "publishedAirways": True,
+                    "legacyGlobalFixes": True,
+                    "legacyGlobalNavaids": True,
+                    "legacyGlobalAirways": True,
+                    "legacyGlobalIlsFacilities": True,
+                    "flightgearNavaids": True,
+                    "worldCorridorGraph": True,
+                },
+                "statistics": {
+                    "ifrWaypoints": 113356,
+                    "flightgearNavaids": 26599,
+                    "airwaySegments": 70291,
+                    "lowAirwaySegments": 37195,
+                    "highAirwaySegments": 33096,
+                    "airports": 86377,
+                },
+            }), encoding="utf-8")
+
+            with patch.object(mod, "MANIFEST", path):
+                blocked = mod.enforce()
+
+            manifest = json.loads(path.read_text(encoding="utf-8"))
+            self.assertEqual(set(blocked), set(ids))
+            for dataset in manifest["datasets"]:
+                self.assertFalse(dataset["available"])
+                self.assertFalse(dataset["operationallyAvailable"])
+                self.assertNotIn("downloadUrl", dataset)
+                self.assertIn("2012.08", dataset["downloadBlockReason"])
+            self.assertFalse(any(manifest["capabilities"][key] for key in (
+                "independentWaypoints", "publishedAirways", "legacyGlobalFixes",
+                "legacyGlobalNavaids", "legacyGlobalAirways", "legacyGlobalIlsFacilities", "flightgearNavaids",
+                "worldCorridorGraph",
+            )))
+            self.assertEqual(manifest["statistics"]["airports"], 86377)
+            self.assertNotIn("ifrWaypoints", manifest["statistics"])
+            self.assertEqual(manifest["developmentOnlyStatistics"]["airwaySegments"], 70291)
+
 
 if __name__ == "__main__":
     unittest.main()
