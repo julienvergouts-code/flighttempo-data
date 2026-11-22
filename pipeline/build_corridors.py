@@ -177,17 +177,33 @@ class RepositoryNavDatabase:
                 if node==target: break
                 if node in closed: continue
                 closed.add(node)
-                for nxt,weight,_ in self.physical_adj.get(node,[]):
+                for nxt,weight,airway in self.physical_adj.get(node,[]):
                     new_cost=cost+weight
                     if new_cost<best.get(nxt,float("inf")):
-                        best[nxt]=new_cost; previous[nxt]=node
+                        best[nxt]=new_cost; previous[nxt]=(node,weight,airway)
                         h=_nm(self.physical_nodes[nxt]["coord"],goal_position)*self.heuristic_scale
                         heapq.heappush(queue,(new_cost+h,new_cost,nxt))
             if target not in best: return None
-            chain=[target]
-            while chain[-1]!=source: chain.append(previous[chain[-1]])
-            chain.reverse()
-            self.last_route_physical_path=[{"node_index":i,**self.physical_nodes[i]} for i in chain]
+            chain=[target]; edge_chain=[]
+            while chain[-1]!=source:
+                parent,weight,airway=previous[chain[-1]]
+                edge_chain.append((parent,chain[-1],weight,airway))
+                chain.append(parent)
+            chain.reverse(); edge_chain.reverse()
+            route_nodes=[]
+            cumulative=0.0
+            for i,node_index in enumerate(chain):
+                node=dict(self.physical_nodes[node_index])
+                row={"node_index":node_index,**node,"step_cost_nm":0.0,"step_geodesic_nm":0.0,
+                     "cumulative_cost_nm":0.0,"airway_from_previous":None}
+                if i:
+                    parent,child,weight,airway=edge_chain[i-1]
+                    step_geodesic=_nm(self.physical_nodes[parent]["coord"],self.physical_nodes[child]["coord"])
+                    cumulative+=weight
+                    row.update(step_cost_nm=weight,step_geodesic_nm=step_geodesic,
+                               cumulative_cost_nm=cumulative,airway_from_previous=airway)
+                route_nodes.append(row)
+            self.last_route_physical_path=route_nodes
             return [self.physical_nodes[i]["ident"] for i in chain],best[target]
         # CSV fallback has identifier-only nodes; use Dijkstra, not an unsafe heuristic.
         if start_name not in self.adj or goal_name not in self.adj: return None
