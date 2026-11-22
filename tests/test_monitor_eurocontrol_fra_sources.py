@@ -27,5 +27,15 @@ class TestFraMonitor(unittest.TestCase):
         self.assertEqual(sheet["candidateHeaderRows"][0]["row"], 2)
         self.assertNotIn("records", sheet)
 
+    def test_header_detection_accepts_availability_and_fra_columns(self):
+        wb = Workbook()
+        ws = wb.active
+        ws.append(["Point", "FRA", "Coordinates", "Availability"])
+        ws.append(["ABCD", "North", "N5100 E00400", "H24"])
+        buffer = io.BytesIO()
+        wb.save(buffer)
+        sheet = inspect_workbook(buffer.getvalue())["sheets"][0]
+        self.assertEqual(sheet["candidateHeaderRows"][0]["row"], 1)
+
 if __name__ == "__main__":
     unittest.main()
