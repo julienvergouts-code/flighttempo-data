@@ -24,6 +24,14 @@ EUROPE_AIRLINE_PREFIXES = {
 EU_BOUNDS = (32.0, 72.0, -20.0, 45.0)
 MAX_TRACE_MEMBER_BYTES = 50 * 1024 * 1024
 TARGET_AIRCRAFT = 50
+CONFIDENCE_THRESHOLDS = {"LOW": [1, 2], "MEDIUM": [3, 4], "HIGH": [5]}
+
+def confidence_for_sample_count(count):
+    if count >= CONFIDENCE_THRESHOLDS["HIGH"][0]:
+        return "HIGH"
+    if count >= CONFIDENCE_THRESH["MEDIUM"][0]:
+        return "MEDIUM"
+    return "LOW"
 
 def eu_coord(coord):
     lat, lon = coord
@@ -170,7 +178,7 @@ def main():
                         source=tar.extractfile(member)
                         if source is None: continue
                         prefix=source.read(2)
-                        if prefix==b"\\x1f\\x8b":
+                        if prefix==b"\x1f\x8b"
                             with gzip.GzipFile(fileobj=io.BytesIO(prefix+source.read()), mode="rb") as gz:
                                 payload=gz.read(MAX_TRACE_MEMBER_BYTES+1)
                         else:
@@ -241,7 +249,7 @@ def main():
     aggregated_links=[]
     for (city_pair,a,b),samples in link_samples.items():
         n=len(samples)
-        confidence="HIGH" if n>=5 else "MEDIUM" if n>=3 else "LOW"
+        confidence=confidence_for_sample_count(n)
         aggregated_links.append({"city_pair":city_pair,"from":a,"to":b,
             "independent_samples":n,"independent_aircraft":len(link_aircraft[(city_pair,a,b)]),
             "confidence":confidence,"promotion":"DISABLED"})
@@ -268,7 +276,7 @@ def main():
     evidence={"schema_version":1,"benchmark_type":"streaming_multi_aircraft_observed_adsb",
         "privacy":"Aircraft identifiers, callsigns, registrations, raw traces, and timestamps are not serialized.",
         "independent_sample_definition":"One distinct aircraft ICAO24 plus segmented leg number within the archive date; each directed candidate link counted once per leg.",
-        "confidence_thresholds":{"LOW":[1,2],"MEDIUM":[3,4],"HIGH":[5]},
+        "confidence_thresholds":CONFIDENCE_THRESHOLDS,
         "summary":summary,"corridors":corridors,"candidate_links":aggregated_links,
         "leg_metrics":leg_metrics}
     strict_write(args.evidence_out,evidence)
