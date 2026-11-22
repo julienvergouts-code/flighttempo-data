@@ -53,10 +53,15 @@ def register():
     datasets=manifest.setdefault("datasets",[])
     found=[i for i,d in enumerate(datasets) if d.get("id")==DATASET_ID]
     if len(found)>1: raise ValueError(f"Duplicate manifest dataset id: {DATASET_ID}")
-    if found: datasets[found[0]]=dataset
-    else: datasets.append(dataset)
-    manifest["statistics"]["faaVfrReportingPoints"]=len(rows)
-    manifest["generatedAtUtc"]=datetime.now(timezone.utc).isoformat()
+    changed=False
+    if found:
+        if datasets[found[0]]!=dataset:
+            datasets[found[0]]=dataset;changed=True
+    else:
+        datasets.append(dataset);changed=True
+    stats=manifest.setdefault("statistics",{})
+    if stats.get("faaVfrReportingPoints")!=len(rows):
+        stats["faaVfrReportingPoints"]=len(rows);changed=True
     manifest.setdefault("dataSources",[])
     source={
         "dataset":"faa_vfr_reporting_points","url":SOURCE_URL,"provider":"FAA Aeronautical Information Services",
@@ -65,9 +70,16 @@ def register():
     }
     old=[i for i,d in enumerate(manifest["dataSources"]) if d.get("dataset")=="faa_vfr_reporting_points"]
     if len(old)>1: raise ValueError("Duplicate VFR dataSources metadata entries")
-    if old: manifest["dataSources"][old[0]]=source
-    else: manifest["dataSources"].append(source)
-    MANIFEST_PATH.write_text(json.dumps(manifest,indent=2,ensure_ascii=False)+"\n",encoding="utf-8")
+    if old:
+        if manifest["dataSources"][old[0]]!=source:
+            manifest["dataSources"][old[0]]=source;changed=True
+    else:
+        manifest["dataSources"].append(source);changed=True
+    if changed:
+        manifest["generatedAtUtc"]=datetime.now(timezone.utc).isoformat()
+        MANIFEST_PATH.write_text(json.dumps(manifest,indent=2,ensure_ascii=False)+"\n",encoding="utf-8")
+    else:
+        print("Manifest VFR entry already current; no changes.")
     print(f"Registered {len(rows)} FAA VFR reporting points; {len(raw)} bytes; sha256={dataset['sha256']}; source date={updated}")
     return dataset
 
