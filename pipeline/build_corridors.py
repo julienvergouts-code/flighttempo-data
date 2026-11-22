@@ -382,7 +382,7 @@ class BenchmarkRecorder:
         try:
             with os.fdopen(fd, "w", encoding="utf-8") as f:
                 json.dump(self.state, f, indent=2, allow_nan=False, default=str)
-                f.write("\\n")
+                f.write("\n")
                 f.flush()
                 os.fsync(f.fileno())
             os.replace(tmp_path, self.path)
@@ -632,9 +632,29 @@ def main():
 
                 diag["graph_path_node_count"]=len(path) if path else 0
                 diag["graph_path_distance_nm"]=distance_nm
+                # Explicitly describe observed-trace coverage of the physical
+                # graph path. Gaps are measured from matched trace endpoints to
+                # resolved physical FTWG endpoints, so partial slices are explicit.
+                start_gap_nm = end_gap_nm = covered_fraction = None
+                endpoint_resolution = nav.last_route_endpoint_resolution if path else None
+                if path and endpoint_resolution:
+                    start_physical = endpoint_resolution.get("start", {}).get("coord")
+                    end_physical = endpoint_resolution.get("goal", {}).get("coord")
+                    first_observed = detail_coord(0)
+                    last_observed = detail_coord(len(observed)-1)
+                    if start_physical and first_observed:
+                        start_gap_nm = round(_nm(first_observed, start_physical), 2)
+                    if end_physical and last_observed:
+                        end_gap_nm = round(_nm(last_observed, end_physical), 2)
+                    if distance_nm is not None and start_gap_nm is not None and end_gap_nm is not None:
+                        denominator = distance_nm + start_gap_nm + end_gap_nm
+                        covered_fraction = round(distance_nm / denominator, 4) if denominator > 0 else 0.0
+                diag["start_gap_nm"] = start_gap_nm
+                diag["end_gap_nm"] = end_gap_nm
+                diag["covered_fraction"] = covered_fraction
                 diag["graph_path_nodes"]=path
                 diag["graph_path_physical_nodes"]=nav.last_route_physical_path if path else None
-                diag["graph_path_endpoint_resolution"]=nav.last_route_endpoint_resolution if path else None
+                diag["graph_path_endpoint_resolution"]=endpoint_resolution
                 result["graphComparison"]={"graph_source":nav.graph_source,"status":status,
                                            "fix_jaccard_overlap":overlap,"diagnostics":diag}
                 comparisons.append({"status":status,**diag,"overlap":overlap})
