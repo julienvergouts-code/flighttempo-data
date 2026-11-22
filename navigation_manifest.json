@@ -1,6 +1,6 @@
 {
   "schemaVersion": 13,
-  "generatedAtUtc": "2026-11-22T16:15:36.130604+00:00",
+  "generatedAtUtc": "2026-11-22T16:23:12.328Z",
   "procedureAiracCycle": "2611",
   "navaidTypeCounts": {
     "DME": 167,
@@ -761,6 +761,34 @@
       "downloadPurpose": "reference_only",
       "operationallyAvailable": false,
       "status": "present_reference_dataset"
+    },
+    {
+      "id": "ofma_ofmx_vfr_reference_points",
+      "path": "data/ofma_ofmx_vfr_points.csv",
+      "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/data/ofma_ofmx_vfr_points.csv",
+      "available": true,
+      "recordCount": 4736,
+      "sizeBytes": 454573,
+      "sha256": "8255d553e6152a26beddcea25aeaaf928f5fc7c29c8ff560f005015a271bb1d9",
+      "sourceProvider": "OpenFlightMaps Association",
+      "sourceUrl": "https://openflightmaps.org/",
+      "coverage": "21 official OFMA regions (EB, ED, EF, EH, EK, EP, ES, FA, FY, LD, LF, LG, LH, LI, LJ, LK, LM, LO, LR, LS, LZ); regional coverage only, not worldwide geographic coverage; VFR-designated points.",
+      "license": "OFMA General Users License",
+      "licenseStatus": "commercial_use_permitted_subject_to_OFMA_GUL",
+      "attribution": "Contains information from the open flightmaps database, see www.openflightmaps.org",
+      "licenseUrl": "https://www.openflightmaps.org/live/downloads/20150306-GUL.pdf",
+      "commercialUseAllowed": true,
+      "licenseConditions": [
+        "Preserve OFMA attribution in every use or redistribution.",
+        "Communicate any alterations to OFMA within 15 days.",
+        "If the consuming app lets users alter OFMA data, provide the direct OFMA contributor interface required by GUL section 4.4."
+      ],
+      "dataCycle": "2611",
+      "effectiveDate": null,
+      "provenanceVerification": "official_OFMA_publication_service_and_snapshot",
+      "downloadPurpose": "reference_only",
+      "operationallyAvailable": false,
+      "status": "reference_dataset"
     }
   ],
   "downloadContract": {
