@@ -479,7 +479,7 @@ def main():
                 diag["graph_path_nodes"] = path
                 result["graphComparison"] = {"graph_source": nav.graph_source, "status": status,
                                              "fix_jaccard_overlap": overlap, "diagnostics": diag}
-                comparisons.append({"status": status, **diag, "overlap": overlap}
+                comparisons.append({"status": status, **diag, "overlap": overlap})
             summary = {
                 "trace_rows": trace_rows,
                 "total_legs": len(evidence.get("traceResults", [])),
