@@ -247,6 +247,55 @@ def register_manifest(csv_path: Path, meta: dict) -> dict:
     )
     manifest["generatedAtUtc"] = datetime.utcnow().replace(microsecond=0).isoformat() + "Z"
     NAV_MANIFEST.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    registry_path = ROOT / "procedures/source-registry.json"
+    registry = json.loads(registry_path.read_text(encoding="utf-8"))
+    source = next(
+        item for item in registry["regions"]["europe"]["sources"]
+        if item.get("id") == "FR_SIA_EAIP_DATA_PDFS"
+    )
+    source.update({
+        "license": dataset["license"],
+        "licenseUrl": dataset["licenseUrl"],
+        "redistribution": "commercial_public_redistribution",
+        "licenseStatus": dataset["licenseStatus"],
+        "commercialUseAllowed": True,
+        "attribution": dataset["attribution"],
+        "cycle": meta["airacCycle"],
+        "effectiveDate": meta["airacEffectiveDate"],
+        "expiryDate": meta["expiryDate"],
+        "sourceStatus": "official_eAIP_DATA_procedure_source_commercial_reuse_confirmed",
+        "dataStatus": "current_cycle_imported",
+        "recordCount": len(rows),
+        "procedureTypeCounts": counts,
+    })
+    registry_path.write_text(
+        json.dumps(registry, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+    )
+
+    regional_meta = {
+        "source": "Service de l'Information Aeronautique (SIA France) current eAIP DATA SID/STAR",
+        "sourceUrl": meta["indexUrl"],
+        "license": dataset["license"],
+        "licenseUrl": dataset["licenseUrl"],
+        "commercialUseAllowed": True,
+        "licenseStatus": dataset["licenseStatus"],
+        "attribution": dataset["attribution"],
+        "airacCycle": meta["airacCycle"],
+        "effectiveDate": meta["airacEffectiveDate"],
+        "expiryDate": meta["expiryDate"],
+        "sha256": dataset["sha256"],
+        "sizeBytes": dataset["sizeBytes"],
+        "recordCount": len(rows),
+        "procedureTypeCounts": counts,
+        "sourceDocumentCount": len(meta["sourceDocuments"]),
+        "coverage": dataset["coverage"],
+        "operationallyAvailable": False,
+        "notes": "Current regional reference data. Do not use as approved operational navigation data.",
+    }
+    (ROOT / "procedures/europe").mkdir(parents=True, exist_ok=True)
+    (ROOT / "procedures/europe/meta.json").write_text(
+        json.dumps(regional_meta, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+    )
     return dataset
 
 
