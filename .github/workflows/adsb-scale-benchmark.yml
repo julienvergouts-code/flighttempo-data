@@ -64,6 +64,9 @@ jobs:
             --minimum-aircraft "$MIN_AIRCRAFT" \
             --evidence-out /tmp/adsb_scale_evidence.json \
             --summary-out /tmp/adsb_scale_summary.json
+      - name: Confirm trusted navigation sources remain unchanged
+        if: always()
+        run: git diff --exit-code -- navigation/waypoints/flightgear_fixes.csv navigation/airways/flightgear_airway_segments.csv navigation_manifest.json
       - name: Strictly validate all scale JSON
         if: always()
         run: |
@@ -77,6 +80,11 @@ jobs:
               with p.open(encoding="utf-8") as f:
                   json.load(f, parse_constant=lambda value: (_ for _ in ()).throw(ValueError(value)))
               print(f"STRICT_JSON_OK: {p}")
+          summary = json.loads(files[1].read_text(encoding="utf-8"))
+          if summary.get("promotion_enabled") is not False:
+              raise SystemExit("Candidate promotion must remain disabled")
+          if summary.get("trusted_navigation_modified") is not False:
+              raise SystemExit("Trusted navigation source mutation reported")
           PY
       - name: Upload scale evidence
         if: always()
