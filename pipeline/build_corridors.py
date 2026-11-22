@@ -643,6 +643,8 @@ def main():
                 "total_legs": len(evidence.get("traceResults", [])),
                 "eligible_legs": len(accepted),
                 "matched_fixes": matched_total,
+                "resolved_nodes": resolved_total,
+                "unresolved_nodes": matched_total - resolved_total,
                 "physical_resolved_nodes": resolved_total,
                 "physical_unresolved_nodes": matched_total - resolved_total,
                 "identifier_resolved_nodes_legacy": identifier_resolved_total,
