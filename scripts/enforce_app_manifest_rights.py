@@ -20,6 +20,7 @@ BLOCKED_IDS = {
     "aerosors_ge_airports",
     "openaip_fir_boundaries",
     "airspace_filter",
+    "airport_reference",
 }
 
 CAPABILITY_FLAGS = {
@@ -32,8 +33,22 @@ CAPABILITY_FLAGS = {
 }
 
 
-def enforce() -> list[str]:
-    manifest = json.loads(MANIFEST.read_text(encoding="utf-8"))
+def rights_block_reason(dataset: dict) -> str | None:
+    text = " ".join(str(dataset.get(key, "")) for key in ("license", "licenseStatus", "status")).lower()
+    markers = (
+        "cc by-nc", "cc_by_nc", "non_commercial_only", "non-commercial-only",
+        "personal_noncommercial_only", "personal_non-commercial-only",
+        "not_confirmed", "not-confirmed", "redistribution_not_confirmed",
+        "public_redistribution_not_confirmed", "permission_required",
+        "permission_review_required", "mixed_source_review_required",
+        "declared_redistributable_check_required", "scope_to_confirm",
+        "scope_pending", "license_scope_unconfirmed", "rights_unconfirmed",
+    )
+    return next((marker for marker in markers if marker in text), None)
+
+
+def enforce(manifest_path: Path = MANIFEST) -> list[str]:
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     datasets = manifest.get("datasets")
     if not isinstance(datasets, list):
         raise ValueError("navigation_manifest.json has no datasets array")
@@ -41,12 +56,13 @@ def enforce() -> list[str]:
     blocked = []
     for dataset in datasets:
         dataset_id = dataset.get("id")
-        if dataset_id not in BLOCKED_IDS:
+        reason = rights_block_reason(dataset)
+        if dataset_id not in BLOCKED_IDS and not reason:
             continue
         dataset["available"] = False
         dataset.pop("downloadUrl", None)
         dataset["operationallyAvailable"] = False
-        dataset["status"] = "not_published_redistribution_rights_unconfirmed_or_non_commercial_only"
+        dataset["status"] = "not_published_commercial_reuse_unconfirmed_or_restricted"
         dataset["downloadBlockReason"] = (
             "Retained for research/provenance only. Do not publish through the "
             "app download manifest until redistribution rights suitable for "
@@ -79,7 +95,7 @@ def enforce() -> list[str]:
         | {"Aero.Sors derivative exports: redistribution not confirmed",
            "OpenAIP FIR geometry and derived airspace filter: CC BY-NC 4.0"}
     )
-    MANIFEST.write_text(
+    manifest_path.write_text(
         json.dumps(manifest, indent=2, ensure_ascii=False) + "\n",
         encoding="utf-8",
     )
