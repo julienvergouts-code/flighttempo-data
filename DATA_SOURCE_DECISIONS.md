@@ -123,6 +123,18 @@ Sources:
 - adsb.lol API / licence: https://www.adsb.lol/docs/open-data/api
 - free key and ODbL conditions: https://www.adsb.lol/request
 
+## Terrain and relief
+
+- The repository currently has no elevation raster or DEM pipeline. Its Natural Earth global geography pack contains 8,161 named places and landmark points in 150,962 compressed bytes; point elevations and airport elevations are not a terrain surface.
+- Copernicus DEM GLO-90 is the strongest global source candidate: worldwide 90 m coverage is available under a free, public-use licence. The source is a digital surface model (buildings and vegetation included), so it is suitable only for broad planning context and must not be presented as terrain-clearance data.
+- Do not ship the full-resolution global grid as a default phone download. Produce a compact, downsampled global overview and keep higher-detail regional terrain as separately selected offline packs. The packs need source release, processing/resolution metadata, attribution, and SHA-256 checksums.
+- Copernicus GLO-30 offers 30 m global coverage and a free licence, but access to the 30 m view service became restricted in August 2026. Confirm current download eligibility and the applicable attribution terms before publishing regional packages. The Copernicus source page says the current DEM collection is maintained through 2026, so verify the next product-maintenance plan before making it the only terrain source.
+
+Sources:
+- Copernicus DEM coverage, formats, access and user notice: https://dataspace.copernicus.eu/explore-data/data-collections/copernicus-contributing-missions/collections-description/COP-DEM
+- Copernicus GLO-90 and GLO-30 licence: https://dataspace.copernicus.eu/sites/default/files/media/files/2025-06/copernicus_contributing_mission_data_access_v2_cop_dem_licenses.pdf
+- Copernicus GLO-30 view-service access update (25 August 2026): https://dataspace.copernicus.eu/news/2026-8-25-copernicus-dem-30m-view-service-update
+
 ## Existing navigation data that remains in place
 
 - OurAirports airport/runway/navaid data: CC0/Public Domain as stated by provider; refresh through the existing pipeline.
