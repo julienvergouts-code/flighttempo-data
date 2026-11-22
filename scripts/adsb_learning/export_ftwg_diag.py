@@ -246,6 +246,14 @@ def build_report(result_payload: Any, evidence_payload: Any, nav: Any,
 
         for seq, fix in enumerate(fixes):
             component = wcc_ids.get(fix)
+            physical_variants = getattr(nav,"nodes_by_ident",{}).get(fix,[])
+            physical_variant_rows = [{
+                "node_index": node_index,
+                "coord": nav.physical_nodes[node_index]["coord"],
+                "kind": nav.physical_nodes[node_index]["kind"],
+                "out_degree": len(nav.physical_adj.get(node_index,[])),
+                "has_incoming": node_index in getattr(nav,"physical_in_degree_nodes",set()),
+            } for node_index in physical_variants]
             fix_rows.append({
                 "leg_index": leg_index, "leg_number": leg_number, "route": route,
                 "sequence_index": seq, "ident": fix, "ident_type": classify_ident(fix),
@@ -253,6 +261,8 @@ def build_report(result_payload: Any, evidence_payload: Any, nav: Any,
                 "in_fix_coords_by_ident": fix in coords, "in_ident_adjacency": fix in adj,
                 "ident_in_degree": indegree.get(fix, 0), "ident_out_degree": outdegree.get(fix, 0),
                 "ident_wcc_id": component, "ident_wcc_size": wcc_sizes.get(component, 0) if component is not None else 0,
+                "physical_variant_count": len(physical_variant_rows),
+                "physical_variants": physical_variant_rows,
             })
 
         first, last = fixes[0] if fixes else None, fixes[-1] if fixes else None
@@ -272,6 +282,9 @@ def build_report(result_payload: Any, evidence_payload: Any, nav: Any,
         selected_coords=diag.get("selected_endpoint_coordinates",[]) if isinstance(diag,dict) else []
         selected_start_coord=tuple(selected_coords[0]) if len(selected_coords)>0 and selected_coords[0] else None
         selected_goal_coord=tuple(selected_coords[1]) if len(selected_coords)>1 and selected_coords[1] else None
+        benchmark_selected=diag.get("selected_graph_endpoints",[]) if isinstance(diag,dict) else []
+        benchmark_start=benchmark_selected[0] if len(benchmark_selected)>0 else first_usable
+        benchmark_goal=benchmark_selected[1] if len(benchmark_selected)>1 else last_usable
         leg_rows.append({
             "leg_index": leg_index, "leg_number": leg_number, "route": route,
             "excluded": bool(leg.get("excluded", False)), "matched_count": len(fixes),
@@ -282,7 +295,7 @@ def build_report(result_payload: Any, evidence_payload: Any, nav: Any,
             "first_last_usable_endpoints_skipping_non_adj_or_degree_zero_fixes": [first_usable, last_usable],
             "astar_raw_endpoints": probe_astar(nav, adj, first, last, "raw_observed_endpoints", raw_start_coord, raw_goal_coord),
             "astar_first_last_adjacency_endpoints": probe_astar(nav, adj, first_adj, last_adj, "skips_non_adjacency_fixes", adj_start_coord, adj_goal_coord),
-            "astar_first_last_usable_endpoints": probe_astar(nav, adj, first_usable, last_usable, "skips_non_adjacency_and_degree_zero_fixes", selected_start_coord, selected_goal_coord),
+            "astar_benchmark_selected_endpoints": probe_astar(nav, adj, benchmark_start, benchmark_goal, "benchmark_selected_physical_endpoints", selected_start_coord, selected_goal_coord),
         })
 
     unique = sorted(set(occurrences))
