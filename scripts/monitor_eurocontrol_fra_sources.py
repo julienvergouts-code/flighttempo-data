@@ -105,7 +105,7 @@ def parse_dms_coordinate(value, axis: str):
     if value is None or str(value).strip() == "":
         return None
     text = str(value).strip().upper().replace("°", " ").replace("'", " ").replace('"', " ")
-    text = re.sub(r"\\s+", " ", text)
+    text = re.sub(r"\s+", " ", text)
     if re.fullmatch(r"[+-]?\\d+(?:\\.\\d+)?", text):
         number = float(text)
         limit = 90 if axis == "lat" else 180
