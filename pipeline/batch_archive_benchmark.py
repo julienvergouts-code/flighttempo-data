@@ -214,7 +214,7 @@ def main():
                                 edge=(city_pair,link["from"],link["to"])
                                 link_samples[edge].add(sample)
                                 link_aircraft[edge].add(hex_id)
-                            leg_metrics.append({"city_pair":city_pair,"airport_pair":f"{origin}-{destination}",
+                            leg_metrics.append({"leg_number":leg.get("legNumber"),"city_pair":city_pair,"airport_pair":f"{origin}-{destination}",
                                 "segmentation":leg.get("segmentation"),"position_count":leg.get("positionCount"),
                                 "matched_fix_count":leg.get("matchCount",0),**graph})
                         trace_path.unlink(missing_ok=True)
