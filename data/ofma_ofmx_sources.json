@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "airac": "2611",
+  "sources": [
+    {
+      "region": "EB",
+      "regionName": "Belgium",
+      "regionKey": "ebbu",
+      "url": "https://snapshots.openflightmaps.org/live/2611/ofmx/ebbu/latest/ofmx_eb.zip",
+      "sourcePage": "https://openflightmaps.org/downloads/eb/",
+      "license": "OFMA_GUL",
+      "attribution": "OpenFlightMaps Association (OFMA)",
+      "effectiveDate": "AIRAC 2611"
+    },
+    {
+      "region": "ED",
+      "regionName": "Germany",
+      "regionKey": "ed",
+      "url": "https://snapshots.openflightmaps.org/live/2611/ofmx/ed/latest/ofmx_ed.zip",
+      "sourcePage": "https://openflightmaps.org/downloads/ed/",
+      "license": "OFMA_GUL",
+      "attribution": "OpenFlightMaps Association (OFMA)",
+      "effectiveDate": "AIRAC 2611"
+    },
+    {
+      "region": "EH",
+      "regionName": "Netherlands",
+      "regionKey": "ehaa",
+      "url": "https://snapshots.openflightmaps.org/live/2611/ofmx/ehaa/latest/ofmx_eh.zip",
+      "sourcePage": "https://openflightmaps.org/downloads/eh/",
+      "license": "OFMA_GUL",
+      "attribution": "OpenFlightMaps Association (OFMA)",
+      "effectiveDate": "AIRAC 2611"
+    },
+    {
+      "region": "LF",
+      "regionName": "France",
+      "regionKey": "lf",
+      "url": "https://snapshots.openflightmaps.org/live/2611/ofmx/lf/latest/ofmx_lf.zip",
+      "sourcePage": "https://openflightmaps.org/downloads/lf/",
+      "license": "OFMA_GUL",
+      "attribution": "OpenFlightMaps Association (OFMA)",
+      "effectiveDate": "AIRAC 2611"
+    }
+  ]
+}
