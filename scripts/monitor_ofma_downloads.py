@@ -39,6 +39,18 @@ def fetch(url):
         if len(body)>MAX_PAGE_BYTES: raise RuntimeError("Page exceeded safety limit")
         return r.status,r.url,body
 
+
+def inspect_script(url):
+    try:
+        status,final,raw=fetch(url)
+        source=raw.decode("utf-8","replace")
+        patterns=re.findall(r"""["']((?:https?://|/)[^"'\\s<>]{3,})["']""",source)
+        candidates=sorted(set(x for x in patterns if any(t in x.lower() for t in ("download","api","snapshot","ofmx","cup","openair","region","data"))))
+        return {"url":url,"status":status,"finalUrl":final,"bytes":len(raw),
+                "sha256":hashlib.sha256(raw).hexdigest(),"candidateStrings":candidates[:200]}
+    except Exception as e:
+        return {"url":url,"error":str(e)}
+
 def discover_region(code):
     slug={"LD":"lb"}.get(code,code.lower())
     url=f"https://openflightmaps.org/downloads/{slug}/"
@@ -59,6 +71,7 @@ def discover_region(code):
                 "finalUrl":final,"pageBytes":len(raw),"sha256":hashlib.sha256(raw).hexdigest(),
                 "directDownloadLinks":sorted(set(links)),"formatHints":format_hints,
                 "scriptSrcs":sorted(set(urljoin(final,x) for x in parser.srcs)),
+                "scriptEndpointAnalysis":[inspect_script(urljoin(final,x)) for x in parser.srcs if "download.js" in x.lower() or "ofmTileMap.js" in x.lower()],
                 "dataAttributes":parser.data_attrs[:100],"candidateEmbeddedUrls":candidate_urls[:100],
                 "downloadLinksFound":len(set(links))}
     except Exception as e:
