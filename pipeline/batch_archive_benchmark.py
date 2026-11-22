@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Streaming multi-aircraft ADSB.lol batch benchmark. Evidence only; no nav promotion."""
 from __future__ import annotations
-import argparse, csv, gzip, json, os, re, resource, sys, tempfile, time
+import argparse, csv, gzip, io, json, re, resource, sys, tempfile, time
 from collections import Counter, defaultdict
 from pathlib import Path
 from datetime import datetime
@@ -169,11 +169,12 @@ def main():
                         # A member is read only when its size is bounded; tar iteration stays streaming.
                         source=tar.extractfile(member)
                         if source is None: continue
-                        if name.endswith(".json.gz"):
-                            with gzip.GzipFile(fileobj=source, mode="rb") as gz:
+                        prefix=source.read(2)
+                        if prefix==b"\\x1f\\x8b":
+                            with gzip.GzipFile(fileobj=io.BytesIO(prefix+source.read()), mode="rb") as gz:
                                 payload=gz.read(MAX_TRACE_MEMBER_BYTES+1)
                         else:
-                            payload=source.read(MAX_TRACE_MEMBER_BYTES+1)
+                            payload=prefix+source.read(MAX_TRACE_MEMBER_BYTES-1)
                         if len(payload)>MAX_TRACE_MEMBER_BYTES:
                             rejected["oversize_decoded_trace"]+=1
                             continue
@@ -267,7 +268,7 @@ def main():
     evidence={"schema_version":1,"benchmark_type":"streaming_multi_aircraft_observed_adsb",
         "privacy":"Aircraft identifiers, callsigns, registrations, raw traces, and timestamps are not serialized.",
         "independent_sample_definition":"One distinct aircraft ICAO24 plus segmented leg number within the archive date; each directed candidate link counted once per leg.",
-        "confidence_thresholds":{"LOW":1-2,"MEDIUM":3-4,"HIGH":5},
+        "confidence_thresholds":{"LOW":[1,2],"MEDIUM":[3,4],"HIGH":[5]},
         "summary":summary,"corridors":corridors,"candidate_links":aggregated_links,
         "leg_metrics":leg_metrics}
     strict_write(args.evidence_out,evidence)
