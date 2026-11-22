@@ -28,15 +28,6 @@
       "sourcePage": "https://openflightmaps.org/downloads/eh/",
       "license": "OFMA_GUL",
       "attribution": "OpenFlightMaps Association (OFMA)"
-    },
-    {
-      "region": "LF",
-      "regionName": "France",
-      "regionKey": "lf",
-      "url": "https://snapshots.openflightmaps.org/live/2611/ofmx/lf/latest/ofmx_lf.zip",
-      "sourcePage": "https://openflightmaps.org/downloads/lf/",
-      "license": "OFMA_GUL",
-      "attribution": "OpenFlightMaps Association (OFMA)"
     }
   ]
 }
