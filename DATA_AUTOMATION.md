@@ -10,7 +10,7 @@ This repository is a development/reference data source for FlightTempo. It is no
 | EASA CZIB export | Daily, 04:23 UTC | Official advisory records and advisory metadata | App-downloadable reference only; source acknowledgement required |
 | OpenAIP FIR/UIR geometry | Weekly, Monday 04:41 UTC | Research/reference geometry and associated airspace review metadata | Repository research only; CC BY-NC 4.0, excluded from app download manifest |
 | FAA PRN KICZ index | Daily, in the main navigation workflow | FAA PRN notice references and source PDFs/checksums | FAA reference only; not live NOTAM status and not a hard restriction feed |
-| FAA CIFP cycle | Daily, in the main navigation workflow | Checks official FAA publication page against the packaged procedure cycle | Currentness report only; parsed procedure CSVs are not auto-replaced |
+| FAA CIFP cycle | Daily, in the main navigation workflow | Checks official FAA publication page against the packaged procedure cycle | Currentness report only; parsed procedure CSVs are not auto-replaced |\n| EUROCONTROL FRA ECAC + MUAC | Daily, 04:45 UTC | Downloads latest FRA XLSX to ephemeral CI storage; reports publication URL, workbook structure, aggregate counts and checksum | Metadata/schema monitoring only; source XLSX and point records are not retained or redistributed; rights review required |
 | French SIA eAIP | CI smoke test in the main workflow | Tests extraction from pinned official LFPG SID/STAR DATA PDFs | Test only; not a global/current procedure import |
 | Legacy 2012.08 IFR data | No automatic source refresh | Preserves the existing global fixes, navaids, airway segments and graph | Stale development baseline; never label as current AIRAC |
 
@@ -21,7 +21,7 @@ All workflows that write shared manifests use the same GitHub Actions concurrenc
 - **FAA CIFP:** The FAA publishes a new CIFP every 28 days. The repository now detects a newly published cycle and fails the daily workflow once the packaged cycle has expired. Automatic replacement is deliberately disabled until a verified ARINC 424 parser, full import validation and cycle-to-cycle regression tests are available. The current package is US NAS only and test/reference use only.
 - **Aero.Sors:** Derived CSV exports were removed because permission to republish transformed CSV derivatives has not been confirmed. The importer scripts remain dormant; no scheduled workflow runs them.
 - **OpenAIP:** Non-commercial research data remains in the repository for reference, but its FIR geometry and any mixed-source airspace filter are not offered through the app download manifest.
-- **EUROCONTROL FRA:** Excluded pending written permission for redistribution.
+- **EUROCONTROL FRA:** The daily monitor tracks the ECAC and MUAC FRA-point publications and inspects workbook structure/aggregate metadata. The source XLSX is downloaded only to ephemeral CI storage; no point rows or source workbook are committed or uploaded. Redistribution and source-data rights remain unconfirmed, so FRA data is excluded from the app manifest pending written permission or a verified reuse licence.
 - **National AIPs / terminal procedures:** No automated extraction is enabled unless the source terms, product scope and redistribution rights have been checked.
 
 ## Integrity and safety gates
