@@ -24,11 +24,11 @@ class Tests(unittest.TestCase):
  def test_zip_member_selection(self):
   b=io.BytesIO()
   with zipfile.ZipFile(b,"w") as z:
-   z.writestr("ofmx_ebbu/embedded/ofmx_ebbu","<OFMX-Snapshot/>")
-   z.writestr("ofmx_ebbu/embedded/ofmx_ebbu_ofmShapeExtension.xml","<Shape/>")
-   z.writestr("ofmx_ebbu/isolated/ofmx_ebbu","<OFMX-Snapshot/>")
-  self.assertEqual(xml_from_zip(b.getvalue(),"ebbu"),b"<OFMX-Snapshot/>")
-  with zipfile.ZipFile(b,"a") as z:z.writestr("another/embedded/ofmx_ebbu","<OFMX-Snapshot/>")
+   z.writestr("ofmx_eb/embedded/ofmx_eb","<OFMX-Snapshot/>")
+   z.writestr("ofmx_eb/embedded/ofmx_eb_ofmShapeExtension.xml","<Shape/>")
+   z.writestr("ofmx_eb/isolated/ofmx_eb","<OFMX-Snapshot/>")
+  self.assertEqual(xml_from_zip(b.getvalue(),"ebbu",{"archiveKey":"eb"}),b"<OFMX-Snapshot/>")
+  with zipfile.ZipFile(b,"a") as z:z.writestr("another/embedded/ofmx_eb","<OFMX-Snapshot/>")
   with self.assertRaises(ValueError):xml_from_zip(b.getvalue(),"ebbu")
  def test_empty_or_bad_schema_fails_closed(self):
   with self.assertRaises(ValueError):parse_xml(b"<OFMX-Snapshot/>",{"region":"EB"})
