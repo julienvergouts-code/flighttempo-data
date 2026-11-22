@@ -1,0 +1,81 @@
+{
+  "schemaVersion": 2,
+  "generatedUtc": "2026-11-22T12:47:58Z",
+  "airac": "2611",
+  "count": 1786,
+  "regions": [
+    "EB",
+    "ED",
+    "EH"
+  ],
+  "featureRegions": {
+    "EBBU": 91,
+    "ED": 376,
+    "EHAA": 87,
+    "EKDK": 42,
+    "EPWW": 76,
+    "ESAA": 34,
+    "LF": 628,
+    "LKAA": 77,
+    "LOVV": 312,
+    "LSAS": 63
+  },
+  "countsByType": {
+    "VFR-MRP": 1299,
+    "VFR-RP": 282,
+    "VFR-ENR": 127,
+    "VFR-HELI": 19,
+    "VFR-GLDR": 59
+  },
+  "reusedCodeGroups": 203,
+  "sources": [
+    {
+      "region": "EB",
+      "regionName": "Belgium",
+      "sourcePage": "https://openflightmaps.org/downloads/eb/",
+      "downloadUrl": "https://snapshots.openflightmaps.org/live/2611/ofmx/ebbu/latest/ofmx_eb.zip",
+      "cycle": "2611",
+      "effectiveDate": null,
+      "license": "OFMA General Users License",
+      "attribution": "OpenFlightMaps Association (OFMA)",
+      "sha256": "defa25338f1166ac435ea225057ba85302794e4c6531ab04d6e08b8c89b67cd3",
+      "bytes": 2379379,
+      "parsedVfrPoints": 382
+    },
+    {
+      "region": "ED",
+      "regionName": "Germany",
+      "sourcePage": "https://openflightmaps.org/downloads/ed/",
+      "downloadUrl": "https://snapshots.openflightmaps.org/live/2611/ofmx/ed/latest/ofmx_ed.zip",
+      "cycle": "2611",
+      "effectiveDate": null,
+      "license": "OFMA General Users License",
+      "attribution": "OpenFlightMaps Association (OFMA)",
+      "sha256": "9712011db21606d4967fd1f4bac30648bd5c0844b5d70d4b8bc9917496e199f7",
+      "bytes": 7657849,
+      "parsedVfrPoints": 1169
+    },
+    {
+      "region": "EH",
+      "regionName": "Netherlands",
+      "sourcePage": "https://openflightmaps.org/downloads/eh/",
+      "downloadUrl": "https://snapshots.openflightmaps.org/live/2611/ofmx/ehaa/latest/ofmx_eh.zip",
+      "cycle": "2611",
+      "effectiveDate": null,
+      "license": "OFMA General Users License",
+      "attribution": "OpenFlightMaps Association (OFMA)",
+      "sha256": "623a1f15a187d64bcb64943c2cecf0214207c19ab8daf73d6dee65aa6c82bd09",
+      "bytes": 5391288,
+      "parsedVfrPoints": 1258
+    }
+  ],
+  "license": "OFMA General Users License",
+  "licenseUrl": "https://www.openflightmaps.org/live/downloads/20150306-GUL.pdf",
+  "commercialUseAllowed": true,
+  "licenseNotes": "Commercial use is explicitly permitted by OFMA GUL. Preserve attribution; communicate alterations within 15 days. If an app lets users alter OFMA data, provide the GUL-required direct contribution interface. Reference-only, not primary navigation.",
+  "attribution": "Contains information from the open flightmaps database, see www.openflightmaps.org",
+  "sha256": "cd553867043eb623ba0b957e76da4bc8c11fd683c06e4e1782531904f18ce33c",
+  "sizeBytes": 156967,
+  "operationalUse": false,
+  "stablePointIds": true
+}
