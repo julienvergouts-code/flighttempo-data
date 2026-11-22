@@ -32,6 +32,8 @@ class TestFraMonitor(unittest.TestCase):
         self.assertAlmostEqual(parse_dms_coordinate('W0013000', 'lon'), -1.5)
         self.assertAlmostEqual(parse_dms_coordinate('S 33 30 00', 'lat'), -33.5)
         self.assertAlmostEqual(parse_dms_coordinate('4.25', 'lon'), 4.25)
+        self.assertAlmostEqual(parse_dms_coordinate('N5123.45', 'lat'), 51 + 23.45 / 60)
+        self.assertAlmostEqual(parse_dms_coordinate('51 23 45 N', 'lat'), 51 + 23 / 60 + 45 / 3600)
         self.assertIsNone(parse_dms_coordinate('N916000', 'lat'))
 
     def test_header_detection_accepts_availability_and_fra_columns(self):
