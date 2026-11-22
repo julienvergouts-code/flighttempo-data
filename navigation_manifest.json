@@ -1,6 +1,6 @@
 {
   "schemaVersion": 13,
-  "generatedAtUtc": "2026-11-22T10:54:49.622544+00:00",
+  "generatedAtUtc": "2026-11-22T11:06:10.041587+00:00",
   "procedureAiracCycle": "2611",
   "navaidTypeCounts": {
     "DME": 167,
@@ -34,7 +34,8 @@
     "airportReferenceRunwayMatches": 24175,
     "airportReferenceMultipleRunwayAirports": 3906,
     "airportReferenceOurAirportsMetadataMatches": 29747,
-    "globalAirlineDirectory": 3846
+    "globalAirlineDirectory": 3846,
+    "faaVfrReportingPoints": 681
   },
   "dataSources": [
     {
@@ -66,6 +67,16 @@
       "sizeBytes": 1524931,
       "sha256": "d7292380662c33a95214945023ec0a5b13189599305fd18be739e167a97a9bd1",
       "recordCount": 11008
+    },
+    {
+      "dataset": "faa_vfr_reporting_points",
+      "url": "https://www.faa.gov/air_traffic/flight_info/aeronav/Aero_Data/NASR_Subscription/",
+      "provider": "FAA Aeronautical Information Services",
+      "license": "US Government public-domain data",
+      "downloadedAt": "2026-11-21T23:18:04Z",
+      "sizeBytes": 35570,
+      "sha256": "d535faaa3e2ca5eb63ff3681fa26a249cb5519ee45b0827480937616bd1d94ff",
+      "recordCount": 681
     }
   ],
   "capabilities": {
@@ -715,6 +726,28 @@
       "status": "reference_only_currentness_unverified",
       "license": "FAA public reference; currentness unverified",
       "operationallyAvailable": false
+    },
+    {
+      "id": "faa_vfr_reporting_points",
+      "path": "data/vfr_points.csv",
+      "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/data/vfr_points.csv",
+      "available": true,
+      "recordCount": 681,
+      "sizeBytes": 35570,
+      "sha256": "d535faaa3e2ca5eb63ff3681fa26a249cb5519ee45b0827480937616bd1d94ff",
+      "sourceProvider": "FAA Aeronautical Information Services / NASR FIX",
+      "sourceUrl": "https://www.faa.gov/air_traffic/flight_info/aeronav/Aero_Data/NASR_Subscription/",
+      "coverage": "United States NASR VFR reporting points (VP-prefixed FIX records)",
+      "sourceTag": "FAA_NASR_FIX_2026-11-26",
+      "license": "US Government public-domain data",
+      "licenseStatus": "public_domain",
+      "dataCycle": "2026-11-26",
+      "effectiveDate": "2026-11-26",
+      "expiryDate": "",
+      "provenanceVerification": "source_snapshot",
+      "downloadPurpose": "reference_only",
+      "operationallyAvailable": false,
+      "status": "present_reference_dataset"
     }
   ],
   "downloadContract": {
