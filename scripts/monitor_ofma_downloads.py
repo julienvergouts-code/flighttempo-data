@@ -40,7 +40,8 @@ def fetch(url):
         return r.status,r.url,body
 
 def discover_region(code):
-    slug={"LD":"lb"}.get(code,code.lower())\n    url=f"https://openflightmaps.org/downloads/{slug}/"
+    slug={"LD":"lb"}.get(code,code.lower())
+    url=f"https://openflightmaps.org/downloads/{slug}/"
     try:
         status,final,raw=fetch(url)
         html=raw.decode("utf-8","replace")
@@ -52,7 +53,7 @@ def discover_region(code):
                 links.append(resolved)
         # Capture format hints from the visible text/source without retaining page contents.
         format_hints=sorted(set(ext[1:] for ext in FORMATS if ext in html.lower()))
-        absolute_urls=sorted(set(re.findall(r"https?://[^\\s\\"'<>]+",html)))
+        absolute_urls=sorted(set(re.findall(r"https?://[^\\s<>]+",html)))
         candidate_urls=[x for x in absolute_urls if any(term in x.lower() for term in ("openflightmaps","snapshot","download","api"))]
         return {"region":code,"regionName":REGIONS[code],"pageUrl":url,"status":status,
                 "finalUrl":final,"pageBytes":len(raw),"sha256":hashlib.sha256(raw).hexdigest(),
