@@ -33,7 +33,6 @@ class SiaProcedureImporterTests(unittest.TestCase):
             ["-", "TF", "PG264", "Y", "264", "265.2", "4.7", "-", "-", "-", "-", "1.0"],
             ["-", "TF", "BAXIR", "-", "094", "095.6", "12.8", "-", "-", "-", "", "1.0"],
         ]
-        fixes = {"PG263": [("49.0000", "2.0000")], "PG264": [("49.0100", "2.0100")]}
         rows = parse_table_rows(
             table,
             airport_icao="LFPG",
@@ -43,7 +42,6 @@ class SiaProcedureImporterTests(unittest.TestCase):
             source_document_date="2026-10-01",
             airac_effective_date="2026-10-29",
             source_sha256="abc123",
-            fix_index=fixes,
         )
         self.assertEqual(len(rows), 4)
         self.assertEqual({row["procedure_identifier"] for row in rows}, {"BAXIR 7B"})
@@ -52,9 +50,10 @@ class SiaProcedureImporterTests(unittest.TestCase):
         self.assertEqual(rows[2]["procedure_selector"], "")
         self.assertEqual(rows[2]["fly_over"], "Y")
         self.assertEqual(rows[2]["distance_nm"], "4.7")
-        self.assertEqual(rows[0]["fix_resolution"], "unique_source_fix")
-        self.assertEqual(rows[0]["fix_latitude"], "49.0000")
-        self.assertEqual(rows[3]["fix_resolution"], "not_linked")
+        self.assertEqual(rows[0]["fix_resolution"], "not_linked_no_procedure_source_coordinates")
+        self.assertEqual(rows[0]["fix_latitude"], "")
+        self.assertEqual(rows[0]["fix_longitude"], "")
+        self.assertEqual(rows[3]["fix_resolution"], "not_linked_no_procedure_source_coordinates")
         self.assertEqual(rows[3]["maximum_ias_kt"], "")
 
     def test_approach_table_keeps_leg_sequence_and_vertical_angle(self):
@@ -87,7 +86,7 @@ class SiaProcedureImporterTests(unittest.TestCase):
         self.assertEqual(rows[1]["minimum_altitude_raw"], "5000")
         self.assertEqual(rows[1]["vertical_angle_tch_raw"], "-3.0 / 49")
 
-    def test_fix_ident_ambiguity_is_not_resolved_by_guessing(self):
+    def test_ident_only_fix_lookup_is_not_used_for_procedure_coordinates(self):
         table = [
             self.sid_header,
             ["TEST 1A", "", "", "", "", "", "", "", "", "", "", ""],
@@ -102,10 +101,10 @@ class SiaProcedureImporterTests(unittest.TestCase):
             source_document_date="",
             airac_effective_date="2026-10-29",
             source_sha256="x",
-            fix_index={"DUP": [("50.0", "3.0"), ("51.0", "4.0")]},
         )
-        self.assertEqual(rows[0]["fix_resolution"], "ambiguous_source_fix")
+        self.assertEqual(rows[0]["fix_resolution"], "not_linked_no_procedure_source_coordinates")
         self.assertEqual(rows[0]["fix_latitude"], "")
+        self.assertEqual(rows[0]["fix_longitude"], "")
 
     def test_filename_discovery_excludes_final_segment_and_chart_files(self):
         self.assertEqual(

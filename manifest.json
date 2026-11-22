@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "repository": "julienvergouts-code/flighttempo-data",
-  "generatedAtUtc": "2026-11-22T11:11:20.852364+00:00",
-  "purpose": "Personal FlightTempo development, cross-checking, route-building experiments and flight-preparation practice; not an operational navigation database.",
+  "generatedAtUtc": "2026-11-22T13:38:13.466Z",
+  "purpose": "FlightTempo development and distribution of aviation datasets whose source-specific commercial reuse rights are verified; not an operational navigation database.",
   "rules": {
     "datasetMetaRequired": true,
     "requiredMetaFields": [
@@ -14,7 +14,7 @@
       "licenceStatus"
     ],
     "missingRegionalProcedures": "remain_missing_never_invent",
-    "openAipAttribution": "Contains data from OpenAIP (https://www.openaip.net/), licensed under CC BY-NC 4.0.",
+    "openAipAttribution": "OpenAIP CC BY-NC 4.0 exports are excluded from the active database and removed from tracked data files.",
     "airacNetStorage": "blocked_until_licence_clarified",
     "aerosors": "derivative_redistribution_not_confirmed; do not publish derived CSV exports or include them in app downloads without written permission"
   },
@@ -112,7 +112,6 @@
     },
     {
       "id": "airspace-filter",
-      "path": "airspace/airspace_filter.json",
       "source": "EASA CZIB advisories and OpenAIP FIR/UIR reference geometry",
       "airacCycle": null,
       "effectiveDate": null,
@@ -120,7 +119,10 @@
       "sha256": "129af7e3cb17063766b67830691f21d5e74ff2daf40c8427b7a19e4eb33ee5ff",
       "licenceStatus": "mixed_source_rights_EASA_acknowledgement_and_OpenAIP_CC_BY_NC_4.0",
       "coverage": "Route-preview advisory mapping; not a legal restriction feed",
-      "recordCount": 16
+      "recordCount": 16,
+      "removedPath": "airspace/airspace_filter.json",
+      "dataStatus": "removed_derived_from_noncommercial_openAIP_source",
+      "commercialUseAllowed": false
     },
     {
       "id": "route-policy",
@@ -136,7 +138,6 @@
     },
     {
       "id": "openaip-fir-boundaries",
-      "path": "navigation/airspace/openaip_fir_boundaries.geojson",
       "source": "OpenAIP country airspace exports",
       "airacCycle": null,
       "effectiveDate": null,
@@ -144,7 +145,10 @@
       "sha256": "2b66e8c2edc16955a0ec32cd90feb9a19c31c076fba4642883b7d45959052baf",
       "licenceStatus": "CC_BY_NC_4.0_attribution_required_non_commercial_only",
       "coverage": "Worldwide FIR/UIR polygons where published in OpenAIP country exports",
-      "recordCount": 172
+      "recordCount": 172,
+      "removedPath": "navigation/airspace/openaip_fir_boundaries.geojson",
+      "dataStatus": "removed_noncommercial_source",
+      "commercialUseAllowed": false
     },
     {
       "id": "easa-safety-directives",

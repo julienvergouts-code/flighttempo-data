@@ -56,7 +56,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: flighttempo-shared-manifest-updates
+  group: ${{ github.event_name == 'pull_request' && format('flighttempo-pr-{0}', github.workflow) || 'flighttempo-shared-manifest-updates' }}
   cancel-in-progress: false
 
 jobs:

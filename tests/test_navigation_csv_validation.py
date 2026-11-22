@@ -58,7 +58,8 @@ class ManifestValidationTests(unittest.TestCase):
             "id": "aerosors", "licenseStatus": "derivative_redistribution_not_confirmed"
         }))
         self.assertIsNone(redistribution_block_reason({
-            "id": "ourairports", "license": "CC0 / Public Domain"
+            "id": "ourairports", "license": "CC0 / Public Domain",
+            "licenseStatus": "public_domain"
         }))
 
 

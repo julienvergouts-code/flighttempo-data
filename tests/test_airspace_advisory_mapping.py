@@ -1,96 +1,42 @@
-import sys
+import json
 import unittest
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(ROOT))
-
-from scripts import import_easa_czibs, import_openaip_firs
 
 
-class RussiaBelarusAdvisoryMappingTests(unittest.TestCase):
-    def _feature(self, feature_id, code, name):
-        return {
-            "type": "Feature",
-            "id": feature_id,
-            "geometry": {"type": "Polygon", "coordinates": []},
-            "properties": {
-                "name": name,
-                "country": "RU",
-                "flightTempoFirCode": code,
-            },
-        }
-
-    def test_russia_mapping_uses_exact_five_firs_from_czib(self):
-        features = [
-            self._feature(2310, "UMKK", "KALININGRAD FIR"),
-            self._feature(2448, "UWWW", "SAMARA FIR"),
-            self._feature(2450, "UKFV", "SIMFEROPOL FIR"),
-            self._feature(2458, "URRV", "ROSTOV-NA-DONU FIR"),
-        ]
-        mapped = import_openaip_firs.build_russia_advisory_mapping(
-            {"sourceId": "141480"}, features
+class AirspaceSourcePublicationTests(unittest.TestCase):
+    def test_russia_source_record_keeps_explicit_easa_fir_list(self):
+        payload = json.loads(
+            (ROOT / "airspace/advisories/easa_czibs.json").read_text(encoding="utf-8")
         )
+        record = next(x for x in payload["records"] if x["sourceId"] == "141480")
         self.assertEqual(
-            [x["firCode"] for x in mapped["affectedFirs"]],
-            ["UUWV", "URRV", "ULLL", "USSV", "UWWW"],
+            set(record["explicitFirCodes"]), {"UUWV", "URRV", "ULLL", "USSV", "UWWW"}
         )
-        self.assertNotIn("UMKK", [x["firCode"] for x in mapped["affectedFirs"]])
-        self.assertNotIn("UKFV", [x["firCode"] for x in mapped["affectedFirs"]])
+        self.assertNotIn("UMKK", record["explicitFirCodes"])
+        self.assertNotIn("UKFV", record["explicitFirCodes"])
 
-    def test_partial_or_unverified_russian_geometry_fails_closed(self):
-        features = [
-            self._feature(2448, "UWWW", "SAMARA FIR"),
-            self._feature(2458, "URRV", "ROSTOV-NA-DONU FIR"),
-        ]
-        mapped = import_openaip_firs.build_russia_advisory_mapping(
-            {"sourceId": "141480"}, features
-        )
-        self.assertFalse(mapped["geometryCoverageComplete"])
-        self.assertFalse(mapped["routeAvoidanceReady"])
-        self.assertEqual(
-            {x["firCode"] for x in mapped["affectedFirs"] if not x["geometryAvailable"]},
-            {"UUWV", "ULLL", "USSV"},
-        )
-        active = import_openaip_firs.build_active_firs([{
-            "sourceId": "141480", "country": "Russia", **mapped
-        }])
-        self.assertEqual(active, [])
+    def test_noncommercial_openaip_export_and_derived_filter_are_absent(self):
+        self.assertFalse((ROOT / "navigation/airspace/openaip_fir_boundaries.geojson").exists())
+        self.assertFalse((ROOT / "airspace/airspace_filter.json").exists())
+        self.assertFalse((ROOT / "scripts/import_openaip_firs.py").exists())
+        manifest = json.loads((ROOT / "navigation_manifest.json").read_text(encoding="utf-8"))
+        by_id = {x["id"]: x for x in manifest["datasets"]}
+        for dataset_id in ("openaip_fir_boundaries", "airspace_filter"):
+            dataset = by_id.get(dataset_id)
+            if dataset is not None:
+                self.assertFalse(dataset.get("available", False))
+                self.assertNotIn("downloadUrl", dataset)
+        self.assertFalse(manifest["capabilities"]["firBoundaries"])
+        self.assertFalse(manifest["capabilities"]["airspaceFilterAdvisoryOnly"])
 
-    def test_belarus_directives_are_separate_from_czib_and_not_geometry_ready(self):
-        import json
-        path = ROOT / "airspace/advisories/easa_safety_directives.json"
-        payload = json.loads(path.read_text(encoding="utf-8"))
-        directives = payload["records"]
-        self.assertEqual(
-            {x["sourceId"] for x in directives},
-            {"SD-2021-02", "SD-2021-03"},
-        )
-        for directive in directives:
-            self.assertEqual(directive["affectedFirs"][0]["firCode"], "UMMV")
-            self.assertFalse(directive["affectedFirs"][0]["geometryAvailable"])
-            self.assertIn("unforeseen circumstances", directive["exception"])
-
-    def test_russia_geometry_requires_all_firs_verified_and_clipped(self):
-        codes = [("UUWV", "MOSCOW FIR"), ("URRV", "ROSTOV-NA-DONU FIR"),
-                 ("ULLL", "SANKT-PETERSBURG FIR"), ("USSV", "YEKATERINBURG FIR"),
-                 ("UWWW", "SAMARA FIR")]
-        features = []
-        for idx, (code, name) in enumerate(codes, start=1):
-            feature = self._feature(idx, code, name)
-            feature["properties"]["flightTempoVerifiedAgainstStateAip"] = True
-            feature["properties"]["flightTempoClippedAt60E"] = code != "UWWW"
-            features.append(feature)
-        mapped = import_openaip_firs.build_russia_advisory_mapping(
-            {"sourceId": "141480"}, features
-        )
-        self.assertFalse(mapped["routeAvoidanceReady"])
-        features[-1]["properties"]["flightTempoClippedAt60E"] = True
-        mapped = import_openaip_firs.build_russia_advisory_mapping(
-            {"sourceId": "141480"}, features
-        )
-        self.assertTrue(mapped["geometryCoverageComplete"])
-        self.assertTrue(mapped["routeAvoidanceReady"])
+    def test_easa_records_are_not_app_downloadable_without_verified_commercial_terms(self):
+        manifest = json.loads((ROOT / "navigation_manifest.json").read_text(encoding="utf-8"))
+        by_id = {x["id"]: x for x in manifest["datasets"]}
+        for dataset_id in ("easa_czibs", "easa_safety_directives"):
+            self.assertFalse(by_id[dataset_id]["available"])
+            self.assertNotIn("downloadUrl", by_id[dataset_id])
 
 
 if __name__ == "__main__":

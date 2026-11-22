@@ -1,0 +1,37 @@
+name: Validate VFR data artifacts
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "data/ofma_ofmx_vfr_points.csv"
+      - "data/ofma_ofmx_vfr_points_meta.json"
+      - "navigation_manifest.json"
+      - "scripts/validate_vfr_data_artifacts.py"
+      - ".github/workflows/validate_data_artifacts.yml"
+      - ".github/workflows/import-ofma-ofmx-vfr-points.yml"
+      - "data/ofma_ofmx_sources.json"
+  push:
+    branches: [main]
+    paths:
+      - "data/ofma_ofmx_vfr_points.csv"
+      - "data/ofma_ofmx_vfr_points_meta.json"
+      - "navigation_manifest.json"
+      - "scripts/validate_vfr_data_artifacts.py"
+      - ".github/workflows/validate_data_artifacts.yml"
+      - ".github/workflows/import-ofma-ofmx-vfr-points.yml"
+      - "data/ofma_ofmx_sources.json"
+
+permissions:
+  contents: read
+
+jobs:
+  validate-ofma-vfr:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Validate OFMA CSV, provenance, and manifest integrity
+        run: python scripts/validate_vfr_data_artifacts.py

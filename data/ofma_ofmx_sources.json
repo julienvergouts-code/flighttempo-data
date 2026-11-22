@@ -1,0 +1,219 @@
+{
+  "schemaVersion": 2,
+  "airac": "auto",
+  "provider": "OpenFlightMaps Association (OFMA)",
+  "license": "OFMA_GUL",
+  "attribution": "Contains information from the open flightmaps database, see www.openflightmaps.org",
+  "regions": [
+    {
+      "region": "EB",
+      "regionName": "Belgium",
+      "regionCode": "EBBU",
+      "regionKey": "ebbu",
+      "archiveKey": "eb",
+      "sourcePage": "https://openflightmaps.org/downloads/eb/",
+      "license": "OFMA_GUL",
+      "attribution": "OpenFlightMaps Association (OFMA)"
+    },
+    {
+      "region": "ED",
+      "regionName": "Germany",
+      "regionCode": "ED",
+      "regionKey": "ed",
+      "archiveKey": "ed",
+      "sourcePage": "https://openflightmaps.org/downloads/ed/",
+      "license": "OFMA_GUL",
+      "attribution": "OpenFlightMaps Association (OFMA)"
+    },
+    {
+      "region": "EF",
+      "regionName": "Finland",
+      "regionCode": "EFIN",
+      "regionKey": "efin",
+      "archiveKey": "ef",
+      "sourcePage": "https://openflightmaps.org/downloads/ef/",
+      "license": "OFMA_GUL",
+      "attribution": "OpenFlightMaps Association (OFMA)"
+    },
+    {
+      "region": "EH",
+      "regionName": "Netherlands",
+      "regionCode": "EHAA",
+      "regionKey": "ehaa",
+      "archiveKey": "eh",
+      "sourcePage": "https://openflightmaps.org/downloads/eh/",
+      "license": "OFMA_GUL",
+      "attribution": "OpenFlightMaps Association (OFMA)"
+    },
+    {
+      "region": "EK",
+      "regionName": "Denmark",
+      "regionCode": "EKDK",
+      "regionKey": "ekdk",
+      "archiveKey": "ek",
+      "sourcePage": "https://openflightmaps.org/downloads/ek/",
+      "license": "OFMA_GUL",
+      "attribution": "OpenFlightMaps Association (OFMA)"
+    },
+    {
+      "region": "EP",
+      "regionName": "Poland",
+      "regionCode": "EPWW",
+      "regionKey": "epww",
+      "archiveKey": "ep",
+      "sourcePage": "https://openflightmaps.org/downloads/ep/",
+      "license": "OFMA_GUL",
+      "attribution": "OpenFlightMaps Association (OFMA)"
+    },
+    {
+      "region": "ES",
+      "regionName": "Sweden",
+      "regionCode": "ESAA",
+      "regionKey": "esaa",
+      "archiveKey": "es",
+      "sourcePage": "https://openflightmaps.org/downloads/es/",
+      "license": "OFMA_GUL",
+      "attribution": "OpenFlightMaps Association (OFMA)"
+    },
+    {
+      "region": "FA",
+      "regionName": "South Africa",
+      "regionCode": "FA",
+      "regionKey": "fa",
+      "archiveKey": "fa",
+      "sourcePage": "https://openflightmaps.org/downloads/fa/",
+      "license": "OFMA_GUL",
+      "attribution": "OpenFlightMaps Association (OFMA)"
+    },
+    {
+      "region": "FY",
+      "regionName": "Namibia",
+      "regionCode": "FYWH",
+      "regionKey": "fywh",
+      "archiveKey": "fy",
+      "sourcePage": "https://openflightmaps.org/downloads/fy/",
+      "license": "OFMA_GUL",
+      "attribution": "OpenFlightMaps Association (OFMA)"
+    },
+    {
+      "region": "LD",
+      "regionName": "Croatia",
+      "regionCode": "LDZO",
+      "regionKey": "ldzo",
+      "archiveKey": "ld",
+      "sourcePage": "https://openflightmaps.org/downloads/lb/",
+      "license": "OFMA_GUL",
+      "attribution": "OpenFlightMaps Association (OFMA)"
+    },
+    {
+      "region": "LF",
+      "regionName": "France",
+      "regionCode": "LF",
+      "regionKey": "lf",
+      "archiveKey": "lf",
+      "sourcePage": "https://openflightmaps.org/downloads/lf/",
+      "license": "OFMA_GUL",
+      "attribution": "OpenFlightMaps Association (OFMA)"
+    },
+    {
+      "region": "LG",
+      "regionName": "Greece",
+      "regionCode": "LGGG",
+      "regionKey": "lggg",
+      "archiveKey": "lg",
+      "sourcePage": "https://openflightmaps.org/downloads/lg/",
+      "license": "OFMA_GUL",
+      "attribution": "OpenFlightMaps Association (OFMA)"
+    },
+    {
+      "region": "LH",
+      "regionName": "Hungary",
+      "regionCode": "LHCC",
+      "regionKey": "lhcc",
+      "archiveKey": "lh",
+      "sourcePage": "https://openflightmaps.org/downloads/lh/",
+      "license": "OFMA_GUL",
+      "attribution": "OpenFlightMaps Association (OFMA)"
+    },
+    {
+      "region": "LI",
+      "regionName": "Italy",
+      "regionCode": "LI",
+      "regionKey": "li",
+      "archiveKey": "li",
+      "sourcePage": "https://openflightmaps.org/downloads/li/",
+      "license": "OFMA_GUL",
+      "attribution": "OpenFlightMaps Association (OFMA)"
+    },
+    {
+      "region": "LJ",
+      "regionName": "Slovenia",
+      "regionCode": "LJLA",
+      "regionKey": "ljla",
+      "archiveKey": "lj",
+      "sourcePage": "https://openflightmaps.org/downloads/lj/",
+      "license": "OFMA_GUL",
+      "attribution": "OpenFlightMaps Association (OFMA)"
+    },
+    {
+      "region": "LK",
+      "regionName": "Czech Republic",
+      "regionCode": "LKAA",
+      "regionKey": "lkaa",
+      "archiveKey": "lk",
+      "sourcePage": "https://openflightmaps.org/downloads/lk/",
+      "license": "OFMA_GUL",
+      "attribution": "OpenFlightMaps Association (OFMA)"
+    },
+    {
+      "region": "LM",
+      "regionName": "Malta",
+      "regionCode": "LMMM",
+      "regionKey": "lmmm",
+      "archiveKey": "lm",
+      "sourcePage": "https://openflightmaps.org/downloads/lm/",
+      "license": "OFMA_GUL",
+      "attribution": "OpenFlightMaps Association (OFMA)"
+    },
+    {
+      "region": "LO",
+      "regionName": "Austria",
+      "regionCode": "LOVV",
+      "regionKey": "lovv",
+      "archiveKey": "lo",
+      "sourcePage": "https://openflightmaps.org/downloads/lo/",
+      "license": "OFMA_GUL",
+      "attribution": "OpenFlightMaps Association (OFMA)"
+    },
+    {
+      "region": "LR",
+      "regionName": "Romania",
+      "regionCode": "LRBB",
+      "regionKey": "lrbb",
+      "archiveKey": "lr",
+      "sourcePage": "https://openflightmaps.org/downloads/lr/",
+      "license": "OFMA_GUL",
+      "attribution": "OpenFlightMaps Association (OFMA)"
+    },
+    {
+      "region": "LS",
+      "regionName": "Switzerland",
+      "regionCode": "LSAS",
+      "regionKey": "lsas",
+      "archiveKey": "ls",
+      "sourcePage": "https://openflightmaps.org/downloads/ls/",
+      "license": "OFMA_GUL",
+      "attribution": "OpenFlightMaps Association (OFMA)"
+    },
+    {
+      "region": "LZ",
+      "regionName": "Slovakia",
+      "regionCode": "LZBB",
+      "regionKey": "lzbb",
+      "archiveKey": "lz",
+      "sourcePage": "https://openflightmaps.org/downloads/lz/",
+      "license": "OFMA_GUL",
+      "attribution": "OpenFlightMaps Association (OFMA)"
+    }
+  ]
+}
