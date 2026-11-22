@@ -1,8 +1,8 @@
 name: ADS-B corridor benchmark (real archive)
 
 on:
-  push:
-    branches: [feature/adsb-route-learning]
+  pull_request:
+    branches: [main]
     paths:
       - "pipeline/**"
       - "scripts/adsb_learning/**"
