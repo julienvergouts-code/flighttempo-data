@@ -126,6 +126,8 @@ def redistribution_block_reason(dataset: dict) -> str | None:
         "not_confirmed",
         "redistribution_not_confirmed",
         "derivative_redistribution",
+        "mixed_source_review",
+        "provenance_under_review",
         "personal_development_test_only",
     )
     return next((marker for marker in blocked_markers if marker in license_text), None)

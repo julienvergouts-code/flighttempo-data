@@ -56,6 +56,10 @@ class SiaProcedureImporterTests(unittest.TestCase):
         self.assertEqual(rows[0]["fix_latitude"], "49.0000")
         self.assertEqual(rows[3]["fix_resolution"], "not_linked")
         self.assertEqual(rows[3]["maximum_ias_kt"], "")
+        self.assertEqual(
+            rows[0]["source_license"],
+            "SIA Licence Ouverte 2.0 (eAIP product; SIA attribution required)",
+        )
 
     def test_approach_table_keeps_leg_sequence_and_vertical_angle(self):
         header = [

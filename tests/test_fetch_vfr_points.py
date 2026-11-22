@@ -42,7 +42,7 @@ def zip_bytes(members):
     return out.getvalue()
 
 
-class VfrReportingPointPipelineTests(unittest.TestCase):
+class FaaVfrWaypointPipelineTests(unittest.TestCase):
     def test_fix_link_case_insensitive_and_cycle_date(self):
         html = '<a href="/extra/26_Nov_2026_fix_csv.zip">FIX</a>'
         self.assertEqual(mod.extract_fix_links(html, "https://example.com/index/"), [
@@ -68,7 +68,7 @@ class VfrReportingPointPipelineTests(unittest.TestCase):
             rows = mod.parse_faa_records(mod.iter_fix_base_lines(archive), "2026-11-26")
         self.assertEqual(rows, [{
             "icao": "", "code": "VPABC", "name": "VPABC", "lat": "34.123456",
-            "lon": "-118.123456", "role": "VRP", "source": "FAA", "updated_date": "2026-11-26",
+            "lon": "-118.123456", "role": "VFR_WAYPOINT", "source": "FAA", "updated_date": "2026-11-26",
         }])
 
     def test_fallback_to_previous_archive(self):
@@ -90,9 +90,18 @@ class VfrReportingPointPipelineTests(unittest.TestCase):
     def test_bad_coordinates_rejected(self):
         for lat, lon in [(0, 0), (91, 0), (0, 181), (-91, 20)]:
             row = {"icao": "", "code": "VP001", "name": "test", "lat": lat, "lon": lon,
-                   "role": "VRP", "source": "FAA", "updated_date": "2026-11-26"}
+                   "role": "VFR_WAYPOINT", "source": "FAA", "updated_date": "2026-11-26"}
             with self.subTest(lat=lat, lon=lon), self.assertRaises(ValueError):
                 mod.validate_record(row)
+
+    def test_faa_records_require_vfr_waypoint_role_and_identifier(self):
+        base = {"icao": "", "code": "VP001", "name": "test", "lat": 40, "lon": -70,
+                "role": "VFR_WAYPOINT", "source": "FAA", "updated_date": "2026-11-26"}
+        self.assertEqual(mod.validate_record(base)["role"], "VFR_WAYPOINT")
+        for field, value in (("role", "VRP"), ("code", "ABC12")):
+            invalid = {**base, field: value}
+            with self.subTest(field=field), self.assertRaises(ValueError):
+                mod.validate_record(invalid)
 
     def test_rejection_rate_guard(self):
         bad = [{"icao": "", "code": "VP1", "name": "x", "lat": 0, "lon": 0, "role": "VRP",
@@ -104,7 +113,7 @@ class VfrReportingPointPipelineTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as td:
             csvpath, metapath = Path(td) / "data.csv", Path(td) / "meta.json"
             old = [{"icao": "", "code": "VPOLD", "name": "VPOLD", "lat": 40, "lon": -70,
-                    "role": "VRP", "source": "FAA", "updated_date": "2026-10-01"}]
+                    "role": "VFR_WAYPOINT", "source": "FAA", "updated_date": "2026-10-01"}]
             mod.write_csv(csvpath, old, "2026-10-01T00:00:00Z")
             orig_csv, orig_meta, orig_fetch = mod.CSV_PATH, mod.META_PATH, mod.fetch_faa
             mod.CSV_PATH, mod.META_PATH = csvpath, metapath
@@ -120,7 +129,7 @@ class VfrReportingPointPipelineTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as td:
             path, meta = Path(td) / "points.csv", Path(td) / "meta.json"
             previous = [{"icao": "", "code": f"VP{i:03}", "name": "x", "lat": 40+i/100, "lon": -70,
-                         "role": "VRP", "source": "FAA", "updated_date": "2026-10-01"} for i in range(10)]
+                         "role": "VFR_WAYPOINT", "source": "FAA", "updated_date": "2026-10-01"} for i in range(10)]
             mod.write_csv(path, previous, "old")
             orig_csv, orig_meta, orig_fetch = mod.CSV_PATH, mod.META_PATH, mod.fetch_faa
             mod.CSV_PATH, mod.META_PATH = path, meta
@@ -135,7 +144,7 @@ class VfrReportingPointPipelineTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as td:
             path, meta = Path(td) / "points.csv", Path(td) / "meta.json"
             records = [{"icao": "", "code": "VP001", "name": "VP001", "lat": 40, "lon": -70,
-                        "role": "VRP", "source": "FAA", "updated_date": "2026-11-26"}]
+                        "role": "VFR_WAYPOINT", "source": "FAA", "updated_date": "2026-11-26"}]
             orig_csv, orig_meta, orig_fetch = mod.CSV_PATH, mod.META_PATH, mod.fetch_faa
             mod.CSV_PATH, mod.META_PATH, mod.fetch_faa = path, meta, lambda: records
             try:
@@ -151,7 +160,7 @@ class VfrReportingPointPipelineTests(unittest.TestCase):
             csvpath.write_text("old-csv")
             metapath.write_text("old-meta")
             records = [{"icao": "", "code": "VP001", "name": "VP001", "lat": 40, "lon": -70,
-                        "role": "VRP", "source": "FAA", "updated_date": "2026-11-26"}]
+                        "role": "VFR_WAYPOINT", "source": "FAA", "updated_date": "2026-11-26"}]
             real_replace, count = mod.os.replace, 0
             def fail_second(src, dst):
                 nonlocal count
@@ -168,8 +177,8 @@ class VfrReportingPointPipelineTests(unittest.TestCase):
             self.assertEqual(metapath.read_text(), "old-meta")
 
     def test_disabled_ofma_rows_retained_and_faa_wins_duplicate(self):
-        faa = {"icao": "", "code": "VP001", "name": "FAA point", "lat": 40, "lon": -70,
-               "role": "VRP", "source": "FAA", "updated_date": "2026-11-26"}
+        faa = {"icao": "", "code": "VP001", "name": "FAA waypoint", "lat": 40, "lon": -70,
+               "role": "VFR_WAYPOINT", "source": "FAA", "updated_date": "2026-11-26"}
         ofma = {"icao": "", "code": "VP001", "name": "OFMA point", "lat": 41, "lon": -71,
                 "role": "VRP", "source": "OFMA", "updated_date": "2026-11-20"}
         retained = {"icao": "LFPG", "code": "P1", "name": "P1", "lat": 49, "lon": 2.5,
@@ -185,7 +194,7 @@ class VfrReportingPointPipelineTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as td:
             csvpath, metapath = Path(td) / "points.csv", Path(td) / "meta.json"
             records = [{"icao": "", "code": "VP001", "name": "VP001", "lat": 40, "lon": -70,
-                        "role": "VRP", "source": "FAA", "updated_date": "2026-11-26"}]
+                        "role": "VFR_WAYPOINT", "source": "FAA", "updated_date": "2026-11-26"}]
             mod.write_csv(csvpath, records, "old-generated")
             mod.write_meta(metapath, records, "old-generated", "ok")
             orig_csv, orig_meta, orig_fetch = mod.CSV_PATH, mod.META_PATH, mod.fetch_faa

@@ -1,4 +1,4 @@
-name: Update FAA VFR Reporting Points
+name: Update FAA VFR Waypoints
 on:
   push:
     branches:
@@ -25,7 +25,7 @@ jobs:
       - run: python -m pip install --upgrade pip requests
       - name: Run FAA importer
         run: python pipeline/fetch_vfr_points.py
-      - name: Register VFR reporting points in navigation manifest
+      - name: Register FAA VFR waypoints in navigation manifest
         run: python scripts/register_faa_vfr_points_manifest.py
       - name: Commit changed dataset and manifest
         run: |
@@ -33,8 +33,8 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add data/vfr_points.csv data/vfr_points_meta.json navigation_manifest.json
           if git diff --cached --quiet; then
-            echo "No VFR reporting-point data changes."
+            echo "No VFR waypoint data changes."
           else
-            git commit -m "Update FAA VFR reporting points and manifest"
+            git commit -m "Update FAA VFR waypoints and manifest"
             git push
           fi

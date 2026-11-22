@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
-  "checkedAtUtc": "2026-11-14",
+  "checkedAtUtc": "2026-11-22",
   "purpose": "Source and redistribution inventory for IFR terminal procedures and relevant VFR procedure geometry. This registry is not an operational data publication.",
   "regions": {
     "europe": {
-      "status": "partial_public_source_confirmed_not_ingested",
+      "status": "licensed_procedure_source_confirmed_parser_smoke_tested_no_procedure_package",
       "operationallyAvailable": false,
-      "summary": "France publishes current procedure DATA sheets in its eAIP, including structured SID and STAR leg tables and some RNP approach precoding tables. Its separate SIA AIXM4.5/XML export is openly reusable reference data but is not yet treated as a complete IFPD feed. No complete Europe-wide IFR procedure dataset has been established.",
+      "summary": "No European SID/STAR or VFR reporting-point records are currently published in FlightTempo. France has current, structured DATA SID/STAR PDFs under the SIA Licence Ouverte; CI parsed 98 LFPG SID/STAR leg rows, but they remain smoke-test output and are not yet an app package. SIA AIXM designated points are another open source, but the current archive mirror did not expose a dated download during CI. OFMA publishes regional VFR reference data under conditional terms, but no machine-readable export is wired into the repository.",
       "confirmedProcedureCountries": [],
       "candidateProcedureCountries": [
         "FR"
@@ -19,7 +19,7 @@
           "id": "FR_SIA_XML",
           "jurisdiction": "FR",
           "provider": "Service de l'Information Aeronautique (DGAC France)",
-          "sourceUrl": "https://www.sia.aviation-civile.gouv.fr/produits-numeriques-en-libre-disposition/les-bases-de-donnees-sia/donnees-aeronautiques-xml-airac-11-26.html",
+          "sourceUrl": "https://www.sia.aviation-civile.gouv.fr/produits-numeriques-en-libre-disposition/les-bases-de-donnees-sia/donnees-aeronautiques-xml-airac-12-26.html",
           "mirrorUrl": "https://data.cquest.org/dgac/aip/",
           "format": [
             "AIXM 4.5 XML",
@@ -30,18 +30,18 @@
           "redistribution": "public_redistribution",
           "licenseStatus": "verified_from_official_SIA_open_data_terms",
           "attribution": "Service de l'Information Aeronautique (SIA France); include the source and last update date.",
-          "cycle": "2611",
-          "effectiveDate": "2026-10-29",
-          "expiryDate": "2026-11-25",
+          "cycle": "2612",
+          "effectiveDate": "2026-11-26",
+          "expiryDate": "2026-12-23",
           "downloadPrice": "EUR 0",
-          "packageSize": "5.8 MB",
+          "packageSize": "5.6 MB",
           "fileMembers": [
             "AIXM4.5_all_FR_OM_YYYY-MM-DD.xml",
             "XML_SIA_YYYY-MM-DD.xml"
           ],
           "sourceStatus": "public_open_data_reference_dataset",
-          "dataStatus": "not_available_in_FlightTempo",
-          "notes": "The SIA XML export is an openly reusable reference-data source (Licence Ouverte 2.0), useful for airports, runways, navaids and designated-point coordinates. Do not assume that this XML package contains complete IFR SID/STAR/approach leg sequences. France's published procedure tables are available separately as eAIP DATA PDFs and must be ingested and validated independently."
+          "dataStatus": "daily_refresh_pipeline_added_latest_live_mirror_index_had_no_dated_archive",
+          "notes": "The official SIA product page lists AIRAC 12/26 as a free 5.6 MB XML download effective 26 November to 23 December 2026 and places products in this free-disposition section under Licence Ouverte. The daily workflow attempts to export only WGS-84 DPN designated points to a separate reference package. Its latest live run reached the mirror index but found no dated AIXM ZIP link, so no package was generated. These points are not classified as VFR reporting points, and this XML export is not a complete IFR SID/STAR/approach leg feed."
         },
         {
           "id": "OFMA_EUROPE",
@@ -64,7 +64,7 @@
           ],
           "sourceStatus": "candidate_vfr_source",
           "dataStatus": "not_imported",
-          "notes": "OFMA FAQ permits use in an app that is sold when the General Users' License is followed. Coverage and completeness differ by region; do not promote these VFR vectors to IFR procedures."
+          "notes": "OFMA FAQ permits use in a commercial app when the General Users' License is followed. Its documented exports include CUP and OpenAir, while current regional coverage differs. Conditions include attribution, reporting modifications within the licence period and providing a correction-report route. OFMA says its data is not certified and must not be a primary navigation source. Its current live region pages did not expose machine-readable file links to the FlightTempo source monitor, so no OFMA point or route records are imported yet."
         },
         {
           "id": "DFS_INSPIRE",
@@ -78,11 +78,11 @@
           ],
           "license": "GeoZG / INSPIRE open geodata framework",
           "redistribution": "public_reference_geodata",
-          "licenseStatus": "public_geodata_source",
+          "licenseStatus": "restricted_reuse_terms_require_confirmation",
           "procedureScope": [],
           "sourceStatus": "geodata_only",
           "dataStatus": "not_imported",
-          "notes": "The published air transport network includes airports, runways, navaids, points, routes and airspace; it is not the German IFR SID/STAR/approach publication. DFS states updates twice yearly and warns the data may contain errors or be incomplete."
+          "notes": "The published air transport network includes airports, runways, navaids, points, routes and airspace; it is not the German IFR SID/STAR/approach publication. DFS states updates twice yearly and warns the data may contain errors or be incomplete. GovData currently classifies the dataset licence as restricted use, so redistribution in FlightTempo is not confirmed."
         },
         {
           "id": "EUROCONTROL_EAD",
@@ -154,15 +154,17 @@
             "RNAV STARs",
             "RNP approach DATA tables where complete non-FNA sheets are published"
           ],
-          "license": "SIA Licence Ouverte / Open Licence terms for products in the free-disposition catalogue; exact inclusion of each eAIP chart/PDF product must be confirmed before public redistribution",
-          "redistribution": "document_scope_confirmation_required",
-          "licenseStatus": "general_SIA_open_data_terms_verified_specific_eAIP_DATA_PDF_scope_to_confirm",
+          "license": "SIA Licence Ouverte 2.0 (linked from the free-disposition eAIP product page)",
+          "licenseUrl": "https://www.sia.aviation-civile.gouv.fr/produits-numeriques-en-libre-disposition/eaip/zip-eaip-complet-airac-11-26.html",
+          "licenseTextUrl": "https://www.sia.aviation-civile.gouv.fr/pub/media/news/file//l/i/licenceopendata-vf_2.pdf",
+          "redistribution": "public_redistribution_with_attribution",
+          "licenseStatus": "confirmed_for_free_disposition_eAIP_product",
           "attribution": "Service de l'Information Aeronautique (SIA France); cite the source URL and last update date.",
           "cycle": "2611",
           "effectiveDate": "2026-10-29",
           "expiryDate": "2026-11-25",
-          "sourceStatus": "current_structured_procedure_tables_found_parser_added_not_yet_source_validated",
-          "dataStatus": "not_imported",
+          "sourceStatus": "current_structured_procedure_tables_found_license_confirmed_ci_smoke_tested",
+          "dataStatus": "no_app_procedure_package_smoke_test_only",
           "exampleSources": [
             {
               "id": "LFPG_SID",
@@ -179,7 +181,7 @@
               "url": "https://www.sia.aviation-civile.gouv.fr/media/dvd/eAIP_29_OCT_2026/FRANCE/AIRAC-2026-10-29/html/eAIP/Cartes/LFPG/AD_2_LFPG_DATA_STAR_RWY26L_RNAV_CODE_02.pdf"
             }
           ],
-          "notes": "The current AIP's GEN 0.4 checklist identifies individual DATA SID, DATA STAR and DATA RWY precoding sheets. Example LFPG SID/STAR PDFs expose row-level path terminators, waypoint identifiers, fly-over flags, magnetic/true courses, distances, turn direction, altitude/IAS constraints and navigation accuracy. The importer stores these fields as published, keeps shared runway selectors unexpanded, and leaves coordinates unresolved unless linked to a unique source-backed fix. FNA-only final-approach sheets are excluded from the complete RNP approach pattern. Do not release extracted PDFs or derived data until the licence scope for the specific eAIP product has been confirmed."
+          "notes": "The eAIP ZIP product is in SIA's free-disposition catalogue and links to Licence Ouverte 2.0, which permits commercial extraction and redistribution with attribution and preservation of meaning. CI downloaded the LFPG DATA SID and STAR PDFs and extracted 56 SID plus 42 STAR rows (98 total) for AIRAC 11/26. This output is currently a smoke test, not a published app package. The importer preserves published leg attributes, does not create synthetic geometry, and only links coordinates when a source-backed fix has one unique exact identifier match."
         }
       ]
     },

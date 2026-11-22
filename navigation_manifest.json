@@ -13,27 +13,12 @@
   },
   "targetProfile": "FlightTempo downloadable aviation reference data",
   "statistics": {
-    "airports": 29747,
+    "airports": 86377,
     "runways": 47131,
     "navaids": 11008,
-    "ifrWaypoints": 113356,
-    "flightgearNavaids": 26599,
-    "airwaySegments": 70291,
-    "lowAirwaySegments": 37195,
-    "highAirwaySegments": 33096,
     "ourairportsAirports": 86377,
     "airlineProfiles": 2,
     "routeRules": 109,
-    "flightgearIlsFacilities": 10006,
-    "flightgearLocalizerFacilities": 3472,
-    "flightgearGlideslopeFacilities": 3159,
-    "flightgearMarkerBeacons": 3375,
-    "flightgearDmeFacilities": 5755,
-    "airportReferenceRecords": 29747,
-    "airportReferenceOurAirportsElevationMatches": 28488,
-    "airportReferenceRunwayMatches": 24175,
-    "airportReferenceMultipleRunwayAirports": 3906,
-    "airportReferenceOurAirportsMetadataMatches": 29747,
     "globalAirlineDirectory": 3846,
     "faaVfrReportingPoints": 681
   },
@@ -74,8 +59,8 @@
       "provider": "FAA Aeronautical Information Services",
       "license": "US Government public-domain data",
       "downloadedAt": "2026-11-21T23:18:04Z",
-      "sizeBytes": 35570,
-      "sha256": "d535faaa3e2ca5eb63ff3681fa26a249cb5519ee45b0827480937616bd1d94ff",
+      "sizeBytes": 41699,
+      "sha256": "7c6a856b61bf74178f285992967a360d2e786438c8f7885c4e0fb34c9df14c67",
       "recordCount": 681
     }
   ],
@@ -90,20 +75,20 @@
     "ndb": true,
     "tacan": true,
     "ilsFacilities": false,
-    "independentWaypoints": true,
-    "publishedAirways": true,
+    "independentWaypoints": false,
+    "publishedAirways": false,
     "sids": false,
     "stars": false,
     "ilsApproaches": false,
     "rnavApproaches": false,
     "approaches": false,
     "ourairportsAirports": true,
-    "flightgearNavaids": true,
-    "legacyGlobalFixes": true,
-    "legacyGlobalNavaids": true,
-    "legacyGlobalAirways": true,
-    "legacyGlobalIlsFacilities": true,
-    "worldCorridorGraph": true,
+    "flightgearNavaids": false,
+    "legacyGlobalFixes": false,
+    "legacyGlobalNavaids": false,
+    "legacyGlobalAirways": false,
+    "legacyGlobalIlsFacilities": false,
+    "worldCorridorGraph": false,
     "faaPrnReferences": true,
     "faaLiveNotamCurrentnessVerified": false,
     "conflictZoneAdvisories": true,
@@ -116,17 +101,18 @@
     "aerosors_ge_navaids": false,
     "aerosors_ge_airports": false,
     "globalAirlineDirectory": true,
-    "easaSafetyDirectives": true
+    "easaSafetyDirectives": true,
+    "faaVfrReportingPoints": true
   },
-  "procedureCoverageStatus": "FAA_US_NAS_ONLY_TEST_DATA; EUROPE_FRANCE_SOURCE_NOT_INGESTED; ASIA_NO_PUBLIC_REDISTRIBUTABLE_SOURCE_CONFIRMED",
+  "procedureCoverageStatus": "FAA_US_NAS_ONLY_TEST_DATA; EUROPE_NO_IFR_PROCEDURES_OR_VFR_REPORTING_POINTS; FRANCE_SIA_DPN_REFERENCE_REFRESH_PENDING; ASIA_NO_PUBLIC_REDISTRIBUTABLE_SOURCE_CONFIRMED",
   "procedureOperationalUse": false,
   "procedureSourceRegistryVersion": 1,
-  "procedureSourceRegistryCheckedAtUtc": "2026-11-14",
+  "procedureSourceRegistryCheckedAtUtc": "2026-11-22",
   "regionalProcedureCoverage": {
     "europe": {
-      "status": "partial_public_source_confirmed_not_ingested",
+      "status": "licensed_procedure_source_confirmed_parser_smoke_tested_no_procedure_package",
       "operationallyAvailable": false,
-      "summary": "France publishes current procedure DATA sheets in its eAIP, including structured SID and STAR leg tables and some RNP approach precoding tables. Its separate SIA AIXM4.5/XML export is openly reusable reference data but is not yet treated as a complete IFPD feed. No complete Europe-wide IFR procedure dataset has been established.",
+      "summary": "No European SID/STAR or VFR reporting-point records are currently published in FlightTempo. France has current, structured DATA SID/STAR PDFs under the SIA Licence Ouverte; CI parsed 98 LFPG SID/STAR leg rows, but they remain smoke-test output and are not yet an app package. SIA AIXM designated points are another open source, but the current archive mirror did not expose a dated download during CI. OFMA publishes regional VFR reference data under conditional terms, but no machine-readable export is wired into the repository.",
       "confirmedProcedureCountries": [],
       "candidateProcedureCountries": [
         "FR"
@@ -139,7 +125,7 @@
           "id": "FR_SIA_XML",
           "jurisdiction": "FR",
           "provider": "Service de l'Information Aeronautique (DGAC France)",
-          "sourceUrl": "https://www.sia.aviation-civile.gouv.fr/produits-numeriques-en-libre-disposition/les-bases-de-donnees-sia/donnees-aeronautiques-xml-airac-11-26.html",
+          "sourceUrl": "https://www.sia.aviation-civile.gouv.fr/produits-numeriques-en-libre-disposition/les-bases-de-donnees-sia/donnees-aeronautiques-xml-airac-12-26.html",
           "mirrorUrl": "https://data.cquest.org/dgac/aip/",
           "format": [
             "AIXM 4.5 XML",
@@ -150,18 +136,18 @@
           "redistribution": "public_redistribution",
           "licenseStatus": "verified_from_official_SIA_open_data_terms",
           "attribution": "Service de l'Information Aeronautique (SIA France); include the source and last update date.",
-          "cycle": "2611",
-          "effectiveDate": "2026-10-29",
-          "expiryDate": "2026-11-25",
+          "cycle": "2612",
+          "effectiveDate": "2026-11-26",
+          "expiryDate": "2026-12-23",
           "downloadPrice": "EUR 0",
-          "packageSize": "5.8 MB",
+          "packageSize": "5.6 MB",
           "fileMembers": [
             "AIXM4.5_all_FR_OM_YYYY-MM-DD.xml",
             "XML_SIA_YYYY-MM-DD.xml"
           ],
           "sourceStatus": "public_open_data_reference_dataset",
-          "dataStatus": "not_available_in_FlightTempo",
-          "notes": "The SIA XML export is an openly reusable reference-data source (Licence Ouverte 2.0), useful for airports, runways, navaids and designated-point coordinates. Do not assume that this XML package contains complete IFR SID/STAR/approach leg sequences. France's published procedure tables are available separately as eAIP DATA PDFs and must be ingested and validated independently."
+          "dataStatus": "daily_refresh_pipeline_added_latest_live_mirror_index_had_no_dated_archive",
+          "notes": "The official SIA product page lists AIRAC 12/26 as a free 5.6 MB XML download effective 26 November to 23 December 2026 and places products in this free-disposition section under Licence Ouverte. The daily workflow attempts to export only WGS-84 DPN designated points to a separate reference package. Its latest live run reached the mirror index but found no dated AIXM ZIP link, so no package was generated. These points are not classified as VFR reporting points, and this XML export is not a complete IFR SID/STAR/approach leg feed."
         },
         {
           "id": "OFMA_EUROPE",
@@ -184,7 +170,7 @@
           ],
           "sourceStatus": "candidate_vfr_source",
           "dataStatus": "not_imported",
-          "notes": "OFMA FAQ permits use in an app that is sold when the General Users' License is followed. Coverage and completeness differ by region; do not promote these VFR vectors to IFR procedures."
+          "notes": "OFMA FAQ permits use in a commercial app when the General Users' License is followed. Its documented exports include CUP and OpenAir, while current regional coverage differs. Conditions include attribution, reporting modifications within the licence period and providing a correction-report route. OFMA says its data is not certified and must not be a primary navigation source. Its current live region pages did not expose machine-readable file links to the FlightTempo source monitor, so no OFMA point or route records are imported yet."
         },
         {
           "id": "DFS_INSPIRE",
@@ -198,11 +184,11 @@
           ],
           "license": "GeoZG / INSPIRE open geodata framework",
           "redistribution": "public_reference_geodata",
-          "licenseStatus": "public_geodata_source",
+          "licenseStatus": "restricted_reuse_terms_require_confirmation",
           "procedureScope": [],
           "sourceStatus": "geodata_only",
           "dataStatus": "not_imported",
-          "notes": "The published air transport network includes airports, runways, navaids, points, routes and airspace; it is not the German IFR SID/STAR/approach publication. DFS states updates twice yearly and warns the data may contain errors or be incomplete."
+          "notes": "The published air transport network includes airports, runways, navaids, points, routes and airspace; it is not the German IFR SID/STAR/approach publication. DFS states updates twice yearly and warns the data may contain errors or be incomplete. GovData currently classifies the dataset licence as restricted use, so redistribution in FlightTempo is not confirmed."
         },
         {
           "id": "EUROCONTROL_EAD",
@@ -274,15 +260,17 @@
             "RNAV STARs",
             "RNP approach DATA tables where complete non-FNA sheets are published"
           ],
-          "license": "SIA Licence Ouverte / Open Licence terms for products in the free-disposition catalogue; exact inclusion of each eAIP chart/PDF product must be confirmed before public redistribution",
-          "redistribution": "document_scope_confirmation_required",
-          "licenseStatus": "general_SIA_open_data_terms_verified_specific_eAIP_DATA_PDF_scope_to_confirm",
+          "license": "SIA Licence Ouverte 2.0 (linked from the free-disposition eAIP product page)",
+          "licenseUrl": "https://www.sia.aviation-civile.gouv.fr/produits-numeriques-en-libre-disposition/eaip/zip-eaip-complet-airac-11-26.html",
+          "licenseTextUrl": "https://www.sia.aviation-civile.gouv.fr/pub/media/news/file//l/i/licenceopendata-vf_2.pdf",
+          "redistribution": "public_redistribution_with_attribution",
+          "licenseStatus": "confirmed_for_free_disposition_eAIP_product",
           "attribution": "Service de l'Information Aeronautique (SIA France); cite the source URL and last update date.",
           "cycle": "2611",
           "effectiveDate": "2026-10-29",
           "expiryDate": "2026-11-25",
-          "sourceStatus": "current_structured_procedure_tables_found_parser_added_not_yet_source_validated",
-          "dataStatus": "not_imported",
+          "sourceStatus": "current_structured_procedure_tables_found_license_confirmed_ci_smoke_tested",
+          "dataStatus": "no_app_procedure_package_smoke_test_only",
           "exampleSources": [
             {
               "id": "LFPG_SID",
@@ -299,7 +287,7 @@
               "url": "https://www.sia.aviation-civile.gouv.fr/media/dvd/eAIP_29_OCT_2026/FRANCE/AIRAC-2026-10-29/html/eAIP/Cartes/LFPG/AD_2_LFPG_DATA_STAR_RWY26L_RNAV_CODE_02.pdf"
             }
           ],
-          "notes": "The current AIP's GEN 0.4 checklist identifies individual DATA SID, DATA STAR and DATA RWY precoding sheets. Example LFPG SID/STAR PDFs expose row-level path terminators, waypoint identifiers, fly-over flags, magnetic/true courses, distances, turn direction, altitude/IAS constraints and navigation accuracy. The importer stores these fields as published, keeps shared runway selectors unexpanded, and leaves coordinates unresolved unless linked to a unique source-backed fix. FNA-only final-approach sheets are excluded from the complete RNP approach pattern. Do not release extracted PDFs or derived data until the licence scope for the specific eAIP product has been confirmed."
+          "notes": "The eAIP ZIP product is in SIA's free-disposition catalogue and links to Licence Ouverte 2.0, which permits commercial extraction and redistribution with attribution and preservation of meaning. CI downloaded the LFPG DATA SID and STAR PDFs and extracted 56 SID plus 42 STAR rows (98 total) for AIRAC 11/26. This output is currently a smoke test, not a published app package. The importer preserves published leg attributes, does not create synthetic geometry, and only links coordinates when a source-backed fix has one unique exact identifier match."
         }
       ]
     },
@@ -410,8 +398,7 @@
     {
       "id": "airport_reference",
       "path": "airports/airports.csv",
-      "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/airports/airports.csv",
-      "available": true,
+      "available": false,
       "recordCount": 29747,
       "sizeBytes": 7125340,
       "sha256": "7a879d57f41ee428b5bd64dd8b1046feb6588e2edbdb11c3d50e70ee2670df0a",
@@ -424,7 +411,10 @@
       "dataCycle": "daily_source_snapshot",
       "effectiveDate": "",
       "expiryDate": "",
-      "provenanceVerification": "partial"
+      "provenanceVerification": "partial",
+      "operationallyAvailable": false,
+      "status": "not_published_redistribution_rights_unconfirmed_or_non_commercial_only",
+      "downloadBlockReason": "Legacy IATA and time-zone fields have mixed upstream provenance; keep this table in the repository until redistribution rights are confirmed. Use the separate OurAirports CC0 dataset for app downloads."
     },
     {
       "id": "ourairports_airports",
@@ -486,8 +476,7 @@
     {
       "id": "flightgear_fixes",
       "path": "navigation/waypoints/flightgear_fixes.csv",
-      "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/navigation/waypoints/flightgear_fixes.csv",
-      "available": true,
+      "available": false,
       "recordCount": 113356,
       "sizeBytes": 11457339,
       "sha256": "1bfd6b7fb7e10dac4f7cfdec9201e66a3ad3a1b1990e7215569dded8c6163749",
@@ -500,13 +489,15 @@
       "dataCycle": "2012.08",
       "effectiveDate": "",
       "expiryDate": "",
-      "provenanceVerification": "not_declared"
+      "provenanceVerification": "not_declared",
+      "operationallyAvailable": false,
+      "status": "development_reference_only_stale_or_unverified",
+      "downloadBlockReason": "The only bundled global fixes are from the stale 2012.08 X-Plane/FlightGear snapshot. Keep them for development and parser tests; do not offer them as current app data. A maintained source and its redistribution terms must be verified first."
     },
     {
       "id": "flightgear_navaids",
       "path": "navigation/navaids/flightgear_navaids.csv",
-      "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/navigation/navaids/flightgear_navaids.csv",
-      "available": true,
+      "available": false,
       "recordCount": 26599,
       "sizeBytes": 8317558,
       "sha256": "c6ee3a883e34b2fb1aa4d3c32bceb11b26aac6b2499bef6596aa79e63d2c68e4",
@@ -519,13 +510,15 @@
       "dataCycle": "2012.08",
       "effectiveDate": "",
       "expiryDate": "",
-      "provenanceVerification": "not_declared"
+      "provenanceVerification": "not_declared",
+      "operationallyAvailable": false,
+      "status": "development_reference_only_stale_or_unverified",
+      "downloadBlockReason": "The bundled X-Plane/FlightGear navaid snapshot is from 2012.08. Use the separate maintained OurAirports navaid reference dataset where appropriate; do not offer this stale snapshot to the app."
     },
     {
       "id": "flightgear_airway_segments",
       "path": "navigation/airways/flightgear_airway_segments.csv",
-      "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/navigation/airways/flightgear_airway_segments.csv",
-      "available": true,
+      "available": false,
       "recordCount": 70291,
       "sizeBytes": 20439306,
       "sha256": "91a53e0b7ea5e79c408dab124d0976d1c78d6e4faf10b949bc230035858ac24f",
@@ -539,7 +532,9 @@
       "effectiveDate": "",
       "expiryDate": "",
       "provenanceVerification": "not_declared",
-      "status": "verified"
+      "status": "development_reference_only_stale_or_unverified",
+      "operationallyAvailable": false,
+      "downloadBlockReason": "The only bundled global airway segments are from the stale 2012.08 X-Plane/FlightGear snapshot. Keep them for development experiments; do not offer them as current app route data."
     },
     {
       "id": "sids",
@@ -670,14 +665,14 @@
     {
       "id": "world_corridor_graph",
       "path": "navigation/graph/world_corridor_graph.bin",
-      "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/navigation/graph/world_corridor_graph.bin",
-      "available": true,
+      "available": false,
       "recordCount": 156701,
       "sizeBytes": 7665684,
       "sha256": "bf2ce08daae0df7818d9afea17765a92f7ddf3369ffc2842bfa2ebfda3f56b39",
-      "status": "legacy_global_graph_test_only",
+      "status": "development_reference_only_stale_or_unverified",
       "license": "GPL-3.0",
-      "operationallyAvailable": false
+      "operationallyAvailable": false,
+      "downloadBlockReason": "This generated graph is built from the stale 2012.08 airway snapshot and synthetic airport connectors. It is development-only and is not a current published airway network."
     },
     {
       "id": "easa_czibs",
@@ -697,8 +692,8 @@
       "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/airspace/advisories/easa_safety_directives.json",
       "available": true,
       "recordCount": 2,
-      "sizeBytes": 3941,
-      "sha256": "531d42feed30978bb7574c75f69782b8b19d32a34424ef67ddef8fe5e3a625d3",
+      "sizeBytes": 4005,
+      "sha256": "b7d45c540ae84f34060f2c8947392dbd4eba4a0a80f6c0c208c24ae81aef7334",
       "status": "operator_scope_reference_only",
       "license": "EASA source acknowledgement",
       "operationallyAvailable": false
@@ -733,11 +728,11 @@
       "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/data/vfr_points.csv",
       "available": true,
       "recordCount": 681,
-      "sizeBytes": 35570,
-      "sha256": "d535faaa3e2ca5eb63ff3681fa26a249cb5519ee45b0827480937616bd1d94ff",
+      "sizeBytes": 41699,
+      "sha256": "7c6a856b61bf74178f285992967a360d2e786438c8f7885c4e0fb34c9df14c67",
       "sourceProvider": "FAA Aeronautical Information Services / NASR FIX",
       "sourceUrl": "https://www.faa.gov/air_traffic/flight_info/aeronav/Aero_Data/NASR_Subscription/",
-      "coverage": "United States NASR VFR reporting points (VP-prefixed FIX records)",
+      "coverage": "United States NASR VFR waypoints (VP-prefixed FIX records; visual-checkpoint association varies)",
       "sourceTag": "FAA_NASR_FIX_2026-11-26",
       "license": "US Government public-domain data",
       "licenseStatus": "public_domain",
@@ -868,10 +863,31 @@
       "allRunwayHEHeadingsDegT"
     ],
     "runwaySelection": "All matched open runway ends with a usable length are retained in aligned pipe-delimited airport reference columns; complete individual runway records are retained in navigation/runways/runways_parsed.csv.",
-    "limitations": "Community-maintained source data; no guarantee of accuracy or operational fitness. Full source snapshots and normalized records are retained separately."
+    "limitations": "Community-maintained source data; no guarantee of accuracy or operational fitness. Full source snapshots and normalized records are retained separately.",
+    "appDownloadable": false,
+    "downloadBlockReason": "Legacy IATA and time-zone fields have mixed upstream provenance; keep this table in the repository until redistribution rights are confirmed. Use the separate OurAirports CC0 dataset for app downloads."
   },
   "developmentOnlySources": [
     "Aero.Sors derivative exports: redistribution not confirmed",
+    "Legacy airport reference IATA/time-zone fields: source redistribution rights under review",
+    "Legacy global X-Plane/FlightGear fixes, navaids, airways and derived graph: 2012.08 stale development data; excluded from app downloads",
     "OpenAIP FIR geometry and derived airspace filter: CC BY-NC 4.0"
-  ]
+  ],
+  "developmentOnlyStatistics": {
+    "airportReferenceRecords": 29747,
+    "airportReferenceOurAirportsElevationMatches": 28488,
+    "airportReferenceRunwayMatches": 24175,
+    "airportReferenceMultipleRunwayAirports": 3906,
+    "airportReferenceOurAirportsMetadataMatches": 29747,
+    "ifrWaypoints": 113356,
+    "flightgearNavaids": 26599,
+    "airwaySegments": 70291,
+    "lowAirwaySegments": 37195,
+    "highAirwaySegments": 33096,
+    "flightgearIlsFacilities": 10006,
+    "flightgearLocalizerFacilities": 3472,
+    "flightgearGlideslopeFacilities": 3159,
+    "flightgearMarkerBeacons": 3375,
+    "flightgearDmeFacilities": 5755
+  }
 }

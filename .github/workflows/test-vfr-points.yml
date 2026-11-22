@@ -1,4 +1,4 @@
-name: Test VFR Reporting Points Pipeline
+name: Test FAA VFR Waypoint Pipeline
 on:
   pull_request:
     paths:

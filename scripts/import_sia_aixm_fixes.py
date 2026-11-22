@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+from datetime import datetime, timezone
 import hashlib
 import json
 import re
@@ -134,6 +135,10 @@ def main() -> int:
     parser.add_argument("--input", type=Path, required=True, help="AIXM4.5 XML file or SIA ZIP export")
     parser.add_argument("--output", type=Path, required=True, help="Output fix CSV path")
     parser.add_argument("--manifest", type=Path, help="Optional provenance JSON path")
+    parser.add_argument("--effective-date", help="AIRAC effective date (YYYY-MM-DD)")
+    parser.add_argument("--expiry-date", help="AIRAC expiry date (YYYY-MM-DD)")
+    parser.add_argument("--source-url", help="Official SIA product page for this source cycle")
+    parser.add_argument("--source-file-url", help="URL of the mirrored source archive")
     args = parser.parse_args()
     if not args.input.is_file():
         parser.error(f"Input file does not exist: {args.input}")
@@ -154,7 +159,7 @@ def main() -> int:
 
     if args.manifest:
         args.manifest.parent.mkdir(parents=True, exist_ok=True)
-        args.manifest.write_text(json.dumps({
+        metadata = {
             "schemaVersion": 1,
             "sourceProvider": "Service de l'Information Aeronautique (SIA France)",
             "license": "Licence Ouverte / Open Licence (Etalab)",
@@ -169,7 +174,18 @@ def main() -> int:
             }),
             "status": "reference_fix_dataset_not_operationally_validated",
             "attribution": "Service de l'Information Aeronautique (SIA France); cite the source and last update date.",
-        }, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+            "downloadedAtUtc": datetime.now(timezone.utc).isoformat(),
+        }
+        if args.effective_date:
+            metadata["effectiveDate"] = args.effective_date
+            metadata["dataCycle"] = args.effective_date
+        if args.expiry_date:
+            metadata["expiryDate"] = args.expiry_date
+        if args.source_url:
+            metadata["sourceUrl"] = args.source_url
+        if args.source_file_url:
+            metadata["sourceFileUrl"] = args.source_file_url
+        args.manifest.write_text(json.dumps(metadata, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
     print(json.dumps({
         "output": str(args.output),

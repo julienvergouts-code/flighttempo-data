@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""FlightTempo VFR reporting-point data pipeline (FAA NASR FIX).
+"""FlightTempo VFR waypoint reference pipeline (FAA NASR FIX).
 
 FAA records are public-domain US government data. OFMA is intentionally not
 enabled: a feed URL, schema and redistribution terms must be verified first.
@@ -189,7 +189,7 @@ def parse_faa_records(lines: Iterable[str], effective_date: str) -> list[dict[st
             records.append({
                 "icao": "", "code": ident, "name": ident,
                 "lat": row.get("LAT_DECIMAL"), "lon": row.get("LONG_DECIMAL"),
-                "role": "VRP", "source": "FAA", "updated_date": effective_date,
+                "role": "VFR_WAYPOINT", "source": "FAA", "updated_date": effective_date,
             })
     return records
 
@@ -234,7 +234,11 @@ def validate_record(record: dict[str, Any]) -> dict[str, Any]:
     if source not in VALID_SOURCES:
         raise ValueError(f"Unsupported source {source}")
     role = clean(record.get("role")).upper()
-    if role not in {"ENTRY", "EXIT", "BOTH", "VRP"}:
+    if source == "FAA" and not re.fullmatch(r"VP[A-Z0-9]{3}", code):
+        raise ValueError("Invalid FAA VFR waypoint identifier")
+    if source == "FAA" and role != "VFR_WAYPOINT":
+        raise ValueError("FAA VFR records must use the VFR_WAYPOINT role")
+    if role not in {"ENTRY", "EXIT", "BOTH", "VRP", "VFR_WAYPOINT"}:
         role = "VRP"
     return {"icao": icao, "code": code, "name": clean(record.get("name")) or code,
             "lat": round(lat, 5), "lon": round(lon, 5), "role": role,
@@ -369,7 +373,7 @@ def main(argv: list[str] | None = None) -> int:
         fetched, status = fetch_faa(), "ok"
         validated, rejected = validate_records(fetched, guard=True)
         if not validated:
-            raise RuntimeError("FAA produced zero valid reporting points")
+            raise RuntimeError("FAA produced zero valid VFR waypoints")
         retained_disabled = [row for row in previous if row["source"] == "OFMA"]
         new_rows = dedupe_sort(validated + retained_disabled)
     except Exception as exc:
@@ -379,7 +383,7 @@ def main(argv: list[str] | None = None) -> int:
             log.error("Use --allow-partial to publish retained data with failure metadata")
             return 1
     if not new_rows:
-        log.error("Refusing to publish an empty reporting-point dataset")
+        log.error("Refusing to publish an empty VFR waypoint dataset")
         return 1
     if previous:
         drop = (len(previous) - len(new_rows)) / len(previous)
@@ -400,7 +404,7 @@ def main(argv: list[str] | None = None) -> int:
         print(json.dumps({"total_rows": len(new_rows), "source_status": status, "rejected": rejected if status == "ok" else None}, indent=2))
         return 0
     publish_pair(CSV_PATH, META_PATH, new_rows, generated, status)
-    log.info("Published %d FAA VFR reporting points (%s)", len(new_rows), status)
+    log.info("Published %d FAA VFR waypoints (%s)", len(new_rows), status)
     return 0
 
 
