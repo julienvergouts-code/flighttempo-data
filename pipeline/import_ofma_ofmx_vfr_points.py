@@ -18,13 +18,21 @@ def stamp():return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 def clean(x):return re.sub(r"\s+"," ",str(x or "")).strip()
 def parse_coord(s):
  s=clean(s).upper()
- m=re.fullmatch(r"(\d{2,3})(\d{2})(?:(\d{2}(?:\.\d+)?))?([NSEW])",s)
- if not m:raise ValueError(f"bad OFMX coordinate {s!r}")
- deg=int(m.group(1));mins=int(m.group(2));secs=float(m.group(3) or 0);hem=m.group(4)
- if mins>=60 or secs>=60:raise ValueError(f"coordinate minute/second out of range: {s}")
+ hem=s[-1] if s and s[-1] in "NSEW" else ""
+ if not hem:raise ValueError(f"bad OFMX coordinate {s!r}")
+ body=s[:-1]
  limit=90 if hem in "NS" else 180
- if deg>limit or (deg==limit and (mins or secs)):raise ValueError(f"coordinate degrees out of range: {s}")
- v=deg+mins/60+secs/3600
+ # OFMX commonly uses decimal degrees with hemisphere (e.g. 48.98444444N).
+ if re.fullmatch(r"\\d{1,3}\\.\\d+",body):
+  v=float(body)
+  if v>limit:raise ValueError(f"coordinate degrees out of range: {s}")
+ else:
+  m=re.fullmatch(r"(\\d{2,3})(\\d{2})(?:(\\d{2}(?:\\.\\d+)?))?",body)
+  if not m:raise ValueError(f"bad OFMX coordinate {s!r}")
+  deg=int(m.group(1));mins=int(m.group(2));secs=float(m.group(3) or 0)
+  if mins>=60 or secs>=60:raise ValueError(f"coordinate minute/second out of range: {s}")
+  if deg>limit or (deg==limit and (mins or secs)):raise ValueError(f"coordinate degrees out of range: {s}")
+  v=deg+mins/60+secs/3600
  return -v if hem in "SW" else v
 def text(node,name):
  for child in list(node):
