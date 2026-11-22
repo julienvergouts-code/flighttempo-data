@@ -10,7 +10,7 @@ ROOT=Path(__file__).resolve().parents[1]
 CONFIG=ROOT/"data/ofma_ofmx_sources.json"
 OUT=ROOT/"data/ofma_ofmx_vfr_points.csv"
 META=ROOT/"data/ofma_ofmx_vfr_points_meta.json"
-COLUMNS=["region","code","name","lat","lon","kind","source","license","updated_date"]
+COLUMNS=["region","code","name","lat","lon","kind","source","license","cycle"]
 VFR_TYPES={"VFR-RP","VFR-MRP","VFR-ENR","VFR-GLDR","VFR-HELI"}
 MAX_BYTES=80*1024*1024
 UA="FlightTempo-OFMA-OFMX-VFR-Importer/1.0 (+https://github.com/julienvergouts-code/flighttempo-data)"
@@ -62,7 +62,7 @@ def parse_xml(raw,src):
   lat=parse_coord(lat_s);lon=parse_coord(lon_s)
   if not -90<=lat<=90 or not -180<=lon<=180 or (lat==0 and lon==0):raise ValueError(f"invalid point coordinates: {code or name}")
   if not code and not name:continue
-  records.append({"region":src["region"],"code":code or name[:32],"name":name or code,"lat":round(lat,6),"lon":round(lon,6),"kind":typ,"source":"OFMA","license":"OFMA_GUL","updated_date":src.get("effectiveDate") or src.get("cycle") or stamp()[:10]})
+  records.append({"region":src["region"],"code":code or name[:32],"name":name or code,"lat":round(lat,6),"lon":round(lon,6),"kind":typ,"source":"OFMA","license":"OFMA_GUL","updated_date":src.get("cycle") or stamp()[:10]})
  if not records:raise ValueError(f"no VFR Dpn records parsed for {src['region']}; schema/endpoint may have changed")
  return records
 def xml_from_zip(raw,region_key):
@@ -103,8 +103,8 @@ def run(config=CONFIG,dry=False):
  if not sources:print("No OFMA OFMX sources configured; existing data retained.");return 0
  allrows=[];sm=[]
  for src in sources:
-  validate_source(src);url=src["url"].replace("/live/2611/","/live/"+airac+"/");raw=fetch(url);xml=xml_from_zip(raw,src["regionKey"]);src["effectiveDate"]=airac;records=parse_xml(xml,src);allrows.extend(records)
-  sm.append({"region":src["region"],"regionName":src["regionName"],"sourcePage":src["sourcePage"],"downloadUrl":url,"cycle":airac,"effectiveDate":src.get("effectiveDate"),"license":"OFMA General Users License","attribution":src.get("attribution","OpenFlightMaps Association (OFMA)"),"sha256":hashlib.sha256(raw).hexdigest(),"bytes":len(raw),"parsedVfrPoints":len(records)})
+  validate_source(src);url=src["url"].replace("{airac}",airac);raw=fetch(url);xml=xml_from_zip(raw,src["regionKey"]);src["cycle"]=airac;records=parse_xml(xml,src);allrows.extend(records)
+  sm.append({"region":src["region"],"regionName":src["regionName"],"sourcePage":src["sourcePage"],"downloadUrl":url,"cycle":airac,"effectiveDate":None,"license":"OFMA General Users License","attribution":src.get("attribution","OpenFlightMaps Association (OFMA)"),"sha256":hashlib.sha256(raw).hexdigest(),"bytes":len(raw),"parsedVfrPoints":len(records)})
  uniq={(r["region"],r["code"],r["lat"],r["lon"],r["kind"]):r for r in allrows};rows=sorted(uniq.values(),key=lambda r:(r["region"],r["kind"],r["code"],r["lat"],r["lon"]))
  buf=io.StringIO();buf.write("#version=1,generated_utc="+stamp()+"\n");w=csv.DictWriter(buf,fieldnames=COLUMNS);w.writeheader();w.writerows(rows);csvdata=buf.getvalue().encode()
  meta={"schemaVersion":1,"generatedUtc":stamp(),"airac":airac,"count":len(rows),"regions":sorted({r["region"] for r in rows}),"sources":sm,"license":"OFMA General Users License","licenseNotes":"Commercial use subject to GUL conditions. Preserve attribution; report errors/alterations and provide user error-reporting route as required. Reference-only, not primary navigation.","attribution":"OpenFlightMaps Association (OFMA)","sha256":hashlib.sha256(csvdata).hexdigest(),"sizeBytes":len(csvdata),"operationalUse":False}
