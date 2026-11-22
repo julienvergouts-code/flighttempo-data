@@ -52,6 +52,52 @@ class CorridorBuilderTests(unittest.TestCase):
                                 parse_constant=lambda value: (_ for _ in ()).throw(ValueError(value)))
             self.assertFalse(parsed["promotion_enabled"])
 
+    def test_batch_privacy_guard_rejects_identity_and_trace_fields(self):
+        batch_benchmark.assert_privacy_safe({"trace_members_scanned": 4, "aircraft_processed": 25})
+        with self.assertRaisesRegex(ValueError, "Privacy audit failed"):
+            batch_benchmark.assert_privacy_safe({"leg_metrics": [{"callsign": "RYR6TH"}]})
+        with self.assertRaisesRegex(ValueError, "Privacy audit failed"):
+            batch_benchmark.assert_privacy_safe({"leg_metrics": [{"_observed_trace_endpoints": {}}]})
+
+    def test_diag_leg_measures_actual_observed_endpoints_and_severe_gaps(self):
+        graph_coords={"FIXA":(52.0,4.0),"FIXB":(54.0,8.0)}
+
+        class FakeNav:
+            last_route_endpoint_resolution={
+                "start":{"coord":graph_coords["FIXA"]},
+                "goal":{"coord":graph_coords["FIXB"]},
+            }
+
+            def resolve_physical_endpoint(self, fix, coord, role):
+                return {"offset_nm":0.0,"coord":graph_coords[fix],"node_index":fix}
+
+            def a_star_connected(self, start_fix, goal_fix, start_coord, goal_coord):
+                return ({"nodes":[start_fix,goal_fix]},200.0)
+
+        leg={
+            "matchedFixes":["FIXA","FIXB"],
+            "matchedFixDetails":[
+                {"fix":"FIXA","lat":52.0,"lon":4.0},
+                {"fix":"FIXB","lat":54.0,"lon":8.0},
+            ],
+            "_observed_trace_endpoints":{"start":[50.0,4.0],"end":[56.0,8.0]},
+        }
+        result=batch_benchmark.diag_leg(leg,FakeNav())
+        self.assertTrue(result["connected"])
+        self.assertGreater(result["start_gap_nm"],100)
+        self.assertGreater(result["end_gap_nm"],100)
+        expected_start=benchmark_pipeline._nm((50.0,4.0),graph_coords["FIXA"])
+        expected_end=benchmark_pipeline._nm((56.0,8.0),graph_coords["FIXB"])
+        self.assertAlmostEqual(result["start_gap_nm"],round(expected_start,2),places=2)
+        self.assertAlmostEqual(result["end_gap_nm"],round(expected_end,2),places=2)
+        expected_coverage=round(200.0/(200.0+round(expected_start,2)+round(expected_end,2)),4)
+        self.assertEqual(result["covered_fraction"],expected_coverage)
+
+    def test_diag_leg_requires_observed_endpoints_instead_of_falling_back_to_fixes(self):
+        result=batch_benchmark.diag_leg({"matchedFixes":["FIXA"]},object())
+        self.assertEqual(result["status"],"MISSING_OBSERVED_TRACE_ENDPOINTS")
+        self.assertIsNone(result["start_gap_nm"])
+
     def test_readsb_epoch_relative_seconds_and_ground_flag(self):
         with tempfile.TemporaryDirectory() as d:
             p = Path(d) / "trace.json"
@@ -81,13 +127,16 @@ class CorridorBuilderTests(unittest.TestCase):
             p.write_text(json.dumps({"timestamp":1700000000,"trace":trace}))
             airports=[("EHAM",52.3086,4.7639),("EHEH",51.4500,5.3740)]
             fixes=[("FIXA",52.31,4.77),("FIXB",51.88,5.10),("FIXC",51.46,5.38)]
-            result=builder.process_trace(p,airports,fixes,{"EHAM":0,"EHEH":1})
+            result=builder.process_trace(p,airports,fixes,{"EHAM":0,"EHEH":1},
+                                         include_observed_endpoints=True)
         self.assertEqual(result[0]["origin"],"EHAM")
         self.assertEqual(result[0]["destination"],"EHEH")
         details=result[0]["matchedFixDetails"]
         self.assertGreaterEqual(len(details),2)
         self.assertTrue(all({"fix","lat","lon","distanceNm"}<=set(x) for x in details))
         self.assertTrue(all("t" not in x for x in details))
+        self.assertEqual(result[0]["_observed_trace_endpoints"]["start"],trace[0][1:3])
+        self.assertEqual(result[0]["_observed_trace_endpoints"]["end"],trace[-1][1:3])
 
     def test_candidate_link_is_low_confidence(self):
         matches = [
@@ -119,3 +168,5 @@ class CorridorBuilderTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+

@@ -196,7 +196,7 @@ def candidate_links(matches):
                       "promotion": "requires_repeat_independent_observations_or_explicit_airway_match"})
     return links
 
-def process_trace(path, airports, fixes, graph_airports):
+def process_trace(path, airports, fixes, graph_airports, *, include_observed_endpoints=False):
     meta, points = read_points(path)
     if len(points) < 2:
         raise ValueError(f"{path}: fewer than two valid trace points")
@@ -241,7 +241,7 @@ def process_trace(path, airports, fixes, graph_airports):
                             "maxDistanceFromAirportNm": round(max_distance_from_origin, 1)})
             continue
         matches = match_fixes(leg_points, fixes)
-        results.append({"excluded": False, "legNumber": leg_no, "origin": origin,
+        result={"excluded": False, "legNumber": leg_no, "origin": origin,
                         "destination": destination, "segmentation": segment["segmentation"],
                         "routeType": "LOCAL_OR_RTB" if local_rtb else "POINT_TO_POINT",
                         "durationMinutes": round(duration_minutes, 1),
@@ -254,7 +254,13 @@ def process_trace(path, airports, fixes, graph_airports):
                                               "distanceNm": m["distanceNm"]} for m in matches],
                         "matchCount": len(matches),
                         "geometry": [[round(p["lat"], 4), round(p["lon"], 4)] for p in leg_points[::max(1, len(leg_points)//100)]],
-                        "candidateLinks": candidate_links(matches), "graphComparison": "pending"})
+                        "candidateLinks": candidate_links(matches), "graphComparison": "pending"}
+        if include_observed_endpoints:
+            # Used only in-memory by the scale diagnostic; never serialize trace coordinates.
+            result["_observed_trace_endpoints"]={
+                "start":[leg_points[0]["lat"],leg_points[0]["lon"]],
+                "end":[leg_points[-1]["lat"],leg_points[-1]["lon"]]}
+        results.append(result)
     return results
 
 def main():
@@ -320,3 +326,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+

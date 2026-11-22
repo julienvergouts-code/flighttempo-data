@@ -25,11 +25,19 @@ EU_BOUNDS = (32.0, 72.0, -20.0, 45.0)
 MAX_TRACE_MEMBER_BYTES = 50 * 1024 * 1024
 TARGET_AIRCRAFT = 50
 CONFIDENCE_THRESHOLDS = {"LOW": [1, 2], "MEDIUM": [3, 4], "HIGH": [5]}
+FORBIDDEN_ARTIFACT_KEYS = {
+    "id", "icao24", "icao_24", "hex", "aircraft_id", "aircraft_hex",
+    "registration", "registration_id", "registration_number",
+    "callsign", "call_sign", "flight", "flight_number",
+    "trace", "raw_trace", "trace_data", "trace_points", "trace_endpoints",
+    "_observed_trace_endpoints", "observed_trace_endpoints", "geometry",
+    "positions", "position_data", "timestamp", "timestamps",
+}
 
 def confidence_for_sample_count(count):
     if count >= CONFIDENCE_THRESHOLDS["HIGH"][0]:
         return "HIGH"
-    if count >= CONFIDENCE_THRESH["MEDIUM"][0]:
+    if count >= CONFIDENCE_THRESHOLDS["MEDIUM"][0]:
         return "MEDIUM"
     return "LOW"
 
@@ -38,9 +46,24 @@ def eu_coord(coord):
     return EU_BOUNDS[0] <= lat <= EU_BOUNDS[1] and EU_BOUNDS[2] <= lon <= EU_BOUNDS[3]
 
 def strict_write(path, payload):
+    assert_privacy_safe(payload)
     Path(path).write_text(json.dumps(payload, indent=2, allow_nan=False) + "\n", encoding="utf-8")
     with Path(path).open(encoding="utf-8") as f:
         json.load(f, parse_constant=lambda value: (_ for _ in ()).throw(ValueError(value)))
+
+def assert_privacy_safe(payload):
+    """Reject aircraft identity and raw trace fields from serialized artifacts."""
+    def walk(value, path="$"):
+        if isinstance(value, dict):
+            for key, child in value.items():
+                normalized = str(key).casefold().replace("-", "_")
+                if normalized in FORBIDDEN_ARTIFACT_KEYS:
+                    raise ValueError(f"Privacy audit failed: forbidden artifact field {path}.{key}")
+                walk(child, f"{path}.{key}")
+        elif isinstance(value, list):
+            for index, child in enumerate(value):
+                walk(child, f"{path}[{index}]")
+    walk(payload)
 
 def airport_metadata(path):
     coords, cities = {}, {}
@@ -81,6 +104,16 @@ def flight_prefix(doc):
     return value[:3] if len(value)>=4 else ""
 
 def diag_leg(leg, nav):
+    observed=leg.get("_observed_trace_endpoints")
+    try:
+        trace_start=tuple(float(x) for x in observed["start"])
+        trace_end=tuple(float(x) for x in observed["end"])
+        if len(trace_start)!=2 or len(trace_end)!=2:
+            raise ValueError("trace endpoint must contain latitude and longitude")
+    except (KeyError, TypeError, ValueError):
+        return {"connected":False,"path_distance_nm":None,"start_gap_nm":None,
+                "end_gap_nm":None,"covered_fraction":None,
+                "status":"MISSING_OBSERVED_TRACE_ENDPOINTS"}
     fixes=leg.get("matchedFixes",[])
     details=leg.get("matchedFixDetails",[])
     matched=[(f,(float(details[i]["lat"]),float(details[i]["lon"])))
@@ -103,6 +136,13 @@ def diag_leg(leg, nav):
     if not starts or not goals:
         return result
     start,goal=starts[0],goals[-1]
+    start_graph_coord=start[3].get("coord")
+    end_graph_coord=goal[3].get("coord")
+    sg=archive_pipeline._nm(trace_start,start_graph_coord) if start_graph_coord else None
+    eg=archive_pipeline._nm(trace_end,end_graph_coord) if end_graph_coord else None
+    if sg is not None: sg=round(sg,2)
+    if eg is not None: eg=round(eg,2)
+    result.update(start_gap_nm=sg,end_gap_nm=eg)
     try:
         route=nav.a_star_connected(start[1],goal[1],start[2],goal[2])
     except Exception:
@@ -110,16 +150,9 @@ def diag_leg(leg, nav):
     if not route:
         result["status"]="GRAPH_GAP"
         return result
-    dist=float(route[1]); resolution=nav.last_route_endpoint_resolution or {}
-    s_coord=resolution.get("start",{}).get("coord")
-    g_coord=resolution.get("goal",{}).get("coord")
-    sg=archive_pipeline._nm(matched[0][1],s_coord) if s_coord else None
-    eg=archive_pipeline._nm(matched[-1][1],g_coord) if g_coord else None
-    if sg is not None: sg=round(sg,2)
-    if eg is not None: eg=round(eg,2)
+    dist=float(route[1])
     denom=dist+sg+eg if sg is not None and eg is not None else None
     result.update(connected=True,status="CONNECTED",path_distance_nm=round(dist,2),
-                  start_gap_nm=sg,end_gap_nm=eg,
                   covered_fraction=round(dist/denom,4) if denom and denom>0 else None)
     return result
 
@@ -194,7 +227,8 @@ def main():
                         trace_path=Path(tmp)/"trace.json"
                         trace_path.write_bytes(payload)
                         try:
-                            legs=builder.process_trace(trace_path,airports,fixes,graph_airports)
+                            legs=builder.process_trace(trace_path,airports,fixes,graph_airports,
+                                                       include_observed_endpoints=True)
                         except Exception:
                             rejected["trace_processing_or_anchor_failure"]+=1
                             trace_path.unlink(missing_ok=True)
@@ -288,3 +322,5 @@ def main():
         raise SystemExit("Batch produced zero eligible European legs")
 if __name__=="__main__":
     main()
+
+
