@@ -36,6 +36,14 @@ class CorridorBuilderTests(unittest.TestCase):
         self.assertTrue(batch_benchmark.eu_coord((51.5, 5.4)))
         self.assertFalse(batch_benchmark.eu_coord((40.0, -100.0)))
 
+    def test_batch_confidence_thresholds_are_observation_only(self):
+        self.assertEqual(batch_benchmark.confidence_for_sample_count(1), "LOW")
+        self.assertEqual(batch_benchmark.confidence_for_sample_count(2), "LOW")
+        self.assertEqual(batch_benchmark.confidence_for_sample_count(3), "MEDIUM")
+        self.assertEqual(batch_benchmark.confidence_for_sample_count(4), "MEDIUM")
+        self.assertEqual(batch_benchmark.confidence_for_sample_count(5), "HIGH")
+        self.assertEqual(batch_benchmark.CONFIDENCE_THRESHOLDS["HIGH"], [5])
+
     def test_batch_artifacts_are_strict_json(self):
         with tempfile.TemporaryDirectory() as d:
             path = Path(d) / "scale_summary.json"
