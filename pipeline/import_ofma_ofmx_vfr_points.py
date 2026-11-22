@@ -71,10 +71,10 @@ def xml_from_zip(raw,region_key):
  if len(raw)>MAX_BYTES:raise ValueError("download exceeds size cap")
  with zipfile.ZipFile(io.BytesIO(raw)) as z:
   names=[n for n in z.namelist() if "/embedded/" in n.lower()]
-  target=f"ofmx_{region_key}".lower()
-  preferred=[n for n in names if n.rsplit("/",1)[-1].lower() in (target,target+".xml",target+".ofmx")]
+  keys=[region_key.lower(),str(source.get("archiveKey","")).lower()]
+  preferred=[n for n in names if n.rsplit("/",1)[-1].lower() in tuple(f"ofmx_{k}" for k in keys if k)+tuple(f"ofmx_{k}.xml" for k in keys if k)+tuple(f"ofmx_{k}.ofmx" for k in keys if k)]
   selected=preferred or names
-  if len(selected)!=1:raise ValueError(f"ambiguous OFMX embedded archive members: {len(selected)} candidates")
+  if len(selected)!=1:raise ValueError(f"ambiguous OFMX embedded archive members ({len(selected)}): {selected}")
   return z.read(selected[0])
 def validate_source(s):
  for k in ("region","regionName","regionKey","url","sourcePage","license"):
@@ -104,7 +104,7 @@ def run(config=CONFIG,dry=False):
  if not sources:print("No OFMA OFMX sources configured; existing data retained.");return 0
  allrows=[];sm=[]
  for src in sources:
-  validate_source(src);url=src["url"].replace("{airac}",airac);raw=fetch(url);xml=xml_from_zip(raw,src["regionKey"]);src["cycle"]=airac;records=parse_xml(xml,src);allrows.extend(records)
+  validate_source(src);url=src["url"].replace("{airac}",airac);raw=fetch(url);xml=xml_from_zip(raw,src["regionKey"],src);src["cycle"]=airac;records=parse_xml(xml,src);allrows.extend(records)
   sm.append({"region":src["region"],"regionName":src["regionName"],"sourcePage":src["sourcePage"],"downloadUrl":url,"cycle":airac,"effectiveDate":None,"license":"OFMA General Users License","attribution":src.get("attribution","OpenFlightMaps Association (OFMA)"),"sha256":hashlib.sha256(raw).hexdigest(),"bytes":len(raw),"parsedVfrPoints":len(records)})
  uniq={(r["region"],r["code"],r["lat"],r["lon"],r["kind"]):r for r in allrows};rows=sorted(uniq.values(),key=lambda r:(r["region"],r["kind"],r["code"],r["lat"],r["lon"]))
  buf=io.StringIO();buf.write("#version=1,generated_utc="+stamp()+"\n");w=csv.DictWriter(buf,fieldnames=COLUMNS);w.writeheader();w.writerows(rows);csvdata=buf.getvalue().encode()
