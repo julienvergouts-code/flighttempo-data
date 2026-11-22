@@ -73,6 +73,9 @@ class FtWGReaderTests(unittest.TestCase):
             self.assertEqual(path,["START","DUP","GOAL"])
             self.assertAlmostEqual(cost,60.0)
             self.assertEqual([n["node_index"] for n in db.last_route_physical_path],[0,2,3])
+            self.assertAlmostEqual(sum(n["step_cost_nm"] for n in db.last_route_physical_path),cost)
+            self.assertAlmostEqual(db.last_route_physical_path[-1]["cumulative_cost_nm"],cost)
+            self.assertEqual(db.last_route_physical_path[1]["airway_from_previous"],"LONG1")
 
     def test_rejects_wrong_magic(self):
         with tempfile.TemporaryDirectory() as d:
