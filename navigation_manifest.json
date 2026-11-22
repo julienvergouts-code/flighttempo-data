@@ -1,6 +1,6 @@
 {
   "schemaVersion": 13,
-  "generatedAtUtc": "2026-11-22T14:03:57.369927+00:00",
+  "generatedAtUtc": "2026-11-22T16:05:04.517077+00:00",
   "procedureAiracCycle": "2611",
   "navaidTypeCounts": {
     "DME": 167,
@@ -26,7 +26,7 @@
     "airportReferenceOurAirportsMetadataMatches": 29747,
     "globalAirlineDirectory": 3846,
     "faaVfrReportingPoints": 681,
-    "ofmaOfmxVfrReferencePoints": 1786,
+    "ofmaOfmxVfrReferencePoints": 4736,
     "franceSiaSidStarLegs": 7988
   },
   "dataSources": [
@@ -774,12 +774,12 @@
       "path": "data/ofma_ofmx_vfr_points.csv",
       "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/data/ofma_ofmx_vfr_points.csv",
       "available": true,
-      "recordCount": 1786,
-      "sizeBytes": 156967,
-      "sha256": "373d2121b7f108715874f6e3415972d449cc80e715ac64e8147917d61f3b6468",
+      "recordCount": 4736,
+      "sizeBytes": 454573,
+      "sha256": "0c258ab86f28dc0697f7be0149eaf7b8e463433c05de75cb8d9e6793050c0f81",
       "sourceProvider": "OpenFlightMaps Association",
       "sourceUrl": "https://openflightmaps.org/",
-      "coverage": "EB Belgium, ED Germany, EH Netherlands; VFR designated points only",
+      "coverage": "21 official OFMA regions (EB, ED, EF, EH, EK, EP, ES, FA, FY, LD, LF, LG, LH, LI, LJ, LK, LM, LO, LR, LS, LZ); regional coverage only, not worldwide geographic coverage; VFR-designated points.",
       "license": "OFMA General Users License",
       "licenseStatus": "commercial_use_permitted_subject_to_OFMA_GUL",
       "attribution": "Contains information from the open flightmaps database, see www.openflightmaps.org",
@@ -792,10 +792,10 @@
       ],
       "dataCycle": "2611",
       "effectiveDate": null,
-      "provenanceVerification": "official_OFMA_snapshot_endpoint",
+      "provenanceVerification": "official_OFMA_publication_service_and_snapshot",
       "downloadPurpose": "reference_only",
       "operationallyAvailable": false,
-      "status": "regional_reference_dataset"
+      "status": "reference_dataset"
     }
   ],
   "downloadContract": {
