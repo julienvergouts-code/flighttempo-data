@@ -1,6 +1,6 @@
 {
   "schemaVersion": 13,
-  "generatedAtUtc": "2026-11-22T12:52:29.812066+00:00",
+  "generatedAtUtc": "2026-11-22T12:53:05.099851+00:00",
   "procedureAiracCycle": "2611",
   "navaidTypeCounts": {
     "DME": 167,
@@ -758,7 +758,7 @@
       "available": true,
       "recordCount": 1786,
       "sizeBytes": 156967,
-      "sha256": "f801aa6153847d5f84d49baf99681bbc2f5f3da741546fd9bc793112271c0e60",
+      "sha256": "f4c19226143bf6a6edfa0ea080bd96becd763a2c87cf00ac95307769da4380c0",
       "sourceProvider": "OpenFlightMaps Association",
       "sourceUrl": "https://openflightmaps.org/",
       "coverage": "EB Belgium, ED Germany, EH Netherlands; VFR designated points only",
