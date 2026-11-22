@@ -24,7 +24,7 @@ jobs:
       - name: Install workbook inspection dependency
         run: python -m pip install -r requirements-aerosors.txt
       - name: Unit tests
-        run: python -m unittest tests.test_monitor_eurocontrol_fra_sources -v
+        run: python -m unittest discover -s tests -p 'test_monitor_eurocontrol_fra_sources.py' -v
       - name: Fetch latest FRA workbooks and inspect schema (temporary)
         run: python scripts/monitor_eurocontrol_fra_sources.py
       - name: Upload metadata report only
