@@ -1,5 +1,5 @@
 import unittest
-from scripts.monitor_eurocontrol_fra_sources import DownloadLinkParser, inspect_workbook
+from scripts.monitor_eurocontrol_fra_sources import DownloadLinkParser, inspect_workbook, parse_dms_coordinate
 import io
 from openpyxl import Workbook
 
@@ -26,6 +26,13 @@ class TestFraMonitor(unittest.TestCase):
         self.assertEqual(sheet["maxRows"], 3)
         self.assertEqual(sheet["candidateHeaderRows"][0]["row"], 2)
         self.assertNotIn("records", sheet)
+
+    def test_parse_dms_and_decimal_coordinates(self):
+        self.assertAlmostEqual(parse_dms_coordinate('N510000', 'lat'), 51.0)
+        self.assertAlmostEqual(parse_dms_coordinate('W0013000', 'lon'), -1.5)
+        self.assertAlmostEqual(parse_dms_coordinate('S 33 30 00', 'lat'), -33.5)
+        self.assertAlmostEqual(parse_dms_coordinate('4.25', 'lon'), 4.25)
+        self.assertIsNone(parse_dms_coordinate('N916000', 'lat'))
 
     def test_header_detection_accepts_availability_and_fra_columns(self):
         wb = Workbook()
