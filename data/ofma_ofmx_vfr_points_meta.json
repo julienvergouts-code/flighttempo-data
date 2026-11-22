@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedUtc": "2026-11-22T16:08:12Z",
+  "generatedUtc": "2026-11-22T16:08:45Z",
   "airac": "2611",
   "count": 4736,
   "regions": [
@@ -475,7 +475,7 @@
     "implementation": "scripts/exact_point_matching.py",
     "currentGlobalIFRSourceStatus": "No current commercially reusable worldwide IFR fix layer is active in this repository; the stale 2012.08 global baseline remains excluded from app downloads."
   },
-  "sha256": "922fc915bb27a75894476cb8a17b10a476db1316595b4d98122a14e09af18ef1",
+  "sha256": "811cd351efadad60f13f32947cffc684b3a2872be9083a09f8b95cbbeb38966d",
   "sizeBytes": 454573,
   "operationalUse": false,
   "stablePointIds": true
