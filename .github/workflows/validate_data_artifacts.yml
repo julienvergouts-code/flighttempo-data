@@ -9,6 +9,8 @@ on:
       - "navigation_manifest.json"
       - "scripts/validate_vfr_data_artifacts.py"
       - ".github/workflows/validate_data_artifacts.yml"
+      - ".github/workflows/import-ofma-ofmx-vfr-points.yml"
+      - "data/ofma_ofmx_sources.json"
   push:
     branches: [main]
     paths:
@@ -17,6 +19,8 @@ on:
       - "navigation_manifest.json"
       - "scripts/validate_vfr_data_artifacts.py"
       - ".github/workflows/validate_data_artifacts.yml"
+      - ".github/workflows/import-ofma-ofmx-vfr-points.yml"
+      - "data/ofma_ofmx_sources.json"
 
 permissions:
   contents: read
