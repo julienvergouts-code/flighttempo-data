@@ -496,6 +496,7 @@ def main():
             nav._load_airways()
             comparisons = []
             resolved_total = 0
+            identifier_resolved_total = 0
             matched_total = 0
             connected_legs = 0
 
@@ -540,6 +541,7 @@ def main():
                         physical_unresolved.append(fix)
                 resolved=physical_resolved
                 resolved_total+=len(resolved)
+                identifier_resolved_total+=len(identifier_resolved)
 
                 start_candidates=[]; goal_candidates=[]
                 for i,fix in enumerate(observed):
@@ -643,7 +645,8 @@ def main():
                 "matched_fixes": matched_total,
                 "physical_resolved_nodes": resolved_total,
                 "physical_unresolved_nodes": matched_total - resolved_total,
-                "identifier_resolved_nodes_legacy": sum(len(c.get("unresolved_fixes",[]))==0 for c in comparisons),
+                "identifier_resolved_nodes_legacy": identifier_resolved_total,
+                "identifier_unresolved_nodes_legacy": matched_total-identifier_resolved_total,
                 "connected_legs": connected_legs,
                 "graph_source": nav.graph_source,
                 "graph_node_count": len(nav.fix_coords_by_ident),
