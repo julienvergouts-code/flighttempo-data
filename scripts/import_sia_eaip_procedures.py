@@ -238,7 +238,7 @@ def parse_table_rows(
             "fix_longitude": fix_lon,
             "fix_resolution": fix_resolution,
             "source_provider": "Service de l'Information Aeronautique (SIA France)",
-            "source_license": "SIA eAIP DATA PDF; redistribution licence scope pending confirmation",
+            "source_license": "SIA Licence Ouverte / Open Licence",
             "source_file": source_file,
             "source_url": source_url,
             "source_document_date": source_document_date,
@@ -408,7 +408,7 @@ def main() -> int:
         report = {
             "schemaVersion": 1,
             "provider": "Service de l'Information Aeronautique (SIA France)",
-            "license": "SIA eAIP DATA PDF; redistribution licence scope pending confirmation",
+            "license": "SIA Licence Ouverte / Open Licence",
             "attribution": "Service de l'Information Aeronautique (SIA France); include the source and last update date.",
             "airacEffectiveDate": args.airac_effective_date,
             "status": "parsed_not_independently_validated",
@@ -426,7 +426,8 @@ def main() -> int:
                 "Fix coordinates are linked only when a supplied fix source has a unique exact ident match.",
                 "Shared/blank runway selectors are preserved and are not expanded into guessed branches.",
                 "Missing values remain blank; no synthetic route legs or constraints are generated.",
-                "Source charts, AIP text, fix coordinates, procedure sequencing and cycle validity require review before wider release.",
+                "Source charts, AIP text, fix coordinates, procedure sequencing and cycle validity require validation before any operational use.",
+                "Commercial reuse is permitted under the SIA Open Licence with source/date attribution; do not imply SIA endorsement.",
                 "This dataset is not an operational navigation source.",
             ],
         }
