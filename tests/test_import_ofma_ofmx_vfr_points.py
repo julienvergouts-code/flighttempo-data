@@ -19,7 +19,7 @@ class Tests(unittest.TestCase):
    with self.assertRaises(ValueError):parse_coord(value)
  def test_filters_only_vfr_designated_points(self):
   xml=b"""<OFMX-Snapshot><Dpn><DpnUid><codeId>AB123</codeId><geoLat>491234N</geoLat><geoLong>0041234E</geoLong></DpnUid><codeType>VFR-RP</codeType><txtName>REPORT POINT</txtName></Dpn><Dpn><DpnUid><codeId>IFR01</codeId><geoLat>491234N</geoLat><geoLong>0041234E</geoLong></DpnUid><codeType>OTHER</codeType><txtName>OTHER</txtName></Dpn></OFMX-Snapshot>"""
-  rows=parse_xml(xml,{"region":"EB","effectiveDate":"2611"})
+  rows=parse_xml(xml,{"region":"EB","cycle":"2611"})
   self.assertEqual(len(rows),1);self.assertEqual(rows[0]["code"],"AB123");self.assertEqual(rows[0]["kind"],"VFR-RP")
  def test_zip_member_selection(self):
   b=io.BytesIO()
