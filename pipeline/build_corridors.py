@@ -71,6 +71,11 @@ class RepositoryNavDatabase:
                 print(f"[NAV] Warning: invalid FTWG binary ({exc}); falling back to CSV.")
                 self.adj.clear()
                 self.fix_coords_by_ident.clear()
+                self.physical_nodes.clear()
+                self.physical_adj.clear()
+                self.nodes_by_ident.clear()
+                self.physical_in_degree_nodes.clear()
+                self.heuristic_scale=0.0
         if not PATH_FIXES.exists() or not PATH_AIRWAYS.exists():
             print("[NAV] FTWG binary and CSV fallback unavailable.")
             return
@@ -329,7 +334,7 @@ def _durable_json(path: Path, payload: dict) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", encoding="utf-8") as f:
         json.dump(payload, f, indent=2, allow_nan=False, default=str)
-        f.write("\\n")
+        f.write("\n")
         f.flush()
         os.fsync(f.fileno())
 
@@ -598,6 +603,11 @@ def main():
                 "graph_source": nav.graph_source,
                 "graph_node_count": len(nav.fix_coords_by_ident),
                 "graph_adjacency_node_count": len(nav.adj),
+                "physical_graph_node_count": len(nav.physical_nodes),
+                "physical_graph_adjacency_node_count": len(nav.physical_adj),
+                "physical_graph_directed_edge_count": sum(len(v) for v in nav.physical_adj.values()),
+                "duplicate_identifier_count": sum(1 for v in nav.nodes_by_ident.values() if len(v)>1),
+                "admissible_heuristic_scale": nav.heuristic_scale,
             }
             recorder.state["leg_diagnostics"] = comparisons
             recorder.state["summary"] = summary
