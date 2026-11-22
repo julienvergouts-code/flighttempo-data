@@ -189,14 +189,25 @@ class OurAirportsFullFieldExportTests(unittest.TestCase):
                 "available": True,
                 "recordCount": 34,
             },
+            {
+                "id": "ofma_ofmx_vfr_reference_points",
+                "path": "data/ofma_ofmx_vfr_points.csv",
+                "available": True,
+                "recordCount": 4736,
+                "sizeBytes": 454573,
+                "sha256": "8255d553e6152a26beddcea25aeaaf928f5fc7c29c8ff560f005015a271bb1d9",
+                "downloadPurpose": "reference_only",
+                "operationallyAvailable": False,
+            },
         ]
         existing = {
             "schemaVersion": 13,
             "datasets": external_datasets,
-            "statistics": {"globalAirlineDirectory": 3846, "airports": 10},
+            "statistics": {"globalAirlineDirectory": 3846, "ofmaOfmxVfrReferencePoints": 4736, "airports": 10},
             "capabilities": {
                 "globalAirlineDirectory": True,
                 "conflictZoneAdvisories": True,
+                "ofmaOfmxVfrReferencePoints": True,
                 "airports": False,
             },
             "downloadContract": {"version": 1, "repository": "flighttempo-data"},
@@ -214,8 +225,10 @@ class OurAirportsFullFieldExportTests(unittest.TestCase):
 
         self.assertEqual(merged["datasets"], external_datasets)
         self.assertEqual(merged["statistics"]["globalAirlineDirectory"], 3846)
+        self.assertEqual(merged["statistics"]["ofmaOfmxVfrReferencePoints"], 4736)
         self.assertEqual(merged["statistics"]["airports"], 29747)
         self.assertTrue(merged["capabilities"]["globalAirlineDirectory"])
+        self.assertTrue(merged["capabilities"]["ofmaOfmxVfrReferencePoints"])
         self.assertTrue(merged["capabilities"]["conflictZoneAdvisories"])
         self.assertTrue(merged["capabilities"]["airports"])
         self.assertEqual(merged["downloadContract"], existing["downloadContract"])

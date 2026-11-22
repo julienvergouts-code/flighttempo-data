@@ -19,7 +19,14 @@ class AirspaceSourcePublicationTests(unittest.TestCase):
 
     def test_noncommercial_openaip_export_and_derived_filter_are_absent(self):
         self.assertFalse((ROOT / "navigation/airspace/openaip_fir_boundaries.geojson").exists())
-        self.assertFalse((ROOT / "airspace/airspace_filter.json").exists())
+        # The shared file may contain unrelated FAA restriction references.
+        # Assert that no OpenAIP-derived content is present in it.
+        filter_path = ROOT / "airspace/airspace_filter.json"
+        if filter_path.is_file():
+            filter_data = json.loads(filter_path.read_text(encoding="utf-8"))
+            self.assertNotIn("openaip", json.dumps(filter_data).lower())
+            fir_dataset = filter_data.get("firBoundaryDataset") or {}
+            self.assertNotEqual(fir_dataset.get("status"), "available_development_reference")
         self.assertFalse((ROOT / "scripts/import_openaip_firs.py").exists())
         manifest = json.loads((ROOT / "navigation_manifest.json").read_text(encoding="utf-8"))
         by_id = {x["id"]: x for x in manifest["datasets"]}

@@ -30,7 +30,23 @@ class EasaAirspaceCoverageTests(unittest.TestCase):
         self.assertFalse(by_id["easa_czibs"]["available"])
         self.assertNotIn("downloadUrl", by_id["easa_czibs"])
         self.assertFalse(self.manifest["capabilities"]["conflictZoneAdvisories"])
-        self.assertFalse((ROOT / "airspace/airspace_filter.json").exists())
+        # The shared filter file is owned by FAA restriction references. Its
+        # existence does not mean incomplete EASA Russia geometry was published.
+        filter_path = ROOT / "airspace/airspace_filter.json"
+        if filter_path.is_file():
+            filter_data = json.loads(filter_path.read_text(encoding="utf-8"))
+            def nested_objects(value):
+                if isinstance(value, dict):
+                    yield value
+                    for child in value.values():
+                        yield from nested_objects(child)
+                elif isinstance(value, list):
+                    for child in value:
+                        yield from nested_objects(child)
+            self.assertFalse(any(
+                item.get("sourceId") == "141480" or item.get("sourceAdvisoryId") == "141480"
+                for item in nested_objects(filter_data)
+            ))
 
     def test_minsk_safety_directives_remain_separate_operator_scope_records(self):
         records = self.directives["records"]
@@ -47,9 +63,14 @@ class EasaAirspaceCoverageTests(unittest.TestCase):
         self.assertNotIn("downloadUrl", item)
         self.assertFalse(item["operationallyAvailable"])
 
-    def test_noncommercial_openaip_filter_is_absent(self):
+    def test_noncommercial_openaip_filter_content_is_absent(self):
         self.assertFalse((ROOT / "navigation/airspace/openaip_fir_boundaries.geojson").exists())
-        self.assertFalse((ROOT / "airspace/airspace_filter.json").exists())
+        filter_path = ROOT / "airspace/airspace_filter.json"
+        if filter_path.is_file():
+            filter_data = json.loads(filter_path.read_text(encoding="utf-8"))
+            self.assertNotIn("openaip", json.dumps(filter_data).lower())
+            fir_dataset = filter_data.get("firBoundaryDataset") or {}
+            self.assertNotEqual(fir_dataset.get("status"), "available_development_reference")
 
 
 if __name__ == "__main__":
