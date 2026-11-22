@@ -12,7 +12,7 @@ on:
 permissions:
   contents: write
 concurrency:
-  group: update-vfr-points
+  group: flighttempo-shared-manifest-updates
   cancel-in-progress: false
 jobs:
   update:
@@ -25,14 +25,16 @@ jobs:
       - run: python -m pip install --upgrade pip requests
       - name: Run FAA importer
         run: python pipeline/fetch_vfr_points.py
-      - name: Commit changed dataset
+      - name: Register VFR reporting points in navigation manifest
+        run: python scripts/register_faa_vfr_points_manifest.py
+      - name: Commit changed dataset and manifest
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/vfr_points.csv data/vfr_points_meta.json
+          git add data/vfr_points.csv data/vfr_points_meta.json navigation_manifest.json
           if git diff --cached --quiet; then
             echo "No VFR reporting-point data changes."
           else
-            git commit -m "Update FAA VFR reporting points"
+            git commit -m "Update FAA VFR reporting points and manifest"
             git push
           fi
