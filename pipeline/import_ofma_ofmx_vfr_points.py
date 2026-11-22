@@ -62,7 +62,7 @@ def parse_xml(raw,src):
   lat=parse_coord(lat_s);lon=parse_coord(lon_s)
   if not -90<=lat<=90 or not -180<=lon<=180 or (lat==0 and lon==0):raise ValueError(f"invalid point coordinates: {code or name}")
   if not code and not name:continue
-  records.append({"region":src["region"],"code":code or name[:32],"name":name or code,"lat":round(lat,6),"lon":round(lon,6),"kind":typ,"source":"OFMA","license":"OFMA_GUL","updated_date":src.get("cycle") or stamp()[:10]})
+  records.append({"region":src["region"],"code":code or name[:32],"name":name or code,"lat":round(lat,6),"lon":round(lon,6),"kind":typ,"source":"OFMA","license":"OFMA_GUL","cycle":src.get("cycle") or stamp()[:10]})
  if not records:raise ValueError(f"no VFR Dpn records parsed for {src['region']}; schema/endpoint may have changed")
  return records
 def xml_from_zip(raw,region_key):
@@ -72,7 +72,7 @@ def xml_from_zip(raw,region_key):
   if not names:raise ValueError("OFMX archive contains no XML/embedded file")
   preferred=[n for n in names if f"ofmx_{region_key}" in n.lower()]
   selected=preferred or names
-  if len(selected)>3:raise ValueError(f"ambiguous OFMX archive members: {len(selected)} candidates")
+  if len(selected)!=1:raise ValueError(f"ambiguous OFMX archive members: {len(selected)} candidates")
   payloads=[z.read(n) for n in selected]
   return b"\n".join(payloads)
 def validate_source(s):
