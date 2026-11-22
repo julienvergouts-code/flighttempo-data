@@ -110,21 +110,42 @@ def parse_dms_coordinate(value, axis: str):
         number = float(text)
         limit = 90 if axis == "lat" else 180
         return number if abs(number) <= limit else None
-    match = re.fullmatch(r"([NSEW])\s*(\d{6,7})", text.replace(" ", ""))
+
+    compact = text.replace(" ", "")
+    match = re.fullmatch(r"([NSEW])(\d{6,7})", compact)
     if match:
         hemi, digits = match.groups()
         if axis == "lat" and hemi not in "NS" or axis == "lon" and hemi not in "EW":
             return None
         deg_digits = 2 if axis == "lat" else 3
-        deg, minute, second = int(digits[:deg_digits]), int(digits[deg_digits:deg_digits+2]), int(digits[deg_digits+2:deg_digits+4])
+        deg, minute, second = (
+            int(digits[:deg_digits]),
+            int(digits[deg_digits:deg_digits + 2]),
+            int(digits[deg_digits + 2:deg_digits + 4]),
+        )
     else:
-        match = re.fullmatch(r"([NSEW])\s*(\d{1,3})\s+(\d{1,2})\s+(\d{1,2}(?:\.\d+)?)", text)
-        if not match:
-            return None
-        hemi, deg_s, minute_s, second_s = match.groups()
-        if axis == "lat" and hemi not in "NS" or axis == "lon" and hemi not in "EW":
-            return None
-        deg, minute, second = int(deg_s), int(minute_s), float(second_s)
+        # Compact degrees/minutes with decimal minutes, e.g. N5123.45/E00412.3.
+        deg_digits = 2 if axis == "lat" else 3
+        dm = re.fullmatch(r"([NSEW])(\d{" + str(deg_digits) + r"})(\d{2}(?:\.\d+)?)", compact)
+        if dm:
+            hemi, deg_s, minute_s = dm.groups()
+            if axis == "lat" and hemi not in "NS" or axis == "lon" and hemi not in "EW":
+                return None
+            deg, minute, second = int(deg_s), float(minute_s), 0.0
+        else:
+            # Separated DMS and suffix-hemisphere forms.
+            suffix = re.fullmatch(r"(\d{1,3})\s+(\d{1,2})\s+(\d{1,2}(?:\.\d+)?)\s*([NSEW])", text)
+            separated = re.fullmatch(r"([NSEW])\s*(\d{1,3})\s+(\d{1,2})\s+(\d{1,2}(?:\.\d+)?)", text)
+            if suffix:
+                deg_s, minute_s, second_s, hemi = suffix.groups()
+            elif separated:
+                hemi, deg_s, minute_s, second_s = separated.groups()
+            else:
+                return None
+            if axis == "lat" and hemi not in "NS" or axis == "lon" and hemi not in "EW":
+                return None
+            deg, minute, second = int(deg_s), int(minute_s), float(second_s)
+
     limit = 90 if axis == "lat" else 180
     if deg > limit or minute >= 60 or second >= 60:
         return None
@@ -132,7 +153,6 @@ def parse_dms_coordinate(value, axis: str):
     if (axis == "lat" and hemi == "S") or (axis == "lon" and hemi == "W"):
         result = -result
     return result
-
 
 def analyze_ecac_workbook(workbook) -> dict:
     ws = next((sheet for sheet in workbook.worksheets if sheet.title.strip().lower() == "fra points"), None)
