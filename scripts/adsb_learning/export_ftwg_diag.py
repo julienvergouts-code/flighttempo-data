@@ -146,7 +146,8 @@ def weak_components(undirected: dict[str, set[str]]) -> tuple[dict[str, int], di
 
 
 def probe_astar(nav: Any, adj: dict[str, Any], start: str | None, goal: str | None,
-                label: str) -> dict[str, Any]:
+                label: str, start_coord: tuple[float,float] | None = None,
+                goal_coord: tuple[float,float] | None = None) -> dict[str, Any]:
     result = {"probe": label, "start": start, "goal": goal, "attempted": False,
               "connected": False, "path": None, "cost_nm": None, "reason": None}
     if not start or not goal:
@@ -159,7 +160,7 @@ def probe_astar(nav: Any, adj: dict[str, Any], start: str | None, goal: str | No
         return result
     result["attempted"] = True
     try:
-        raw = nav.a_star_connected(start, goal)
+        raw = nav.a_star_connected(start, goal, start_coord, goal_coord)
     except Exception as exc:
         result["reason"] = f"astar_exception:{type(exc).__name__}:{exc}"
         return result
@@ -171,6 +172,8 @@ def probe_astar(nav: Any, adj: dict[str, Any], start: str | None, goal: str | No
         if isinstance(path, (list, tuple)):
             result["path"] = list(path)
             result["connected"] = bool(path)
+            result["physical_path"] = getattr(nav,"last_route_physical_path",None)
+            result["endpoint_resolution"] = getattr(nav,"last_route_endpoint_resolution",None)
         result["cost_nm"] = cost
         result["reason"] = None if result["connected"] else "astar_returned_unrecognized_path"
     else:
@@ -255,6 +258,20 @@ def build_report(result_payload: Any, evidence_payload: Any, nav: Any,
         first, last = fixes[0] if fixes else None, fixes[-1] if fixes else None
         first_adj, last_adj = (in_adj[0] if in_adj else None), (in_adj[-1] if in_adj else None)
         first_usable, last_usable = (usable[0] if usable else None), (usable[-1] if usable else None)
+        matched_details=leg.get("matchedFixDetails",[])
+        details_by_fix={}
+        if isinstance(matched_details,list):
+            for row in matched_details:
+                if isinstance(row,dict) and row.get("fix"):
+                    try: details_by_fix.setdefault(normalize(row["fix"]),[]).append((float(row["lat"]),float(row["lon"])))
+                    except (TypeError,ValueError,KeyError): pass
+        raw_start_coord=details_by_fix.get(first,[None])[0] if first else None
+        raw_goal_coord=details_by_fix.get(last,[None])[-1] if last else None
+        adj_start_coord=details_by_fix.get(first_adj,[None])[0] if first_adj else None
+        adj_goal_coord=details_by_fix.get(last_adj,[None])[-1] if last_adj else None
+        selected_coords=diag.get("selected_endpoint_coordinates",[]) if isinstance(diag,dict) else []
+        selected_start_coord=tuple(selected_coords[0]) if len(selected_coords)>0 and selected_coords[0] else None
+        selected_goal_coord=tuple(selected_coords[1]) if len(selected_coords)>1 and selected_coords[1] else None
         leg_rows.append({
             "leg_index": leg_index, "leg_number": leg_number, "route": route,
             "excluded": bool(leg.get("excluded", False)), "matched_count": len(fixes),
@@ -263,9 +280,9 @@ def build_report(result_payload: Any, evidence_payload: Any, nav: Any,
             "raw_observed_endpoints": [first, last],
             "first_last_adjacency_endpoints_skipping_non_adj_fixes": [first_adj, last_adj],
             "first_last_usable_endpoints_skipping_non_adj_or_degree_zero_fixes": [first_usable, last_usable],
-            "astar_raw_endpoints": probe_astar(nav, adj, first, last, "raw_observed_endpoints"),
-            "astar_first_last_adjacency_endpoints": probe_astar(nav, adj, first_adj, last_adj, "skips_non_adjacency_fixes"),
-            "astar_first_last_usable_endpoints": probe_astar(nav, adj, first_usable, last_usable, "skips_non_adjacency_and_degree_zero_fixes"),
+            "astar_raw_endpoints": probe_astar(nav, adj, first, last, "raw_observed_endpoints", raw_start_coord, raw_goal_coord),
+            "astar_first_last_adjacency_endpoints": probe_astar(nav, adj, first_adj, last_adj, "skips_non_adjacency_fixes", adj_start_coord, adj_goal_coord),
+            "astar_first_last_usable_endpoints": probe_astar(nav, adj, first_usable, last_usable, "skips_non_adjacency_and_degree_zero_fixes", selected_start_coord, selected_goal_coord),
         })
 
     unique = sorted(set(occurrences))
@@ -296,12 +313,17 @@ def build_report(result_payload: Any, evidence_payload: Any, nav: Any,
     return {
         "status": "complete", "read_only": True, "graph_source": graph_source,
         "loader_used": "RepositoryNavDatabase() + _load_airways(); same repository FTWG binary as benchmark",
-        "representation_note": "All degrees and WCCs are identifier-keyed adjacency metrics. Duplicate physical nodes/coordinates sharing an identifier are collapsed. WCCs are weak (edges treated undirected); A* probes remain directed.",
+        "representation_note": "Coverage degrees/WCCs remain identifier-keyed legacy metrics. Route probes use physical FTWG node indices and matched coordinates to disambiguate duplicate identifiers; WCCs are weak (edges treated undirected), while route search is directed.",
         "benchmark_result_parse": {"traceResults_legs_parsed": len(legs), "matched_fix_occurrences": len(occurrences)},
         "benchmark_evidence_parse": {"leg_diagnostics_entries": len(diag_map), "trailing_non_json_text_present": bool(evidence_trailing_text)},
         "1_graph_provenance_and_counts": {
             "binary_header": binary_header, "graph_source": graph_source,
             "fix_coords_by_ident_key_count": len(coords), "ident_adjacency_key_count": len(adj),
+            "physical_node_count": len(getattr(nav,"physical_nodes",[])),
+            "physical_adjacency_node_count": len(getattr(nav,"physical_adj",{})),
+            "physical_directed_edge_count": sum(len(v) for v in getattr(nav,"physical_adj",{}).values()),
+            "duplicate_identifier_count": sum(1 for v in getattr(nav,"nodes_by_ident",{}).values() if len(v)>1),
+            "admissible_heuristic_scale": getattr(nav,"heuristic_scale",0.0),
             "identifier_directed_edge_count": edge_count, "identifier_wcc_node_count": len(undirected),
             "identifier_wcc_count": len(wcc_sizes), "largest_identifier_wcc_size": max(wcc_sizes.values(), default=0),
             "benchmark_graph_summary": (result_payload.get("summary", {}) if isinstance(result_payload, dict) else {}),
