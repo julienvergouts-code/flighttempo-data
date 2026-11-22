@@ -24,7 +24,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: flighttempo-shared-manifest-updates
+  group: ${{ github.event_name == 'pull_request' && format('flighttempo-pr-{0}', github.workflow) || 'flighttempo-shared-manifest-updates' }}
   cancel-in-progress: false
 
 jobs:
@@ -67,7 +67,7 @@ jobs:
           if-no-files-found: error
           retention-days: 14
       - name: Publish the validated data update
-        if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
         run: |
           if git diff --quiet -- procedures/europe/france/sid_star_legs.csv procedures/europe/france/meta.json procedures/europe/meta.json procedures/source-registry.json navigation_manifest.json; then
             echo "No French procedure data changes."
