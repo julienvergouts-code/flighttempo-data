@@ -65,9 +65,9 @@ def parse_xml(raw,src):
   if not -90<=lat<=90 or not -180<=lon<=180 or (lat==0 and lon==0):raise ValueError(f"invalid point coordinates: {code or name}")
   if not code and not name:continue
   feature_region=clean(uid.attrib.get("region") or dpn.attrib.get("region")).upper()
-  identity="|".join((feature_region or src["region"],code or name,typ,f"{lat:.6f}",f"{lon:.6f}"))
+  identity="|".join((feature_region or src["region"],code or name,typ,f"{lat:.8f}",f"{lon:.8f}"))
   point_id=hashlib.sha256(identity.encode("utf-8")).hexdigest()[:16]
-  records.append({"region":src["region"],"feature_region":feature_region,"point_id":point_id,"code":code or name[:32],"name":name or code,"lat":round(lat,6),"lon":round(lon,6),"kind":typ,"source_regions":src["region"],"source":"OFMA","license":"OFMA_GUL","cycle":src.get("cycle") or stamp()[:10]})
+  records.append({"region":src["region"],"feature_region":feature_region,"point_id":point_id,"code":code or name[:32],"name":name or code,"lat":round(lat,8),"lon":round(lon,8),"kind":typ,"source_regions":src["region"],"source":"OFMA","license":"OFMA_GUL","cycle":src.get("cycle") or stamp()[:10]})
  if not records:raise ValueError(f"no VFR Dpn records parsed for {src['region']}; schema/endpoint may have changed")
  return records
 def xml_from_zip(raw,region_key,source=None):
@@ -132,7 +132,7 @@ def run(config=CONFIG,dry=False):
   reused[key]=reused.get(key,0)+1
  reused_codes=sum(1 for n in reused.values() if n>1)
  buf=io.StringIO();buf.write("#version=2,generated_utc="+stamp()+"\n");w=csv.DictWriter(buf,fieldnames=COLUMNS);w.writeheader();w.writerows(rows);csvdata=buf.getvalue().encode()
- meta={"schemaVersion":2,"generatedUtc":stamp(),"airac":airac,"count":len(rows),"regions":sorted({r["region"] for r in rows}),"featureRegions":by_feature_region,"countsByType":by_type,"reusedCodeGroups":reused_codes,"sources":sm,"license":"OFMA General Users License","licenseNotes":"Commercial use subject to GUL conditions. Preserve attribution; report errors/alterations and provide user error-reporting route as required. Reference-only, not primary navigation.","attribution":"OpenFlightMaps Association (OFMA)","sha256":hashlib.sha256(csvdata).hexdigest(),"sizeBytes":len(csvdata),"operationalUse":False,"stablePointIds":True}
+ meta={"schemaVersion":2,"generatedUtc":stamp(),"airac":airac,"count":len(rows),"regions":sorted({r["region"] for r in rows}),"featureRegions":by_feature_region,"countsByType":by_type,"reusedCodeGroups":reused_codes,"sources":sm,"license":"OFMA General Users License","licenseUrl":"https://www.openflightmaps.org/live/downloads/20150306-GUL.pdf","commercialUseAllowed":True,"licenseNotes":"Commercial use is explicitly permitted by OFMA GUL. Preserve attribution; communicate alterations within 15 days. If an app lets users alter OFMA data, provide the GUL-required direct contribution interface. Reference-only, not primary navigation.","attribution":"Contains information from the open flightmaps database, see www.openflightmaps.org","sha256":hashlib.sha256(csvdata).hexdigest(),"sizeBytes":len(csvdata),"operationalUse":False,"stablePointIds":True}
  if dry:print(json.dumps({"pointCount":len(rows),"regions":meta["regions"],"featureRegions":by_feature_region,"countsByType":by_type,"sources":sm},indent=2));return 0
  atomic_pair(OUT,META,csvdata,meta);print(f"Imported {len(rows)} OFMA OFMX VFR points across {len(meta['regions'])} source regions; feature regions={len(by_feature_region)}; reused code groups={reused_codes}");return 0
 def main():
