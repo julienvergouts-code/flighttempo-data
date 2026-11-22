@@ -4,6 +4,11 @@ import tempfile
 import unittest
 from pathlib import Path
 
+PIPELINE = Path(__file__).resolve().parents[1] / "pipeline" / "build_corridors.py"
+pipeline_spec = importlib.util.spec_from_file_location("benchmark_pipeline", PIPELINE)
+benchmark_pipeline = importlib.util.module_from_spec(pipeline_spec)
+pipeline_spec.loader.exec_module(benchmark_pipeline)
+
 SCRIPT = Path(__file__).resolve().parents[1] / "scripts" / "adsb_learning" / "build_corridors.py"
 spec = importlib.util.spec_from_file_location("build_corridors", SCRIPT)
 builder = importlib.util.module_from_spec(spec)
@@ -11,6 +16,16 @@ spec.loader.exec_module(builder)
 
 
 class CorridorBuilderTests(unittest.TestCase):
+    def test_benchmark_recorder_evidence_is_strict_json(self):
+        with tempfile.TemporaryDirectory() as d:
+            path = Path(d) / "benchmark_evidence.json"
+            recorder = benchmark_pipeline.BenchmarkRecorder(path, {"test": True})
+            raw = path.read_text(encoding="utf-8")
+            parsed = json.loads(raw, parse_constant=lambda value: (_ for _ in ()).throw(ValueError(value)))
+            self.assertEqual(parsed["status"], "running")
+            self.assertTrue(raw.endswith("\\n"))
+            self.assertFalse(raw.endswith("\\\\n"))
+
     def test_readsb_epoch_relative_seconds_and_ground_flag(self):
         with tempfile.TemporaryDirectory() as d:
             p = Path(d) / "trace.json"
