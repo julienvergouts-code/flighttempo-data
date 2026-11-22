@@ -9,6 +9,11 @@ pipeline_spec = importlib.util.spec_from_file_location("benchmark_pipeline", PIP
 benchmark_pipeline = importlib.util.module_from_spec(pipeline_spec)
 pipeline_spec.loader.exec_module(benchmark_pipeline)
 
+BATCH = Path(__file__).resolve().parents[1] / "pipeline" / "batch_archive_benchmark.py"
+batch_spec = importlib.util.spec_from_file_location("batch_archive_benchmark", BATCH)
+batch_benchmark = importlib.util.module_from_spec(batch_spec)
+batch_spec.loader.exec_module(batch_benchmark)
+
 SCRIPT = Path(__file__).resolve().parents[1] / "scripts" / "adsb_learning" / "build_corridors.py"
 spec = importlib.util.spec_from_file_location("build_corridors", SCRIPT)
 builder = importlib.util.module_from_spec(spec)
@@ -24,6 +29,20 @@ class CorridorBuilderTests(unittest.TestCase):
             parsed = json.loads(raw, parse_constant=lambda value: (_ for _ in ()).throw(ValueError(value)))
             self.assertEqual(parsed["status"], "running")
             self.assertTrue(raw.endswith("\n"))
+
+    def test_batch_runner_callsign_and_europe_filter(self):
+        self.assertEqual(batch_benchmark.flight_prefix({"flight": "RYR6TH"}), "RYR")
+        self.assertIn("RYR", batch_benchmark.EUROPE_AIRLINE_PREFIXES)
+        self.assertTrue(batch_benchmark.eu_coord((51.5, 5.4)))
+        self.assertFalse(batch_benchmark.eu_coord((40.0, -100.0)))
+
+    def test_batch_artifacts_are_strict_json(self):
+        with tempfile.TemporaryDirectory() as d:
+            path = Path(d) / "scale_summary.json"
+            batch_benchmark.strict_write(path, {"promotion_enabled": False, "n": 2})
+            parsed = json.loads(path.read_text(encoding="utf-8"),
+                                parse_constant=lambda value: (_ for _ in ()).throw(ValueError(value)))
+            self.assertFalse(parsed["promotion_enabled"])
 
     def test_readsb_epoch_relative_seconds_and_ground_flag(self):
         with tempfile.TemporaryDirectory() as d:
