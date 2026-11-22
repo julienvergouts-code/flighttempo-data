@@ -108,15 +108,19 @@ def flight_prefix(doc):
     compatibility with older exports while scanning nested observations.
     Only the transient prefix is returned; no callsign is serialized.
     """
-    candidates=[doc.get("flight"),doc.get("callsign")]
-    trace=doc.get("trace",[])
-    if isinstance(trace,list):
-        for row in trace:
-            if isinstance(row,(list,tuple)) and len(row)>8 and isinstance(row[8],dict):
-                aircraft=row[8]
-                candidates.extend((aircraft.get("flight"),aircraft.get("callsign")))
+    def values():
+        yield doc.get("flight")
+        yield doc.get("callsign")
+        trace=doc.get("trace",[])
+        if isinstance(trace,list):
+            for row in trace:
+                if isinstance(row,(list,tuple)) and len(row)>8 and isinstance(row[8],dict):
+                    aircraft=row[8]
+                    yield aircraft.get("flight")
+                    yield aircraft.get("callsign")
+
     first_prefix=""
-    for value in candidates:
+    for value in values():
         if isinstance(value,list):
             value="".join(str(x) for x in value)
         normalized=re.sub(r"[^A-Z0-9]","",str(value or "").upper())
