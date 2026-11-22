@@ -42,6 +42,10 @@ jobs:
         run: python -m py_compile pipeline/batch_archive_benchmark.py pipeline/build_corridors.py scripts/adsb_learning/build_corridors.py
       - name: Compile physical FTWG graph
         run: python pipeline/compile_ftwg_graph.py
+      - name: Run ADS-B corridor and FTWG reader tests
+        run: |
+          python -m unittest discover -s tests -p "test_adsb_corridor_builder.py" -v
+          python -m unittest discover -s tests -p "test_ftwg_binary_reader.py" -v
       - name: Stream archive and benchmark multi-aircraft batch
         env:
           RUN_DATE: ${{ inputs.date || '2026-11-16' }}
