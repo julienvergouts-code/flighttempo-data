@@ -70,11 +70,11 @@ def xml_from_zip(raw,region_key):
  with zipfile.ZipFile(io.BytesIO(raw)) as z:
   names=[n for n in z.namelist() if not n.endswith("/") and ("/embedded/" in n.lower() or n.lower().endswith((".ofmx",".xml")))]
   if not names:raise ValueError("OFMX archive contains no XML/embedded file")
-  preferred=[n for n in names if f"ofmx_{region_key}" in n.lower()]
+  target=f"ofmx_{region_key}".lower()
+  preferred=[n for n in names if n.rsplit("/",1)[-1].lower() in (target,target+".ofmx")]
   selected=preferred or names
   if len(selected)!=1:raise ValueError(f"ambiguous OFMX archive members: {len(selected)} candidates")
-  payloads=[z.read(n) for n in selected]
-  return b"\n".join(payloads)
+  return z.read(selected[0])
 def validate_source(s):
  for k in ("region","regionName","regionKey","url","sourcePage","license"):
   if not clean(s.get(k)):raise ValueError(f"source missing {k}")
