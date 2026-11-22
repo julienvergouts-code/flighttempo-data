@@ -1,0 +1,3 @@
+## OpenFlightMaps regional VFR points
+
+The OFMA CUP importer is intentionally separate from the FAA VFR point feed. It supports CUP files and ZIPs containing exactly one CUP file. Region sources must be manually configured only after the official regional download URL, data cycle and OFMA GUL conditions are verified. The importer preserves region, source URL, cycle, attribution, per-source SHA-256 and counts in metadata. Empty source configuration is a no-op and retains any previously published data. Dataset is reference-only and is not an operational navigation source.
