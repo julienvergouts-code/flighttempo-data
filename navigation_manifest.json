@@ -1,6 +1,6 @@
 {
   "schemaVersion": 13,
-  "generatedAtUtc": "2026-11-23T19:37:21.133098+00:00",
+  "generatedAtUtc": "2026-11-23T19:39:14.492230+00:00",
   "procedureAiracCycle": "2611",
   "navaidTypeCounts": {
     "DME": 167,
@@ -30,7 +30,8 @@
     "franceSiaSidStarLegs": 7988,
     "faaNasrFixes": 69385,
     "faaNasrNavaids": 1608,
-    "faaNasrAirwaySegments": 17178
+    "faaNasrAirwaySegments": 17178,
+    "ofmaAirspaceFeatures": 805
   },
   "dataSources": [
     {
@@ -147,7 +148,8 @@
     "franceStars": true,
     "faaNasrFixes": true,
     "faaNasrNavaids": true,
-    "faaNasrAirwaySegments": true
+    "faaNasrAirwaySegments": true,
+    "ofmaAirspace": true
   },
   "procedureCoverageStatus": "FAA_US_NAS_ONLY_TEST_DATA; EUROPE_FRANCE_SOURCE_NOT_INGESTED; ASIA_NO_PUBLIC_REDISTRIBUTABLE_SOURCE_CONFIRMED",
   "procedureOperationalUse": false,
@@ -983,6 +985,45 @@
       "operationallyAvailable": false,
       "status": "present_reference_dataset",
       "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/navigation/faa_nasr/airway_segments.csv"
+    },
+    {
+      "id": "ofma_airspace",
+      "path": "airspace/ofma/index.json",
+      "available": true,
+      "recordCount": 805,
+      "sizeBytes": 1891,
+      "sha256": "62a014bd6aa9db4751406f704b8a9439bcc9ae0806184df47deb5516d0ee90a3",
+      "packBaseUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/airspace/ofma/",
+      "packCount": 1,
+      "packBytes": 55162,
+      "sourceProvider": "OpenFlightMaps Association (OFMA)",
+      "sourceUrl": "https://openflightmaps.org/",
+      "coverage": "OFMA regions only (not worldwide): EF. CTR, TMA, ATZ, RMZ, TMZ, danger/restricted/prohibited and similar areas as polygons.",
+      "license": "OFMA General Users License",
+      "licenseStatus": "commercial_use_permitted_subject_to_OFMA_GUL",
+      "licenseUrl": "https://www.openflightmaps.org/live/downloads/20150306-GUL.pdf",
+      "attribution": "Contains information from the open flightmaps database, see www.openflightmaps.org",
+      "commercialUseAllowed": true,
+      "licenseConditions": [
+        "Keep the OFMA attribution with the data.",
+        "Pass the data on under the same GUL terms; no further restrictions (GUL 4.5).",
+        "Communicate alterations to OFMA within 15 days (GUL 4.3).",
+        "If users can alter the data, link the OFMA contributor site (GUL 4.4)."
+      ],
+      "alterations": [
+        "Arc and circle boundary segments converted to polylines (3 degree steps).",
+        "Coordinates rounded to 5 decimal places.",
+        "Border-following (FNT) boundary segments approximated by straight lines and flagged approx.",
+        "FIR and UIR records not exported."
+      ],
+      "dataCycle": "2611",
+      "effectiveDate": "2026-10-29",
+      "expiryDate": "2026-11-25",
+      "provenanceVerification": "official_OFMA_publication_service_and_snapshot",
+      "downloadPurpose": "reference_only",
+      "operationallyAvailable": false,
+      "status": "reference_dataset",
+      "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/airspace/ofma/index.json"
     }
   ],
   "downloadContract": {

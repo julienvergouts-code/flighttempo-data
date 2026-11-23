@@ -1,0 +1,60 @@
+{
+  "schema": 1,
+  "format": "FlightTempo OFMA airspace packs",
+  "cycle": "2611",
+  "effectiveDate": "2026-10-29",
+  "expiryDate": "2026-11-25",
+  "provider": "OpenFlightMaps Association (OFMA)",
+  "license": "OFMA General Users License",
+  "licenseUrl": "https://www.openflightmaps.org/live/downloads/20150306-GUL.pdf",
+  "attribution": "Contains information from the open flightmaps database, see www.openflightmaps.org",
+  "commercialUseAllowed": true,
+  "licenseConditions": [
+    "Keep the OFMA attribution with the data.",
+    "Pass the data on under the same GUL terms; no further restrictions (GUL 4.5).",
+    "Communicate alterations to OFMA within 15 days (GUL 4.3).",
+    "If users can alter the data, link the OFMA contributor site (GUL 4.4)."
+  ],
+  "alterations": [
+    "Arc and circle boundary segments converted to polylines (3 degree steps).",
+    "Coordinates rounded to 5 decimal places.",
+    "Border-following (FNT) boundary segments approximated by straight lines and flagged approx.",
+    "FIR and UIR records not exported."
+  ],
+  "operationalUse": false,
+  "notice": "Reference data only. Not certified, not for navigation or airspace-compliance decisions.",
+  "regions": [
+    {
+      "region": "EF",
+      "regionName": "Finland",
+      "file": "EF.json.gz",
+      "cycle": "2611",
+      "featureCount": 805,
+      "countsByType": {
+        "CTA": 11,
+        "SECTOR": 23,
+        "TMA": 46,
+        "R": 127,
+        "TRA": 272,
+        "RMZ": 14,
+        "CTR": 25,
+        "GLDR": 1,
+        "D": 144,
+        "RAS": 1,
+        "TSA": 123,
+        "P": 7,
+        "FIZ": 10,
+        "ADIZ": 1
+      },
+      "bbox": [
+        54.82426,
+        10.5,
+        69.82056,
+        31.51833
+      ],
+      "sizeBytes": 55162,
+      "sha256": "0be9af6418880644dab45392d5b18de00fc936c73022c6fbb90b6edcf47d64ba"
+    }
+  ],
+  "generatedAtUtc": "2026-11-23T19:39:14Z"
+}
