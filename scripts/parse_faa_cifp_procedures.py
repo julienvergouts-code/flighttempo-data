@@ -49,7 +49,7 @@ def parse_procedure_record(line: str, line_number: int) -> dict | None:
     }
 
 
-def parse_file(path: Path, out_dir: Path, source_archive: str | None = None) -> dict:
+def parse_file(path: Path, out_dir: Path, source_archive: str | None = None, manifest_path: Path | None = None) -> dict:
     if not path.is_file():
         raise FileNotFoundError(path)
     out_dir.mkdir(parents=True, exist_ok=True)
