@@ -1,15 +1,18 @@
 {
   "schemaVersion": 1,
-  "checkedAtUtc": "2026-11-14",
+  "checkedAtUtc": "2026-11-23",
   "purpose": "Source and redistribution inventory for IFR terminal procedures and relevant VFR procedure geometry. This registry is not an operational data publication.",
   "regions": {
     "europe": {
-      "status": "partial_public_source_confirmed_not_ingested",
+      "status": "partial_current_cycle_imported",
       "operationallyAvailable": false,
-      "summary": "France publishes current procedure DATA sheets in its eAIP, including structured SID and STAR leg tables and some RNP approach precoding tables. Its separate SIA AIXM4.5/XML export is openly reusable reference data but is not yet treated as a complete IFPD feed. No complete Europe-wide IFR procedure dataset has been established.",
-      "confirmedProcedureCountries": [],
-      "candidateProcedureCountries": [
+      "summary": "French eAIP DATA procedure tables are partially imported under confirmed commercial redistribution terms (7,988 SID/STAR rows from 239 of 380 source documents; 62.89% document coverage in the recorded audit). France remains partial. Belgium and Germany have no redistributable IFR procedure data confirmed; both are blocked pending product-specific licensing or written permission.",
+      "confirmedProcedureCountries": [
         "FR"
+      ],
+      "candidateProcedureCountries": [
+        "BE",
+        "DE"
       ],
       "vfrOnlyProviders": [
         "OpenFlightMaps"
@@ -191,6 +194,50 @@
           "parsedDocumentCount": 239,
           "skippedDocumentCount": 141,
           "documentCoverageRatio": 0.6289
+        },
+        {
+          "id": "BE_SKEYES_AIP",
+          "jurisdiction": "BE",
+          "provider": "AIM Belgium / skeyes",
+          "sourceUrl": "https://ops.skeyes.be/",
+          "termsUrl": "https://www.skeyes.be/media/2305/terms-and-conditions-of-use.pdf",
+          "format": [
+            "eAIP HTML/PDF",
+            "restricted data provision"
+          ],
+          "procedureScope": [
+            "SIDs",
+            "STARs",
+            "approaches"
+          ],
+          "license": "Skeyes terms of use; no commercial redistribution grant verified",
+          "redistribution": "prior_written_permission_required",
+          "licenseStatus": "commercial_redistribution_not_authorized_by_public_terms",
+          "sourceStatus": "permission_review_required",
+          "dataStatus": "not_imported",
+          "notes": "Belgian AIP is freely viewable, but public terms describe limited use and prohibit copying/sharing/selling the underlying database absent express authorization. Data provision is restricted to specific users. FlightTempo must not scrape or redistribute AIP procedures without written approval or a separately licensed source."
+        },
+        {
+          "id": "DE_DFS_AIXM",
+          "jurisdiction": "DE",
+          "provider": "DFS Deutsche Flugsicherung GmbH",
+          "sourceUrl": "https://ais.dfs.de/pilotservice/service/information/disclaimer/disclaimer.jsp",
+          "catalogUrl": "https://www.dfs.de/homepage/en/services/geo-data/",
+          "format": [
+            "DFS digital AIXM datasets",
+            "AIS Portal"
+          ],
+          "procedureScope": [
+            "SIDs",
+            "STARs",
+            "approaches"
+          ],
+          "license": "DFS AIS Portal terms; exact digital AIXM product terms not verified",
+          "redistribution": "product_specific_license_review_required",
+          "licenseStatus": "commercial_redistribution_not_confirmed",
+          "sourceStatus": "permission_review_required",
+          "dataStatus": "not_imported",
+          "notes": "DFS AIS Portal terms prohibit commercial resale/reuse of portal content and automated access except digital AIXM-format data. The AIXM automation exception is not a redistribution licence. AIP/chart-derived content and derived works require prior written approval for other uses. Investigate only an exact digital dataset whose product licence explicitly grants commercial redistribution."
         }
       ]
     },
