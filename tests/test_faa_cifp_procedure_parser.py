@@ -53,6 +53,16 @@ class FaaCifpProcedureRecordTests(unittest.TestCase):
             self.assertEqual(summary["sourceArchive"], "CIFP_261126.zip")
             self.assertEqual(len((out / "procedure-records.ndjson").read_text().splitlines()), 2)
 
+    def test_real_261126_source_records_match_header_field_slices(self):
+        fixture_path = Path(__file__).parent / "fixtures" / "faa_cifp_sample_records_261126.txt"
+        records = [parse_procedure_record(line, i) for i, line in enumerate(fixture_path.read_text(encoding="ascii").splitlines(), 1)]
+        self.assertEqual([(r["procedureType"], r["procedureIdentifier"]) for r in records], [
+            ("SID", "DEEZZ6"), ("STAR", "CAMRN5"), ("APPROACH", "I04L")
+        ])
+        self.assertEqual(records[0]["transitionIdentifier"], "W04L")
+        self.assertEqual(records[1]["legFixIdentifier"], "SIE")
+        self.assertEqual(records[2]["legFixIdentifier"], "AROKE")
+
     def test_bad_record_width_fails_closed(self):
         with self.assertRaises(ValueError):
             parse_procedure_record("short", 1)
