@@ -1,0 +1,47 @@
+name: Update FAA CIFP SIDs and STARs
+on:
+  schedule:
+    - cron: '50 0 * * *'
+  workflow_dispatch:
+    inputs:
+      cycle:
+        description: 'Optional cycle effective date (YYYY-MM-DD); default is the cycle in effect today'
+        required: false
+permissions:
+  contents: write
+concurrency:
+  group: flighttempo-shared-manifest-updates
+  cancel-in-progress: false
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run decoder tests
+        run: python tests/test_publish_faa_cifp_procedures.py
+      - name: Publish SIDs and STARs for the cycle in effect
+        run: |
+          if [ -n "${{ inputs.cycle }}" ]; then
+            python pipeline/publish_faa_cifp_procedures.py --cycle "${{ inputs.cycle }}"
+          else
+            python pipeline/publish_faa_cifp_procedures.py
+          fi
+      - name: Re-apply cycle and rights gate
+        run: python scripts/enforce_app_manifest_rights.py
+      - name: Validate navigation CSVs
+        run: python scripts/validate_navigation_csvs.py
+      - name: Commit changed datasets and manifest
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add procedures/sids procedures/stars procedures/source-manifest.json navigation_manifest.json
+          if git diff --cached --quiet; then
+            echo "No SID/STAR changes."
+          else
+            git commit -m "Update FAA CIFP SIDs and STARs"
+            git pull --rebase origin main
+            git push origin HEAD:main
+          fi
