@@ -59,6 +59,6 @@ This repository is a reference-data source for FlightTempo, not an approved aero
 
 ## Automatic FAA cycle monitoring
 
-The daily navigation workflow checks the official [FAA CIFP download page](https://www.faa.gov/air_traffic/flight_info/aeronav/digital_products/cifp/download/) and writes `faa-cifp-currentness.json`. It records the packaged cycle, latest published cycle, effective/expiry dates and whether an update is due. The monitor fails the pipeline once the packaged cycle has expired.
+The daily navigation workflow checks the official [FAA CIFP download page](https://www.faa.gov/air_traffic/flight_info/aeronav/digital_products/cifp/download/) and writes `faa-cifp-currentness.json`. It records the packaged cycle, latest published cycle, effective/expiry dates and whether an update is due. The monitor fails the daily pipeline on the new cycle effective date (when a newer published cycle becomes effective) and again if the packaged cycle is expired.
 
 **The procedure CSVs are not automatically re-parsed yet.** The repository does not currently contain a verified, tested ARINC 424 importer. The monitor deliberately does not replace procedure data until an importer and cycle-to-cycle regression checks exist. FAA states CIFP is updated every 28 days and requires recipients to notify customers of reported errors and notify FAA when errors are found. See the FAA product page and its customer agreement.
