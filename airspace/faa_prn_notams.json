@@ -3,7 +3,7 @@
   "provider": "FAA",
   "dataset": "Prohibitions, Restrictions and Notices (PRN) — KICZ NOTAM references",
   "sourcePage": "https://www.faa.gov/air_traffic/publications/us_restrictions/index.cfm",
-  "generatedAtUtc": "2026-11-23T10:46:41.861993+00:00",
+  "generatedAtUtc": "2026-11-23T10:47:47.781243+00:00",
   "currentnessWarning": "The FAA PRN page is an official index, not a live NOTAM cancellation/status API. Do not hard-block a route solely from this file without checking the current NOTAM and applicability.",
   "records": [
     {
