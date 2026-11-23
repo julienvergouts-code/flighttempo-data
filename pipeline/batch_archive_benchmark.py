@@ -133,8 +133,8 @@ def flight_prefix(doc):
             return prefix
     return first_prefix
 
-PREFIX_COMPRESSED_BYTES = 256 * 1024
-PREFIX_DECODED_BYTES = 2 * 1024 * 1024
+PREFIX_COMPRESSED_BYTES = 16 * 1024
+PREFIX_DECODED_BYTES = 256 * 1024
 
 
 def partial_callsign_prefixes(data: bytes, compressed: bool) -> tuple[bool, set[str]]:
@@ -149,7 +149,7 @@ def partial_callsign_prefixes(data: bytes, compressed: bool) -> tuple[bool, set[
     else:
         decoded = data[:PREFIX_DECODED_BYTES]
     text = decoded.decode("utf-8", errors="replace")
-    values = re.findall(r'"(?:flight|callsign)\\s*:\\s*("(?:\\\\.|[^"\\\\])*")', text, re.I)
+    values = re.findall(r'"(?:flight|callsign)"\s*:\s*("(?:\\.|[^"\\])*")', text, re.I)
     prefixes = set()
     for raw in values:
         try:
@@ -171,10 +171,15 @@ def load_trace_member(tar, member):
         return None, None, "unreadable_member"
     try:
         compressed = source.read(min(member.size, PREFIX_COMPRESSED_BYTES))
-        is_gzip = compressed[:2] == b"\\x1f\\x8b"
+        is_gzip = compressed[:2] == b"\x1f\x8b"
         has_callsign, prefixes = partial_callsign_prefixes(compressed, is_gzip)
         if has_callsign and not (prefixes & EUROPE_AIRLINE_PREFIXES):
             return None, None, "non_european_commercial_callsign"
+        reader = getattr(tar, "fileobj", None)
+        original_block_size = getattr(reader, "CACHE_BLOCK_BYTES", None)
+        if original_block_size is not None:
+            reader.CACHE_BLOCK_BYTES = 128 * 1024
+            reader.cache.clear()
         source.seek(0)
         raw = source.read(MAX_TRACE_MEMBER_BYTES + 1)
         if len(raw) > MAX_TRACE_MEMBER_BYTES:
@@ -183,7 +188,7 @@ def load_trace_member(tar, member):
             try:
                 with gzip.GzipFile(fileobj=io.BytesIO(raw), mode="rb") as gz:
                     payload = gz.read(MAX_TRACE_MEMBER_BYTES + 1)
-            except (OSError, EOFError):
+            except (OSError, EOFError, zlib.error):
                 return None, None, "invalid_gzip"
         else:
             payload = raw
@@ -198,6 +203,9 @@ def load_trace_member(tar, member):
         return payload, doc, None
     finally:
         source.close()
+        if "reader" in locals() and original_block_size is not None:
+            reader.CACHE_BLOCK_BYTES = original_block_size
+            reader.cache.clear()
 
 
 def diag_leg(leg, nav):
