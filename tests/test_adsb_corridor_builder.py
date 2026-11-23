@@ -1,5 +1,8 @@
 import importlib.util
+import gzip
+import io
 import json
+import tarfile
 import tempfile
 import unittest
 from pathlib import Path
@@ -29,6 +32,74 @@ class CorridorBuilderTests(unittest.TestCase):
             parsed = json.loads(raw, parse_constant=lambda value: (_ for _ in ()).throw(ValueError(value)))
             self.assertEqual(parsed["status"], "running")
             self.assertTrue(raw.endswith("\n"))
+
+    def test_http_range_concat_reader_seeks_across_split_assets(self):
+        data=b"0123456789abcdef"
+        assets=[{"url":"https://archive.test/a","size":7},
+                {"url":"https://archive.test/b","size":9}]
+        class FakeResponse:
+            def __init__(self, content, start, end, total):
+                self.content=content
+                self.status_code=206
+                self.headers={"Content-Range":f"bytes {start}-{end}/{total}"}
+            def close(self): pass
+        class FakeSession:
+            def get(self,url,headers,**kwargs):
+                start,end=map(int,headers["Range"].split("=")[1].split("-"))
+                source=data[:7] if url.endswith("/a") else data[7:]
+                return FakeResponse(source[start:end+1],start,end,len(source))
+        reader=benchmark_pipeline.HTTPRangeConcatReader(assets,FakeSession())
+        reader.CACHE_BLOCK_BYTES=4
+        try:
+            self.assertEqual(reader.read(10),data[:10])
+            reader.seek(-4,io.SEEK_END)
+            self.assertEqual(reader.read(),data[-4:])
+            self.assertGreater(reader.range_requests,0)
+        finally:
+            reader.close()
+
+    def test_range_reader_supports_tar_random_access_and_member_extraction(self):
+        archive=io.BytesIO()
+        with tarfile.open(fileobj=archive,mode="w") as tf:
+            for name,payload in [("skip.txt",b"x"*5000),("trace_full_aabbcc.json",b'{"flight":"RYR1","trace":[]}')]:
+                info=tarfile.TarInfo(name)
+                info.size=len(payload)
+                tf.addfile(info,io.BytesIO(payload))
+        raw=archive.getvalue()
+        cut=1234
+        assets=[{"url":"https://archive.test/one","size":cut},
+                {"url":"https://archive.test/two","size":len(raw)-cut}]
+        class FakeResponse:
+            def __init__(self,data,start,end,total):
+                self.content=data
+                self.status_code=206
+                self.headers={"Content-Range":f"bytes {start}-{end}/{total}"}
+            def close(self): pass
+        class FakeSession:
+            def get(self,url,headers,**kwargs):
+                start,end=map(int,headers["Range"].split("=")[1].split("-"))
+                source=raw[:cut] if url.endswith("/one") else raw[cut:]
+                return FakeResponse(source[start:end+1],start,end,len(source))
+        reader=benchmark_pipeline.HTTPRangeConcatReader(assets,FakeSession())
+        try:
+            with tarfile.open(fileobj=reader,mode="r:") as tf:
+                first=tf.next()
+                self.assertEqual(first.name,"skip.txt")
+                second=tf.next()
+                self.assertEqual(second.name,"trace_full_aabbcc.json")
+                self.assertEqual(tf.extractfile(second).read(),b'{"flight":"RYR1","trace":[]}')
+        finally:
+            reader.close()
+
+    def test_partial_callsign_prefix_reads_gzip_trace_prefix(self):
+        raw=json.dumps({"trace":[[0,52,4,30000,400,90,0,0,{"flight":"RYR123"}]]}).encode()
+        compressed=gzip.compress(raw)
+        has_fields,prefixes=batch_benchmark.partial_callsign_prefixes(compressed,True)
+        self.assertTrue(has_fields)
+        self.assertIn("RYR",prefixes)
+        has_fields,prefixes=batch_benchmark.partial_callsign_prefixes(b'{"trace":[]}',False)
+        self.assertFalse(has_fields)
+        self.assertEqual(prefixes,set())
 
     def test_concatenated_http_stream_resumes_after_broken_connection(self):
         class FakeResponse:
