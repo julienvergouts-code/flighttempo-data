@@ -32,7 +32,7 @@ jobs:
         continue-on-error: true
       - name: Download and integrity-check new published CIFP archive
         run: python scripts/stage_faa_cifp_archive.py
-      - name: Audit staged CIFP archive structure (report only)\n        run: python scripts/audit_faa_cifp_archive.py /tmp/faa-cifp-update/CIFP_261126.zip --output /tmp/faa-cifp-update/cifp-structure-audit.json\n      - name: Upload staged archive and metadata
+      - name: Audit staged CIFP archive structure (report only)\n        run: archive="$(find /tmp/faa-cifp-update -maxdepth 1 -name 'CIFP_*.zip' -print -quit)"\n        test -n "$archive"\n        python scripts/audit_faa_cifp_archive.py "$archive" --output /tmp/faa-cifp-update/cifp-structure-audit.json\n      - name: Upload staged archive and metadata
         uses: actions/upload-artifact@v4
         with:
           name: faa-cifp-staged-${{ github.run_id }}
