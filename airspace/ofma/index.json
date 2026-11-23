@@ -25,6 +25,47 @@
   "notice": "Reference data only. Not certified, not for navigation or airspace-compliance decisions.",
   "regions": [
     {
+      "region": "EB",
+      "regionName": "Belgium",
+      "file": "EB.json.gz",
+      "cycle": "2611",
+      "featureCount": 1019,
+      "countsByType": {
+        "SECTOR": 40,
+        "UNKNOWN": 11,
+        "DRAFT": 1,
+        "CTR": 65,
+        "NRA": 14,
+        "TMA": 211,
+        "TMZ": 35,
+        "R": 272,
+        "GLDR": 80,
+        "LFA": 3,
+        "HPGLDR": 46,
+        "MCTR": 1,
+        "ATZ": 11,
+        "RMZ": 9,
+        "CTA": 26,
+        "D": 42,
+        "HTZ": 10,
+        "HPZ": 2,
+        "P": 51,
+        "TRA": 25,
+        "CBA": 4,
+        "TSA": 37,
+        "HTA": 21,
+        "ACRO": 2
+      },
+      "bbox": [
+        46.32861,
+        -3.05,
+        55.06667,
+        14.81306
+      ],
+      "sizeBytes": 321901,
+      "sha256": "f1145fa20964070dea5934a4ee2dbc0ec809aacbe98c3e32bfe940c7e77d818a"
+    },
+    {
       "region": "ED",
       "regionName": "Germany",
       "file": "ED.json.gz",
@@ -104,6 +145,50 @@
       ],
       "sizeBytes": 65039,
       "sha256": "6bae21cdeca9fb037750333b7464ceb19e5853fff1f17960af31e78822d13b4e"
+    },
+    {
+      "region": "EH",
+      "regionName": "Netherlands",
+      "file": "EH.json.gz",
+      "cycle": "2611",
+      "featureCount": 3336,
+      "countsByType": {
+        "R": 899,
+        "D": 160,
+        "TMA": 578,
+        "CTA": 112,
+        "RMZ": 55,
+        "TSA": 43,
+        "TRA": 50,
+        "CTR": 180,
+        "GLDR": 218,
+        "SECTOR": 165,
+        "DRAFT": 1,
+        "TMZ": 77,
+        "UNKNOWN": 54,
+        "I-GLDR": 9,
+        "HPGLDR": 120,
+        "NRA": 317,
+        "ATZ": 14,
+        "MCTR": 1,
+        "LFA": 10,
+        "CBA": 6,
+        "ACRO": 2,
+        "HTA": 21,
+        "MODEL": 19,
+        "P": 115,
+        "D-OTHER": 13,
+        "HPZ": 15,
+        "HTZ": 82
+      },
+      "bbox": [
+        38.3,
+        -3.43333,
+        69.06,
+        24.14
+      ],
+      "sizeBytes": 1026340,
+      "sha256": "6d1085bf8c213fc81fefad043602613f606156444ce0399856ad3949ea3f785c"
     },
     {
       "region": "EK",
@@ -329,6 +414,46 @@
       ],
       "sizeBytes": 736935,
       "sha256": "be485566010d517d3f3fea765174c84e3ec458b5683aa538c450cfd955fc0e6a"
+    },
+    {
+      "region": "LF",
+      "regionName": "France",
+      "file": "LF.json.gz",
+      "cycle": "2611",
+      "featureCount": 2302,
+      "countsByType": {
+        "SECTOR": 118,
+        "UNKNOWN": 20,
+        "DRAFT": 1,
+        "CTR": 145,
+        "NRA": 102,
+        "TMA": 526,
+        "TMZ": 50,
+        "R": 712,
+        "GLDR": 135,
+        "LFA": 3,
+        "HPGLDR": 46,
+        "MCTR": 1,
+        "ATZ": 6,
+        "RMZ": 31,
+        "I-GLDR": 8,
+        "CTA": 99,
+        "P": 127,
+        "D": 116,
+        "HPZ": 2,
+        "TRA": 26,
+        "HTZ": 10,
+        "CBA": 4,
+        "D-OTHER": 14
+      },
+      "bbox": [
+        39.0,
+        -8.0,
+        55.06667,
+        14.81306
+      ],
+      "sizeBytes": 583476,
+      "sha256": "96e7a938d68cd5d38c4a7c2a9cd39d87231d335ff8b21c3171b40c588073c339"
     },
     {
       "region": "LG",
@@ -753,5 +878,5 @@
       "sha256": "0100eb12b77c77bcd3c63a55378b55eb1e4be0d61263a2317056cd5f04564759"
     }
   ],
-  "generatedAtUtc": "2026-11-23T19:55:39Z"
+  "generatedAtUtc": "2026-11-23T20:01:52Z"
 }

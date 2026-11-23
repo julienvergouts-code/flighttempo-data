@@ -1,6 +1,6 @@
 {
   "schemaVersion": 13,
-  "generatedAtUtc": "2026-11-23T19:58:49.550943+00:00",
+  "generatedAtUtc": "2026-11-23T20:01:52.661332+00:00",
   "procedureAiracCycle": "2611",
   "navaidTypeCounts": {
     "DME": 167,
@@ -31,7 +31,7 @@
     "faaNasrFixes": 69385,
     "faaNasrNavaids": 1608,
     "faaNasrAirwaySegments": 17178,
-    "ofmaAirspaceFeatures": 27085
+    "ofmaAirspaceFeatures": 33742
   },
   "dataSources": [
     {
@@ -990,15 +990,15 @@
       "id": "ofma_airspace",
       "path": "airspace/ofma/index.json",
       "available": true,
-      "recordCount": 27085,
-      "sizeBytes": 16275,
-      "sha256": "4187e627a0c70e0b0842b53a0aa4250ae3477691d47fe196f3974c67251ee57d",
+      "recordCount": 33742,
+      "sizeBytes": 18856,
+      "sha256": "f4533e057f6b2dc8f0102a034fece4941c4bfe0e1247def544fad101eedeaeb0",
       "packBaseUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/airspace/ofma/",
-      "packCount": 18,
-      "packBytes": 8277217,
+      "packCount": 21,
+      "packBytes": 10208934,
       "sourceProvider": "OpenFlightMaps Association (OFMA)",
       "sourceUrl": "https://openflightmaps.org/",
-      "coverage": "OFMA regions only (not worldwide): ED, EF, EK, EP, ES, FA, FY, LD, LG, LH, LI, LJ, LK, LM, LO, LR, LS, LZ. CTR, TMA, ATZ, RMZ, TMZ, danger/restricted/prohibited and similar areas as polygons.",
+      "coverage": "OFMA regions only (not worldwide): EB, ED, EF, EH, EK, EP, ES, FA, FY, LD, LF, LG, LH, LI, LJ, LK, LM, LO, LR, LS, LZ. CTR, TMA, ATZ, RMZ, TMZ, danger/restricted/prohibited and similar areas as polygons.",
       "license": "OFMA General Users License",
       "licenseStatus": "commercial_use_permitted_subject_to_OFMA_GUL",
       "licenseUrl": "https://www.openflightmaps.org/live/downloads/20150306-GUL.pdf",
