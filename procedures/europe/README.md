@@ -1,5 +1,10 @@
 # European procedure data status
 
+
+## France, Belgium and Germany licensing audit
+
+A country-specific commercial reuse screening was recorded in [FR/BE/DE licence audit](fr-be-de-license-audit.md). France has open products suitable for conditional ingestion; Belgium and Germany remain blocked for redistribution pending exact product licensing or written permission. This audit does not authorize any new dataset by itself.
+
 ## Current position
 
 FlightTempo does **not** yet contain a complete Europe-wide IFR SID/STAR/approach dataset. The FAA CIFP files in this repository are US-only development/test data and must never be labelled as European procedures.
