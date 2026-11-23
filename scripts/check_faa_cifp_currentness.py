@@ -149,9 +149,9 @@ def build_status(manifest: dict, cycles: list[dict], today: date | None = None) 
         "latestPublishedDownloadUrl": latest["downloadUrl"],
         "automaticImport": False,
         "automaticImportReason": (
-            "The repository does not yet contain a verified FAA ARINC 424 parser "
-            "and end-to-end regression suite. This monitor must not replace "
-            "procedure CSVs without that validation."
+            "The repository has a validated staging-only archive audit and partial procedure-header extractor. "
+            "Full ARINC 424 leg semantics, CSV conversion, and end-to-end equivalence checks "
+            "are not implemented. No packaged procedure dataset may be replaced."
         ),
         "operationalUse": False,
     }
