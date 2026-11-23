@@ -30,6 +30,60 @@ class CorridorBuilderTests(unittest.TestCase):
             self.assertEqual(parsed["status"], "running")
             self.assertTrue(raw.endswith("\n"))
 
+    def test_concatenated_http_stream_resumes_after_broken_connection(self):
+        class FakeResponse:
+            def __init__(self, status_code, headers, broken=False):
+                self.status_code = status_code
+                self.headers = headers
+                self.broken = broken
+                self.closed = False
+
+            def raise_for_status(self):
+                if self.status_code >= 400:
+                    raise benchmark_pipeline.requests.exceptions.HTTPError(
+                        f"HTTP {self.status_code}"
+                    )
+
+            def iter_content(self, chunk_size):
+                if self.broken:
+                    yield b"abc"
+                    raise benchmark_pipeline.requests.exceptions.ChunkedEncodingError(
+                        "connection dropped"
+                    )
+                yield b"def"
+
+            def close(self):
+                self.closed = True
+
+        class FakeSession:
+            def __init__(self):
+                self.calls = []
+                self.responses = [
+                    FakeResponse(200, {"Content-Encoding": "identity"}, broken=True),
+                    FakeResponse(206, {
+                        "Content-Encoding": "identity",
+                        "Content-Range": "bytes 3-5/6",
+                    }),
+                ]
+
+            def get(self, url, **kwargs):
+                self.calls.append((url, kwargs))
+                return self.responses[len(self.calls) - 1]
+
+        session = FakeSession()
+        stream = benchmark_pipeline.ConcatenatedHttpStream(
+            ["https://archive.test/part.aa"], session
+        )
+        stream.RETRY_BACKOFF_SECONDS = 0
+        target = bytearray(6)
+        try:
+            self.assertEqual(stream.readinto(target), 6)
+            self.assertEqual(bytes(target), b"abcdef")
+            self.assertEqual(session.calls[1][1]["headers"]["Range"], "bytes=3-")
+            self.assertEqual(session.responses[1].status_code, 206)
+        finally:
+            stream.close()
+
     def test_batch_runner_callsign_and_europe_filter(self):
         self.assertEqual(batch_benchmark.flight_prefix({"flight": "RYR6TH"}), "RYR")
         readsb_trace={"trace":[[0,52.0,4.0,30000,420,90,0,0,{"type":"adsb_icao","flight":"DLH7YA  "}]]}

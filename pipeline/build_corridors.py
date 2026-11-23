@@ -16,6 +16,7 @@ import sys
 import tarfile
 import tempfile
 import traceback
+import time
 from datetime import datetime
 from pathlib import Path
 from typing import Iterator
@@ -225,29 +226,120 @@ class RepositoryNavDatabase:
 
 
 class ConcatenatedHttpStream(io.RawIOBase):
-    """Present multiple ordered release assets as one readable tar stream."""
+    """Present ordered release assets as a tar stream with bounded HTTP range recovery."""
+    MAX_STREAM_RETRIES = 5
+    MAX_OPEN_RETRIES = 3
+    RETRY_BACKOFF_SECONDS = 1.0
+
     def __init__(self, urls: list[str], session: requests.Session):
         self.urls, self.session = urls, session
         self.index = 0
         self.response = None
         self.iterator = None
         self.buffer = bytearray()
+        self.current_url = None
+        self.asset_received = 0
+        self.stream_retries = 0
 
     def readable(self):
         return True
 
-    def _next_asset(self):
+    def _close_response(self):
         if self.response is not None:
             self.response.close()
+        self.response = None
+        self.iterator = None
+
+    def _open_response(self, offset: int):
+        headers = {"Accept-Encoding": "identity"}
+        if offset:
+            headers["Range"] = f"bytes={offset}-"
+        response = self.session.get(
+            self.current_url, stream=True, timeout=(30, 180), headers=headers
+        )
+        if offset:
+            if response.status_code != 206:
+                response.close()
+                raise RuntimeError(
+                    f"Archive range resume rejected at byte {offset}: HTTP "
+                    f"{response.status_code}; expected 206 Partial Content"
+                )
+            content_range = response.headers.get("Content-Range", "")
+            match = re.match(r"bytes\s+(\d+)-(\d+)/(\d+|\*)$", content_range, re.I)
+            if not match or int(match.group(1)) != offset:
+                response.close()
+                raise RuntimeError(
+                    f"Archive range resume returned invalid Content-Range "
+                    f"{content_range!r} for offset {offset}"
+                )
+        elif response.status_code == 206:
+            response.close()
+            raise RuntimeError("Archive server unexpectedly returned partial content for initial request")
+        response.raise_for_status()
+        content_encoding = response.headers.get("Content-Encoding", "identity").lower()
+        if content_encoding not in ("", "identity"):
+            response.close()
+            raise RuntimeError(
+                f"Archive range recovery requires identity encoding; got {content_encoding}"
+            )
+        self.response = response
+        self.iterator = response.iter_content(CHUNK)
+
+    def _open_with_retries(self, offset: int, purpose: str):
+        for attempt in range(self.MAX_OPEN_RETRIES + 1):
+            try:
+                self._open_response(offset)
+                return
+            except RuntimeError:
+                raise
+            except Exception as exc:
+                self._close_response()
+                if attempt >= self.MAX_OPEN_RETRIES:
+                    raise RuntimeError(
+                        f"Could not open archive asset at byte {offset} after "
+                        f"{self.MAX_OPEN_RETRIES + 1} attempts ({purpose})"
+                    ) from exc
+                delay = self.RETRY_BACKOFF_SECONDS * (2 ** attempt)
+                print(
+                    f"[archive] transient open failure ({purpose}, attempt "
+                    f"{attempt + 1}/{self.MAX_OPEN_RETRIES}); retrying in {delay:.0f}s: {exc}",
+                    flush=True,
+                )
+                time.sleep(delay)
+
+    def _next_asset(self):
+        self._close_response()
         if self.index >= len(self.urls):
             return False
-        url = self.urls[self.index]
+        self.current_url = self.urls[self.index]
         self.index += 1
-        print(f"[archive] streaming asset {self.index}/{len(self.urls)}: {url.rsplit('/', 1)[-1]}", flush=True)
-        self.response = self.session.get(url, stream=True, timeout=(30, 180))
-        self.response.raise_for_status()
-        self.iterator = self.response.iter_content(CHUNK)
+        self.asset_received = 0
+        self.stream_retries = 0
+        print(
+            f"[archive] streaming asset {self.index}/{len(self.urls)}: "
+            f"{self.current_url.rsplit('/', 1)[-1]}",
+            flush=True,
+        )
+        self._open_with_retries(0, "initial asset request")
         return True
+
+    def _recover_stream(self, error: Exception):
+        if self.stream_retries >= self.MAX_STREAM_RETRIES:
+            raise RuntimeError(
+                f"Archive stream interrupted at byte {self.asset_received}; "
+                f"exhausted {self.MAX_STREAM_RETRIES} range-resume attempts"
+            ) from error
+        self.stream_retries += 1
+        offset = self.asset_received
+        self._close_response()
+        delay = self.RETRY_BACKOFF_SECONDS * (2 ** (self.stream_retries - 1))
+        print(
+            f"[archive] stream interruption at byte {offset}; range-resume "
+            f"{self.stream_retries}/{self.MAX_STREAM_RETRIES} in {delay:.0f}s: {error}",
+            flush=True,
+        )
+        time.sleep(delay)
+        self._open_with_retries(offset, "range resume")
 
     def readinto(self, target):
         while len(self.buffer) < len(target):
@@ -257,16 +349,21 @@ class ConcatenatedHttpStream(io.RawIOBase):
                 block = next(self.iterator)
                 if block:
                     self.buffer.extend(block)
+                    self.asset_received += len(block)
             except StopIteration:
-                self.iterator = None
+                self._close_response()
+                self.current_url = None
+                self.asset_received = 0
+                self.stream_retries = 0
+            except Exception as exc:
+                self._recover_stream(exc)
         count = min(len(target), len(self.buffer))
         target[:count] = self.buffer[:count]
         del self.buffer[:count]
         return count
 
     def close(self):
-        if self.response is not None:
-            self.response.close()
+        self._close_response()
         super().close()
 
 
