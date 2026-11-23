@@ -15238,7 +15238,30 @@
    ],
    "tileCount": 0,
    "sizeBytes": 0,
-   "tiles": []
+   "tiles": [],
+   "accuracyNote": "Copernicus under-reads sharp tropical peaks here (Mont Orohena ~1,840 m vs 2,241 m real, about 400 m / 1,300 ft low). Do not rely on a 1,000 ft buffer over the interior of the islands."
+  },
+  {
+   "id": "st-barth",
+   "name": "Saint-Barthelemy (Caribbean)",
+   "bbox": [
+    17,
+    -63,
+    18,
+    -62
+   ],
+   "tileCount": 1,
+   "sizeBytes": 6957,
+   "tiles": [
+    {
+     "id": "N17W063",
+     "lat": 17,
+     "lon": -63,
+     "maxM": 1152,
+     "sizeBytes": 6957,
+     "sha256": "9f4ca6671623708cf4448bb45960376f017d95539c6c35db21d771cc3428a6be"
+    }
+   ]
   }
  ]
 }
