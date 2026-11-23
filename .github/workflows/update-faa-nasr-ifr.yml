@@ -2,8 +2,9 @@ name: Update FAA NASR IFR Reference Data
 
 # Imports US fixes, navaids and airway segments from the FAA 28-day NASR
 # subscription (US Government public-domain data). The importer selects the
-# newest cycle whose effective date has passed, so a weekly Thursday run picks
-# up each new cycle on or shortly after its effective date.
+# newest cycle whose effective date has passed. It runs daily just after 00:00
+# UTC (idempotent: nothing changes unless a new cycle took effect), so the data
+# switches at the cycle boundary and downloads are not left without a cycle.
 on:
   push:
     branches:
@@ -13,7 +14,7 @@ on:
       - 'scripts/register_faa_nasr_ifr_manifest.py'
       - '.github/workflows/update-faa-nasr-ifr.yml'
   schedule:
-    - cron: '17 12 * * 4'
+    - cron: '30 0 * * *'
   workflow_dispatch:
     inputs:
       cycle:
