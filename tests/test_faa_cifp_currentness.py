@@ -29,6 +29,16 @@ class FaaCifpCurrentnessTests(unittest.TestCase):
         self.assertEqual(result["status"], "packaged_cycle_current_next_cycle_published")
         self.assertEqual(result["packagedCycle"]["cycleToken"], "261029")
 
+    def test_flags_new_cycle_on_effective_date(self):
+        manifest = {"datasets": [
+            {"id": "sids", "sourceUrl": "CIFP_261029.zip", "effectiveDate": "2026-10-29", "expiryDate": "2026-11-26"},
+            {"id": "stars", "sourceUrl": "CIFP_261029.zip", "effectiveDate": "2026-10-29", "expiryDate": "2026-11-26"},
+            {"id": "approaches", "sourceUrl": "CIFP_261029.zip", "effectiveDate": "2026-10-29", "expiryDate": "2026-11-26"},
+        ]}
+        result = build_status(manifest, parse_cycles(HTML), today=date(2026, 11, 26))
+        self.assertEqual(result["status"], "new_cycle_effective_import_required")
+        self.assertEqual(result["latestPublishedCycle"]["cycleToken"], "261126")
+
     def test_flags_expired_packaged_cycle(self):
         manifest = {"datasets": [
             {"id": "sids", "sourceUrl": "CIFP_261029.zip", "effectiveDate": "2026-10-29", "expiryDate": "2026-11-26"},
