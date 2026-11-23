@@ -149,5 +149,25 @@ class ConfigTests(unittest.TestCase):
         self.assertGreaterEqual(len(cfg["canaries"]), 3)
 
 
+
+class FetchRetryTests(unittest.TestCase):
+    def test_retries_dropped_connections_then_succeeds(self):
+        import http.client
+        import io
+        import urllib.request
+        from unittest import mock
+        import build_terrain_tiles as b
+        calls = {"n": 0}
+
+        def fake(request, timeout=0):
+            calls["n"] += 1
+            if calls["n"] < 4:
+                raise http.client.RemoteDisconnected("closed")
+            return io.BytesIO(b"data")
+        with mock.patch.object(urllib.request, "urlopen", fake):
+            self.assertEqual(b.fetch_tile("https://x/y", sleep=lambda s: None), b"data")
+        self.assertEqual(calls["n"], 4)
+
+
 if __name__ == "__main__":
     unittest.main()

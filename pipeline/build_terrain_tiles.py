@@ -14,10 +14,12 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import http.client
 import json
 import logging
 import math
 import sys
+import time
 import urllib.error
 import urllib.request
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -54,20 +56,29 @@ def region_tiles(region: dict[str, Any]) -> list[tuple[int, int]]:
             for lo in range(region["west"], region["east"])]
 
 
-def fetch_tile(url: str) -> bytes | None:
+FETCH_ATTEMPTS = 6
+
+
+def fetch_tile(url: str, sleep=time.sleep) -> bytes | None:
+    """Download one source tile. 403/404 means the tile does not exist (open sea).
+
+    Any other network failure (dropped connection, timeout, 5xx) is retried with
+    backoff; a world build makes thousands of requests and must not die on one.
+    """
     request = urllib.request.Request(url, headers={"User-Agent": UA})
-    for attempt in range(3):
+    for attempt in range(FETCH_ATTEMPTS):
         try:
             with urllib.request.urlopen(request, timeout=120) as response:
                 return response.read()
         except urllib.error.HTTPError as exc:
             if exc.code in (403, 404):
-                return None  # tile does not exist (open sea)
-            if attempt == 2:
+                return None
+            if attempt == FETCH_ATTEMPTS - 1:
                 raise
-        except (urllib.error.URLError, TimeoutError):
-            if attempt == 2:
+        except (urllib.error.URLError, OSError, http.client.HTTPException):
+            if attempt == FETCH_ATTEMPTS - 1:
                 raise
+        sleep(min(60, 2 ** (attempt + 1)))
     return None
 
 
