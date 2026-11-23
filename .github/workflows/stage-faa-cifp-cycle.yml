@@ -6,7 +6,10 @@ on:
     paths:
       - "scripts/check_faa_cifp_currentness.py"
       - "scripts/stage_faa_cifp_archive.py"
-      - "scripts/audit_faa_cifp_archive.py"\n      - "tests/test_faa_cifp_archive_audit.py"\n      - "tests/test_faa_cifp_currentness.py"\n      - "tests/test_easa_airspace_coverage.py"
+      - "scripts/audit_faa_cifp_archive.py"
+      - "tests/test_faa_cifp_archive_audit.py"
+      - "tests/test_faa_cifp_currentness.py"
+      - "tests/test_easa_airspace_coverage.py"
       - ".github/workflows/stage-faa-cifp-cycle.yml"
   schedule:
     - cron: '40 4 * * *'
