@@ -99,7 +99,24 @@ def main():
     report = audit_archive(args.archive)
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(report, indent=2) + "\\n", encoding="utf-8")
-    print(json.dumps({"archive": report["archiveName"], "sha256": report["archiveSha256"], "textMembers": report["asciiTextMemberCount"], "report": str(args.output), "conversionEnabled": False, "publicationEnabled": False}, indent=2))
+    summary = {
+        "archive": report["archiveName"],
+        "sha256": report["archiveSha256"],
+        "textMembers": report["asciiTextMemberCount"],
+        "report": str(args.output),
+        "conversionEnabled": False,
+        "publicationEnabled": False,
+        "members": [
+            {
+                "name": item["name"],
+                "lineCount": item.get("lineCount"),
+                "lineLengthDistribution": item.get("lineLengthDistribution"),
+                "recordLeadingCharacterCounts": item.get("recordLeadingCharacterCounts")
+            }
+            for item in report["members"] if item.get("classification") == "ascii_text"
+        ]
+    }
+    print(json.dumps(summary, indent=2))
 
 
 if __name__ == "__main__":
