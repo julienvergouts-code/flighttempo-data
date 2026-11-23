@@ -1,6 +1,12 @@
 name: Stage newly published FAA CIFP cycle
 
 on:
+  push:
+    branches: [main]
+    paths:
+      - "scripts/check_faa_cifp_currentness.py"
+      - "scripts/stage_faa_cifp_archive.py"
+      - ".github/workflows/stage-faa-cifp-cycle.yml"
   schedule:
     - cron: '40 4 * * *'
   workflow_dispatch:
