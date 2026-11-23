@@ -109,7 +109,7 @@ class BuildTests(unittest.TestCase):
         self.assertEqual([t["id"] for t in region["tiles"]], ["N45E006"])
         self.assertEqual(region["tiles"][0]["maxM"], 4806)
         self.assertIn("Copernicus", index["attribution"])
-        self.assertIn("Produced using Copernicus WorldDEM-90", index["attribution"])
+        self.assertIn("Produced using Copernicus WorldDEM-30", index["attribution"])
         self.assertTrue(index["modificationNotice"])
         first = (self.out / "tiles/N45/N45E006.fttr").read_bytes()
         calls.clear()

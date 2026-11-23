@@ -10,10 +10,13 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "scripts"))
+import terrain_notices  # noqa: E402
 WORLD_INDEX = ROOT / "terrain" / "world-index.json"
 TILE_INDEX = ROOT / "terrain" / "index.json"  # source of licence / attribution wording
 CONFIRMATION = ROOT / "data" / "terrain_rights_confirmation.json"
@@ -38,7 +41,10 @@ def merge_index(entries: list[dict], world_index: Path = WORLD_INDEX, tile_index
         "elevationMeaning": meta["elevationMeaning"], "source": meta["source"], "license": meta["license"],
         "attribution": meta["attribution"], "disclaimer": meta["disclaimer"],
         "modificationNotice": meta["modificationNotice"], "operationalUse": False, "notice": meta["notice"],
-        "accuracyNotes": ["Sharp peaks can read well below their real height (Matterhorn about -150 m, Mont Orohena about -400 m)."],
+        "accuracyNotes": [
+            "Sharp peaks can read well below their real height (Matterhorn about -150 m, Mont Orohena about -400 m).",
+            "A missing tile is treated as open sea (0 m). Copernicus withholds GLO-30 tiles for a few countries, so land there can be missing: do not read 'no tile' as 'no terrain' over land.",
+        ],
         "blocks": [blocks[k] for k in sorted(blocks)],
     }
     world_index.parent.mkdir(parents=True, exist_ok=True)
@@ -48,8 +54,10 @@ def merge_index(entries: list[dict], world_index: Path = WORLD_INDEX, tile_index
 
 def register(world_index: Path = WORLD_INDEX, confirmation_path: Path = CONFIRMATION,
              manifest_path: Path = MANIFEST_PATH) -> dict:
+    index = json.loads(world_index.read_bytes())
+    if terrain_notices.refresh(index):
+        world_index.write_text(json.dumps(index, indent=1, ensure_ascii=False) + "\n", encoding="utf-8")
     raw = world_index.read_bytes()
-    index = json.loads(raw)
     confirmation = json.loads(confirmation_path.read_text(encoding="utf-8"))
     confirmed = confirmation.get("commercialUseConfirmed") is True and bool(confirmation.get("confirmedBy"))
     blocks = index["blocks"]
