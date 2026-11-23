@@ -1,0 +1,8 @@
+{
+  "dataset": "terrain_tiles",
+  "commercialUseConfirmed": false,
+  "confirmedBy": null,
+  "confirmedOn": null,
+  "reading": "Copernicus DEM licence text (COPDEM-30; GLO-90 is offered under the same free licence per AWS and the Copernicus Data Space) grants a free, worldwide, unlimited-in-time right to reproduce, distribute, adapt and combine the data, requires the attribution and no-liability notice, and states no non-commercial restriction. It does not use the word 'commercial'. Set commercialUseConfirmed to true only after you accept that reading (or have confirmation from the Copernicus helpdesk).",
+  "licenceUrl": "https://documentation.dataspace.copernicus.eu/APIs/SentinelHub/Data/DEM/resources/license/License-COPDEM-30.pdf"
+}

@@ -339,6 +339,9 @@ jobs:
       - name: Register OFMA airspace packs in navigation manifest
         run: |
           if [ -f airspace/ofma/index.json ]; then python3 scripts/register_ofma_airspace_manifest.py; fi
+      - name: Register terrain tiles in navigation manifest
+        run: |
+          if [ -f terrain/index.json ]; then python3 scripts/register_terrain_manifest.py; fi
       - name: Re-apply cycle and rights gate after registration steps
         run: python3 scripts/enforce_app_manifest_rights.py
       - name: Validate OFMA VFR artifact integrity and coverage

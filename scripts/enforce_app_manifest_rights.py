@@ -53,6 +53,7 @@ CAPABILITY_FLAGS = {
     "easa_safety_directives": ("easaSafetyDirectives",),
     "faa_prn_notams": ("faaPrnReferences",),
     "ofma_airspace": ("ofmaAirspace",),
+    "terrain_tiles": ("terrainTiles",),
     "sids": ("sids",),
     "stars": ("stars",),
     "approaches": ("approaches", "ilsApproaches", "rnavApproaches"),
