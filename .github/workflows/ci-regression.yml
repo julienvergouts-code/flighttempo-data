@@ -37,6 +37,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+      - name: Install test dependency for spreadsheet fixtures
+        run: python -m pip install -r requirements-aerosors.txt
       - name: Run unit and regression tests
         run: python -m unittest discover -s tests -v
       - name: Validate OFMA VFR artifact
