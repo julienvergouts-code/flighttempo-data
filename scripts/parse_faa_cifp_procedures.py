@@ -49,7 +49,7 @@ def parse_procedure_record(line: str, line_number: int) -> dict | None:
     }
 
 
-def parse_file(path: Path, out_dir: Path) -> dict:
+def parse_file(path: Path, out_dir: Path, source_archive: str | None = None) -> dict:
     if not path.is_file():
         raise FileNotFoundError(path)
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -78,7 +78,7 @@ def parse_file(path: Path, out_dir: Path) -> dict:
     summary = {
         "schemaVersion": 1,
         "sourceProvider": "FAA AeroNav CIFP",
-        "sourceArchive": path.name,
+        "sourceArchive": source_archive or path.name,
         "sourceFile": path.name,
         "recordWidth": RECORD_WIDTH,
         "recordsScanned": total,
@@ -106,8 +106,9 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("cifp_text", type=Path)
     ap.add_argument("--output-dir", type=Path, required=True)
+    ap.add_argument("--source-archive", default=None)
     args = ap.parse_args()
-    summary = parse_file(args.cifp_text, args.output_dir)
+    summary = parse_file(args.cifp_text, args.output_dir, args.source_archive)
     print(json.dumps(summary, indent=2))
 
 
