@@ -1,9 +1,9 @@
 {
   "version": 1,
-  "generated_utc": "2026-11-21T23:18:04Z",
-  "total_rows": 681,
+  "generated_utc": "2026-11-23T15:38:44Z",
+  "total_rows": 675,
   "rows_by_source": {
-    "FAA": 681,
+    "FAA": 675,
     "OFMA": 0
   },
   "source_status": {
