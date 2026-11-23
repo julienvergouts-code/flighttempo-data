@@ -134,6 +134,7 @@ def write_index(cfg: dict[str, Any], out: Path, tiles: dict[str, list[dict[str, 
             "id": region["id"], "name": region["name"],
             "bbox": [region["south"], region["west"], region["north"], region["east"]],
             "tileCount": len(entries), "sizeBytes": sum(e["sizeBytes"] for e in entries), "tiles": entries,
+            **({"accuracyNote": region["accuracyNote"]} if region.get("accuracyNote") else {}),
         })
     index = {
         "schema": 1, "format": "FlightTempo terrain tiles (FTTR v1)",

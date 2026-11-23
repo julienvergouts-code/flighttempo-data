@@ -37,3 +37,19 @@ The licence text grants free worldwide reproduction, distribution and adaptation
 `airspace/ofma/index.json` lists one `<REGION>.json.gz` pack per OFMA region (CTR, TMA, ATZ, RMZ, TMZ, D/R/P and similar; FIR/UIR excluded). Each feature has `type`, `name`, `class`, `lower`/`upper` (`ft` plus `ref` = AGL, MSL, FL, GND, UNL), `rings` (lists of `[lat, lon]`, closed) and `bbox` `[minLat, minLon, maxLat, maxLon]`. `approx: true` means a border-following boundary was drawn with straight lines. Download only the regions whose bbox the route touches. Updated every AIRAC cycle.
 
 OFMA General Users' License: commercial use is allowed; keep "Contains information from the open flightmaps database, see www.openflightmaps.org"; the data is passed on under the same terms (GUL 4.5); alterations (declared in the index) must be communicated to OFMA within 15 days (GUL 4.3); if app users can edit the data, link the OFMA contributor site (GUL 4.4). Reference data only.
+
+
+## Measured accuracy (spot checks, `scripts/verify_terrain_spots.py`)
+
+Tiles are max-pooled, so flat or rounded terrain reads at or above the real height. Very sharp peaks are the weak spot of the source data (radar-derived surface model):
+
+| Place | Tile vs real |
+|---|---|
+| Mont Blanc | +5 m |
+| Innsbruck (Hafelekarspitze / Patscherkofel) | +77 m / +7 m |
+| Zugspitze | -12 m |
+| Mount Fuji | -7 m |
+| Matterhorn | about -147 m (-480 ft) |
+| Mont Orohena (Tahiti) | about -400 m (-1,300 ft) |
+
+Under-reads over sharp alpine or tropical peaks can exceed a 1,000 ft buffer in Polynesia. French Polynesia carries an `accuracyNote` in the index so the app can show it.
