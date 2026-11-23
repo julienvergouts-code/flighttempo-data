@@ -66,7 +66,7 @@ jobs:
       - name: Parse procedure headers into non-publishable staging records
         run: |
           archive="$(find /tmp/faa-cifp-update -maxdepth 1 -name 'CIFP_*.zip' -print -quit)"
-          python scripts/parse_faa_cifp_procedures.py /tmp/faa-cifp-update/FAACIFP18 --source-archive "$(basename "$archive")" --output-dir /tmp/faa-cifp-update/parsed-staging
+          python scripts/parse_faa_cifp_procedures.py /tmp/faa-cifp-update/FAACIFP18 --source-archive "$(basename "$archive")" --manifest navigation_manifest.json --output-dir /tmp/faa-cifp-update/parsed-staging
       - name: Upload staged archive and metadata
         uses: actions/upload-artifact@v4
         with:
