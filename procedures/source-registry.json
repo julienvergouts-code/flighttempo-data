@@ -12,7 +12,12 @@
       ],
       "candidateProcedureCountries": [
         "BE",
-        "DE"
+        "DE",
+        "PL",
+        "HU",
+        "CZ",
+        "IE",
+        "GB"
       ],
       "vfrOnlyProviders": [
         "OpenFlightMaps"
@@ -238,6 +243,43 @@
           "sourceStatus": "permission_review_required",
           "dataStatus": "not_imported",
           "notes": "DFS AIS Portal terms prohibit commercial resale/reuse of portal content and automated access except digital AIXM-format data. The AIXM automation exception is not a redistribution licence. AIP/chart-derived content and derived works require prior written approval for other uses. Investigate only an exact digital dataset whose product licence explicitly grants commercial redistribution."
+        },
+        {
+          "id": "OFMA_EUROPE_REGIONAL_PACKS",
+          "jurisdiction": "Europe (regional coverage)",
+          "provider": "open flightmaps association (OFMA)",
+          "sourceUrl": "https://openflightmaps.org/downloads/",
+          "termsUrl": "https://www.openflightmaps.org/live/downloads/20150306-GUL.pdf",
+          "format": [
+            "OFMX / regional downloadable data (package-specific formats to verify)"
+          ],
+          "procedureScope": [
+            "VFR routes",
+            "VFR circuits",
+            "VFR aerodrome data (region-dependent)"
+          ],
+          "license": "OFMA General Users License",
+          "redistribution": "commercial_public_redistribution_subject_to_GUL",
+          "licenseStatus": "commercial_use_explicit_in_GUL",
+          "sourceStatus": "candidate_continental_vfr_source",
+          "dataStatus": "not_imported_for_target_regions",
+          "notes": "Catalogue lists regional datasets for Poland (EP), Hungary (LH), Czech Republic (LK), Belgium (EB), Germany (ED), and France (LF), among others. Investigate package availability, exact format, region coverage, cycle/date, features, counts, checksums and gaps before ingestion. OFMA data is complementary, not primary navigation data."
+        },
+        {
+          "id": "FR_PAC_P_FRENCH_POLYNESIA",
+          "jurisdiction": "PF (French Polynesia; SIA PAC-P publication)",
+          "provider": "DGAC France / SIA with local SEAC",
+          "sourceUrl": "https://www.sia.aviation-civile.gouv.fr/",
+          "license": "SIA Licence Ouverte scope to be verified for exact PAC-P product",
+          "redistribution": "commercial_reuse_candidate_pending_product_scope_verification",
+          "licenseStatus": "exact_PAC_P_product_scope_not_yet_verified",
+          "procedureScope": [
+            "aerodrome data",
+            "VFR/IFR procedures as published in PAC-P AIP"
+          ],
+          "sourceStatus": "candidate_official_AIP_open_product",
+          "dataStatus": "not_imported",
+          "notes": "PAC-P AIP is separately published by SIA. Do not assume the main SIA open-product licence applies to this exact PAC-P package until product catalogue/terms explicitly confirm coverage. Verify current AIRAC and product scope, then parser support."
         }
       ]
     },
