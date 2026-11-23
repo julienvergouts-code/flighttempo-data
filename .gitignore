@@ -1,1 +1,3 @@
 data/ofma_source_archives/
+__pycache__/
+*.pyc
