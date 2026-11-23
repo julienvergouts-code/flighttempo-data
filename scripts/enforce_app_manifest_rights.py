@@ -56,6 +56,9 @@ CAPABILITY_FLAGS = {
     "stars": ("stars",),
     "approaches": ("approaches", "ilsApproaches", "rnavApproaches"),
     "france_sia_sid_star_legs": ("franceSids", "franceStars"),
+    "faa_nasr_fixes": ("faaNasrFixes",),
+    "faa_nasr_navaids": ("faaNasrNavaids",),
+    "faa_nasr_airway_segments": ("faaNasrAirwaySegments",),
 }
 
 
