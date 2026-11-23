@@ -180,8 +180,11 @@ def main():
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text(json.dumps(status, indent=2) + "\n", encoding="utf-8")
     print(json.dumps(status, indent=2))
-    if status["status"] == "stale_update_required":
-        raise SystemExit("Packaged FAA CIFP cycle has expired; procedure update is required.")
+    if status["status"] in {"new_cycle_effective_import_required", "stale_update_required"}:
+        raise SystemExit(
+            "FAA CIFP update required: a newer cycle is effective or the packaged cycle has expired. "
+            "This is an alert only; automatic ARINC 424 import is not implemented."
+        )
 
 
 if __name__ == "__main__":
