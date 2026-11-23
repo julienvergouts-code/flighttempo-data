@@ -1,6 +1,6 @@
 {
   "schemaVersion": 13,
-  "generatedAtUtc": "2026-11-23T20:26:01.305396+00:00",
+  "generatedAtUtc": "2026-11-23T20:26:31.773679+00:00",
   "procedureAiracCycle": "2611",
   "navaidTypeCounts": {
     "DME": 167,
@@ -32,7 +32,7 @@
     "faaNasrNavaids": 1608,
     "faaNasrAirwaySegments": 17178,
     "ofmaAirspaceFeatures": 33742,
-    "terrainTiles": 1898
+    "terrainTiles": 1899
   },
   "dataSources": [
     {
@@ -1031,12 +1031,12 @@
       "id": "terrain_tiles",
       "path": "terrain/index.json",
       "available": false,
-      "recordCount": 1898,
-      "sizeBytes": 367648,
-      "sha256": "b34a344354c7bb9e5faef6cf020134271c29acd42ed018c82b9f5e96b813b2b4",
+      "recordCount": 1899,
+      "sizeBytes": 368232,
+      "sha256": "27a651a5cdeb1e6e83078557ff7e07a23efca827c5ce4fb0c5e302954bf55fe9",
       "tileBaseUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/terrain-data/",
-      "tileCount": 1898,
-      "tileBytes": 184224430,
+      "tileCount": 1899,
+      "tileBytes": 184231387,
       "regions": [
         {
           "id": "europe",
@@ -1073,13 +1073,25 @@
           ],
           "tileCount": 0,
           "sizeBytes": 0
+        },
+        {
+          "id": "st-barth",
+          "name": "Saint-Barthelemy (Caribbean)",
+          "bbox": [
+            17,
+            -63,
+            18,
+            -62
+          ],
+          "tileCount": 1,
+          "sizeBytes": 6957
         }
       ],
       "cellsPerDegree": 400,
       "format": "FlightTempo terrain tiles (FTTR v1)",
       "sourceProvider": "Copernicus DEM GLO-30 (ESA / European Union; DLR, Airbus)",
       "sourceUrl": "https://registry.opendata.aws/copernicus-dem/",
-      "coverage": "Regional tile packs: Europe, Japan, French Polynesia (Tahiti). Highest-sample-per-cell terrain (max pooled), not worldwide.",
+      "coverage": "Regional tile packs: Europe, Japan, French Polynesia (Tahiti), Saint-Barthelemy (Caribbean). Highest-sample-per-cell terrain (max pooled), not worldwide.",
       "license": "Copernicus DEM free licence (GLO-30)",
       "licenseStatus": "copernicus_free_licence_commercial_reuse_not_confirmed",
       "licenseUrl": "https://documentation.dataspace.copernicus.eu/APIs/SentinelHub/Data/DEM/resources/license/License-COPDEM-30.pdf",
