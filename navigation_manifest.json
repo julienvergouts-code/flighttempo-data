@@ -1,6 +1,6 @@
 {
   "schemaVersion": 13,
-  "generatedAtUtc": "2026-11-23T20:11:14.485328+00:00",
+  "generatedAtUtc": "2026-11-23T20:20:12.188249+00:00",
   "procedureAiracCycle": "2611",
   "navaidTypeCounts": {
     "DME": 167,
@@ -32,7 +32,7 @@
     "faaNasrNavaids": 1608,
     "faaNasrAirwaySegments": 17178,
     "ofmaAirspaceFeatures": 33742,
-    "terrainTiles": 239
+    "terrainTiles": 1898
   },
   "dataSources": [
     {
@@ -1031,12 +1031,12 @@
       "id": "terrain_tiles",
       "path": "terrain/index.json",
       "available": false,
-      "recordCount": 239,
-      "sizeBytes": 47943,
-      "sha256": "db5be9ee173b61ba2d232f9eb486becaf37a3d1e742b8ab9edc14c524f031b37",
+      "recordCount": 1898,
+      "sizeBytes": 367648,
+      "sha256": "b34a344354c7bb9e5faef6cf020134271c29acd42ed018c82b9f5e96b813b2b4",
       "tileBaseUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/terrain-data/",
-      "tileCount": 239,
-      "tileBytes": 19288298,
+      "tileCount": 1898,
+      "tileBytes": 184224430,
       "regions": [
         {
           "id": "europe",
@@ -1047,8 +1047,8 @@
             72,
             45
           ],
-          "tileCount": 0,
-          "sizeBytes": 0
+          "tileCount": 1659,
+          "sizeBytes": 164936132
         },
         {
           "id": "japan",
