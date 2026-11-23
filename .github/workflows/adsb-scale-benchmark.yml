@@ -103,7 +103,7 @@ jobs:
               if not p.exists():
                   raise SystemExit(f"STRICT_JSON_FAIL: missing {p}")
               raw = p.read_bytes()
-              if not raw.endswith(b"\\n"):
+              if not raw.endswith(b"\n"):
                   raise SystemExit(f"JSON_NEWLINE_FAIL: missing real newline in {p}")
               print(f"JSON_NEWLINE_OK: {p}")
               parsed[p] = json.loads(raw.decode("utf-8"), parse_constant=lambda value: (_ for _ in ()).throw(ValueError(value)))
