@@ -5,7 +5,10 @@ import tempfile
 import unittest
 from pathlib import Path
 
-import numpy as np
+try:
+    import numpy as np
+except ImportError:  # the daily data workflow does not install numpy
+    raise unittest.SkipTest("numpy not installed; terrain tests run in the terrain workflow")
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "pipeline"))
