@@ -3,7 +3,7 @@ from pathlib import Path
 from scripts.audit_faa_cifp_archive import audit_archive
 
 class FaaCifpArchiveAuditTests(unittest.TestCase):
-    def make_zip(self, content=b"SAMPLE CIFP RECORD\\n"):
+    def make_zip(self, content=b"SAMPLE CIFP RECORD\n"):
         tmp = tempfile.NamedTemporaryFile(suffix=".zip", delete=False)
         tmp.close()
         with zipfile.ZipFile(tmp.name, "w") as zf:
@@ -11,7 +11,7 @@ class FaaCifpArchiveAuditTests(unittest.TestCase):
         return Path(tmp.name)
 
     def test_audit_is_report_only_and_hashes_text_member(self):
-        path = self.make_zip(b"SAMPLE RECORD\\n" * 4)
+        path = self.make_zip(b"SAMPLE RECORD\n" * 4)
         try:
             report = audit_archive(path)
             self.assertEqual(report["zipIntegrity"], "passed")
