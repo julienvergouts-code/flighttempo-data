@@ -109,7 +109,7 @@ def decode_line(line: str, number: int, source_tag: str) -> tuple[str, dict[str,
     Fixed ARINC 424-18 positions (0-based): airport 6:10, subsection 12,
     procedure 13:19, route type 19, transition 20:25, sequence 26:29, fix 29:34,
     continuation 38, path terminator 47:49, altitude description 82,
-    altitude 1 83:88, speed limit 99:102.
+    altitude 1 84:89, speed limit 99:102.
     """
     if len(line) != RECORD_WIDTH:
         raise CifpError(f"Line {number}: expected {RECORD_WIDTH} columns, got {len(line)}")
@@ -133,7 +133,7 @@ def decode_line(line: str, number: int, source_tag: str) -> tuple[str, dict[str,
         "fix_id": line[29:34].strip(),
         "path_terminator": line[47:49].strip(),
         "alt_desc": line[82].strip(),
-        "alt1": line[83:88].strip(),
+        "alt1": line[84:89].strip(),
         "speed_limit_kt": line[99:102].strip(),
         "source": source_tag,
     }
