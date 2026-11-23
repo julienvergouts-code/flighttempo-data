@@ -1,4 +1,4 @@
-import tempfile, unittest
+import json, tempfile, unittest
 from pathlib import Path
 from scripts.parse_faa_cifp_procedures import parse_file, parse_procedure_record
 
@@ -47,10 +47,18 @@ class FaaCifpProcedureRecordTests(unittest.TestCase):
             source = Path(tmp) / "FAACIFP18"
             out = Path(tmp) / "stage"
             source.write_text(sid + "\n" + star + "\n", encoding="ascii")
-            summary = parse_file(source, out, "CIFP_261126.zip")
+            manifest = Path(tmp) / "manifest.json"
+            manifest.write_text(json.dumps({"datasets": [
+                {"id": "sids", "recordCount": 1}, {"id": "stars", "recordCount": 1},
+                {"id": "approaches", "recordCount": 1}
+            ]}), encoding="utf-8")
+            summary = parse_file(source, out, "CIFP_261126.zip", manifest)
             self.assertEqual(summary["procedureRecordCounts"], {"SID": 1, "STAR": 1})
             self.assertFalse(summary["appPublicationEnabled"])
             self.assertEqual(summary["sourceArchive"], "CIFP_261126.zip")
+            self.assertEqual(summary["sourceVsPackagedCounts"]["SID"]["difference"], 0)
+            self.assertEqual(summary["sourceVsPackagedCounts"]["STAR"]["difference"], 0)
+            self.assertEqual(summary["sourceVsPackagedCounts"]["APPROACH"]["difference"], -1)
             self.assertEqual(len((out / "procedure-records.ndjson").read_text().splitlines()), 2)
 
     def test_real_261126_source_records_match_header_field_slices(self):
