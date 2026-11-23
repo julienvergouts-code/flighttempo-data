@@ -34,9 +34,10 @@ jobs:
       - name: Download and integrity-check new published CIFP archive
         run: python scripts/stage_faa_cifp_archive.py
       - name: Audit staged CIFP archive structure (report only)
-        run: archive="$(find /tmp/faa-cifp-update -maxdepth 1 -name 'CIFP_*.zip' -print -quit)"
-        test -n "$archive"
-        python scripts/audit_faa_cifp_archive.py "$archive" --output /tmp/faa-cifp-update/cifp-structure-audit.json
+        run: |
+          archive="$(find /tmp/faa-cifp-update -maxdepth 1 -name 'CIFP_*.zip' -print -quit)"
+          test -n "$archive"
+          python scripts/audit_faa_cifp_archive.py "$archive" --output /tmp/faa-cifp-update/cifp-structure-audit.json
       - name: Upload staged archive and metadata
         uses: actions/upload-artifact@v4
         with:
