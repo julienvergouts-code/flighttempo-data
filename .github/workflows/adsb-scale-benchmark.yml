@@ -1,8 +1,8 @@
 name: ADS-B multi-aircraft scale benchmark
 
 on:
-  pull_request:
-    branches: [main]
+  push:
+    branches: [feature/adsb-route-learning]
     paths:
       - "pipeline/batch_archive_benchmark.py"
       - "pipeline/build_corridors.py"
