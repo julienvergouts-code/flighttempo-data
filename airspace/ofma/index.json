@@ -18,7 +18,7 @@
   "alterations": [
     "Arc and circle boundary segments converted to polylines (3 degree steps).",
     "Coordinates rounded to 5 decimal places.",
-    "Border-following (FNT) boundary segments approximated by straight lines and flagged approx.",
+    "Border-following (FNT) boundary segments drawn along the published border line; where that border is not in the package they are approximated by straight lines and flagged approx.",
     "FIR and UIR records not exported."
   ],
   "operationalUse": false,
@@ -69,8 +69,8 @@
         58.5,
         20.30556
       ],
-      "sizeBytes": 1149699,
-      "sha256": "7e47eb3faa17caee90a9f6a41f970e86b2489c12a2a176c2941fb947ebb3e5d3"
+      "sizeBytes": 1180465,
+      "sha256": "262832215ec02af8eaf862a41040c6d64e2e3358f8cc00d001f9c26b69aaddc9"
     },
     {
       "region": "EF",
@@ -102,8 +102,8 @@
         69.82056,
         31.51833
       ],
-      "sizeBytes": 64277,
-      "sha256": "3846e1d4e58d3b0e638b124be5367ea9a968c07c192a854b3a52b4a72acf51cc"
+      "sizeBytes": 65039,
+      "sha256": "6bae21cdeca9fb037750333b7464ceb19e5853fff1f17960af31e78822d13b4e"
     },
     {
       "region": "EK",
@@ -135,15 +135,15 @@
         69.06,
         24.14
       ],
-      "sizeBytes": 103580,
-      "sha256": "3bdc3375256bd74a2c19d20ba854e601c74e948bc526c6b995eb57fd1d355058"
+      "sizeBytes": 103648,
+      "sha256": "5fa1da0ee98cbf48897a5482377fa90bcb8fa36b7aa674ee0d53e73120996364"
     },
     {
       "region": "EP",
       "regionName": "Poland",
       "file": "EP.json.gz",
       "cycle": "2611",
-      "featureCount": 1984,
+      "featureCount": 1985,
       "countsByType": {
         "TMA": 232,
         "CTA": 9,
@@ -160,7 +160,7 @@
         "D": 69,
         "ATZ": 156,
         "TRA": 494,
-        "TSA": 109,
+        "TSA": 110,
         "P": 50,
         "TRA_GA": 3,
         "TIZ": 6,
@@ -174,15 +174,15 @@
         69.06,
         28.105
       ],
-      "sizeBytes": 509606,
-      "sha256": "0a669e70cb9a71ba08defed0b9792db02e595fca2d97bd50c8679375b30883a6"
+      "sizeBytes": 514472,
+      "sha256": "7b48f2b062526239af498e3e23f877849300c2a9d983b5b44db6e2b3c92a4157"
     },
     {
       "region": "ES",
       "regionName": "Sweden",
       "file": "ES.json.gz",
       "cycle": "2611",
-      "featureCount": 2976,
+      "featureCount": 2980,
       "countsByType": {
         "TMA": 291,
         "R": 640,
@@ -193,7 +193,7 @@
         "TRA": 513,
         "CTR": 117,
         "GLDR": 98,
-        "SECTOR": 148,
+        "SECTOR": 152,
         "UNKNOWN": 24,
         "NRA": 166,
         "TMZ": 49,
@@ -218,8 +218,8 @@
         69.82056,
         31.51833
       ],
-      "sizeBytes": 596377,
-      "sha256": "b5fa337f6fe2570a4bcb499b669eecb74385cfea6e3cba2a4a3864b42cc91b0a"
+      "sizeBytes": 598034,
+      "sha256": "3c5a3d6300848e8e3f323d2fe8177a07c10af8eb77d84a01ff2e4021dcc44c21"
     },
     {
       "region": "FA",
@@ -250,8 +250,8 @@
         -16.98333,
         35.97093
       ],
-      "sizeBytes": 210066,
-      "sha256": "0be26d31221e63b67cb788458e2665750b47747b97e346c99e2246f1be8831a8"
+      "sizeBytes": 210130,
+      "sha256": "6f00bf6fba534a87a888db746ee6ead3bcd5603257c24dd1009d6deb38c97881"
     },
     {
       "region": "FY",
@@ -279,8 +279,8 @@
         -16.98333,
         25.28139
       ],
-      "sizeBytes": 38156,
-      "sha256": "0ec4e5b320d4d59381b4269b61da5d049bde8e42b21a64a5301c9abeda680d2a"
+      "sizeBytes": 38221,
+      "sha256": "430248c424985074327b6ece888d695c1e08f886c18f535f3117caeaca277951"
     },
     {
       "region": "LD",
@@ -327,8 +327,8 @@
         48.85614,
         22.91167
       ],
-      "sizeBytes": 723695,
-      "sha256": "44abc7c8d62d028f0b0bd68036b56ae3c7831c0e606c77ef3fb3895050364e8d"
+      "sizeBytes": 736935,
+      "sha256": "be485566010d517d3f3fea765174c84e3ec458b5683aa538c450cfd955fc0e6a"
     },
     {
       "region": "LG",
@@ -359,8 +359,8 @@
         44.21556,
         30.75
       ],
-      "sizeBytes": 126755,
-      "sha256": "6e4c75a69ba9d03406c8ee04828518d6455ff9996be28f367b73567d468091d6"
+      "sizeBytes": 127563,
+      "sha256": "0f62808a5cf8b14ee039e48714be9866d8628f2e15df5d4662a3dd8544ce6bd7"
     },
     {
       "region": "LH",
@@ -400,8 +400,8 @@
         49.51694,
         27.65472
       ],
-      "sizeBytes": 297423,
-      "sha256": "b092a1bf8692a97c7d181d8a924da19a8ac37dd2a9e9c140745bbbfaed98681d"
+      "sizeBytes": 301514,
+      "sha256": "dc5bba54b611d8e1edbc4a7c9157d84b34ce57924da8f0ca76f87f9b65267f22"
     },
     {
       "region": "LI",
@@ -449,18 +449,18 @@
         51.11667,
         23.58333
       ],
-      "sizeBytes": 940260,
-      "sha256": "5d3cf3ed47687a616ee135b6ad0435705fc1b96a84d95e2bc5d2c4d745ed088f"
+      "sizeBytes": 941984,
+      "sha256": "61d191b7c2ff6f6567550be1a6e81a0094ac09b9fa2a2095bd8d73fe96b9094d"
     },
     {
       "region": "LJ",
       "regionName": "Slovenia",
       "file": "LJ.json.gz",
       "cycle": "2611",
-      "featureCount": 1728,
+      "featureCount": 1729,
       "countsByType": {
         "D": 187,
-        "CTA": 62,
+        "CTA": 63,
         "P": 181,
         "CTR": 61,
         "ATZ": 36,
@@ -497,15 +497,15 @@
         48.95282,
         22.91167
       ],
-      "sizeBytes": 604567,
-      "sha256": "8619ca5285dd8f9babb67ea48044d2cd1fd01b34df54632a962b90db4fbcffd1"
+      "sizeBytes": 618213,
+      "sha256": "da3af05a90a97a805006af0141daf22beb16f06448ce30c84f7ead109636b802"
     },
     {
       "region": "LK",
       "regionName": "Czech Republic",
       "file": "LK.json.gz",
       "cycle": "2611",
-      "featureCount": 1522,
+      "featureCount": 1523,
       "countsByType": {
         "TMA": 188,
         "SECTOR": 32,
@@ -520,7 +520,7 @@
         "TMZ": 18,
         "ATZ": 132,
         "D": 41,
-        "TSA": 61,
+        "TSA": 62,
         "P": 28,
         "TRA": 268,
         "CTA": 12,
@@ -539,8 +539,8 @@
         55.06667,
         24.01611
       ],
-      "sizeBytes": 533378,
-      "sha256": "6453b12e8f37d62ca2398a44a919018f67504e184f77ecaee1bc271dc3666aa0"
+      "sizeBytes": 559544,
+      "sha256": "05da90982583c70377e098810862adb0d0305218659de61cae3aed7605c9dfb0"
     },
     {
       "region": "LM",
@@ -572,22 +572,22 @@
         44.38806,
         23.58333
       ],
-      "sizeBytes": 64687,
-      "sha256": "12c9953a8aac6ec3d24131c647fecedbde149c927bae746ec6754f65b46db50b"
+      "sizeBytes": 64752,
+      "sha256": "a02e91761c75f56bba3a79ae718259e43403f362b260a0a7463ee97332e2127a"
     },
     {
       "region": "LO",
       "regionName": "Austria",
       "file": "LO.json.gz",
       "cycle": "2611",
-      "featureCount": 3317,
+      "featureCount": 3319,
       "countsByType": {
         "SECTOR": 32,
         "UNKNOWN": 46,
         "DRAFT": 2,
         "CTR": 141,
         "NRA": 238,
-        "TMA": 363,
+        "TMA": 364,
         "TMZ": 52,
         "R": 269,
         "GLDR": 178,
@@ -602,7 +602,7 @@
         "TSA": 150,
         "P": 273,
         "TRA_GA": 3,
-        "CTA": 85,
+        "CTA": 86,
         "MTMA": 9,
         "TIZ": 6,
         "ACRO": 30,
@@ -625,15 +625,15 @@
         55.06667,
         22.91167
       ],
-      "sizeBytes": 1135020,
-      "sha256": "bc64e8e06e03257ec723686fbbe642d324c71a7864c0a0af3ab115aad7609d8d"
+      "sizeBytes": 1169161,
+      "sha256": "3a1916360108dabf69582811a85659852808f59f93a2941bf22c0e6b618a46a0"
     },
     {
       "region": "LR",
       "regionName": "Romania",
       "file": "LR.json.gz",
       "cycle": "2611",
-      "featureCount": 819,
+      "featureCount": 820,
       "countsByType": {
         "TMA": 47,
         "CTR": 29,
@@ -642,7 +642,7 @@
         "R": 157,
         "HPGLDR": 26,
         "ATZ": 17,
-        "CTA": 13,
+        "CTA": 14,
         "TIZ": 8,
         "P": 5,
         "MTMA": 9,
@@ -662,23 +662,23 @@
         48.57417,
         30.75
       ],
-      "sizeBytes": 239307,
-      "sha256": "7287b6f32cf9b48577ca2dc2d87ed9ab20d67869cf4b8d51b9fdaf8486a9581a"
+      "sizeBytes": 253603,
+      "sha256": "9674e3439188e5a72e4e6038cfe58b7e5a3e2217b308e7f4855a5ae67cbd82dc"
     },
     {
       "region": "LS",
       "regionName": "Switzerland",
       "file": "LS.json.gz",
       "cycle": "2611",
-      "featureCount": 1638,
+      "featureCount": 1640,
       "countsByType": {
         "SECTOR": 45,
-        "CTA": 67,
+        "CTA": 68,
         "DRA": 35,
         "R": 268,
         "HPGLDR": 60,
         "TMZ": 43,
-        "TMA": 293,
+        "TMA": 294,
         "CTR": 97,
         "DRAFT": 2,
         "TRA": 34,
@@ -707,19 +707,19 @@
         55.06667,
         19.0
       ],
-      "sizeBytes": 466042,
-      "sha256": "49eaedade25e41dd6ca2040901213edfef396c43dfb1525e86fff7600295317f"
+      "sizeBytes": 470406,
+      "sha256": "0068454461e98e2d86d4aee3195440538ab89e55f424014a88470c93f6606f3c"
     },
     {
       "region": "LZ",
       "regionName": "Slovakia",
       "file": "LZ.json.gz",
       "cycle": "2611",
-      "featureCount": 1139,
+      "featureCount": 1140,
       "countsByType": {
         "SECTOR": 19,
         "TRA": 315,
-        "TSA": 48,
+        "TSA": 49,
         "HPGLDR": 54,
         "ATZ": 90,
         "TMA": 111,
@@ -749,9 +749,9 @@
         54.36833,
         24.08861
       ],
-      "sizeBytes": 309662,
-      "sha256": "102a6b774b8b7f26e0c94463c67c711dba7da280da46f0257bf0e76298f598de"
+      "sizeBytes": 323533,
+      "sha256": "0100eb12b77c77bcd3c63a55378b55eb1e4be0d61263a2317056cd5f04564759"
     }
   ],
-  "generatedAtUtc": "2026-11-23T19:49:42Z"
+  "generatedAtUtc": "2026-11-23T19:55:39Z"
 }
