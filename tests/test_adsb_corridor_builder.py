@@ -86,6 +86,7 @@ class CorridorBuilderTests(unittest.TestCase):
         }
         result=batch_benchmark.diag_leg(leg,FakeNav())
         self.assertTrue(result["connected"])
+        self.assertEqual(result["path_distance_nm"],200.0)
         self.assertGreater(result["start_gap_nm"],100)
         self.assertGreater(result["end_gap_nm"],100)
         expected_start=benchmark_pipeline._nm((50.0,4.0),graph_coords["FIXA"])
