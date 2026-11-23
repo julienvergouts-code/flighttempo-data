@@ -84,6 +84,43 @@ class ParseTests(unittest.TestCase):
         self.assertTrue(self.by_name["BORDER"].get("approx"))
         self.assertNotIn("approx", self.by_name["PARIS CDG"])
 
+    def test_border_segment_follows_published_border_line(self):
+        xml = b"""<OFMX-Snapshot>
+<Gbr><GbrUid><txtName>A_B</txtName></GbrUid>
+ <Gbv><geoLat>50.00N</geoLat><geoLong>005.00E</geoLong></Gbv>
+ <Gbv><geoLat>50.10N</geoLat><geoLong>005.10E</geoLong></Gbv>
+ <Gbv><geoLat>50.20N</geoLat><geoLong>005.05E</geoLong></Gbv>
+ <Gbv><geoLat>50.30N</geoLat><geoLong>005.20E</geoLong></Gbv></Gbr>
+<Ase><AseUid mid="9" region="EB"><codeType>CTA</codeType><codeId>X</codeId></AseUid><txtName>B</txtName>
+ <codeDistVerUpper>STD</codeDistVerUpper><valDistVerUpper>195</valDistVerUpper><uomDistVerUpper>FL</uomDistVerUpper>
+ <codeDistVerLower>ALT</codeDistVerLower><valDistVerLower>2500</valDistVerLower><uomDistVerLower>FT</uomDistVerLower></Ase>
+<Abd><AbdUid><AseUid mid="9" region="EB"/></AbdUid>
+ <Avx><codeType>GRC</codeType><geoLat>50.00N</geoLat><geoLong>005.00E</geoLong></Avx>
+ <Avx><GbrUid><txtName>A_B</txtName></GbrUid><codeType>FNT</codeType><geoLat>50.30N</geoLat><geoLong>005.20E</geoLong></Avx>
+ <Avx><codeType>GRC</codeType><geoLat>50.30N</geoLat><geoLong>004.80E</geoLong></Avx>
+ <Avx><codeType>GRC</codeType><geoLat>50.00N</geoLat><geoLong>004.80E</geoLong></Avx></Abd>
+</OFMX-Snapshot>"""
+        feats, info = mod.parse_airspace(xml, "EB")
+        self.assertEqual(len(feats), 1)
+        self.assertFalse(feats[0].get("approx"))
+        self.assertEqual(info["stats"]["border_segments_resolved"], 1)
+        ring = feats[0]["rings"][0] if "rings" in feats[0] else feats[0]["geometry"][0]
+        self.assertIn([50.1, 5.1], [list(p) for p in ring])
+
+    def test_unresolved_border_is_not_counted_as_failure(self):
+        xml = b"""<OFMX-Snapshot>
+<Ase><AseUid mid="9" region="EB"><codeType>CTA</codeType><codeId>X</codeId></AseUid><txtName>B</txtName></Ase>
+<Abd><AbdUid><AseUid mid="9" region="EB"/></AbdUid>
+ <Avx><codeType>GRC</codeType><geoLat>50.00N</geoLat><geoLong>005.00E</geoLong></Avx>
+ <Avx><GbrUid><txtName>NOPE</txtName></GbrUid><codeType>FNT</codeType><geoLat>50.30N</geoLat><geoLong>005.20E</geoLong></Avx>
+ <Avx><codeType>GRC</codeType><geoLat>50.00N</geoLat><geoLong>005.00E</geoLong></Avx></Abd>
+</OFMX-Snapshot>"""
+        feats, info = mod.parse_airspace(xml, "EB")
+        self.assertEqual(feats, [])
+        self.assertEqual(info["stats"]["unresolved_border"], 1)
+        self.assertEqual(info["stats"].get("considered", 0), 0)
+        self.assertEqual(info["stats"].get("geometry_failed", 0), 0)
+
     def test_ids_are_stable(self):
         again, _ = mod.parse_airspace(XML, "LF")
         self.assertEqual([f["id"] for f in again], [f["id"] for f in self.features])

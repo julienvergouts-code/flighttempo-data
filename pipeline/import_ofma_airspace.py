@@ -9,8 +9,9 @@ navigation or airspace-compliance database.
 Alterations made by this importer (declared in index.json, GUL section 4.3):
   * circular and arc boundary segments are converted to polylines (<= 3 degree steps);
   * coordinates are rounded to 5 decimals (about 1 m);
-  * boundaries that follow a geographic border (FNT) are approximated by straight
-    lines between their published vertices and flagged ``approx``;
+  * boundaries that follow a geographic border (FNT) use the border line published in
+    the same package; if it is missing they are approximated by straight lines and
+    flagged ``approx``;
   * FIR/UIR records are not exported.
 """
 from __future__ import annotations
@@ -53,7 +54,7 @@ MAX_FEATURE_SPAN_DEG = 30.0
 ALTERATIONS = [
     "Arc and circle boundary segments converted to polylines (3 degree steps).",
     "Coordinates rounded to 5 decimal places.",
-    "Border-following (FNT) boundary segments approximated by straight lines and flagged approx.",
+    "Border-following (FNT) boundary segments drawn along the published border line; where that border is not in the package they are approximated by straight lines and flagged approx.",
     "FIR and UIR records not exported.",
 ]
 UNITS_TO_FT = {"FT": 1.0, "FL": 100.0, "M": 3.280839895, "KM": 3280.839895}
@@ -122,6 +123,73 @@ def circle_ring(centre: tuple[float, float], radius_nm: float) -> list[tuple[flo
     return ring
 
 
+# ------------------------------------------------------------------ borders
+
+BORDER_MAX_SNAP_NM = 3.0
+
+
+def _flat_d2(a: tuple[float, float], b: tuple[float, float]) -> float:
+    dlat = a[0] - b[0]
+    dlon = (a[1] - b[1]) * math.cos(math.radians((a[0] + b[0]) / 2))
+    return dlat * dlat + dlon * dlon
+
+
+def nearest_index(border: list[tuple[float, float]], p: tuple[float, float]) -> tuple[int, float]:
+    best, best_d = 0, float("inf")
+    for i, v in enumerate(border):
+        d = _flat_d2(v, p)
+        if d < best_d:
+            best, best_d = i, d
+    return best, math.sqrt(best_d) * 60.0  # degrees -> NM
+
+
+def border_between(border: list[tuple[float, float]], start: tuple[float, float],
+                   end: tuple[float, float]) -> list[tuple[float, float]] | None:
+    """Border vertices running from ``start`` to ``end`` (both exclusive of the endpoints themselves).
+
+    Returns None when either end is not within BORDER_MAX_SNAP_NM of the border.
+    A closed border (first == last) is walked the shorter way round.
+    """
+    if len(border) < 2:
+        return None
+    i, di = nearest_index(border, start)
+    j, dj = nearest_index(border, end)
+    if di > BORDER_MAX_SNAP_NM or dj > BORDER_MAX_SNAP_NM:
+        return None
+    if i == j:
+        return []
+    closed = border[0] == border[-1]
+    if not closed:
+        seg = border[i + 1:j] if i < j else border[j + 1:i][::-1]
+        return seg
+    ring = border[:-1]
+    n = len(ring)
+    i, j = i % n, j % n
+    fwd = [ring[(i + k) % n] for k in range(1, (j - i) % n)]
+    back = [ring[(i - k) % n] for k in range(1, (i - j) % n)]
+    return fwd if len(fwd) <= len(back) else back
+
+
+def collect_borders(root: ET.Element) -> dict[str, list[tuple[float, float]]]:
+    borders: dict[str, list[tuple[float, float]]] = {}
+    for node in root.iter():
+        if local(node) != "gbr":
+            continue
+        name = txt(child(node, "GbrUid"), "txtName")
+        if not name:
+            continue
+        pts = []
+        for v in node.iter():
+            if local(v) == "gbv":
+                try:
+                    pts.append(point(v, "geoLat", "geoLong"))
+                except ValueError:
+                    continue
+        if len(pts) >= 2:
+            borders.setdefault(name, pts)
+    return borders
+
+
 # ------------------------------------------------------------------ parsing helpers
 
 local = ofma.local_name
@@ -180,7 +248,12 @@ def point(node: ET.Element, lat_name: str, lon_name: str) -> tuple[float, float]
     return lat, lon
 
 
-def ring_from_abd(abd: ET.Element, stats: Counter) -> tuple[list[tuple[float, float]], bool]:
+class UnresolvedBorder(ValueError):
+    """Boundary follows a border line that is not in the package, so no ring can be drawn."""
+
+
+def ring_from_abd(abd: ET.Element, stats: Counter,
+                  borders: dict[str, list[tuple[float, float]]] | None = None) -> tuple[list[tuple[float, float]], bool]:
     """Return (closed ring, approximated) for one Abd element."""
     circle = child(abd, "Circle")
     if circle is not None:
@@ -201,24 +274,35 @@ def ring_from_abd(abd: ET.Element, stats: Counter) -> tuple[list[tuple[float, fl
             unit = txt(avx, "uomRadiusArc").upper() or "NM"
             r = number(txt(avx, "valRadiusArc"))
             radius = r * UNITS_TO_NM.get(unit, 1.0) if r else None
-        items.append((kind, here, centre, radius))
+        items.append((kind, here, centre, radius, txt(child(avx, "GbrUid"), "txtName")))
     if not items:
         raise ValueError("no boundary")
     ring: list[tuple[float, float]] = []
     approx = False
-    for kind, here, centre, radius in items:
+    for kind, here, centre, radius, border_name in items:
         if kind in {"CWA", "CCA"}:
             if not ring:  # an arc that opens the boundary starts at the closing vertex
                 ring.append(items[-1][1] if len(items) > 1 else here)
             ring.extend(arc_points(ring[-1], here, centre, radius, kind == "CWA"))
             stats["arcs"] += 1
         else:
-            if kind == "FNT":
+            if kind == "FNT" and ring:
+                stats["border_segments"] += 1
+                along = border_between(borders[border_name], ring[-1], here) if borders and border_name in borders else None
+                if along is None:
+                    approx = True
+                    stats["border_segments_approximated"] += 1
+                else:
+                    ring.extend(along)
+                    stats["border_segments_resolved"] += 1
+            elif kind == "FNT":
                 approx = True
                 stats["border_segments"] += 1
             ring.append(here)
     distinct = {p for p in ring}
     if len(distinct) < 3:
+        if any(i[0] == "FNT" for i in items):
+            raise UnresolvedBorder("border-following boundary without border geometry")
         raise ValueError("fewer than three vertices")
     if ring[0] != ring[-1]:
         ring.append(ring[0])
@@ -227,7 +311,9 @@ def ring_from_abd(abd: ET.Element, stats: Counter) -> tuple[list[tuple[float, fl
 
 def parse_airspace(raw: bytes, region: str) -> tuple[list[dict[str, Any]], dict[str, Any]]:
     root = ET.fromstring(raw)
+    borders = collect_borders(root)
     stats: Counter = Counter()
+    stats["borders_available"] = len(borders)
     ases: dict[str, ET.Element] = {}
     ase_order: list[str] = []
     abds: dict[str, list[ET.Element]] = {}
@@ -267,11 +353,16 @@ def parse_airspace(raw: bytes, region: str) -> tuple[list[dict[str, Any]], dict[
         rings, approx_any = [], False
         try:
             for abd in abds.get(key, []):
-                ring, approx = ring_from_abd(abd, stats)
+                ring, approx = ring_from_abd(abd, stats, borders)
                 rings.append(ring)
                 approx_any = approx_any or approx
             if not rings:
                 raise ValueError("no boundary")
+        except UnresolvedBorder:
+            # Not a parse failure: the shape is defined only by a border line we do not have.
+            stats["considered"] -= 1
+            stats["unresolved_border"] += 1
+            continue
         except ValueError as exc:
             stats["geometry_failed"] += 1
             stats["geometry_failed:" + str(exc)[:40]] += 1
