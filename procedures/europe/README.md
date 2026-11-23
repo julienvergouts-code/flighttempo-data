@@ -7,7 +7,7 @@ A country-specific commercial reuse screening was recorded in [FR/BE/DE licence 
 
 ## Current position
 
-FlightTempo does **not** yet contain a complete Europe-wide IFR SID/STAR/approach dataset. The FAA CIFP files in this repository are US-only development/test data and must never be labelled as European procedures.
+FlightTempo does **not** yet contain a complete Europe-wide IFR SID/STAR/approach dataset. The FAA CIFP files are US-only development/test data and must never be labelled as European procedures. France currently has a partial AIRAC 11/26 SID/STAR extraction in the repository: 7,988 rows across 43 airports (4,665 SID; 3,323 STAR), from 239 parsed documents out of 380 indexed documents (62.89% document coverage). It is explicitly marked `parsed_not_independently_validated`; operational availability and procedure capability flags are disabled.
 
 France is the first practical national candidate because its official eAIP publishes separate **DATA SID**, **DATA STAR** and some **DATA RWY / RNP** procedure tables. These are more useful for structured extraction than the graphical route charts alone.
 
@@ -26,7 +26,7 @@ The DATA SID/STAR PDFs contain table columns such as procedure identification, p
 
 ### Extraction implementation
 
-The first importer is now in scripts/import_sia_eaip_procedures.py. It is designed to:
+The importer is in scripts/import_sia_eaip_procedures.py. Current staged extraction is:
 
 1. Read individual SIA DATA PDFs using pdfplumber.
 2. Preserve the published procedure heading, runway selector and each row's path terminator and constraints.
