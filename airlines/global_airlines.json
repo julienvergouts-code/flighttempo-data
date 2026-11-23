@@ -7,7 +7,7 @@
     "license": "CC0-1.0"
   },
   "description": "Worldwide airline reference directory; not a timetable or proof of current operations.",
-  "recordCount": 3846,
+  "recordCount": 3847,
   "records": [
     {
       "wikidataId": "Q209104",
@@ -1018,6 +1018,24 @@
       "dissolution": "1981-01-01T00:00:00Z",
       "operatingStatus": "dissolved",
       "wikidataUrl": "http://www.wikidata.org/entity/Q114609433"
+    },
+    {
+      "wikidataId": "Q161432",
+      "name": "Aero Continente",
+      "iataCodes": [
+        "N6"
+      ],
+      "icaoCodes": [
+        "ACQ"
+      ],
+      "callsigns": [],
+      "countries": [
+        "Peru"
+      ],
+      "inception": "1992-01-01T00:00:00Z",
+      "dissolution": "2004-10-29T00:00:00Z",
+      "operatingStatus": "dissolved",
+      "wikidataUrl": "http://www.wikidata.org/entity/Q161432"
     },
     {
       "wikidataId": "Q4688127",
@@ -19759,6 +19777,24 @@
       "wikidataUrl": "http://www.wikidata.org/entity/Q4201939"
     },
     {
+      "wikidataId": "Q19744058",
+      "name": "Chair Airlines",
+      "iataCodes": [
+        "CS"
+      ],
+      "icaoCodes": [
+        "GSW"
+      ],
+      "callsigns": [],
+      "countries": [
+        "Switzerland"
+      ],
+      "inception": "2014-01-01T00:00:00Z",
+      "dissolution": null,
+      "operatingStatus": "not_verified",
+      "wikidataUrl": "http://www.wikidata.org/entity/Q19744058"
+    },
+    {
       "wikidataId": "Q2406313",
       "name": "Chalair Aviation",
       "iataCodes": [
@@ -34028,7 +34064,7 @@
       ],
       "callsigns": [],
       "countries": [
-        "France"
+        "Switzerland"
       ],
       "inception": "1967-01-01T00:00:00Z",
       "dissolution": null,
@@ -41065,6 +41101,22 @@
       "dissolution": "2004-01-01T00:00:00Z",
       "operatingStatus": "dissolved",
       "wikidataUrl": "http://www.wikidata.org/entity/Q2487527"
+    },
+    {
+      "wikidataId": "Q142251785",
+      "name": "Monmouth Airlines",
+      "iataCodes": [
+        "VM"
+      ],
+      "icaoCodes": [],
+      "callsigns": [],
+      "countries": [
+        "United States"
+      ],
+      "inception": "1966-01-01T00:00:00Z",
+      "dissolution": "1981-01-01T00:00:00Z",
+      "operatingStatus": "dissolved",
+      "wikidataUrl": "http://www.wikidata.org/entity/Q142251785"
     },
     {
       "wikidataId": "Q638897",
@@ -48793,24 +48845,6 @@
       "wikidataUrl": "http://www.wikidata.org/entity/Q16045991"
     },
     {
-      "wikidataId": "Q161432",
-      "name": "Q161432",
-      "iataCodes": [
-        "N6"
-      ],
-      "icaoCodes": [
-        "ACQ"
-      ],
-      "callsigns": [],
-      "countries": [
-        "Peru"
-      ],
-      "inception": "1992-01-01T00:00:00Z",
-      "dissolution": "2005-01-01T00:00:00Z",
-      "operatingStatus": "dissolved",
-      "wikidataUrl": "http://www.wikidata.org/entity/Q161432"
-    },
-    {
       "wikidataId": "Q16488224",
       "name": "Q16488224",
       "iataCodes": [],
@@ -48927,24 +48961,6 @@
       "dissolution": null,
       "operatingStatus": "not_verified",
       "wikidataUrl": "http://www.wikidata.org/entity/Q1958602"
-    },
-    {
-      "wikidataId": "Q19744058",
-      "name": "Q19744058",
-      "iataCodes": [
-        "CS"
-      ],
-      "icaoCodes": [
-        "GSW"
-      ],
-      "callsigns": [],
-      "countries": [
-        "Switzerland"
-      ],
-      "inception": "2014-01-01T00:00:00Z",
-      "dissolution": null,
-      "operatingStatus": "not_verified",
-      "wikidataUrl": "http://www.wikidata.org/entity/Q19744058"
     },
     {
       "wikidataId": "Q19876488",

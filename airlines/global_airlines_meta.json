@@ -3,9 +3,9 @@
   "sourceUrl": "https://www.wikidata.org/",
   "license": "CC0-1.0",
   "licenceStatus": "CC0_structured_data",
-  "recordCount": 3846,
-  "sizeBytes": 1581603,
-  "sha256": "33d3fc7103df22d7219a2c6966cb60cd2f8a4fdefd656e6eadfb20d0027bb46f",
-  "generatedAtUtc": "2026-11-17T14:45:42.048997+00:00",
+  "recordCount": 3847,
+  "sizeBytes": 1582037,
+  "sha256": "45d757a4ffdb70c1ef6ac901be40f8f7386c995c111fc951f55a0329829fa348",
+  "generatedAtUtc": "2026-11-23T06:32:27.201838+00:00",
   "notes": "Operating status is marked not_verified unless a dissolution date is explicitly present. No schedules or route frequencies are inferred."
 }
