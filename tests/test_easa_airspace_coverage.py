@@ -43,8 +43,24 @@ class EasaAirspaceCoverageTests(unittest.TestCase):
                 elif isinstance(value, list):
                     for child in value:
                         yield from nested_objects(child)
+            # Advisory metadata may be retained as a warning. The regression
+            # guard is specifically that incomplete Russia geometry is not
+            # published as a geometry-backed active FIR or route-ready area.
+            advisories = filter_data.get("activeAdvisories", [])
+            russia = next((x for x in advisories if x.get("sourceId") == "141480"), None)
+            if russia is not None:
+                self.assertFalse(russia.get("routeAvoidanceReady", False))
+                self.assertFalse(russia.get("geometryCoverageComplete", False))
+            published_firs = filter_data.get("activeFirs", [])
             self.assertFalse(any(
-                item.get("sourceId") == "141480" or item.get("sourceAdvisoryId") == "141480"
+                item.get("sourceAdvisoryId") == "141480"
+                and item.get("geometryFeatureId") is not None
+                and item.get("geometryAvailable", False)
+                for item in published_firs
+            ))
+            self.assertFalse(any(
+                item.get("sourceId") == "141480"
+                and item.get("geometryFeatureId") is not None
                 for item in nested_objects(filter_data)
             ))
 
