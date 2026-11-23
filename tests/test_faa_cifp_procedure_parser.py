@@ -46,7 +46,7 @@ class FaaCifpProcedureRecordTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             source = Path(tmp) / "FAACIFP18"
             out = Path(tmp) / "stage"
-            source.write_text(sid + "\\n" + star + "\\n", encoding="ascii")
+            source.write_text(sid + "\n" + star + "\n", encoding="ascii")
             summary = parse_file(source, out, "CIFP_261126.zip")
             self.assertEqual(summary["procedureRecordCounts"], {"SID": 1, "STAR": 1})
             self.assertFalse(summary["appPublicationEnabled"])
