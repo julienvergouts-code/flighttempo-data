@@ -75,6 +75,25 @@ def parse_file(path: Path, out_dir: Path, source_archive: str | None = None) -> 
             dst.write(json.dumps(record, separators=(",", ":")) + "\n")
     if not counts:
         raise ValueError("No SID/STAR/approach records identified; refusing to produce empty output")
+    packaged_counts = {}
+    count_comparison = {}
+    if manifest_path:
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+        packaged_counts = {
+            item["id"]: item.get("recordCount")
+            for item in manifest.get("datasets", [])
+            if item.get("id") in {"sids", "stars", "approaches"}
+        }
+        source_to_dataset = {"SID": "sids", "STAR": "stars", "APPROACH": "approaches"}
+        for source_type, dataset_id in source_to_dataset.items():
+            source_count = counts[source_type]
+            packaged_count = packaged_counts.get(dataset_id)
+            count_comparison[source_type] = {
+                "sourceRecordCount": source_count,
+                "packagedCsvRecordCount": packaged_count,
+                "difference": (source_count - packaged_count) if isinstance(packaged_count, int) else None,
+                "interpretation": "informational_only_record_types_and_CSV_row_semantics_may_differ"
+            }
     summary = {
         "schemaVersion": 1,
         "sourceProvider": "FAA AeroNav CIFP",
@@ -83,6 +102,8 @@ def parse_file(path: Path, out_dir: Path, source_archive: str | None = None) -> 
         "recordWidth": RECORD_WIDTH,
         "recordsScanned": total,
         "procedureRecordCounts": dict(sorted(counts.items())),
+        "packagedCsvRecordCounts": packaged_counts,
+        "sourceVsPackagedCounts": count_comparison,
         "uniqueAirportIds": len(airports),
         "procedureTransitionGroups": len(groups),
         "stagedOutput": output.name,
@@ -107,8 +128,9 @@ def main():
     ap.add_argument("cifp_text", type=Path)
     ap.add_argument("--output-dir", type=Path, required=True)
     ap.add_argument("--source-archive", default=None)
+    ap.add_argument("--manifest", type=Path, default=None)
     args = ap.parse_args()
-    summary = parse_file(args.cifp_text, args.output_dir, args.source_archive)
+    summary = parse_file(args.cifp_text, args.output_dir, args.source_archive, args.manifest)
     print(json.dumps(summary, indent=2))
 
 
