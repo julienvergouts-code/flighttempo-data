@@ -142,7 +142,7 @@ class ConfigTests(unittest.TestCase):
     def test_real_config_is_sane(self):
         cfg = json.loads((ROOT / "data/terrain_regions.json").read_text())
         url = bt.source_url(cfg, -18, -150)
-        self.assertTrue(url.endswith("Copernicus_DSM_COG_30_S18_00_W150_00_DEM/Copernicus_DSM_COG_30_S18_00_W150_00_DEM.tif"))
+        self.assertTrue(url.endswith("Copernicus_DSM_COG_10_S18_00_W150_00_DEM/Copernicus_DSM_COG_10_S18_00_W150_00_DEM.tif"))
         for r in cfg["regions"]:
             self.assertLess(r["south"], r["north"])
             self.assertLess(r["west"], r["east"])

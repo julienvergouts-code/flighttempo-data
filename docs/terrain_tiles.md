@@ -1,7 +1,7 @@
 # Terrain tiles (FTTR v1) and airspace packs
 
 ## Terrain tiles
-Built by the **Build terrain tiles (Copernicus GLO-90)** workflow from the public Copernicus DEM GLO-90 bucket. Tiles are published on the `terrain-data` branch; `terrain/index.json` on `main` lists them and is registered in `navigation_manifest.json` as `terrain_tiles` (`tileBaseUrl` + tile path).
+Built by the **Build terrain tiles (Copernicus GLO-30)** workflow from the public Copernicus DEM GLO-30 bucket. Tiles are published on the `terrain-data` branch; `terrain/index.json` on `main` lists them and is registered in `navigation_manifest.json` as `terrain_tiles` (`tileBaseUrl` + tile path).
 
 - One tile per 1 x 1 degree cell, named by its south-west corner: `tiles/N45/N45E006.fttr`.
 - 400 x 400 cells per tile (9 arc-seconds, about 280 m north-south).
