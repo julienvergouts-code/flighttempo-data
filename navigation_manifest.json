@@ -1,6 +1,6 @@
 {
   "schemaVersion": 13,
-  "generatedAtUtc": "2026-11-23T10:56:06.134115+00:00",
+  "generatedAtUtc": "2026-11-23T10:57:17.730540+00:00",
   "procedureAiracCycle": "2611",
   "navaidTypeCounts": {
     "DME": 167,
@@ -35,7 +35,7 @@
       "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
       "provider": "OurAirports",
       "license": "CC0 / Public Domain as stated by OurAirports",
-      "downloadedAt": "2026-11-23T10:55:20.089160+00:00",
+      "downloadedAt": "2026-11-23T10:56:30.218337+00:00",
       "sizeBytes": 12763057,
       "sha256": "200f6b42633c9c37e18049d5e7de5a9e347698661c68a52ee7359a0e5d128ee3",
       "recordCount": 86383
@@ -45,7 +45,7 @@
       "url": "https://davidmegginson.github.io/ourairports-data/runways.csv",
       "provider": "OurAirports",
       "license": "CC0 / Public Domain as stated by OurAirports",
-      "downloadedAt": "2026-11-23T10:55:20.089160+00:00",
+      "downloadedAt": "2026-11-23T10:56:30.218337+00:00",
       "sizeBytes": 3976372,
       "sha256": "aecbf51dc5aa2e1d0373297076c0cf82e62e916bbabc63f2d8c487cca4856e23",
       "recordCount": 47139
@@ -55,7 +55,7 @@
       "url": "https://davidmegginson.github.io/ourairports-data/navaids.csv",
       "provider": "OurAirports",
       "license": "CC0 / Public Domain as stated by OurAirports",
-      "downloadedAt": "2026-11-23T10:55:20.089160+00:00",
+      "downloadedAt": "2026-11-23T10:56:30.218337+00:00",
       "sizeBytes": 1524931,
       "sha256": "d7292380662c33a95214945023ec0a5b13189599305fd18be739e167a97a9bd1",
       "recordCount": 11008
@@ -127,7 +127,12 @@
       ],
       "candidateProcedureCountries": [
         "BE",
-        "DE"
+        "DE",
+        "PL",
+        "HU",
+        "CZ",
+        "IE",
+        "GB"
       ],
       "vfrOnlyProviders": [
         "OpenFlightMaps"
@@ -353,6 +358,43 @@
           "sourceStatus": "permission_review_required",
           "dataStatus": "not_imported",
           "notes": "DFS AIS Portal terms prohibit commercial resale/reuse of portal content and automated access except digital AIXM-format data. The AIXM automation exception is not a redistribution licence. AIP/chart-derived content and derived works require prior written approval for other uses. Investigate only an exact digital dataset whose product licence explicitly grants commercial redistribution."
+        },
+        {
+          "id": "OFMA_EUROPE_REGIONAL_PACKS",
+          "jurisdiction": "Europe (regional coverage)",
+          "provider": "open flightmaps association (OFMA)",
+          "sourceUrl": "https://openflightmaps.org/downloads/",
+          "termsUrl": "https://www.openflightmaps.org/live/downloads/20150306-GUL.pdf",
+          "format": [
+            "OFMX / regional downloadable data (package-specific formats to verify)"
+          ],
+          "procedureScope": [
+            "VFR routes",
+            "VFR circuits",
+            "VFR aerodrome data (region-dependent)"
+          ],
+          "license": "OFMA General Users License",
+          "redistribution": "commercial_public_redistribution_subject_to_GUL",
+          "licenseStatus": "commercial_use_explicit_in_GUL",
+          "sourceStatus": "candidate_continental_vfr_source",
+          "dataStatus": "not_imported_for_target_regions",
+          "notes": "Catalogue lists regional datasets for Poland (EP), Hungary (LH), Czech Republic (LK), Belgium (EB), Germany (ED), and France (LF), among others. Investigate package availability, exact format, region coverage, cycle/date, features, counts, checksums and gaps before ingestion. OFMA data is complementary, not primary navigation data."
+        },
+        {
+          "id": "FR_PAC_P_FRENCH_POLYNESIA",
+          "jurisdiction": "PF (French Polynesia; SIA PAC-P publication)",
+          "provider": "DGAC France / SIA with local SEAC",
+          "sourceUrl": "https://www.sia.aviation-civile.gouv.fr/",
+          "license": "SIA Licence Ouverte scope to be verified for exact PAC-P product",
+          "redistribution": "commercial_reuse_candidate_pending_product_scope_verification",
+          "licenseStatus": "exact_PAC_P_product_scope_not_yet_verified",
+          "procedureScope": [
+            "aerodrome data",
+            "VFR/IFR procedures as published in PAC-P AIP"
+          ],
+          "sourceStatus": "candidate_official_AIP_open_product",
+          "dataStatus": "not_imported",
+          "notes": "PAC-P AIP is separately published by SIA. Do not assume the main SIA open-product licence applies to this exact PAC-P package until product catalogue/terms explicitly confirm coverage. Verify current AIRAC and product scope, then parser support."
         }
       ]
     },
@@ -781,7 +823,7 @@
       "available": false,
       "recordCount": 16,
       "sizeBytes": 59342,
-      "sha256": "2697ab462d8341323ab882532c66a043bdf296a514ec7478a4bff279915e169b",
+      "sha256": "f85f6c4287fa9616eddd8126e3574ded288de86dd3cb90d8f48df2e1e1e2d9f5",
       "status": "not_published_commercial_reuse_unconfirmed_or_restricted",
       "license": "FAA public reference; currentness unverified",
       "operationallyAvailable": false,
@@ -920,7 +962,7 @@
     "airportSource": "https://davidmegginson.github.io/ourairports-data/airports.csv",
     "runwaySource": "https://davidmegginson.github.io/ourairports-data/runways.csv",
     "license": "Public Domain / CC0 as stated by OurAirports",
-    "downloadedAtUtc": "2026-11-23T10:56:04.872278+00:00",
+    "downloadedAtUtc": "2026-11-23T10:57:17.192445+00:00",
     "matchedElevationRecords": 28488,
     "matchedAirportMetadataRecords": 29747,
     "matchedAirportsWithRunways": 24175,
