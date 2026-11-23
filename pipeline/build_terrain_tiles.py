@@ -116,7 +116,12 @@ def check_canaries(cfg: dict[str, Any], out: Path, region_ids: set[str]) -> list
         window = grid[max(0, row - 8):row + 9, max(0, col - 8):col + 9]
         value = int(window.max())
         if not canary["minM"] <= value <= canary["maxM"]:
-            raise TerrainError(f"canary {canary['name']}: {value} m outside {canary['minM']}-{canary['maxM']} m")
+            import numpy as np
+            r, c = np.unravel_index(int(grid.argmax()), grid.shape)
+            raise TerrainError(
+                f"canary {canary['name']}: {value} m outside {canary['minM']}-{canary['maxM']} m; "
+                f"tile max {int(grid.max())} m at lat {la0 + 1 - (r + 0.5) / n:.4f} lon {lo0 + (c + 0.5) / n:.4f} "
+                f"(expected lat {canary['lat']} lon {canary['lon']}); grid {grid.shape} dtype {grid.dtype}")
         results.append(f"{canary['name']}: {value} m")
     return results
 
