@@ -1,4 +1,4 @@
-import tempfile, unittest, zipfile
+import json, subprocess, sys, tempfile, unittest, zipfile
 from pathlib import Path
 from scripts.audit_faa_cifp_archive import audit_archive
 
@@ -21,6 +21,21 @@ class FaaCifpArchiveAuditTests(unittest.TestCase):
             self.assertEqual(report["members"][0]["lineCount"], 4)
         finally:
             path.unlink(missing_ok=True)
+
+    def test_cli_writes_parseable_json_report(self):
+        path = self.make_zip(b"VALID\\n")
+        report_path = path.with_suffix(".json")
+        try:
+            result = subprocess.run(
+                [sys.executable, "scripts/audit_faa_cifp_archive.py", str(path), "--output", str(report_path)],
+                check=True, capture_output=True, text=True,
+            )
+            report = json.loads(report_path.read_text(encoding="utf-8"))
+            self.assertFalse(report["conversionEnabled"])
+            self.assertIn("archive", result.stdout)
+        finally:
+            path.unlink(missing_ok=True)
+            report_path.unlink(missing_ok=True)
 
     def test_rejects_empty_archive(self):
         path = self.make_zip(b"")
