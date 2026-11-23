@@ -1,0 +1,35 @@
+name: Stage newly published FAA CIFP cycle
+
+on:
+  schedule:
+    - cron: '40 4 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: faa-cifp-staging
+  cancel-in-progress: false
+
+jobs:
+  stage-new-cycle:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Check FAA publication cycle
+        run: python scripts/check_faa_cifp_currentness.py
+        continue-on-error: true
+      - name: Download and integrity-check new published CIFP archive
+        run: python scripts/stage_faa_cifp_archive.py
+      - name: Upload staged archive and metadata
+        uses: actions/upload-artifact@v4
+        with:
+          name: faa-cifp-staged-${{ github.run_id }}
+          path: /tmp/faa-cifp-update/
+          if-no-files-found: error
+          retention-days: 14
