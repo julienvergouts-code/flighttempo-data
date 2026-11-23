@@ -409,7 +409,9 @@ def main():
         "candidate_links_with_5plus_samples":sum(x["independent_samples"]>=5 for x in aggregated_links),
         "severe_gap_leg_count":len(severe),"severe_gap_legs":severe,
         "promotion_enabled":False,"trusted_navigation_modified":False,
-        "rejection_counts":dict(rejected),\n        "archive_range_bytes_downloaded":raw.range_bytes_downloaded,\n        "archive_range_requests":raw.range_requests}
+        "rejection_counts":dict(rejected),
+        "archive_range_bytes_downloaded":raw.range_bytes_downloaded,
+        "archive_range_requests":raw.range_requests}
     evidence={"schema_version":1,"benchmark_type":"streaming_multi_aircraft_observed_adsb",
         "privacy":"Aircraft identifiers, callsigns, registrations, raw traces, and timestamps are not serialized.",
         "independent_sample_definition":"One distinct aircraft ICAO24 plus segmented leg number within the archive date; each directed candidate link counted once per leg.",
