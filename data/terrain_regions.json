@@ -6,13 +6,62 @@
     "urlPattern": "{bucket}/Copernicus_DSM_COG_10_{ns}{lat:02d}_00_{ew}{lon:03d}_00_DEM/Copernicus_DSM_COG_10_{ns}{lat:02d}_00_{ew}{lon:03d}_00_DEM.tif"
   },
   "regions": [
-    {"id": "europe", "name": "Europe", "south": 34, "west": -25, "north": 72, "east": 45},
-    {"id": "japan", "name": "Japan", "south": 24, "west": 122, "north": 46, "east": 146},
-    {"id": "french-polynesia", "name": "French Polynesia (Tahiti)", "south": -28, "west": -155, "north": -7, "east": -134}
+    {
+      "id": "europe",
+      "name": "Europe",
+      "south": 34,
+      "west": -25,
+      "north": 72,
+      "east": 45
+    },
+    {
+      "id": "japan",
+      "name": "Japan",
+      "south": 24,
+      "west": 122,
+      "north": 46,
+      "east": 146
+    },
+    {
+      "id": "french-polynesia",
+      "name": "French Polynesia (Tahiti)",
+      "south": -28,
+      "west": -155,
+      "north": -7,
+      "east": -134,
+      "accuracyNote": "Copernicus under-reads sharp tropical peaks here (Mont Orohena ~1,840 m vs 2,241 m real, about 400 m / 1,300 ft low). Do not rely on a 1,000 ft buffer over the interior of the islands."
+    },
+    {
+      "id": "st-barth",
+      "name": "Saint-Barthelemy (Caribbean)",
+      "south": 17,
+      "west": -63,
+      "north": 18,
+      "east": -62
+    }
   ],
   "canaries": [
-    {"name": "Mont Blanc", "lat": 45.8326, "lon": 6.8652, "minM": 4500, "maxM": 4950},
-    {"name": "Mount Fuji", "lat": 35.3606, "lon": 138.7274, "minM": 3500, "maxM": 3950},
-    {"name": "Mont Orohena (Tahiti)", "lat": -17.6267, "lon": -149.4700, "minM": 2000, "maxM": 2450}
+    {
+      "name": "Mont Blanc",
+      "lat": 45.8326,
+      "lon": 6.8652,
+      "minM": 4500,
+      "maxM": 4950
+    },
+    {
+      "name": "Mount Fuji",
+      "lat": 35.3606,
+      "lon": 138.7274,
+      "minM": 3500,
+      "maxM": 3950
+    },
+    {
+      "name": "Mont Orohena (Tahiti)",
+      "lat": -17.6267,
+      "lon": -149.47,
+      "minM": 1700,
+      "maxM": 2450,
+      "note": "Known Copernicus under-read over Tahiti (~1,840 m vs 2,241 m real); range widened on purpose, see region accuracyNote."
+    }
   ]
 }
