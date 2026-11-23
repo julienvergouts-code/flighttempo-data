@@ -2,13 +2,14 @@ name: ADS-B multi-aircraft scale benchmark
 # Trigger validation on the current PR head; benchmark settings remain the workflow defaults.
 
 on:
-  pull_request:
-    branches: [main]
+  push:
+    branches: [feature/adsb-route-learning]
     paths:
       - "pipeline/batch_archive_benchmark.py"
       - "pipeline/build_corridors.py"
       - "scripts/adsb_learning/**"
       - "navigation/graph/**"
+      - "tests/**"
       - ".github/workflows/adsb-scale-benchmark.yml"
   workflow_dispatch:
     inputs:
