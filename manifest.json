@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "repository": "julienvergouts-code/flighttempo-data",
-  "generatedAtUtc": "2026-11-23T07:54:38.340214+00:00",
+  "generatedAtUtc": "2026-11-23T10:34:22.686125+00:00",
   "purpose": "FlightTempo development and distribution of aviation datasets whose source-specific commercial reuse rights are verified; not an operational navigation database.",
   "rules": {
     "datasetMetaRequired": true,
@@ -151,6 +151,18 @@
       "commercialUseAllowed": false
     },
     {
+      "id": "easa-safety-directives",
+      "path": "airspace/advisories/easa_safety_directives.json",
+      "source": "EASA Safety Directives SD-2021-02 and SD-2021-03",
+      "airacCycle": null,
+      "effectiveDate": "2021-06-02",
+      "expiryDate": null,
+      "sha256": "531d42feed30978bb7574c75f69782b8b19d32a34424ef67ddef8fe5e3a625d3",
+      "licenceStatus": "EASA_source_acknowledgement",
+      "coverage": "Operator-scope-specific safety directives for FIR Minsk (UMMV)",
+      "recordCount": 2
+    },
+    {
       "id": "legacy-global-ifr-fixes",
       "path": "navigation/waypoints/flightgear_fixes.csv",
       "source": "X-Plane default navigation data mirror (ptsmonteiro/x-plane-navdata)",
@@ -190,25 +202,13 @@
       "recordCount": 70291
     },
     {
-      "id": "easa-safety-directives",
-      "path": "airspace/advisories/easa_safety_directives.json",
-      "source": "EASA Safety Directives SD-2021-02 and SD-2021-03",
-      "airacCycle": null,
-      "effectiveDate": "2021-06-02",
-      "expiryDate": null,
-      "sha256": "531d42feed30978bb7574c75f69782b8b19d32a34424ef67ddef8fe5e3a625d3",
-      "licenceStatus": "EASA_source_acknowledgement",
-      "coverage": "Operator-scope-specific safety directives for FIR Minsk (UMMV)",
-      "recordCount": 2
-    },
-    {
       "id": "faa-prn-notams",
       "path": "airspace/faa_prn_notams.json",
       "source": "FAA PRN KICZ NOTAM index",
       "airacCycle": null,
       "effectiveDate": null,
       "expiryDate": null,
-      "sha256": "de94a3310953d313b0834189fc66814ea3a0647f5190fd842b940917ad1022a1",
+      "sha256": "e4e6fd68203105cdcd1924d1d2f6fa5a9e83c2d7a274ced5cf9c76ce2daf8fb8",
       "licenceStatus": "FAA_public_information_reference_currentness_unverified",
       "coverage": "FAA-published international prohibition/restriction notice references",
       "recordCount": 16
