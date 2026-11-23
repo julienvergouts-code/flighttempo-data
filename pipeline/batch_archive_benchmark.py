@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Streaming multi-aircraft ADSB.lol batch benchmark. Evidence only; no nav promotion."""
 from __future__ import annotations
-import argparse, csv, gzip, io, json, re, resource, sys, tempfile, time
+import argparse, csv, gzip, io, json, re, resource, sys, tempfile, time, zlib
 from collections import Counter, defaultdict
 from pathlib import Path
 from datetime import datetime
@@ -133,6 +133,73 @@ def flight_prefix(doc):
             return prefix
     return first_prefix
 
+PREFIX_COMPRESSED_BYTES = 256 * 1024
+PREFIX_DECODED_BYTES = 2 * 1024 * 1024
+
+
+def partial_callsign_prefixes(data: bytes, compressed: bool) -> tuple[bool, set[str]]:
+    """Inspect a bounded trace prefix for callsign prefixes without full JSON decoding."""
+    if compressed:
+        try:
+            decoded = zlib.decompressobj(16 + zlib.MAX_WBITS).decompress(
+                data, PREFIX_DECODED_BYTES
+            )
+        except zlib.error:
+            decoded = b""
+    else:
+        decoded = data[:PREFIX_DECODED_BYTES]
+    text = decoded.decode("utf-8", errors="replace")
+    values = re.findall(r'"(?:flight|callsign)\\s*:\\s*("(?:\\\\.|[^"\\\\])*")', text, re.I)
+    prefixes = set()
+    for raw in values:
+        try:
+            value = json.loads(raw)
+        except Exception:
+            continue
+        if isinstance(value, list):
+            value = "".join(str(x) for x in value)
+        normalized = re.sub(r"[^A-Z0-9]", "", str(value or "").upper())
+        if len(normalized) >= 4:
+            prefixes.add(normalized[:3])
+    return bool(values), prefixes
+
+
+def load_trace_member(tar, member):
+    """Prefix-screen non-European traces, then read/decode only likely candidates."""
+    source = tar.extractfile(member)
+    if source is None:
+        return None, None, "unreadable_member"
+    try:
+        compressed = source.read(min(member.size, PREFIX_COMPRESSED_BYTES))
+        is_gzip = compressed[:2] == b"\\x1f\\x8b"
+        has_callsign, prefixes = partial_callsign_prefixes(compressed, is_gzip)
+        if has_callsign and not (prefixes & EUROPE_AIRLINE_PREFIXES):
+            return None, None, "non_european_commercial_callsign"
+        source.seek(0)
+        raw = source.read(MAX_TRACE_MEMBER_BYTES + 1)
+        if len(raw) > MAX_TRACE_MEMBER_BYTES:
+            return None, None, "oversize_trace"
+        if is_gzip:
+            try:
+                with gzip.GzipFile(fileobj=io.BytesIO(raw), mode="rb") as gz:
+                    payload = gz.read(MAX_TRACE_MEMBER_BYTES + 1)
+            except (OSError, EOFError):
+                return None, None, "invalid_gzip"
+        else:
+            payload = raw
+        if len(payload) > MAX_TRACE_MEMBER_BYTES:
+            return None, None, "oversize_decoded_trace"
+        try:
+            doc = json.loads(payload)
+        except Exception:
+            return None, None, "invalid_json"
+        if flight_prefix(doc) not in EUROPE_AIRLINE_PREFIXES:
+            return None, None, "non_european_commercial_callsign"
+        return payload, doc, None
+    finally:
+        source.close()
+
+
 def diag_leg(leg, nav):
     observed=leg.get("_observed_trace_endpoints")
     try:
@@ -200,7 +267,7 @@ def main():
     session=archive_pipeline.requests.Session()
     session.headers.update({"User-Agent":"FlightTempo-ADS-B-scale-benchmark/1.0",
                             "Accept":"application/vnd.github+json"})
-    release,asset_urls=archive_pipeline.release_assets(args.date,session)
+    release,asset_specs=archive_pipeline.release_asset_specs(args.date,session)
     airports_path=ROOT/"navigation/airports/ourairports_airports.csv"
     fixes_path=ROOT/"navigation/waypoints/flightgear_fixes.csv"
     airports=builder.load_airports(airports_path)
@@ -225,79 +292,77 @@ def main():
     link_samples=defaultdict(set)
     link_aircraft=defaultdict(set)
     with tempfile.TemporaryDirectory(prefix="flighttempo-scale-") as tmp:
-        with archive_pipeline.ConcatenatedHttpStream(asset_urls,session) as raw:
-            with __import__("io").BufferedReader(raw,buffer_size=archive_pipeline.CHUNK) as buffered:
-                with __import__("tarfile").open(fileobj=buffered,mode="r|") as tar:
-                    for member in tar:
-                        name=member.name.replace("\\","/").rsplit("/",1)[-1].lower()
-                        match=re.fullmatch(r"trace_full_([0-9a-f]{6})\.json(?:\.gz)?",name)
-                        if not member.isfile() or not match:
-                            continue
-                        scanned_trace_members+=1
-                        hex_id=match.group(1)
-                        if hex_id in selected_hex or not trace_member_size_is_readable(member.size):
-                            continue
-                        # A member is read only when its size is bounded; tar iteration stays streaming.
-                        source=tar.extractfile(member)
-                        if source is None: continue
-                        prefix=source.read(2)
-                        if prefix==b"\x1f\x8b":
-                            with gzip.GzipFile(fileobj=io.BytesIO(prefix+source.read()), mode="rb") as gz:
-                                payload=gz.read(MAX_TRACE_MEMBER_BYTES+1)
-                        else:
-                            payload=prefix+source.read(MAX_TRACE_MEMBER_BYTES-1)
-                        if len(payload)>MAX_TRACE_MEMBER_BYTES:
-                            rejected["oversize_decoded_trace"]+=1
-                            continue
-                        try: doc=json.loads(payload)
-                        except Exception:
-                            rejected["invalid_json"]+=1; continue
-                        if flight_prefix(doc) not in EUROPE_AIRLINE_PREFIXES:
-                            rejected["non_european_commercial_callsign"]+=1; continue
-                        trace_path=Path(tmp)/"trace.json"
-                        trace_path.write_bytes(payload)
-                        try:
-                            legs=builder.process_trace(trace_path,airports,fixes,graph_airports,
-                                                       include_observed_endpoints=True)
-                        except Exception:
-                            rejected["trace_processing_or_anchor_failure"]+=1
-                            trace_path.unlink(missing_ok=True)
-                            continue
-                        eu_legs=[]
-                        for leg in legs:
-                            if leg.get("excluded"): continue
-                            if not (leg.get("origin") in airport_coords and leg.get("destination") in airport_coords):
-                                continue
-                            if not (eu_coord(airport_coords[leg["origin"]]) and eu_coord(airport_coords[leg["destination"]])):
-                                continue
-                            eu_legs.append(leg)
-                        if not eu_legs:
-                            rejected["no_european_eligible_legs"]+=1
-                            trace_path.unlink(missing_ok=True)
-                            continue
-                        selected_hex.add(hex_id)
-                        aircraft_processed+=1
-                        trace_rows+=len(doc.get("trace",[]))
-                        segmented_legs+=len(legs)
-                        for leg in eu_legs:
-                            eligible_legs+=1
-                            graph=diag_leg(leg,nav)
-                            connected_legs+=int(graph["connected"])
-                            origin,destination=leg["origin"],leg["destination"]
-                            city_pair=f"{cities.get(origin,origin)} – {cities.get(destination,destination)}"
-                            sample=(hex_id,leg.get("legNumber"))
-                            corridor_samples[city_pair].add(sample)
-                            corridor_sequences[city_pair][tuple(leg.get("matchedFixes",[]))]+=1
-                            for link in leg.get("candidateLinks",[]):
-                                edge=(city_pair,link["from"],link["to"])
-                                link_samples[edge].add(sample)
-                                link_aircraft[edge].add(hex_id)
-                            leg_metrics.append({"leg_number":leg.get("legNumber"),"city_pair":city_pair,"airport_pair":f"{origin}-{destination}",
-                                "segmentation":leg.get("segmentation"),"position_count":leg.get("positionCount"),
-                                "matched_fix_count":leg.get("matchCount",0),**graph})
+        with archive_pipeline.HTTPRangeConcatReader(asset_specs,session) as raw:
+            with __import__("tarfile").open(fileobj=raw,mode="r:") as tar:
+                reported_aircraft=0
+                while True:
+                    member=tar.next()
+                    if member is None:
+                        break
+                    name=member.name.replace("\\","/").rsplit("/",1)[-1].lower()
+                    match=re.fullmatch(r"trace_full_([0-9a-f]{6})\.json(?:\.gz)?",name)
+                    if not member.isfile() or not match:
+                        continue
+                    scanned_trace_members+=1
+                    hex_id=match.group(1)
+                    if hex_id in selected_hex or not trace_member_size_is_readable(member.size):
+                        continue
+                    payload,doc,reason=load_trace_member(tar,member)
+                    if reason:
+                        rejected[reason]+=1
+                        continue
+                    trace_path=Path(tmp)/"trace.json"
+                    trace_path.write_bytes(payload)
+                    try:
+                        legs=builder.process_trace(trace_path,airports,fixes,graph_airports,
+                                                   include_observed_endpoints=True)
+                    except Exception:
+                        rejected["trace_processing_or_anchor_failure"]+=1
                         trace_path.unlink(missing_ok=True)
-                        if aircraft_processed>=args.max_aircraft:
-                            break
+                        continue
+                    eu_legs=[]
+                    for leg in legs:
+                        if leg.get("excluded"): continue
+                        if not (leg.get("origin") in airport_coords and leg.get("destination") in airport_coords):
+                            continue
+                        if not (eu_coord(airport_coords[leg["origin"]]) and eu_coord(airport_coords[leg["destination"]])):
+                            continue
+                        eu_legs.append(leg)
+                    if not eu_legs:
+                        rejected["no_european_eligible_legs"]+=1
+                        trace_path.unlink(missing_ok=True)
+                        continue
+                    selected_hex.add(hex_id)
+                    aircraft_processed+=1
+                    trace_rows+=len(doc.get("trace",[]))
+                    segmented_legs+=len(legs)
+                    for leg in eu_legs:
+                        eligible_legs+=1
+                        graph=diag_leg(leg,nav)
+                        connected_legs+=int(graph["connected"])
+                        origin,destination=leg["origin"],leg["destination"]
+                        city_pair=f"{cities.get(origin,origin)} – {cities.get(destination,destination)}"
+                        sample=(hex_id,leg.get("legNumber"))
+                        corridor_samples[city_pair].add(sample)
+                        corridor_sequences[city_pair][tuple(leg.get("matchedFixes",[]))]+=1
+                        for link in leg.get("candidateLinks",[]):
+                            edge=(city_pair,link["from"],link["to"])
+                            link_samples[edge].add(sample)
+                            link_aircraft[edge].add(hex_id)
+                        leg_metrics.append({"leg_number":leg.get("legNumber"),"city_pair":city_pair,"airport_pair":f"{origin}-{destination}",
+                            "segmentation":leg.get("segmentation"),"position_count":leg.get("positionCount"),
+                            "matched_fix_count":leg.get("matchCount",0),**graph})
+                    trace_path.unlink(missing_ok=True)
+                    if scanned_trace_members%250==0 or aircraft_processed>=reported_aircraft+5:
+                        print(
+                            f"[benchmark] scanned_trace_members={scanned_trace_members} "
+                            f"selected_aircraft={aircraft_processed} "
+                            f"range_bytes_downloaded={raw.range_bytes_downloaded} "
+                            f"range_requests={raw.range_requests}", flush=True
+                        )
+                        reported_aircraft=aircraft_processed
+                    if aircraft_processed>=args.max_aircraft:
+                        break
     runtime=time.perf_counter()-started
     peak_rss=int(resource.getrusage(resource.RUSAGE_SELF).ru_maxrss)
     # Linux reports ru_maxrss in KiB. Convert to MiB for artifact.
@@ -336,7 +401,7 @@ def main():
         "candidate_links_with_5plus_samples":sum(x["independent_samples"]>=5 for x in aggregated_links),
         "severe_gap_leg_count":len(severe),"severe_gap_legs":severe,
         "promotion_enabled":False,"trusted_navigation_modified":False,
-        "rejection_counts":dict(rejected)}
+        "rejection_counts":dict(rejected),\n        "archive_range_bytes_downloaded":raw.range_bytes_downloaded,\n        "archive_range_requests":raw.range_requests}
     evidence={"schema_version":1,"benchmark_type":"streaming_multi_aircraft_observed_adsb",
         "privacy":"Aircraft identifiers, callsigns, registrations, raw traces, and timestamps are not serialized.",
         "independent_sample_definition":"One distinct aircraft ICAO24 plus segmented leg number within the archive date; each directed candidate link counted once per leg.",
