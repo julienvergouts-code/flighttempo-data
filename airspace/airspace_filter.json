@@ -1,4 +1,173 @@
 {
+  "schemaVersion": 1,
+  "generatedAtUtc": "2026-11-23T05:37:43.478361+00:00",
+  "source": "EASA CZIB JSON export",
+  "sourceUrl": "https://www.easa.europa.eu/en/domains/air-operations/czibs/export-json?_format=json&page=",
+  "policy": {
+    "defaultAvoidActiveEasaAdvisories": true,
+    "meaning": "Route preview preference only: suggest avoiding active advisory areas. This is not a legal prohibition and does not replace NOTAM/AIP/operator checks.",
+    "hardNoFlyFirs": [],
+    "hardNoFlyStatus": "not_populated_no_verified_machine_readable_prohibition_feed_ingested",
+    "advisoryFirsRequireVerifiedGeometry": true
+  },
+  "activeAdvisories": [
+    {
+      "sourceId": "20599",
+      "name": "Airspace of Syria",
+      "country": "Syria",
+      "validUntil": "2027-04-30",
+      "explicitFirCodes": [],
+      "status": "active"
+    },
+    {
+      "sourceId": "143861",
+      "name": "Airspace of Iran",
+      "country": "Iran",
+      "validUntil": "2027-01-31",
+      "explicitFirCodes": [],
+      "status": "active"
+    },
+    {
+      "sourceId": "143862",
+      "name": "Airspace of Iraq",
+      "country": "Iraq",
+      "validUntil": "2027-01-31",
+      "explicitFirCodes": [],
+      "status": "active"
+    },
+    {
+      "sourceId": "143863",
+      "name": "Airspace of Lebanon",
+      "country": "Lebanon",
+      "validUntil": "2027-01-31",
+      "explicitFirCodes": [],
+      "status": "active"
+    },
+    {
+      "sourceId": "143899",
+      "name": "Airspace of the Persian Gulf and Gulf of Oman",
+      "country": "Bahrain, Kuwait, Qatar, Oman, United Arab Emirates",
+      "validUntil": "2027-01-31",
+      "explicitFirCodes": [],
+      "status": "active"
+    },
+    {
+      "sourceId": "143944",
+      "name": "Airspace of Jordan",
+      "country": "Jordan",
+      "validUntil": "2027-01-31",
+      "explicitFirCodes": [],
+      "status": "active"
+    },
+    {
+      "sourceId": "144230",
+      "name": "Airspace of Saudi Arabia",
+      "country": "Saudi Arabia",
+      "validUntil": "2027-01-31",
+      "explicitFirCodes": [],
+      "status": "active"
+    },
+    {
+      "sourceId": "20589",
+      "name": "Airspace of Somalia",
+      "country": "Somalia",
+      "validUntil": "2027-04-30",
+      "explicitFirCodes": [],
+      "status": "active"
+    },
+    {
+      "sourceId": "20585",
+      "name": "Airspace of Mali",
+      "country": "Mali",
+      "validUntil": "2027-04-30",
+      "explicitFirCodes": [],
+      "status": "active"
+    },
+    {
+      "sourceId": "20602",
+      "name": "Airspace of Yemen – Sana’a Flight Information Region",
+      "country": "Yemen",
+      "validUntil": "2027-04-30",
+      "explicitFirCodes": [
+        "OYSC"
+      ],
+      "status": "active"
+    },
+    {
+      "sourceId": "20582",
+      "name": "Airspace of Libya",
+      "country": "Libya",
+      "validUntil": "2027-01-31",
+      "explicitFirCodes": [],
+      "status": "active"
+    },
+    {
+      "sourceId": "20574",
+      "name": "Airspace of Afghanistan",
+      "country": "Afghanistan",
+      "validUntil": "2027-01-31",
+      "explicitFirCodes": [],
+      "status": "active"
+    },
+    {
+      "sourceId": "20587",
+      "name": "Airspace of Pakistan – Baluchistan and Khyber Pakhtunkhwa provinces",
+      "country": "Pakistan",
+      "validUntil": "2027-01-31",
+      "explicitFirCodes": [],
+      "status": "active"
+    },
+    {
+      "sourceId": "136057",
+      "name": "Airspace of Ukraine",
+      "country": "Ukraine",
+      "validUntil": "2027-01-31",
+      "explicitFirCodes": [],
+      "status": "active"
+    },
+    {
+      "sourceId": "137874",
+      "name": "Airspace of Sudan",
+      "country": "Sudan",
+      "validUntil": "2027-01-31",
+      "explicitFirCodes": [],
+      "status": "active"
+    },
+    {
+      "sourceId": "141480",
+      "name": "Airspace of the Russian Federation",
+      "country": "Russia",
+      "validUntil": "2027-01-31",
+      "explicitFirCodes": [
+        "UUWV",
+        "URRV",
+        "ULLL",
+        "USSV",
+        "UWWW"
+      ],
+      "status": "active"
+    }
+  ],
+  "unmappedAdvisories": [
+    "20599",
+    "143861",
+    "143862",
+    "143863",
+    "143899",
+    "143944",
+    "144230",
+    "20589",
+    "20585",
+    "20582",
+    "20574",
+    "20587",
+    "136057",
+    "137874"
+  ],
+  "firBoundaryDataset": {
+    "status": "not_ingested",
+    "note": "No FIR polygon is fabricated from country names or advisory centroids. A separately licensed global FIR geometry source is required."
+  },
   "faaRestrictions": [
     {
       "notamId": "A0029/21",
