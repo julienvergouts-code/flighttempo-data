@@ -7,6 +7,8 @@ on:
       - "scripts/check_faa_cifp_currentness.py"
       - "scripts/stage_faa_cifp_archive.py"
       - "scripts/audit_faa_cifp_archive.py"
+      - "scripts/parse_faa_cifp_procedures.py"
+      - "tests/test_faa_cifp_procedure_parser.py"
       - "tests/test_faa_cifp_archive_audit.py"
       - "tests/test_faa_cifp_currentness.py"
       - "tests/test_easa_airspace_coverage.py"
@@ -45,6 +47,26 @@ jobs:
           archive="$(find /tmp/faa-cifp-update -maxdepth 1 -name 'CIFP_*.zip' -print -quit)"
           test -n "$archive"
           python scripts/audit_faa_cifp_archive.py "$archive" --output /tmp/faa-cifp-update/cifp-structure-audit.json
+      - name: Extract official FAACIFP18 text member to staging
+        run: |
+          archive="$(find /tmp/faa-cifp-update -maxdepth 1 -name 'CIFP_*.zip' -print -quit)"
+          python - "$archive" <<'PY'
+          import sys, zipfile
+          from pathlib import Path
+          archive = Path(sys.argv[1])
+          staged = Path("/tmp/faa-cifp-update/FAACIFP18")
+          with zipfile.ZipFile(archive) as cifp:
+              if "FAACIFP18" not in cifp.namelist():
+                  raise SystemExit("FAA archive lacks expected FAACIFP18 data file")
+              data = cifp.read("FAACIFP18")
+          data.decode("ascii")
+          staged.write_bytes(data)
+          print(f"Extracted FAACIFP18 staging file: {len(data)} bytes")
+          PY
+      - name: Parse procedure headers into non-publishable staging records
+        run: |
+          archive="$(find /tmp/faa-cifp-update -maxdepth 1 -name 'CIFP_*.zip' -print -quit)"
+          python scripts/parse_faa_cifp_procedures.py /tmp/faa-cifp-update/FAACIFP18 --source-archive "$(basename "$archive")" --output-dir /tmp/faa-cifp-update/parsed-staging
       - name: Upload staged archive and metadata
         uses: actions/upload-artifact@v4
         with:
