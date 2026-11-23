@@ -39,9 +39,17 @@ jobs:
             --url-base "https://github.com/${{ github.repository }}/releases/download/$RELEASE_TAG" \
             --entries "$RUNNER_TEMP/entries.json"
           du -sh "$RUNNER_TEMP/blocks"
+      - name: Keep packed blocks as a build artifact (rebuild insurance)
+        uses: actions/upload-artifact@v4
+        with:
+          name: terrain-world-blocks
+          path: ${{ runner.temp }}/blocks
+          retention-days: 3
+          compression-level: 0
       - name: Upload blocks to the GitHub Release
         env:
           GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
         run: |
           if ! gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
             gh release create "$RELEASE_TAG" --title "World terrain blocks (FTTR v1)" \
