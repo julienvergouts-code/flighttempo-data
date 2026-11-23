@@ -1,6 +1,6 @@
 {
   "schemaVersion": 13,
-  "generatedAtUtc": "2026-11-23T15:53:20.846495+00:00",
+  "generatedAtUtc": "2026-11-23T15:54:15.487693+00:00",
   "procedureAiracCycle": "2611",
   "navaidTypeCounts": {
     "DME": 167,
@@ -689,7 +689,7 @@
       "sha256": "be974a777fe0da70bb143bedce4f05d5744c2c62ad382691937c4b35494bf3cf",
       "sourceProvider": "FAA AeroNav",
       "sourceUrl": "https://aeronav.faa.gov/Upload_313-d/cifp/CIFP_261029.zip",
-      "coverage": "United States / FAA National Airspace System — departure procedures",
+      "coverage": "United States / FAA National Airspace System \u2014 departure procedures",
       "sourceTag": "FAA_CIFP_2611",
       "license": "US Government Public Domain (FAA AeroNav)",
       "licenseStatus": "public_domain",
@@ -712,7 +712,7 @@
       "sha256": "6bf123c683e442c1a07fbc46f4f11ad45045f8322a1b2506d65f6719055c0c06",
       "sourceProvider": "FAA AeroNav",
       "sourceUrl": "https://aeronav.faa.gov/Upload_313-d/cifp/CIFP_261029.zip",
-      "coverage": "United States / FAA National Airspace System — arrival procedures",
+      "coverage": "United States / FAA National Airspace System \u2014 arrival procedures",
       "sourceTag": "FAA_CIFP_2611",
       "license": "US Government Public Domain (FAA AeroNav)",
       "licenseStatus": "public_domain",
@@ -734,7 +734,7 @@
       "sha256": "ff7b9121e79b56ff616a77e285c9cba764575fd2c58335b3281124813362d3dd",
       "sourceProvider": "FAA AeroNav",
       "sourceUrl": "https://aeronav.faa.gov/Upload_313-d/cifp/CIFP_261029.zip",
-      "coverage": "United States / FAA National Airspace System — instrument approaches",
+      "coverage": "United States / FAA National Airspace System \u2014 instrument approaches",
       "sourceTag": "FAA_CIFP_2611",
       "license": "US Government Public Domain (FAA AeroNav)",
       "licenseStatus": "public_domain",
@@ -888,34 +888,6 @@
       "status": "present_reference_dataset"
     },
     {
-      "id": "ofma_ofmx_vfr_reference_points",
-      "path": "data/ofma_ofmx_vfr_points.csv",
-      "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/data/ofma_ofmx_vfr_points.csv",
-      "available": true,
-      "recordCount": 4736,
-      "sizeBytes": 454573,
-      "sha256": "e780a6f12b500d0a9b1df9b77df5626f46b9bf11268211a2ee3cc4d3e683c61d",
-      "sourceProvider": "OpenFlightMaps Association",
-      "sourceUrl": "https://openflightmaps.org/",
-      "coverage": "21 official OFMA regions (EB, ED, EF, EH, EK, EP, ES, FA, FY, LD, LF, LG, LH, LI, LJ, LK, LM, LO, LR, LS, LZ); regional coverage only, not worldwide geographic coverage; VFR-designated points.",
-      "license": "OFMA General Users License",
-      "licenseStatus": "commercial_use_permitted_subject_to_OFMA_GUL",
-      "attribution": "Contains information from the open flightmaps database, see www.openflightmaps.org",
-      "licenseUrl": "https://www.openflightmaps.org/live/downloads/20150306-GUL.pdf",
-      "commercialUseAllowed": true,
-      "licenseConditions": [
-        "Preserve OFMA attribution in every use or redistribution.",
-        "Communicate any alterations to OFMA within 15 days.",
-        "If the consuming app lets users alter OFMA data, provide the direct OFMA contributor interface required by GUL section 4.4."
-      ],
-      "dataCycle": "2611",
-      "effectiveDate": null,
-      "provenanceVerification": "official_OFMA_publication_service_and_snapshot",
-      "downloadPurpose": "reference_only",
-      "operationallyAvailable": false,
-      "status": "reference_dataset"
-    },
-    {
       "id": "faa_nasr_fixes",
       "path": "navigation/faa_nasr/fixes.csv",
       "available": true,
@@ -983,6 +955,34 @@
       "operationallyAvailable": false,
       "status": "present_reference_dataset",
       "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/navigation/faa_nasr/airway_segments.csv"
+    },
+    {
+      "id": "ofma_ofmx_vfr_reference_points",
+      "path": "data/ofma_ofmx_vfr_points.csv",
+      "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/data/ofma_ofmx_vfr_points.csv",
+      "available": true,
+      "recordCount": 4736,
+      "sizeBytes": 454573,
+      "sha256": "d2ae3812cf4a2503207eaf2c0aed2f8440e27608fc0909c058a5d04282e20ce5",
+      "sourceProvider": "OpenFlightMaps Association",
+      "sourceUrl": "https://openflightmaps.org/",
+      "coverage": "21 official OFMA regions (EB, ED, EF, EH, EK, EP, ES, FA, FY, LD, LF, LG, LH, LI, LJ, LK, LM, LO, LR, LS, LZ); regional coverage only, not worldwide geographic coverage; VFR-designated points.",
+      "license": "OFMA General Users License",
+      "licenseStatus": "commercial_use_permitted_subject_to_OFMA_GUL",
+      "attribution": "Contains information from the open flightmaps database, see www.openflightmaps.org",
+      "licenseUrl": "https://www.openflightmaps.org/live/downloads/20150306-GUL.pdf",
+      "commercialUseAllowed": true,
+      "licenseConditions": [
+        "Preserve OFMA attribution in every use or redistribution.",
+        "Communicate any alterations to OFMA within 15 days.",
+        "If the consuming app lets users alter OFMA data, provide the direct OFMA contributor interface required by GUL section 4.4."
+      ],
+      "dataCycle": "2611",
+      "effectiveDate": null,
+      "provenanceVerification": "official_OFMA_publication_service_and_snapshot",
+      "downloadPurpose": "reference_only",
+      "operationallyAvailable": false,
+      "status": "reference_dataset"
     }
   ],
   "downloadContract": {
