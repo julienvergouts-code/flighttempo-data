@@ -1,6 +1,6 @@
 {
   "schemaVersion": 13,
-  "generatedAtUtc": "2026-11-23T20:08:58.700984+00:00",
+  "generatedAtUtc": "2026-11-23T20:11:14.485328+00:00",
   "procedureAiracCycle": "2611",
   "navaidTypeCounts": {
     "DME": 167,
@@ -31,7 +31,8 @@
     "faaNasrFixes": 69385,
     "faaNasrNavaids": 1608,
     "faaNasrAirwaySegments": 17178,
-    "ofmaAirspaceFeatures": 33742
+    "ofmaAirspaceFeatures": 33742,
+    "terrainTiles": 239
   },
   "dataSources": [
     {
@@ -149,7 +150,8 @@
     "faaNasrFixes": true,
     "faaNasrNavaids": true,
     "faaNasrAirwaySegments": true,
-    "ofmaAirspace": true
+    "ofmaAirspace": true,
+    "terrainTiles": false
   },
   "procedureCoverageStatus": "FAA_US_NAS_ONLY_TEST_DATA; EUROPE_FRANCE_SOURCE_NOT_INGESTED; ASIA_NO_PUBLIC_REDISTRIBUTABLE_SOURCE_CONFIRMED",
   "procedureOperationalUse": false,
@@ -1024,6 +1026,72 @@
       "operationallyAvailable": false,
       "status": "reference_dataset",
       "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/airspace/ofma/index.json"
+    },
+    {
+      "id": "terrain_tiles",
+      "path": "terrain/index.json",
+      "available": false,
+      "recordCount": 239,
+      "sizeBytes": 47943,
+      "sha256": "db5be9ee173b61ba2d232f9eb486becaf37a3d1e742b8ab9edc14c524f031b37",
+      "tileBaseUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/terrain-data/",
+      "tileCount": 239,
+      "tileBytes": 19288298,
+      "regions": [
+        {
+          "id": "europe",
+          "name": "Europe",
+          "bbox": [
+            34,
+            -25,
+            72,
+            45
+          ],
+          "tileCount": 0,
+          "sizeBytes": 0
+        },
+        {
+          "id": "japan",
+          "name": "Japan",
+          "bbox": [
+            24,
+            122,
+            46,
+            146
+          ],
+          "tileCount": 239,
+          "sizeBytes": 19288298
+        },
+        {
+          "id": "french-polynesia",
+          "name": "French Polynesia (Tahiti)",
+          "bbox": [
+            -28,
+            -155,
+            -7,
+            -134
+          ],
+          "tileCount": 0,
+          "sizeBytes": 0
+        }
+      ],
+      "cellsPerDegree": 400,
+      "format": "FlightTempo terrain tiles (FTTR v1)",
+      "sourceProvider": "Copernicus DEM GLO-30 (ESA / European Union; DLR, Airbus)",
+      "sourceUrl": "https://registry.opendata.aws/copernicus-dem/",
+      "coverage": "Regional tile packs: Europe, Japan, French Polynesia (Tahiti). Highest-sample-per-cell terrain (max pooled), not worldwide.",
+      "license": "Copernicus DEM free licence (GLO-30)",
+      "licenseStatus": "copernicus_free_licence_commercial_reuse_not_confirmed",
+      "licenseUrl": "https://documentation.dataspace.copernicus.eu/APIs/SentinelHub/Data/DEM/resources/license/License-COPDEM-30.pdf",
+      "attribution": "© DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved. Produced using Copernicus WorldDEM-90.",
+      "disclaimer": "The organisations in charge of the Copernicus programme by law or by delegation do not incur any liability for any use of the Copernicus WorldDEM-90.",
+      "modificationNotice": "Resampled by max pooling from 1 arc-second to 9 arc-second cells.",
+      "dataCycle": null,
+      "provenanceVerification": "source_snapshot",
+      "downloadPurpose": "reference_only",
+      "operationallyAvailable": false,
+      "status": "not_published_commercial_reuse_unconfirmed_or_restricted",
+      "downloadBlockReason": "Commercial redistribution permission is not explicitly verified for this source."
     }
   ],
   "downloadContract": {
