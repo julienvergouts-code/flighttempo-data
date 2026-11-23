@@ -23,7 +23,7 @@ def leg(airport, proc, rtype, trans, seq, fix, pt, desc="", alt="", spd="", sub=
     put(0, 1, "S"); put(1, 4, "USA"); put(4, 5, "P"); put(6, 10, airport); put(10, 12, "K1")
     put(12, 13, sub); put(13, 19, proc); put(19, 20, rtype); put(20, 25, trans)
     put(26, 29, f"{seq:03d}"); put(29, 34, fix); put(38, 39, cont); put(47, 49, pt)
-    put(82, 83, desc); put(83, 88, alt); put(99, 102, spd)
+    put(82, 83, desc); put(84, 89, alt); put(99, 102, spd)
     return "".join(line)
 
 
