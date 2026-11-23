@@ -336,6 +336,9 @@ jobs:
         run: python3 scripts/register_ofma_ofmx_vfr_points_manifest.py
       - name: Register FAA NASR fixes, navaids and airways in navigation manifest
         run: python3 scripts/register_faa_nasr_ifr_manifest.py
+      - name: Register OFMA airspace packs in navigation manifest
+        run: |
+          if [ -f airspace/ofma/index.json ]; then python3 scripts/register_ofma_airspace_manifest.py; fi
       - name: Re-apply cycle and rights gate after registration steps
         run: python3 scripts/enforce_app_manifest_rights.py
       - name: Validate OFMA VFR artifact integrity and coverage

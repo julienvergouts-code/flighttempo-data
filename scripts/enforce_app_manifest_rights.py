@@ -52,6 +52,7 @@ CAPABILITY_FLAGS = {
     "easa_czibs": ("conflictZoneAdvisories",),
     "easa_safety_directives": ("easaSafetyDirectives",),
     "faa_prn_notams": ("faaPrnReferences",),
+    "ofma_airspace": ("ofmaAirspace",),
     "sids": ("sids",),
     "stars": ("stars",),
     "approaches": ("approaches", "ilsApproaches", "rnavApproaches"),

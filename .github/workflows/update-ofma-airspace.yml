@@ -1,0 +1,68 @@
+name: Update OFMA airspace packs
+on:
+  schedule:
+    - cron: '10 1 * * *'
+  workflow_dispatch:
+    inputs:
+      force:
+        description: 'Re-download even if the current cycle is already published (true/false)'
+        required: false
+        default: 'false'
+permissions:
+  contents: write
+concurrency:
+  group: flighttempo-shared-manifest-updates
+  cancel-in-progress: false
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run airspace importer tests
+        run: python tests/test_import_ofma_airspace.py
+      - name: Import OFMA airspace for the AIRAC cycle in effect
+        id: import
+        continue-on-error: true
+        run: |
+          if [ "${{ inputs.force }}" = "true" ]; then
+            python pipeline/import_ofma_airspace.py --force
+          else
+            python pipeline/import_ofma_airspace.py
+          fi
+      - name: Register airspace packs in navigation manifest
+        run: |
+          if [ -f airspace/ofma/index.json ]; then python scripts/register_ofma_airspace_manifest.py; else echo 'No airspace index yet.'; fi
+      - name: Re-apply cycle and rights gate
+        run: python scripts/enforce_app_manifest_rights.py
+      - name: Validate manifest datasets
+        run: python scripts/validate_navigation_csvs.py
+      - name: Commit changed packs and manifest
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add airspace/ofma navigation_manifest.json
+          if git diff --cached --quiet; then
+            echo "No airspace changes."
+          else
+            git commit -m "chore(navdata): update OFMA airspace packs [skip ci]"
+            for attempt in 1 2 3; do
+              git fetch -q origin main
+              if git rebase origin/main; then
+                git push origin HEAD:main && break
+              else
+                git rebase --abort
+                git reset -q --hard origin/main
+                python pipeline/import_ofma_airspace.py || true
+                python scripts/register_ofma_airspace_manifest.py
+                python scripts/enforce_app_manifest_rights.py
+                git add airspace/ofma navigation_manifest.json
+                git commit -q -m "chore(navdata): update OFMA airspace packs [skip ci]" || break
+              fi
+            done
+          fi
+      - name: Fail the run if the importer reported problems
+        if: steps.import.outcome == 'failure'
+        run: exit 1
