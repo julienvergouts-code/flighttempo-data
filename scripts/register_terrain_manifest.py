@@ -39,7 +39,7 @@ def register(index_path: Path = INDEX, confirmation_path: Path = CONFIRMATION,
         "regions": [{"id": r["id"], "name": r["name"], "bbox": r["bbox"],
                      "tileCount": r["tileCount"], "sizeBytes": r["sizeBytes"]} for r in index["regions"]],
         "cellsPerDegree": index["cellsPerDegree"], "format": index["format"],
-        "sourceProvider": "Copernicus DEM GLO-90 (ESA / European Union; DLR, Airbus)",
+        "sourceProvider": "Copernicus DEM GLO-30 (ESA / European Union; DLR, Airbus)",
         "sourceUrl": "https://registry.opendata.aws/copernicus-dem/",
         "coverage": "Regional tile packs: " + ", ".join(r["name"] for r in index["regions"]) +
                     ". Highest-sample-per-cell terrain (max pooled), not worldwide.",

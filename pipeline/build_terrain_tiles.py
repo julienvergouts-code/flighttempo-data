@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""Build FlightTempo terrain tiles (FTTR v1) from Copernicus DEM GLO-90.
+"""Build FlightTempo terrain tiles (FTTR v1) from Copernicus DEM GLO-30.
 
-Source: Copernicus DEM GLO-90 (public AWS open-data bucket, no account needed).
+Source: Copernicus DEM GLO-30 (public AWS open-data bucket, no account needed).
 Each 1 x 1 degree GeoTIFF is reduced to 400 x 400 cells keeping the highest
 sample per cell (see terrain_tiles.py) and written to ``--out``. Tiles that
 already exist are skipped, so reruns only add what is missing. Open-sea tiles do
@@ -143,9 +143,9 @@ def write_index(cfg: dict[str, Any], out: Path, tiles: dict[str, list[dict[str, 
         "elevationMeaning": ("Highest source sample in each cell, rounded up (max pooling; never averaged). "
                              "Metres above the EGM2008 geoid (about mean sea level). Surface model: includes "
                              "vegetation and structures. Open-sea tiles are not published (treat as 0 m)."),
-        "source": "Copernicus DEM GLO-90", "license": "Copernicus DEM free licence (GLO-90)",
+        "source": "Copernicus DEM GLO-30", "license": "Copernicus DEM free licence (GLO-30)",
         "attribution": ATTRIBUTION, "disclaimer": DISCLAIMER,
-        "modificationNotice": "Resampled by max pooling from 3 arc-second to 9 arc-second cells.",
+        "modificationNotice": "Resampled by max pooling from 1 arc-second to 9 arc-second cells.",
         "operationalUse": False,
         "notice": "Reference data for planning only. Not for navigation or terrain-clearance decisions.",
         "regions": regions,

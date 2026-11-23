@@ -10,7 +10,7 @@ sys.path.insert(0, str(ROOT / "pipeline"))
 import register_terrain_manifest as reg  # noqa: E402
 import commercial_rights  # noqa: E402
 
-INDEX = {"cellsPerDegree": 400, "format": "FTTR", "license": "Copernicus DEM free licence (GLO-90)",
+INDEX = {"cellsPerDegree": 400, "format": "FTTR", "license": "Copernicus DEM free licence (GLO-30)",
          "attribution": "© DLR ... Produced using Copernicus WorldDEM-90.", "disclaimer": "no liability",
          "modificationNotice": "max pooled",
          "regions": [{"id": "alps", "name": "Alps", "bbox": [45, 6, 47, 7], "tileCount": 2, "sizeBytes": 1000, "tiles": []}]}
