@@ -43,3 +43,34 @@
 - France: prioritize the SIA openly licensed XML reference product for coordinate-bearing aerodrome/navaid/designated-point data, then separately validate the DATA PDF procedure importer against a wider set of airports and cycle changes.
 - Belgium: pursue a written commercial redistribution grant from skeyes/AIM Belgium; meanwhile use only independently licensed open geodata (e.g. OurAirports) and OFMA coverage where applicable, clearly labelled by provenance.
 - Germany: investigate exact DFS digital AIXM dataset product-level licence and redistribution terms; no ingestion until those terms expressly permit FlightTempo commercial redistribution.
+
+
+## Expanded targets: Poland, Hungary, Czech Republic, Ireland, UK and French Polynesia
+
+### Continental VFR first — OFMA
+The OFMA download catalogue currently lists regional datasets for **Poland (EP), Hungary (LH), Czech Republic (LK)** and also **Belgium (EB), Germany (ED), France (LF)**. OFMA's General Users License explicitly grants worldwide, royalty-free rights including commercial use, extraction, derivative/collective databases and redistribution, subject to its conditions. Its FAQ says commercial apps may sell use of the data under the GUL and warns it is complementary information, not a primary navigation source. Therefore, this is our preferred continental VFR source to investigate and ingest as a regional pack—not as separate country scraping projects.
+
+Official links:
+- Downloads: https://openflightmaps.org/downloads/
+- GUL: https://www.openflightmaps.org/live/downloads/20150306-GUL.pdf
+- FAQ: https://openflightmaps.org/faq/
+
+**Coverage caveat:** the catalogue listing establishes a dataset exists, not that every feature type or aerodrome is complete. We must record exact package/region, date, feature counts and gaps on ingestion.
+
+### Ireland and UK
+Ireland and the UK are not shown in the currently inspected OFMA download catalogue list. Their national AIPs are publicly accessible, but access alone does not grant commercial redistribution. Keep IFR procedure ingestion blocked until exact open licence or written permission is confirmed. Investigate independently licensed VFR sources and any national open geodata.
+
+### French Polynesia (PAC-P)
+French Polynesia has a separate official SIA PAC-P AIP. It is part of France's aeronautical publication system and is published by DGAC/SIA with local SEAC information. The official PAC-P publication is available online. However, before bulk extraction and redistribution, confirm that the exact PAC-P product is covered by the SIA Licence Ouverte terms/product catalogue. Treat as **candidate open source / licence scope check required**, not imported yet.
+- Official PAC-P source example: https://www.sia.aviation-civile.gouv.fr/media/dvd/eAIP_11_JUN_2026/PAC-P/AIRAC-2026-05-14/pdf/FR-GEN-0.1-fr-FR.pdf
+- SIA open products/licence: https://www.sia.aviation-civile.gouv.fr/produits-numeriques-en-libre-disposition.html
+
+## Global / continental strategy
+
+1. **Global base layer:** OurAirports CC0 airports/runways + eligible global public-domain datasets, with explicit field-level provenance. This gives broad airport coverage but not full IFR procedure or airway coverage.
+2. **Continental VFR packs:** OFMA regional data under GUL, where regions/packages are available and validated. Build a single Europe pack from individual OFMA regional packages, preserving each region's licence and source metadata.
+3. **Continental IFR:** no confirmed free, global commercial-redistribution source for complete terminal procedures/airways has been established. EAD is not an open redistribution source; ICAO geospatial datasets are paid/licensed. Use national datasets only where a licence explicitly permits reuse (France is currently the confirmed candidate in our registry).
+4. **Simulator data:** X-Plane / FlightGear are useful discovery and comparison leads only. Their global navdata files include upstream source notices and mixed provenance; a simulator's software GPL does not automatically license its embedded aviation data. Do not copy simulator navdata into FlightTempo without file/source-level licence clearance.
+5. **Common format:** normalize eligible sources into a FlightTempo schema and retain source provenance, licence, date/cycle, hashes, region and confidence. AIXM can inform the schema but is not a licence to data.
+
+Priority targets now: OFMA Poland, Hungary and Czech Republic regional packs; OFMA Germany/Belgium/France packs where not already ingested; PAC-P licence scope and extraction; then Ireland and UK licence research. No restricted dataset will be ingested.
