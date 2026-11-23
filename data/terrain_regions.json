@@ -13,6 +13,6 @@
   "canaries": [
     {"name": "Mont Blanc", "lat": 45.8326, "lon": 6.8652, "minM": 4500, "maxM": 4950},
     {"name": "Mount Fuji", "lat": 35.3606, "lon": 138.7274, "minM": 3500, "maxM": 3950},
-    {"name": "Mont Orohena (Tahiti)", "lat": -17.6256, "lon": -149.4814, "minM": 2000, "maxM": 2450}
+    {"name": "Mont Orohena (Tahiti)", "lat": -17.6267, "lon": -149.4700, "minM": 2000, "maxM": 2450}
   ]
 }

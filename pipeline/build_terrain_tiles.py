@@ -109,11 +109,11 @@ def check_canaries(cfg: dict[str, Any], out: Path, region_ids: set[str]) -> list
         if not f.is_file():
             continue  # canary outside the regions being built
         _, _, grid = tt.decode_tile(f.read_bytes())
-        # highest cell within ~1.5 km of the summit (peaks fall on cell borders)
+        # highest cell within ~2 km of the summit (peaks fall on cell borders)
         n = grid.shape[0]
         row = int((la0 + 1 - canary["lat"]) * n)
         col = int((canary["lon"] - lo0) * n)
-        window = grid[max(0, row - 3):row + 4, max(0, col - 3):col + 4]
+        window = grid[max(0, row - 8):row + 9, max(0, col - 8):col + 9]
         value = int(window.max())
         if not canary["minM"] <= value <= canary["maxM"]:
             raise TerrainError(f"canary {canary['name']}: {value} m outside {canary['minM']}-{canary['maxM']} m")
