@@ -120,7 +120,7 @@ def main() -> None:
     parser.add_argument("--output", type=Path, help="Write JSON report (default: stdout)")
     args = parser.parse_args()
     report = audit_path(args.input)
-    text = json.dumps(report, indent=2, ensure_ascii=False) + "\\n"
+    text = json.dumps(report, indent=2, ensure_ascii=False) + "\n"
     if args.output:
         args.output.write_text(text, encoding="utf-8")
     else:
