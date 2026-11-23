@@ -5,7 +5,7 @@
 | Data | Source and commercial rights | Coverage / cycle | Repository status |
 |---|---|---|---|
 | VFR reporting points | FAA NASR subscription data; US government public-domain data | United States; dataset effective 2026-11-26 | 681-point CSV. The release is not available to app downloads until its effective date. |
-| VFR points, reporting points and other designated reference points | open flightmaps (OFMA) OFMX under its General Users' License | Current cycle 2611; 1,786 deduplicated points from supported regional packages across 10 feature regions | Commercial use is permitted subject to the GUL. The export is reference-only, with source attribution and change-reporting conditions. |
+| VFR points, reporting points and other designated reference points | open flightmaps (OFMA) OFMX under its General Users' License | Current cycle 2611; 4,736 deduplicated points from 21 official OFMA regions (regional coverage only, not worldwide) | Commercial use is permitted subject to the GUL. The export is reference-only, with source attribution and change-reporting conditions. |
 | Airports, runways and community navaids | OurAirports CC0 / public domain | Worldwide | Updated through the navigation-data workflow. These are community reference records, not complete official VFR procedure data. |
 
 ## OFMA conditions

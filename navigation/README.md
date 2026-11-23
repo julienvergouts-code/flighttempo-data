@@ -8,8 +8,8 @@ This directory contains the global reference datasets and the prebuilt route gra
 
 | Dataset | Records | Source / status |
 | --- | ---: | --- |
-| OurAirports airports | 86,371 | CC0 / Public Domain |
-| OurAirports runways | 47,127 | CC0 / Public Domain |
+| OurAirports airports | 86,383 | CC0 / Public Domain |
+| OurAirports runways | 47,139 | CC0 / Public Domain |
 | OurAirports navaids | 11,008 | CC0 / Public Domain |
 | Legacy IFR fixes | 113,356 | X-Plane/FlightGear-format mirror, GPL-3.0, cycle 2012.08 |
 | Legacy en-route navaids | 26,599 | X-Plane/FlightGear-format mirror, GPL-3.0, cycle 2012.08 |
