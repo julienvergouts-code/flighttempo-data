@@ -31,6 +31,10 @@ jobs:
       - name: Check FAA publication cycle
         run: python scripts/check_faa_cifp_currentness.py
         continue-on-error: true
+      - name: Run FAA CIFP and EASA geometry regression tests
+        run: |
+          python -m unittest discover -s tests -p 'test_faa_cifp*.py' -v
+          python -m unittest discover -s tests -p 'test_easa_airspace_coverage.py' -v
       - name: Download and integrity-check new published CIFP archive
         run: python scripts/stage_faa_cifp_archive.py
       - name: Audit staged CIFP archive structure (report only)
