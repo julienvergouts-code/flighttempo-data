@@ -121,6 +121,17 @@ class ParseTests(unittest.TestCase):
         self.assertEqual(info["stats"].get("considered", 0), 0)
         self.assertEqual(info["stats"].get("geometry_failed", 0), 0)
 
+    def test_point_only_airspace_is_not_a_failure(self):
+        xml = b"""<OFMX-Snapshot>
+<Ase><AseUid mid="7" region="EB"><codeType>D-OTHER</codeType><codeId>P1</codeId></AseUid><txtName>P</txtName></Ase>
+<Abd><AbdUid><AseUid mid="7" region="EB"/></AbdUid>
+ <Avx><codeType>GRC</codeType><geoLat>48.5N</geoLat><geoLong>000.5E</geoLong></Avx></Abd>
+</OFMX-Snapshot>"""
+        feats, info = mod.parse_airspace(xml, "EB")
+        self.assertEqual(feats, [])
+        self.assertEqual(info["stats"]["point_only"], 1)
+        self.assertEqual(info["stats"].get("geometry_failed", 0), 0)
+
     def test_ids_are_stable(self):
         again, _ = mod.parse_airspace(XML, "LF")
         self.assertEqual([f["id"] for f in again], [f["id"] for f in self.features])

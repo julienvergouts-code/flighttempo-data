@@ -252,6 +252,10 @@ class UnresolvedBorder(ValueError):
     """Boundary follows a border line that is not in the package, so no ring can be drawn."""
 
 
+class PointOnly(ValueError):
+    """Boundary is a single point with no radius, so there is no area to draw."""
+
+
 def ring_from_abd(abd: ET.Element, stats: Counter,
                   borders: dict[str, list[tuple[float, float]]] | None = None) -> tuple[list[tuple[float, float]], bool]:
     """Return (closed ring, approximated) for one Abd element."""
@@ -300,6 +304,8 @@ def ring_from_abd(abd: ET.Element, stats: Counter,
                 stats["border_segments"] += 1
             ring.append(here)
     distinct = {p for p in ring}
+    if len(distinct) == 1 and not any(i[0] in {"CWA", "CCA", "FNT"} for i in items):
+        raise PointOnly("single point without radius")
     if len(distinct) < 3:
         if any(i[0] == "FNT" for i in items):
             raise UnresolvedBorder("border-following boundary without border geometry")
@@ -358,6 +364,10 @@ def parse_airspace(raw: bytes, region: str) -> tuple[list[dict[str, Any]], dict[
                 approx_any = approx_any or approx
             if not rings:
                 raise ValueError("no boundary")
+        except PointOnly:
+            stats["considered"] -= 1
+            stats["point_only"] += 1
+            continue
         except UnresolvedBorder:
             # Not a parse failure: the shape is defined only by a border line we do not have.
             stats["considered"] -= 1
