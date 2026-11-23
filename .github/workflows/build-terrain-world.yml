@@ -1,0 +1,74 @@
+name: Build world terrain blocks (Copernicus GLO-30)
+on:
+  workflow_dispatch:
+    inputs:
+      region:
+        description: 'Region id from data/terrain_world_regions.json (empty = whole world)'
+        required: false
+        default: ''
+permissions:
+  contents: write
+concurrency:
+  group: flighttempo-shared-manifest-updates
+  cancel-in-progress: false
+env:
+  RELEASE_TAG: terrain-world-v1
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 350
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install --upgrade pip numpy rasterio
+      - name: Tests
+        run: |
+          python tests/test_terrain_tiles.py
+          python tests/test_pack_terrain_blocks.py
+          python tests/test_register_terrain_world_manifest.py
+      - name: Build tiles
+        run: |
+          ARGS=""
+          if [ -n "${{ inputs.region }}" ]; then ARGS="--region ${{ inputs.region }}"; fi
+          python pipeline/build_terrain_tiles.py --config data/terrain_world_regions.json --out "$RUNNER_TEMP/tiles" $ARGS
+      - name: Pack 10 degree blocks
+        run: |
+          python pipeline/pack_terrain_blocks.py --tiles "$RUNNER_TEMP/tiles/tiles" --out "$RUNNER_TEMP/blocks" \
+            --url-base "https://github.com/${{ github.repository }}/releases/download/$RELEASE_TAG" \
+            --entries "$RUNNER_TEMP/entries.json"
+          du -sh "$RUNNER_TEMP/blocks"
+      - name: Upload blocks to the GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if ! gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
+            gh release create "$RELEASE_TAG" --title "World terrain blocks (FTTR v1)" \
+              --notes "Copernicus DEM GLO-30 derived terrain blocks. Reference data, not for navigation. See docs/terrain_tiles.md."
+          fi
+          cd "$RUNNER_TEMP/blocks"
+          ls | xargs -n 20 gh release upload "$RELEASE_TAG" --clobber
+      - name: Merge index on main and register
+        run: |
+          mkdir -p terrain
+          [ -f terrain/index.json ] || { echo "terrain/index.json (licence wording) missing"; exit 1; }
+          python scripts/register_terrain_world_manifest.py --entries "$RUNNER_TEMP/entries.json"
+          python scripts/enforce_app_manifest_rights.py
+          python scripts/validate_navigation_csvs.py
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add terrain/world-index.json navigation_manifest.json
+          if git diff --cached --quiet; then echo "No change."; else
+            git commit -q -m "chore(navdata): register world terrain blocks [skip ci]"
+            for attempt in 1 2 3; do
+              git fetch -q origin main
+              if git rebase origin/main; then git push origin HEAD:main && break; else
+                git rebase --abort; git reset -q --hard origin/main
+                python scripts/register_terrain_world_manifest.py --entries "$RUNNER_TEMP/entries.json"
+                python scripts/enforce_app_manifest_rights.py
+                git add terrain/world-index.json navigation_manifest.json
+                git commit -q -m "chore(navdata): register world terrain blocks [skip ci]" || break
+              fi
+            done
+          fi

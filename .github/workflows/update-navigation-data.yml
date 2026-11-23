@@ -342,6 +342,9 @@ jobs:
       - name: Register terrain tiles in navigation manifest
         run: |
           if [ -f terrain/index.json ]; then python3 scripts/register_terrain_manifest.py; fi
+      - name: Register world terrain blocks in navigation manifest
+        run: |
+          if [ -f terrain/world-index.json ]; then python3 scripts/register_terrain_world_manifest.py; fi
       - name: Re-apply cycle and rights gate after registration steps
         run: python3 scripts/enforce_app_manifest_rights.py
       - name: Validate OFMA VFR artifact integrity and coverage
@@ -428,6 +431,8 @@ jobs:
                       count = sum(region["featureCount"] for region in obj["regions"])
                   elif dataset.get("id") == "terrain_tiles":
                       count = sum(region["tileCount"] for region in obj["regions"])
+                  elif dataset.get("id") == "terrain_world":
+                      count = sum(block["tileCount"] for block in obj["blocks"])
                   else:
                       count = 1 if dataset.get("id") == "route_policy" else len(obj.get("records", obj.get("activeAdvisories", [])))
                   assert count == dataset["recordCount"], f"JSON record count mismatch: {path}"

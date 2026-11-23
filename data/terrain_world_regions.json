@@ -1,0 +1,206 @@
+{
+ "schemaVersion": 1,
+ "source": {
+  "name": "Copernicus DEM GLO-30",
+  "bucket": "https://copernicus-dem-30m.s3.eu-central-1.amazonaws.com",
+  "urlPattern": "{bucket}/Copernicus_DSM_COG_10_{ns}{lat:02d}_00_{ew}{lon:03d}_00_DEM/Copernicus_DSM_COG_10_{ns}{lat:02d}_00_{ew}{lon:03d}_00_DEM.tif"
+ },
+ "regions": [
+  {
+   "id": "w-south--180_-120",
+   "name": "World south -180..-120",
+   "south": -60,
+   "west": -180,
+   "north": -10,
+   "east": -120
+  },
+  {
+   "id": "w-south--120_-60",
+   "name": "World south -120..-60",
+   "south": -60,
+   "west": -120,
+   "north": -10,
+   "east": -60
+  },
+  {
+   "id": "w-south--60_0",
+   "name": "World south -60..0",
+   "south": -60,
+   "west": -60,
+   "north": -10,
+   "east": 0
+  },
+  {
+   "id": "w-south-0_60",
+   "name": "World south 0..60",
+   "south": -60,
+   "west": 0,
+   "north": -10,
+   "east": 60
+  },
+  {
+   "id": "w-south-60_120",
+   "name": "World south 60..120",
+   "south": -60,
+   "west": 60,
+   "north": -10,
+   "east": 120
+  },
+  {
+   "id": "w-south-120_180",
+   "name": "World south 120..180",
+   "south": -60,
+   "west": 120,
+   "north": -10,
+   "east": 180
+  },
+  {
+   "id": "w-tropics--180_-120",
+   "name": "World tropics -180..-120",
+   "south": -10,
+   "west": -180,
+   "north": 30,
+   "east": -120
+  },
+  {
+   "id": "w-tropics--120_-60",
+   "name": "World tropics -120..-60",
+   "south": -10,
+   "west": -120,
+   "north": 30,
+   "east": -60
+  },
+  {
+   "id": "w-tropics--60_0",
+   "name": "World tropics -60..0",
+   "south": -10,
+   "west": -60,
+   "north": 30,
+   "east": 0
+  },
+  {
+   "id": "w-tropics-0_60",
+   "name": "World tropics 0..60",
+   "south": -10,
+   "west": 0,
+   "north": 30,
+   "east": 60
+  },
+  {
+   "id": "w-tropics-60_120",
+   "name": "World tropics 60..120",
+   "south": -10,
+   "west": 60,
+   "north": 30,
+   "east": 120
+  },
+  {
+   "id": "w-tropics-120_180",
+   "name": "World tropics 120..180",
+   "south": -10,
+   "west": 120,
+   "north": 30,
+   "east": 180
+  },
+  {
+   "id": "w-north--180_-120",
+   "name": "World north -180..-120",
+   "south": 30,
+   "west": -180,
+   "north": 84,
+   "east": -120
+  },
+  {
+   "id": "w-north--120_-60",
+   "name": "World north -120..-60",
+   "south": 30,
+   "west": -120,
+   "north": 84,
+   "east": -60
+  },
+  {
+   "id": "w-north--60_0",
+   "name": "World north -60..0",
+   "south": 30,
+   "west": -60,
+   "north": 84,
+   "east": 0
+  },
+  {
+   "id": "w-north-0_60",
+   "name": "World north 0..60",
+   "south": 30,
+   "west": 0,
+   "north": 84,
+   "east": 60
+  },
+  {
+   "id": "w-north-60_120",
+   "name": "World north 60..120",
+   "south": 30,
+   "west": 60,
+   "north": 84,
+   "east": 120
+  },
+  {
+   "id": "w-north-120_180",
+   "name": "World north 120..180",
+   "south": 30,
+   "west": 120,
+   "north": 84,
+   "east": 180
+  }
+ ],
+ "canaries": [
+  {
+   "name": "Mont Blanc",
+   "lat": 45.8326,
+   "lon": 6.8652,
+   "minM": 4500,
+   "maxM": 4950
+  },
+  {
+   "name": "Mount Fuji",
+   "lat": 35.3606,
+   "lon": 138.7274,
+   "minM": 3500,
+   "maxM": 3950
+  },
+  {
+   "name": "Mont Orohena (Tahiti)",
+   "lat": -17.6267,
+   "lon": -149.47,
+   "minM": 1700,
+   "maxM": 2450,
+   "note": "Known Copernicus under-read over Tahiti (~1,840 m vs 2,241 m real); range widened on purpose, see region accuracyNote."
+  },
+  {
+   "name": "Mount Everest",
+   "lat": 27.9881,
+   "lon": 86.925,
+   "minM": 8200,
+   "maxM": 9000
+  },
+  {
+   "name": "Aconcagua",
+   "lat": -32.6532,
+   "lon": -70.0109,
+   "minM": 6400,
+   "maxM": 7100
+  },
+  {
+   "name": "Denali",
+   "lat": 63.0695,
+   "lon": -151.0074,
+   "minM": 5700,
+   "maxM": 6300
+  },
+  {
+   "name": "Kilimanjaro",
+   "lat": -3.0674,
+   "lon": 37.3556,
+   "minM": 5400,
+   "maxM": 6000
+  }
+ ]
+}
