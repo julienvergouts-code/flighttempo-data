@@ -24,6 +24,6 @@
   },
   "latestPublishedDownloadUrl": "https://aeronav.faa.gov/Upload_313-d/cifp/CIFP_261126.zip",
   "automaticImport": false,
-  "automaticImportReason": "The repository does not yet contain a verified FAA ARINC 424 parser and end-to-end regression suite. This monitor must not replace procedure CSVs without that validation.",
+  "automaticImportReason": "The repository has a validated staging-only archive audit and partial procedure-header extractor. Full ARINC 424 leg semantics, CSV conversion, and end-to-end equivalence checks are not implemented. No packaged procedure dataset may be replaced.",
   "operationalUse": false
 }
