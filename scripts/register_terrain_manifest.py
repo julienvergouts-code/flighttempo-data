@@ -11,10 +11,13 @@ from __future__ import annotations
 
 import hashlib
 import json
+import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "scripts"))
+import terrain_notices  # noqa: E402
 INDEX = ROOT / "terrain" / "index.json"
 CONFIRMATION = ROOT / "data" / "terrain_rights_confirmation.json"
 MANIFEST_PATH = ROOT / "navigation_manifest.json"
@@ -23,8 +26,10 @@ RAW = "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/"
 
 def register(index_path: Path = INDEX, confirmation_path: Path = CONFIRMATION,
              manifest_path: Path = MANIFEST_PATH) -> dict:
+    index = json.loads(index_path.read_bytes())
+    if terrain_notices.refresh(index):
+        index_path.write_text(json.dumps(index, indent=1, ensure_ascii=False) + "\n", encoding="utf-8")
     raw = index_path.read_bytes()
-    index = json.loads(raw)
     confirmation = json.loads(confirmation_path.read_text(encoding="utf-8"))
     confirmed = confirmation.get("commercialUseConfirmed") is True and bool(confirmation.get("confirmedBy"))
     tiles = sum(r["tileCount"] for r in index["regions"])

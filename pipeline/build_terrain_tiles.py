@@ -35,9 +35,9 @@ ROOT = PIPELINE.parent
 CONFIG = ROOT / "data/terrain_regions.json"
 UA = "FlightTempo-Data-Maintenance/1.0 (+https://github.com/julienvergouts-code/flighttempo-data)"
 ATTRIBUTION = ("© DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS "
-               "by the European Union and ESA; all rights reserved. Produced using Copernicus WorldDEM-90.")
+               "by the European Union and ESA; all rights reserved. Produced using Copernicus WorldDEM-30.")
 DISCLAIMER = ("The organisations in charge of the Copernicus programme by law or by delegation do not incur any "
-              "liability for any use of the Copernicus WorldDEM-90.")
+              "liability for any use of the Copernicus WorldDEM-30.")
 log = logging.getLogger("terrain")
 
 

@@ -29,7 +29,7 @@ The zlib payload holds `rows*cols` int16 values: first all low bytes, then all h
 Visit **every cell** the route corridor touches. Sampling coarser than a cell (0.15 NM) can step over a single-cell peak. `pipeline/terrain_tiles.py::max_elevation_along` is the reference implementation.
 
 ### Licence and attribution (Copernicus DEM)
-Show: "(c) DLR e.V. 2010-2014 and (c) Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved. Produced using Copernicus WorldDEM-90." and pass on: "The organisations in charge of the Copernicus programme by law or by delegation do not incur any liability for any use of the Copernicus WorldDEM-90."
+Show: "(c) DLR e.V. 2010-2014 and (c) Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved. Produced using Copernicus WorldDEM-30." and pass on: "The organisations in charge of the Copernicus programme by law or by delegation do not incur any liability for any use of the Copernicus WorldDEM-30."
 
 The licence text grants free worldwide reproduction, distribution and adaptation without time limit; it does not use the word "commercial". The manifest keeps `terrain_tiles` blocked until `data/terrain_rights_confirmation.json` is set to confirmed by the owner.
 
@@ -53,3 +53,8 @@ Tiles are max-pooled, so flat or rounded terrain reads at or above the real heig
 | Mont Orohena (Tahiti) | about -400 m (-1,300 ft) |
 
 Under-reads over sharp alpine or tropical peaks can exceed a 1,000 ft buffer in Polynesia. French Polynesia carries an `accuracyNote` in the index so the app can show it.
+
+## Known gaps
+
+- Copernicus withholds GLO-30 tiles for a few countries (the ESA announcement says only "some countries"). A missing tile is published as absent and the app treats absent as open sea, so land in those countries is missing, not flat. Treat "no tile" over land as "no data".
+- Licence: COPDEM-30 grants a free, worldwide, unlimited-in-time right to reproduce, distribute, adapt and combine the data. It does not mention commercial use either way. Required: the attribution and "Produced using Copernicus WorldDEM-30" notice (Art. 6a-b), the liability disclaimer (6c), no implied official endorsement (6d), and subsequent users bound by the same obligations (6e). `scripts/terrain_notices.py` holds the wording.

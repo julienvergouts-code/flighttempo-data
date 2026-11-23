@@ -11,7 +11,7 @@ import register_terrain_manifest as reg  # noqa: E402
 import commercial_rights  # noqa: E402
 
 INDEX = {"cellsPerDegree": 400, "format": "FTTR", "license": "Copernicus DEM free licence (GLO-30)",
-         "attribution": "© DLR ... Produced using Copernicus WorldDEM-90.", "disclaimer": "no liability",
+         "attribution": "© DLR ... Produced using Copernicus WorldDEM-30.", "disclaimer": "no liability",
          "modificationNotice": "max pooled",
          "regions": [{"id": "alps", "name": "Alps", "bbox": [45, 6, 47, 7], "tileCount": 2, "sizeBytes": 1000, "tiles": []}]}
 
@@ -47,7 +47,7 @@ class RegisterTests(unittest.TestCase):
         entry = reg.register(self.index, self.conf, self.manifest)
         self.assertTrue(entry["available"])
         self.assertIsNone(commercial_rights.redistribution_block_reason(entry))
-        self.assertIn("WorldDEM-90", entry["attribution"])
+        self.assertIn("WorldDEM-30", entry["attribution"])
         again = reg.register(self.index, self.conf, self.manifest)
         self.assertEqual(len(json.loads(self.manifest.read_text())["datasets"]), 1)
 
