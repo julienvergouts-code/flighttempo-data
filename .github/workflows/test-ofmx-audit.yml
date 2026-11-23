@@ -28,4 +28,4 @@ jobs:
       - name: Syntax check
         run: python -m py_compile scripts/audit_ofmx_features.py tests/test_audit_ofmx_features.py
       - name: Unit tests
-        run: python -m unittest tests.test_audit_ofmx_features -v
+        run: python -m unittest discover -s tests -p test_audit_ofmx_features.py -v
