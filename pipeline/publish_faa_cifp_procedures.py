@@ -67,6 +67,7 @@ PATH_TERMINATORS = set(
 MIN_ROW_RATIO = float(os.getenv("CIFP_MIN_ROW_RATIO", "0.85"))
 MAX_ROW_RATIO = float(os.getenv("CIFP_MAX_ROW_RATIO", "1.15"))
 MIN_EQUIVALENCE = float(os.getenv("CIFP_MIN_EQUIVALENCE", "0.80"))
+MIN_SAME_CYCLE_EQUIVALENCE = float(os.getenv("CIFP_MIN_SAME_CYCLE_EQUIVALENCE", "0.98"))
 MIN_VALID_PATH_TERMINATOR = float(os.getenv("CIFP_MIN_VALID_PATH_TERMINATOR", "0.999"))
 MIN_FIX_WITNESS = float(os.getenv("CIFP_MIN_FIX_WITNESS", "0.70"))
 MIN_ROWS = int(os.getenv("CIFP_MIN_ROWS", "5000"))
@@ -264,7 +265,7 @@ def check_dataset(dataset_id: str, rows: list[dict[str, str]], previous: list[di
                             f"(floor {MIN_FIX_WITNESS:.0%}); the fix column is probably misaligned")
     else:
         report["fixesFoundInNasrOrNavaidData"] = None
-    if previous and previous_cycle != new_cycle:
+    if previous:
         ratio = len(rows) / len(previous)
         report["rowRatioToPrevious"] = round(ratio, 4)
         if not MIN_ROW_RATIO <= ratio <= MAX_ROW_RATIO:
@@ -272,10 +273,11 @@ def check_dataset(dataset_id: str, rows: list[dict[str, str]], previous: list[di
                             f"({len(previous)} -> {len(rows)}); allowed {MIN_ROW_RATIO - 1:+.0%}..{MAX_ROW_RATIO - 1:+.0%}")
         comparison = compare_with_previous(previous, rows)
         report["equivalence"] = comparison
-        if comparison["identicalShare"] < MIN_EQUIVALENCE:
+        floor = MIN_SAME_CYCLE_EQUIVALENCE if previous_cycle == new_cycle else MIN_EQUIVALENCE
+        if comparison["identicalShare"] < floor:
             raise CifpError(
                 f"{dataset_id}: only {comparison['identicalShare']:.1%} of cycle {previous_cycle} legs decode "
-                f"identically in cycle {new_cycle} (floor {MIN_EQUIVALENCE:.0%}). Column disagreements: "
+                f"identically in cycle {new_cycle} (floor {floor:.0%}). Column disagreements: "
                 f"{comparison['columnMismatch']}. Examples: {comparison['examples'][:5]}")
     else:
         report["equivalence"] = None
