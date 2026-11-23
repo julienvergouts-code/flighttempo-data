@@ -1,5 +1,6 @@
-import unittest
-from scripts.parse_faa_cifp_procedures import parse_procedure_record
+import tempfile, unittest
+from pathlib import Path
+from scripts.parse_faa_cifp_procedures import parse_file, parse_procedure_record
 
 class FaaCifpProcedureRecordTests(unittest.TestCase):
     def fixture(self, code, proc="DEEZZ6", transition="W04L", seq="010", fix=""):
@@ -38,6 +39,19 @@ class FaaCifpProcedureRecordTests(unittest.TestCase):
         row = list(self.fixture("D"))
         row[3:5] = list("AE")
         self.assertIsNone(parse_procedure_record("".join(row), 1))
+
+    def test_staging_file_summary_and_ndjson_are_written(self):
+        sid = self.fixture("D", proc="DEEZZ6", transition="W04L", seq="010", fix="PONAE")
+        star = self.fixture("E", proc="CAMRN5", transition="ALL", seq="010", fix="BOTON")
+        with tempfile.TemporaryDirectory() as tmp:
+            source = Path(tmp) / "FAACIFP18"
+            out = Path(tmp) / "stage"
+            source.write_text(sid + "\\n" + star + "\\n", encoding="ascii")
+            summary = parse_file(source, out, "CIFP_261126.zip")
+            self.assertEqual(summary["procedureRecordCounts"], {"SID": 1, "STAR": 1})
+            self.assertFalse(summary["appPublicationEnabled"])
+            self.assertEqual(summary["sourceArchive"], "CIFP_261126.zip")
+            self.assertEqual(len((out / "procedure-records.ndjson").read_text().splitlines()), 2)
 
     def test_bad_record_width_fails_closed(self):
         with self.assertRaises(ValueError):
