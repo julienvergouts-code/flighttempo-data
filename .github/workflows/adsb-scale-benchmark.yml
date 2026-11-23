@@ -39,7 +39,7 @@ concurrency:
 jobs:
   scale-benchmark:
     runs-on: ubuntu-latest
-    timeout-minutes: 120
+    timeout-minutes: 360
     steps:
       - uses: actions/checkout@v4
       - name: Set up Python
@@ -102,8 +102,11 @@ jobs:
           for p in files:
               if not p.exists():
                   raise SystemExit(f"STRICT_JSON_FAIL: missing {p}")
-              with p.open(encoding="utf-8") as f:
-                  parsed[p] = json.load(f, parse_constant=lambda value: (_ for _ in ()).throw(ValueError(value)))
+              raw = p.read_bytes()
+              if not raw.endswith(b"\\n"):
+                  raise SystemExit(f"JSON_NEWLINE_FAIL: missing real newline in {p}")
+              print(f"JSON_NEWLINE_OK: {p}")
+              parsed[p] = json.loads(raw.decode("utf-8"), parse_constant=lambda value: (_ for _ in ()).throw(ValueError(value)))
               print(f"STRICT_JSON_OK: {p}")
               audit_privacy(parsed[p])
               print(f"PRIVACY_AUDIT_OK: {p}")
@@ -115,6 +118,11 @@ jobs:
           if summary.get("status") != "passed":
               raise SystemExit("Scale benchmark did not meet its aircraft minimum")
           evidence = parsed[files[0]]
+          legs = evidence.get("leg_metrics", [])
+          expected_legs = int(summary.get("eligible_european_legs", 0))
+          if len(legs) != expected_legs or any("path_distance_nm" not in leg for leg in legs):
+              raise SystemExit("PER_LEG_PATH_DISTANCE_COVERAGE_FAIL")
+          print(f"PER_LEG_PATH_DISTANCE_COVERAGE_OK: {len(legs)} legs")
           for link in evidence.get("candidate_links", []):
               if link.get("promotion") != "DISABLED":
                   raise SystemExit("Candidate promotion must remain disabled")
