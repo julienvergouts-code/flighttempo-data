@@ -1,0 +1,82 @@
+name: Build terrain tiles (Copernicus GLO-90)
+on:
+  workflow_dispatch:
+    inputs:
+      region:
+        description: 'Region id from data/terrain_regions.json (empty = all)'
+        required: false
+        default: ''
+permissions:
+  contents: write
+concurrency:
+  group: flighttempo-shared-manifest-updates
+  cancel-in-progress: false
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 340
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install --upgrade pip numpy rasterio
+      - name: Run terrain tests
+        run: |
+          python tests/test_terrain_tiles.py
+          python tests/test_register_terrain_manifest.py
+      - name: Fetch existing terrain-data branch (tiles already built are kept)
+        run: |
+          mkdir -p "$RUNNER_TEMP/terrain"
+          if git ls-remote --exit-code --heads origin terrain-data >/dev/null 2>&1; then
+            git clone --quiet --depth 1 --branch terrain-data "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" "$RUNNER_TEMP/terrain"
+          else
+            git -C "$RUNNER_TEMP/terrain" init --quiet -b terrain-data
+            git -C "$RUNNER_TEMP/terrain" remote add origin "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git"
+          fi
+      - name: Build tiles
+        run: |
+          ARGS=""
+          if [ -n "${{ inputs.region }}" ]; then ARGS="--region ${{ inputs.region }}"; fi
+          python pipeline/build_terrain_tiles.py --out "$RUNNER_TEMP/terrain" $ARGS
+      - name: Publish tiles to the terrain-data branch
+        run: |
+          cd "$RUNNER_TEMP/terrain"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          cat > README.md <<'DOC'
+          FlightTempo terrain tiles (FTTR v1), built by the "Build terrain tiles" workflow on main.
+          Source: Copernicus DEM GLO-90. Attribution: (c) DLR e.V. 2010-2014 and (c) Airbus Defence and Space GmbH 2014-2018
+          provided under COPERNICUS by the European Union and ESA; all rights reserved. Produced using Copernicus WorldDEM-90.
+          The organisations in charge of the Copernicus programme by law or by delegation do not incur any liability for any use of the Copernicus WorldDEM-90.
+          Reference data only, not for navigation. See docs/terrain_tiles.md on main for the format.
+          DOC
+          sed -i 's/^          //' README.md
+          git add -A
+          if git diff --cached --quiet; then echo "No new tiles."; else
+            git commit -q -m "Update terrain tiles"
+            git push -q origin HEAD:terrain-data
+          fi
+      - name: Mirror index to main and register in the manifest
+        run: |
+          mkdir -p terrain
+          cp "$RUNNER_TEMP/terrain/index.json" terrain/index.json
+          python scripts/register_terrain_manifest.py
+          python scripts/enforce_app_manifest_rights.py
+          python scripts/validate_navigation_csvs.py
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add terrain/index.json navigation_manifest.json
+          if git diff --cached --quiet; then echo "No manifest change."; else
+            git commit -q -m "chore(navdata): register terrain tiles [skip ci]"
+            for attempt in 1 2 3; do
+              git fetch -q origin main
+              if git rebase origin/main; then git push origin HEAD:main && break; else
+                git rebase --abort; git reset -q --hard origin/main
+                mkdir -p terrain && cp "$RUNNER_TEMP/terrain/index.json" terrain/index.json
+                python scripts/register_terrain_manifest.py && python scripts/enforce_app_manifest_rights.py
+                git add terrain/index.json navigation_manifest.json
+                git commit -q -m "chore(navdata): register terrain tiles [skip ci]" || break
+              fi
+            done
+          fi

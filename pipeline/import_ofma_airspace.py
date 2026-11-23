@@ -191,18 +191,25 @@ def ring_from_abd(abd: ET.Element, stats: Counter) -> tuple[list[tuple[float, fl
             raise ValueError("circle without radius")
         stats["circles"] += 1
         return circle_ring(centre, radius * UNITS_TO_NM.get(unit, 1.0)), False
-    ring: list[tuple[float, float]] = []
-    approx = False
+    items = []
     for avx in (c for c in list(abd) if local(c) == "avx"):
         kind = txt(avx, "codeType").upper()
         here = point(avx, "geoLat", "geoLong")
+        centre = radius = None
         if kind in {"CWA", "CCA"}:
-            if not ring:
-                raise ValueError("arc without a start vertex")
             centre = point(avx, "geoLatArc", "geoLongArc")
             unit = txt(avx, "uomRadiusArc").upper() or "NM"
             r = number(txt(avx, "valRadiusArc"))
             radius = r * UNITS_TO_NM.get(unit, 1.0) if r else None
+        items.append((kind, here, centre, radius))
+    if not items:
+        raise ValueError("no boundary")
+    ring: list[tuple[float, float]] = []
+    approx = False
+    for kind, here, centre, radius in items:
+        if kind in {"CWA", "CCA"}:
+            if not ring:  # an arc that opens the boundary starts at the closing vertex
+                ring.append(items[-1][1] if len(items) > 1 else here)
             ring.extend(arc_points(ring[-1], here, centre, radius, kind == "CWA"))
             stats["arcs"] += 1
         else:
@@ -210,7 +217,8 @@ def ring_from_abd(abd: ET.Element, stats: Counter) -> tuple[list[tuple[float, fl
                 approx = True
                 stats["border_segments"] += 1
             ring.append(here)
-    if len(ring) < 3:
+    distinct = {p for p in ring}
+    if len(distinct) < 3:
         raise ValueError("fewer than three vertices")
     if ring[0] != ring[-1]:
         ring.append(ring[0])
@@ -244,13 +252,16 @@ def parse_airspace(raw: bytes, region: str) -> tuple[list[dict[str, Any]], dict[
                             f"(counts {dict(stats)}; top tags {tags})")
     features: list[dict[str, Any]] = []
     types: Counter = Counter()
-    sample = ""
+    samples: dict[str, str] = {}
     for key in ase_order:
         ase = ases[key]
         uid = child(ase, "AseUid")
         a_type = txt(uid, "codeType").upper()
         if a_type in EXCLUDED_TYPES:
             stats["excluded_type"] += 1
+            continue
+        if not abds.get(key):
+            stats["no_boundary"] += 1
             continue
         stats["considered"] += 1
         rings, approx_any = [], False
@@ -264,9 +275,10 @@ def parse_airspace(raw: bytes, region: str) -> tuple[list[dict[str, Any]], dict[
         except ValueError as exc:
             stats["geometry_failed"] += 1
             stats["geometry_failed:" + str(exc)[:40]] += 1
-            if not sample:
-                parts = [ET.tostring(ase, encoding="unicode")] + [ET.tostring(a, encoding="unicode") for a in abds.get(key, [])[:1]]
-                sample = " || ".join(clean(p) for p in parts)[:900]
+            reason = str(exc)[:40]
+            if reason not in samples:
+                abd_text = clean(ET.tostring(abds[key][0], encoding="unicode"))[:1800]
+                samples[reason] = clean(ET.tostring(uid, encoding="unicode"))[:200] + " >> " + abd_text
             continue
         lats = [p[0] for r in rings for p in r]
         lons = [p[1] for r in rings for p in r]
@@ -292,7 +304,7 @@ def parse_airspace(raw: bytes, region: str) -> tuple[list[dict[str, Any]], dict[
         types[a_type or "UNKNOWN"] += 1
     stats["features"] = len(features)
     features.sort(key=lambda f: (f["type"], f["name"], f["id"]))
-    return features, {"stats": dict(stats), "countsByType": dict(types), "failureSample": sample}
+    return features, {"stats": dict(stats), "countsByType": dict(types), "failureSamples": samples}
 
 
 def check_region(region: str, features: list[dict[str, Any]], info: dict[str, Any]) -> None:
@@ -305,7 +317,7 @@ def check_region(region: str, features: list[dict[str, Any]], info: dict[str, An
         failures = {k: v for k, v in stats.items() if k.startswith("geometry_failed:")}
         raise AirspaceError(f"{region}: geometry resolved for only {success:.1%} of airspaces "
                             f"(floor {MIN_GEOMETRY_SUCCESS:.0%}); failures {failures}; abd={stats.get('abd')}; "
-                            f"sample {info.get('failureSample')!r}")
+                            f"samples {info.get('failureSamples')!r}")
     approx = sum(bool(f.get("approx")) for f in features) / len(features)
     if approx > MAX_APPROX_SHARE:
         raise AirspaceError(f"{region}: {approx:.0%} of airspaces rely on approximated border segments")

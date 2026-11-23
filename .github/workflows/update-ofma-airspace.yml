@@ -8,6 +8,10 @@ on:
         description: 'Re-download even if the current cycle is already published (true/false)'
         required: false
         default: 'false'
+      region:
+        description: 'Only this OFMA region code, e.g. LF (empty = all)'
+        required: false
+        default: ''
 permissions:
   contents: write
 concurrency:
@@ -27,11 +31,10 @@ jobs:
         id: import
         continue-on-error: true
         run: |
-          if [ "${{ inputs.force }}" = "true" ]; then
-            python pipeline/import_ofma_airspace.py --force
-          else
-            python pipeline/import_ofma_airspace.py
-          fi
+          ARGS=""
+          if [ "${{ inputs.force }}" = "true" ]; then ARGS="--force"; fi
+          if [ -n "${{ inputs.region }}" ]; then ARGS="$ARGS --region ${{ inputs.region }}"; fi
+          python pipeline/import_ofma_airspace.py $ARGS
       - name: Register airspace packs in navigation manifest
         run: |
           if [ -f airspace/ofma/index.json ]; then python scripts/register_ofma_airspace_manifest.py; else echo 'No airspace index yet.'; fi

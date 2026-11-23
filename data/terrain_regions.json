@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "name": "Copernicus DEM GLO-90",
+    "bucket": "https://copernicus-dem-90m.s3.eu-central-1.amazonaws.com",
+    "urlPattern": "{bucket}/Copernicus_DSM_COG_30_{ns}{lat:02d}_00_{ew}{lon:03d}_00_DEM/Copernicus_DSM_COG_30_{ns}{lat:02d}_00_{ew}{lon:03d}_00_DEM.tif"
+  },
+  "regions": [
+    {"id": "europe", "name": "Europe", "south": 34, "west": -25, "north": 72, "east": 45},
+    {"id": "japan", "name": "Japan", "south": 24, "west": 122, "north": 46, "east": 146},
+    {"id": "french-polynesia", "name": "French Polynesia (Tahiti)", "south": -28, "west": -155, "north": -7, "east": -134}
+  ],
+  "canaries": [
+    {"name": "Mont Blanc", "lat": 45.8326, "lon": 6.8652, "minM": 4500, "maxM": 4950},
+    {"name": "Mount Fuji", "lat": 35.3606, "lon": 138.7274, "minM": 3500, "maxM": 3950},
+    {"name": "Mont Orohena (Tahiti)", "lat": -17.6256, "lon": -149.4814, "minM": 2000, "maxM": 2450}
+  ]
+}

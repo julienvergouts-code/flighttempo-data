@@ -65,7 +65,8 @@ class ParseTests(unittest.TestCase):
 
     def test_expected_features_only(self):
         self.assertEqual(set(self.by_name), {"PARIS CDG", "ROUND", "BORDER"})  # FIR excluded, no-boundary dropped
-        self.assertEqual(self.info["stats"]["geometry_failed"], 1)
+        self.assertEqual(self.info["stats"]["no_boundary"], 1)
+        self.assertNotIn("geometry_failed", self.info["stats"])
         self.assertEqual(self.info["stats"]["excluded_type"], 1)
 
     def test_vertical_limits(self):
@@ -86,6 +87,24 @@ class ParseTests(unittest.TestCase):
     def test_ids_are_stable(self):
         again, _ = mod.parse_airspace(XML, "LF")
         self.assertEqual([f["id"] for f in again], [f["id"] for f in self.features])
+
+    def test_arc_that_opens_the_boundary_starts_at_the_closing_vertex(self):
+        xml = b"""<OFMX-Snapshot>
+<Ase><AseUid mid="9"><codeType>ATZ</codeType><codeId>A9</codeId></AseUid><txtName>ARC FIRST</txtName></Ase>
+<Abd><AbdUid><AseUid mid="9"/></AbdUid>
+ <Avx><codeType>CWA</codeType><geoLat>490000N</geoLat><geoLong>0030000E</geoLong><geoLatArc>490000N</geoLatArc><geoLongArc>0020000E</geoLongArc><valRadiusArc>30</valRadiusArc><uomRadiusArc>NM</uomRadiusArc></Avx>
+ <Avx><codeType>GRC</codeType><geoLat>480000N</geoLat><geoLong>0030000E</geoLong></Avx>
+ <Avx><codeType>GRC</codeType><geoLat>480000N</geoLat><geoLong>0020000E</geoLong></Avx>
+ <Avx><codeType>GRC</codeType><geoLat>490000N</geoLat><geoLong>0021000E</geoLong></Avx></Abd>
+<Ase><AseUid mid="10"><codeType>R</codeType><codeId>A10</codeId></AseUid><txtName>FULL CIRCLE BY ARC</txtName></Ase>
+<Abd><AbdUid><AseUid mid="10"/></AbdUid>
+ <Avx><codeType>CWA</codeType><geoLat>490000N</geoLat><geoLong>0030000E</geoLong><geoLatArc>490000N</geoLatArc><geoLongArc>0020000E</geoLongArc><valRadiusArc>30</valRadiusArc><uomRadiusArc>NM</uomRadiusArc></Avx></Abd>
+</OFMX-Snapshot>"""
+        features, info = mod.parse_airspace(xml, "LF")
+        by = {f["name"]: f for f in features}
+        self.assertEqual(set(by), {"ARC FIRST", "FULL CIRCLE BY ARC"})
+        self.assertGreater(len(by["FULL CIRCLE BY ARC"]["rings"][0]), 100)
+        self.assertNotIn("geometry_failed", info["stats"])
 
     def test_no_ase_fails_closed(self):
         with self.assertRaisesRegex(mod.AirspaceError, "no Ase"):
