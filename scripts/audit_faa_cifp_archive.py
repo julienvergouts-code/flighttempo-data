@@ -39,6 +39,8 @@ def audit_archive(path: Path) -> dict:
             # Candidate CIFP text files: reasonably sized non-binary members.
             if info.file_size == 0:
                 continue
+            if info.file_size > MAX_TEXT_MEMBER_BYTES:
+                raise ValueError(f"Member too large to read into memory safely: {name}")
             raw = zf.read(info)
             if len(raw) != info.file_size:
                 raise ValueError(f"Member size mismatch: {name}")
@@ -47,8 +49,6 @@ def audit_archive(path: Path) -> dict:
             except UnicodeDecodeError:
                 members.append({"name": name, "sizeBytes": len(raw), "classification": "non_ascii_or_binary", "sha256": hashlib.sha256(raw).hexdigest()})
                 continue
-            if len(raw) > MAX_TEXT_MEMBER_BYTES:
-                raise ValueError(f"Text member too large to audit safely: {name}")
             lines = [line.rstrip("\r") for line in text.splitlines() if line.strip()]
             lengths = Counter(len(line) for line in lines)
             record_codes = Counter(line[:1] for line in lines if line)
@@ -67,12 +67,16 @@ def audit_archive(path: Path) -> dict:
     text_members = [m for m in members if m.get("classification") == "ascii_text" and m.get("lineCount", 0)]
     if not text_members:
         raise ValueError("ZIP contains no non-empty ASCII text member suitable for CIFP audit")
+    archive_hash = hashlib.sha256()
+    with path.open("rb") as archive_stream:
+        for chunk in iter(lambda: archive_stream.read(1024 * 1024), b""):
+            archive_hash.update(chunk)
     return {
         "schemaVersion": 1,
         "stage": "audit_only_no_ARINC424_field_mapping",
         "archiveName": path.name,
         "archiveSizeBytes": path.stat().st_size,
-        "archiveSha256": hashlib.sha256(path.read_bytes()).hexdigest(),
+        "archiveSha256": archive_hash.hexdigest(),
         "zipIntegrity": "passed",
         "memberCount": len(members),
         "asciiTextMemberCount": len(text_members),
