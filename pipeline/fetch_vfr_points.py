@@ -16,7 +16,7 @@ import re
 import shutil
 import tempfile
 import zipfile
-from datetime import datetime, timezone
+from datetime import date, datetime, timezone
 from pathlib import Path
 from typing import Any, Iterable
 from urllib.parse import urljoin
@@ -54,6 +54,12 @@ def timestamp() -> str:
 
 def clean(value: Any) -> str:
     return re.sub(r"\s+", " ", str(value or "")).strip()
+
+
+def as_of_date() -> date:
+    """Date used to decide which NASR cycle is in effect (UTC; FAA_AS_OF_DATE overrides for tests)."""
+    override = os.getenv("FAA_AS_OF_DATE", "").strip()
+    return date.fromisoformat(override) if override else utc_now().date()
 
 
 def parse_cycle_date(token: str) -> str | None:
@@ -146,7 +152,13 @@ def discover_faa_archives() -> list[tuple[str, str]]:
             log.warning("Cycle subpage unavailable %s: %s", page_url, exc)
     if not candidates:
         raise RuntimeError("FAA NASR page contained no dated FIX_CSV.ZIP links")
-    return sorted(candidates.items(), key=lambda pair: pair[1], reverse=True)
+    # FAA publishes the next cycle weeks early. Importing it would replace the
+    # cycle still in effect, so only cycles whose effective date has passed count.
+    today = as_of_date().isoformat()
+    in_effect = {url: date_ for url, date_ in candidates.items() if date_ <= today}
+    if not in_effect:
+        raise RuntimeError(f"No FAA NASR FIX cycle is effective on or before {today}")
+    return sorted(in_effect.items(), key=lambda pair: pair[1], reverse=True)
 
 
 def download_to(url: str, path: Path) -> None:

@@ -2,7 +2,7 @@
 """Register the FAA VFR reporting-point CSV in the app navigation manifest."""
 from __future__ import annotations
 import csv, hashlib, json
-from datetime import datetime, timezone
+from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
 ROOT=Path(__file__).resolve().parents[1]
@@ -34,6 +34,7 @@ def register():
     manifest=json.loads(MANIFEST_PATH.read_text(encoding="utf-8"))
     updated=max((r["updated_date"] for r in rows),default="")
     generated=meta.get("generated_utc","")
+    expiry=(date.fromisoformat(updated)+timedelta(days=27)).isoformat()
     if not generated: raise ValueError("VFR metadata has no generated_utc timestamp")
     dataset={
         "id":DATASET_ID,"path":"data/vfr_points.csv","downloadUrl":DOWNLOAD_URL,
@@ -45,7 +46,7 @@ def register():
         "sourceTag":f"FAA_NASR_FIX_{updated}",
         "license":"US Government public-domain data",
         "licenseStatus":"public_domain","dataCycle":updated,
-        "effectiveDate":updated,"expiryDate":"",
+        "effectiveDate":updated,"expiryDate":expiry,
         "provenanceVerification":"source_snapshot",
         "downloadPurpose":"reference_only","operationallyAvailable":False,
         "status":"present_reference_dataset"

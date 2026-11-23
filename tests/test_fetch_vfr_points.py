@@ -6,6 +6,7 @@ import tempfile
 import zipfile
 from pathlib import Path
 import unittest
+from datetime import date
 
 PIPELINE = Path(__file__).resolve().parents[1] / "pipeline"
 sys.path.insert(0, str(PIPELINE))
@@ -80,12 +81,40 @@ class VfrReportingPointPipelineTests(unittest.TestCase):
             if "29_Oct_2026" in url: return Response(content=archive)
             raise AssertionError(url)
         mod.FAA_FIX_URL = ""
-        original_get = mod.get
+        original_get, original_as_of = mod.get, mod.as_of_date
         mod.get = fake_get
+        mod.as_of_date = lambda: date(2026, 11, 27)
         try:
             self.assertEqual(mod.fetch_faa()[0]["updated_date"], "2026-10-29")
         finally:
-            mod.get = original_get
+            mod.get, mod.as_of_date = original_get, original_as_of
+
+    def _discover(self, as_of):
+        index = '<a href="26_Nov_2026_FIX_CSV.zip">next</a><a href="29_Oct_2026_FIX_CSV.zip">current</a>'
+        requested = []
+        def fake_get(url, **kwargs):
+            requested.append(url)
+            return Response(text=index)
+        mod.FAA_FIX_URL = ""
+        original_get, original_as_of = mod.get, mod.as_of_date
+        mod.get = fake_get
+        mod.as_of_date = lambda: as_of
+        try:
+            return mod.discover_faa_archives()
+        finally:
+            mod.get, mod.as_of_date = original_get, original_as_of
+
+    def test_preview_cycle_is_ignored_until_it_is_effective(self):
+        found = self._discover(date(2026, 11, 25))
+        self.assertEqual([d for _, d in found], ["2026-10-29"])
+
+    def test_new_cycle_is_used_on_its_effective_day(self):
+        found = self._discover(date(2026, 11, 26))
+        self.assertEqual([d for _, d in found], ["2026-11-26", "2026-10-29"])
+
+    def test_error_when_no_cycle_is_effective_yet(self):
+        with self.assertRaises(RuntimeError):
+            self._discover(date(2026, 9, 1))
 
     def test_bad_coordinates_rejected(self):
         for lat, lon in [(0, 0), (91, 0), (0, 181), (-91, 20)]:
