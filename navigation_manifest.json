@@ -1,6 +1,6 @@
 {
   "schemaVersion": 13,
-  "generatedAtUtc": "2026-11-23T10:53:54.998692+00:00",
+  "generatedAtUtc": "2026-11-23T10:54:56.083687+00:00",
   "procedureAiracCycle": "2611",
   "navaidTypeCounts": {
     "DME": 167,
@@ -35,7 +35,7 @@
       "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
       "provider": "OurAirports",
       "license": "CC0 / Public Domain as stated by OurAirports",
-      "downloadedAt": "2026-11-23T10:53:23.661725+00:00",
+      "downloadedAt": "2026-11-23T10:54:26.159231+00:00",
       "sizeBytes": 12763057,
       "sha256": "200f6b42633c9c37e18049d5e7de5a9e347698661c68a52ee7359a0e5d128ee3",
       "recordCount": 86383
@@ -45,7 +45,7 @@
       "url": "https://davidmegginson.github.io/ourairports-data/runways.csv",
       "provider": "OurAirports",
       "license": "CC0 / Public Domain as stated by OurAirports",
-      "downloadedAt": "2026-11-23T10:53:23.661725+00:00",
+      "downloadedAt": "2026-11-23T10:54:26.159231+00:00",
       "sizeBytes": 3976372,
       "sha256": "aecbf51dc5aa2e1d0373297076c0cf82e62e916bbabc63f2d8c487cca4856e23",
       "recordCount": 47139
@@ -55,7 +55,7 @@
       "url": "https://davidmegginson.github.io/ourairports-data/navaids.csv",
       "provider": "OurAirports",
       "license": "CC0 / Public Domain as stated by OurAirports",
-      "downloadedAt": "2026-11-23T10:53:23.661725+00:00",
+      "downloadedAt": "2026-11-23T10:54:26.159231+00:00",
       "sizeBytes": 1524931,
       "sha256": "d7292380662c33a95214945023ec0a5b13189599305fd18be739e167a97a9bd1",
       "recordCount": 11008
@@ -116,15 +116,18 @@
   "procedureCoverageStatus": "FAA_US_NAS_ONLY_TEST_DATA; EUROPE_FRANCE_SOURCE_NOT_INGESTED; ASIA_NO_PUBLIC_REDISTRIBUTABLE_SOURCE_CONFIRMED",
   "procedureOperationalUse": false,
   "procedureSourceRegistryVersion": 1,
-  "procedureSourceRegistryCheckedAtUtc": "2026-11-14",
+  "procedureSourceRegistryCheckedAtUtc": "2026-11-23",
   "regionalProcedureCoverage": {
     "europe": {
-      "status": "partial_public_source_confirmed_not_ingested",
+      "status": "partial_current_cycle_imported",
       "operationallyAvailable": false,
-      "summary": "France publishes current procedure DATA sheets in its eAIP, including structured SID and STAR leg tables and some RNP approach precoding tables. Its separate SIA AIXM4.5/XML export is openly reusable reference data but is not yet treated as a complete IFPD feed. No complete Europe-wide IFR procedure dataset has been established.",
-      "confirmedProcedureCountries": [],
-      "candidateProcedureCountries": [
+      "summary": "French eAIP DATA procedure tables are partially imported under confirmed commercial redistribution terms (7,988 SID/STAR rows from 239 of 380 source documents; 62.89% document coverage in the recorded audit). France remains partial. Belgium and Germany have no redistributable IFR procedure data confirmed; both are blocked pending product-specific licensing or written permission.",
+      "confirmedProcedureCountries": [
         "FR"
+      ],
+      "candidateProcedureCountries": [
+        "BE",
+        "DE"
       ],
       "vfrOnlyProviders": [
         "OpenFlightMaps"
@@ -306,6 +309,50 @@
           "parsedDocumentCount": 239,
           "skippedDocumentCount": 141,
           "documentCoverageRatio": 0.6289
+        },
+        {
+          "id": "BE_SKEYES_AIP",
+          "jurisdiction": "BE",
+          "provider": "AIM Belgium / skeyes",
+          "sourceUrl": "https://ops.skeyes.be/",
+          "termsUrl": "https://www.skeyes.be/media/2305/terms-and-conditions-of-use.pdf",
+          "format": [
+            "eAIP HTML/PDF",
+            "restricted data provision"
+          ],
+          "procedureScope": [
+            "SIDs",
+            "STARs",
+            "approaches"
+          ],
+          "license": "Skeyes terms of use; no commercial redistribution grant verified",
+          "redistribution": "prior_written_permission_required",
+          "licenseStatus": "commercial_redistribution_not_authorized_by_public_terms",
+          "sourceStatus": "permission_review_required",
+          "dataStatus": "not_imported",
+          "notes": "Belgian AIP is freely viewable, but public terms describe limited use and prohibit copying/sharing/selling the underlying database absent express authorization. Data provision is restricted to specific users. FlightTempo must not scrape or redistribute AIP procedures without written approval or a separately licensed source."
+        },
+        {
+          "id": "DE_DFS_AIXM",
+          "jurisdiction": "DE",
+          "provider": "DFS Deutsche Flugsicherung GmbH",
+          "sourceUrl": "https://ais.dfs.de/pilotservice/service/information/disclaimer/disclaimer.jsp",
+          "catalogUrl": "https://www.dfs.de/homepage/en/services/geo-data/",
+          "format": [
+            "DFS digital AIXM datasets",
+            "AIS Portal"
+          ],
+          "procedureScope": [
+            "SIDs",
+            "STARs",
+            "approaches"
+          ],
+          "license": "DFS AIS Portal terms; exact digital AIXM product terms not verified",
+          "redistribution": "product_specific_license_review_required",
+          "licenseStatus": "commercial_redistribution_not_confirmed",
+          "sourceStatus": "permission_review_required",
+          "dataStatus": "not_imported",
+          "notes": "DFS AIS Portal terms prohibit commercial resale/reuse of portal content and automated access except digital AIXM-format data. The AIXM automation exception is not a redistribution licence. AIP/chart-derived content and derived works require prior written approval for other uses. Investigate only an exact digital dataset whose product licence explicitly grants commercial redistribution."
         }
       ]
     },
@@ -734,7 +781,7 @@
       "available": false,
       "recordCount": 16,
       "sizeBytes": 59342,
-      "sha256": "e07d079ce151341617409541e51b7717513c720d7e5ef9ed85bb836b01b69868",
+      "sha256": "6a076db09b491c23ccfa557205146b3a7c7f7b35839f1d8c43631beb09601cc8",
       "status": "not_published_commercial_reuse_unconfirmed_or_restricted",
       "license": "FAA public reference; currentness unverified",
       "operationallyAvailable": false,
@@ -873,7 +920,7 @@
     "airportSource": "https://davidmegginson.github.io/ourairports-data/airports.csv",
     "runwaySource": "https://davidmegginson.github.io/ourairports-data/runways.csv",
     "license": "Public Domain / CC0 as stated by OurAirports",
-    "downloadedAtUtc": "2026-11-23T10:53:54.579670+00:00",
+    "downloadedAtUtc": "2026-11-23T10:54:55.668112+00:00",
     "matchedElevationRecords": 28488,
     "matchedAirportMetadataRecords": 29747,
     "matchedAirportsWithRunways": 24175,
