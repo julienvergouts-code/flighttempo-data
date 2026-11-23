@@ -54,6 +54,7 @@ CAPABILITY_FLAGS = {
     "faa_prn_notams": ("faaPrnReferences",),
     "ofma_airspace": ("ofmaAirspace",),
     "terrain_tiles": ("terrainTiles",),
+    "terrain_world": ("terrainWorld",),
     "sids": ("sids",),
     "stars": ("stars",),
     "approaches": ("approaches", "ilsApproaches", "rnavApproaches"),
