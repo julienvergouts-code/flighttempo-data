@@ -1,6 +1,6 @@
 {
   "schemaVersion": 13,
-  "generatedAtUtc": "2026-11-23T20:26:31.773679+00:00",
+  "generatedAtUtc": "2026-11-23T20:27:43.670138+00:00",
   "procedureAiracCycle": "2611",
   "navaidTypeCounts": {
     "DME": 167,
@@ -32,7 +32,7 @@
     "faaNasrNavaids": 1608,
     "faaNasrAirwaySegments": 17178,
     "ofmaAirspaceFeatures": 33742,
-    "terrainTiles": 1899
+    "terrainTiles": 1982
   },
   "dataSources": [
     {
@@ -1031,12 +1031,12 @@
       "id": "terrain_tiles",
       "path": "terrain/index.json",
       "available": false,
-      "recordCount": 1899,
-      "sizeBytes": 368232,
-      "sha256": "27a651a5cdeb1e6e83078557ff7e07a23efca827c5ce4fb0c5e302954bf55fe9",
+      "recordCount": 1982,
+      "sizeBytes": 384239,
+      "sha256": "6517576c50e8b6b0d15b70fc64eb988ae0e8c7c97d3b588ee41762f872a50d1f",
       "tileBaseUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/terrain-data/",
-      "tileCount": 1899,
-      "tileBytes": 184231387,
+      "tileCount": 1982,
+      "tileBytes": 184379284,
       "regions": [
         {
           "id": "europe",
@@ -1071,8 +1071,8 @@
             -7,
             -134
           ],
-          "tileCount": 0,
-          "sizeBytes": 0
+          "tileCount": 83,
+          "sizeBytes": 147897
         },
         {
           "id": "st-barth",
