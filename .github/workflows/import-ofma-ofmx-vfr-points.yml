@@ -9,6 +9,7 @@ on:
       - "pipeline/import_ofma_ofmx_vfr_points.py"
       - "tests/test_import_ofma_ofmx_vfr_points.py"
       - "scripts/register_ofma_ofmx_vfr_points_manifest.py"
+      - "scripts/audit_ofmx_features.py"
       - "navigation_manifest.json"
       - "docs/ofma_ofmx_vfr_import.md"
       - ".github/workflows/import-ofma-ofmx-vfr-points.yml"
@@ -33,7 +34,9 @@ jobs:
         run: python -m unittest discover -s tests -p 'test_import_ofma_ofmx_vfr_points.py' -v
       - name: Import every current OFMA catalogue region
         run: python pipeline/import_ofma_ofmx_vfr_points.py
-      - name: Upload data and source packages for review
+      - name: Audit OFMX package feature inventory (read-only)
+        run: python scripts/audit_ofmx_features.py data/ofma_source_archives --output ofma_ofmx_inventory.json
+      - name: Upload data, source packages, and inventory for review
         if: github.event_name == 'pull_request'
         uses: actions/upload-artifact@v4
         with:
@@ -42,6 +45,7 @@ jobs:
             data/ofma_ofmx_vfr_points.csv
             data/ofma_ofmx_vfr_points_meta.json
             data/ofma_source_archives/*.zip
+            ofma_ofmx_inventory.json
           if-no-files-found: error
           retention-days: 14
       - name: Register layer in shared navigation manifest
