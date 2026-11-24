@@ -345,6 +345,9 @@ jobs:
       - name: Register world terrain blocks in navigation manifest
         run: |
           if [ -f terrain/world-index.json ]; then python3 scripts/register_terrain_world_manifest.py; fi
+      - name: Register ADS-B observed routes in navigation manifest
+        run: |
+          if [ -f routes/observed/index.json ]; then python3 scripts/register_adsb_observed_manifest.py; fi
       - name: Re-apply cycle and rights gate after registration steps
         run: python3 scripts/enforce_app_manifest_rights.py
       - name: Validate OFMA VFR artifact integrity and coverage
