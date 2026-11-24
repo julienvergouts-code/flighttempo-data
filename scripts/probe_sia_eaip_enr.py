@@ -59,6 +59,8 @@ def main() -> int:
             texts.append(" | ".join(c for c in cells if c))
         coord = [x for x in texts if re.search(r"\d{2,3}[°\s]?\d{2}['\s]?\d{0,2}[.,]?\d*\"?\s?[NSEW]\b", x)]
         print(f"  text rows {len(texts)}, rows with coordinates {len(coord)}")
+        if len(t) < 40000:
+            print("  FULLRAW:", squash(re.sub(r"<[^>]+>", " ", t), 3000))
         for x in texts[3:9]:
             print("  ROW:", x[:300])
         for x in coord[:10]:
