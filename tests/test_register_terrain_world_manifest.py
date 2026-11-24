@@ -39,12 +39,22 @@ class Tests(unittest.TestCase):
             with tempfile.TemporaryDirectory() as t:
                 t = self.setup(t, confirmed)
                 reg.merge_index([block("N00E000", 3)], t / "w.json", t / "meta.json")
-                e = reg.register(t / "w.json", t / "conf.json", t / "manifest.json")
+                e = reg.register(t / "w.json", t / "conf.json", t / "manifest.json", scope_path=t / "none.json")
                 self.assertEqual(e["available"], confirmed)
                 self.assertEqual(e["recordCount"], 3)
                 m = json.loads((t / "manifest.json").read_text())
                 self.assertEqual(m["capabilities"]["terrainWorld"], confirmed)
                 self.assertEqual("commercialUseAllowed" in e, confirmed)
+
+    def test_personal_scope_makes_it_available_but_never_commercial(self):
+        with tempfile.TemporaryDirectory() as t:
+            t = self.setup(t, False)
+            (t / "scope.json").write_text(json.dumps({"scope": "personal", "confirmedBy": "owner"}))
+            reg.merge_index([block("N00E000", 3)], t / "w.json", t / "meta.json")
+            e = reg.register(t / "w.json", t / "conf.json", t / "manifest.json", scope_path=t / "scope.json")
+            self.assertTrue(e["available"])
+            self.assertIs(e["personalUseOnly"], True)
+            self.assertIs(e["commercialUseAllowed"], False)
 
 
 if __name__ == "__main__":

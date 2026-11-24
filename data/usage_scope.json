@@ -1,0 +1,6 @@
+{
+  "scope": "personal",
+  "confirmedBy": "Julien Vergouts",
+  "confirmedOn": "2026-11-24",
+  "note": "Owner decision (chat, 2026-11-24): FlightTempo is personal use only for now, so commercial rights are deferred. Datasets marked personalUseOnly are app-downloadable ONLY while scope is 'personal'. Delete this file or set scope to 'commercial' to close them again. Every dataset keeps commercialUseAllowed=false until its licence is verified."
+}

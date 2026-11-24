@@ -116,9 +116,9 @@ def validate_dataset(root: Path, dataset: dict) -> dict:
 
 
 try:
-    from .commercial_rights import redistribution_block_reason
+    from .commercial_rights import personal_scope_active, redistribution_block_reason
 except ImportError:
-    from commercial_rights import redistribution_block_reason
+    from commercial_rights import personal_scope_active, redistribution_block_reason
 
 
 def validate_manifest(root: Path, manifest_path: Path) -> list[dict]:
@@ -131,7 +131,7 @@ def validate_manifest(root: Path, manifest_path: Path) -> list[dict]:
     for dataset in datasets:
         if not isinstance(dataset, dict):
             raise ValueError("Manifest dataset entry must be an object")
-        blocked_reason = redistribution_block_reason(dataset)
+        blocked_reason = redistribution_block_reason(dataset, personal_scope_active())
         if dataset.get("available", False) and "ofma_gul" in str(dataset.get("licenseStatus", "")).lower():
             if not dataset.get("commercialUseAllowed") or not dataset.get("licenseUrl") or not dataset.get("attribution"):
                 raise ValueError(
