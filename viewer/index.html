@@ -1,0 +1,370 @@
+<title>FlightTempo World</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* Layout: one full-height chart table. Map fills the page, controls float at the top, route sheet docks at the bottom. */
+:root {
+  --bg: #eef1f0; --panel: #fbfcfb; --ink: #1c2524; --mute: #5d6b69; --line: #cfd8d5;
+  --sea: #cfdce0; --land: #e6e3d6; --coast: #6d7b78; --route: #0b6e6a; --route-dim: #7aa8a4;
+  --ctl: #1d6fb8; --res: #c4412b; --oth: #7d6a1e; --accent: #0b6e6a; --warn: #a45a00;
+  --font: "IBM Plex Sans", system-ui, sans-serif; --mono: "IBM Plex Mono", ui-monospace, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0e1514; --panel: #162120; --ink: #e3ebe9; --mute: #8fa09d; --line: #2b3b39;
+    --sea: #0b1a22; --land: #1a2622; --coast: #5f7571; --route: #52d2c8; --route-dim: #2d6f6a;
+    --ctl: #5aa9f0; --res: #ef7a63; --oth: #d4b84a; --accent: #52d2c8; --warn: #e4a54a; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0e1514; --panel: #162120; --ink: #e3ebe9; --mute: #8fa09d; --line: #2b3b39;
+  --sea: #0b1a22; --land: #1a2622; --coast: #5f7571; --route: #52d2c8; --route-dim: #2d6f6a;
+  --ctl: #5aa9f0; --res: #ef7a63; --oth: #d4b84a; --accent: #52d2c8; --warn: #e4a54a; color-scheme: dark;
+}
+html, body { height: 100%; }
+body { background: var(--bg); color: var(--ink); font-family: var(--font); font-size: 14px; overflow: hidden; }
+* { box-sizing: border-box; }
+#app { position: relative; height: 100%; display: flex; flex-direction: column; }
+#stage { position: relative; flex: 1 1 auto; min-height: 0; touch-action: none; background: var(--sea); }
+canvas#map { position: absolute; inset: 0; width: 100%; height: 100%; display: block; cursor: grab; }
+canvas#map.drag { cursor: grabbing; }
+.bar { position: absolute; left: 0; right: 0; top: 0; display: flex; flex-wrap: wrap; gap: 8px; align-items: center;
+  padding: 10px max(12px, env(safe-area-inset-left, 0px)) 8px max(12px, env(safe-area-inset-right, 0px)); pointer-events: none; }
+.bar > * { pointer-events: auto; }
+h1 { font-size: 15px; font-weight: 600; margin: 0 8px 0 0; padding: 6px 10px; background: var(--panel); border: 1px solid var(--line); letter-spacing: .02em; }
+.group { display: flex; flex-wrap: wrap; gap: 4px; background: var(--panel); border: 1px solid var(--line); padding: 4px; }
+.chip { font: inherit; font-size: 12.5px; color: var(--ink); background: transparent; border: 1px solid transparent; padding: 4px 9px; cursor: pointer; }
+.chip:hover { border-color: var(--line); }
+.chip:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+.chip[aria-pressed="true"] { background: var(--accent); color: var(--bg); }
+.chip.sw::before { content: ""; display: inline-block; width: 9px; height: 9px; margin-right: 6px; background: var(--sw, var(--mute)); vertical-align: -1px; }
+.chip.sw[aria-pressed="true"]::before { outline: 1px solid var(--bg); }
+.note { position: absolute; left: max(12px, env(safe-area-inset-left, 0px)); bottom: 8px; font-size: 11.5px; color: var(--mute);
+  background: color-mix(in srgb, var(--panel) 88%, transparent); padding: 3px 8px; border: 1px solid var(--line); max-width: calc(100% - 24px); }
+#tip { position: absolute; pointer-events: none; background: var(--panel); border: 1px solid var(--line); padding: 6px 9px; font-size: 12.5px; max-width: 280px; display: none; z-index: 3; }
+#tip b { font-weight: 600; }
+.mono { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+#sheet { flex: 0 0 auto; max-height: 46%; overflow: auto; background: var(--panel); border-top: 1px solid var(--line);
+  padding: 10px max(16px, env(safe-area-inset-left, 0px)) 12px max(16px, env(safe-area-inset-right, 0px)); }
+#sheet h2 { font-size: 14px; margin: 0 0 6px; font-weight: 600; }
+#sheet .sub { color: var(--mute); font-size: 12.5px; margin-bottom: 8px; }
+#profile { width: 100%; height: 150px; display: block; }
+table { border-collapse: collapse; width: 100%; font-size: 12.5px; }
+th, td { text-align: left; padding: 3px 10px 3px 0; border-bottom: 1px solid var(--line); white-space: nowrap; }
+th { color: var(--mute); font-weight: 500; }
+.tblwrap { overflow-x: auto; margin-top: 8px; }
+.tag { display: inline-block; padding: 0 5px; font-size: 11px; color: var(--bg); background: var(--tc, var(--mute)); }
+.empty { color: var(--mute); }
+.err { padding: 14px; color: var(--warn); }
+@media (max-width: 640px) { h1 { font-size: 13px; } .chip { padding: 5px 8px; } #sheet { max-height: 52%; } }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<div id="app">
+  <div id="stage">
+    <canvas id="map" aria-label="World map with terrain, airspace and the test routes"></canvas>
+    <div class="bar">
+      <h1>FlightTempo World</h1>
+      <div class="group" id="legs" role="group" aria-label="Route"></div>
+      <div class="group" id="layers" role="group" aria-label="Layers"></div>
+    </div>
+    <div id="tip"></div>
+    <div class="note" id="note">Loading world data…</div>
+  </div>
+  <div id="sheet"><div class="empty">Choose a leg above to see the terrain under the route and the airspace it crosses.</div></div>
+</div>
+
+<script>
+(() => {
+  const NM = 60, FT = 3.28084;
+  const el = id => document.getElementById(id);
+  const cv = el("map"), ctx = cv.getContext("2d");
+  const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+  let D = null, terrain = null, view = { lon: 10, lat: 25, s: 3 }, sel = null, W = 0, H = 0, dpr = 1;
+  const layers = { terrain: true, coast: true, ofma: true, openaip: true, routes: true, airports: true };
+  const groups = { ctl: true, res: true, oth: true };
+  const CTL = new Set(["CTR", "TMA", "CTA", "ATZ", "MCTR", "LTA", "UTA", "TIZ", "TIA", "MATZ", "ACC_SECTOR", "C", "D", "E", "B", "A", "CLASS_B", "CLASS_C", "CLASS_D", "CLASS_E"]);
+  const RES = new Set(["R", "D", "P", "TSA", "TRA", "DANGER", "RESTRICTED", "PROHIBITED", "WARNING", "ALERT", "TFR", "PROTECTED", "HTZ", "MRT"]);
+  const grp = f => CTL.has(f.type) ? "ctl" : RES.has(f.type) ? "res" : "oth";
+  const X = lon => (lon - view.lon) * view.s + W / 2, Y = lat => (view.lat - lat) * view.s + H / 2;
+  const lonAt = x => (x - W / 2) / view.s + view.lon, latAt = y => view.lat - (y - H / 2) / view.s;
+
+  function vtxt(v) {
+    if (!v || v.ft == null) return "?";
+    if (v.ref === "GND") return "GND";
+    if (v.ref === "FL") return "FL" + String(Math.round(v.ft / 100)).padStart(3, "0");
+    return v.ft + " ft " + v.ref;
+  }
+  const fitW = () => { view.s = Math.max(W / 360, 1.2); };
+  function clamp() {
+    view.s = Math.min(Math.max(view.s, Math.max(W / 360, 1)), 400);
+    view.lat = Math.min(Math.max(view.lat, -60), 84);
+  }
+
+  function resize() {
+    dpr = window.devicePixelRatio || 1;
+    const r = cv.getBoundingClientRect(); W = r.width; H = r.height;
+    cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
+    clamp(); draw();
+  }
+
+  async function buildTerrain() {
+    const img = new Image(); img.src = D.terrain.png;
+    await img.decode();
+    const c = document.createElement("canvas"); c.width = img.width; c.height = img.height;
+    const g = c.getContext("2d", { willReadFrequently: true }); g.drawImage(img, 0, 0);
+    const src = g.getImageData(0, 0, c.width, c.height), out = g.createImageData(c.width, c.height);
+    const dark = matchMedia("(prefers-color-scheme: dark)").matches && document.documentElement.dataset.theme !== "light" || document.documentElement.dataset.theme === "dark";
+    const stops = dark
+      ? [[0, [26, 38, 34]], [300, [46, 66, 52]], [1200, [92, 98, 66]], [2500, [134, 116, 86]], [4000, [176, 160, 140]], [6500, [232, 232, 236]]]
+      : [[0, [230, 227, 214]], [300, [196, 212, 170]], [1200, [214, 202, 150]], [2500, [190, 150, 110]], [4000, [160, 130, 112]], [6500, [250, 250, 252]]];
+    const sea = dark ? [11, 26, 34] : [207, 220, 224];
+    const lut = new Array(256);
+    for (let p = 0; p < 256; p++) {
+      const m = (p * Math.sqrt(D.terrain.maxM) / 255) ** 2;
+      if (p === 0) { lut[p] = sea; continue; }
+      let a = stops[0], b = stops[stops.length - 1];
+      for (let i = 0; i < stops.length - 1; i++) if (m >= stops[i][0] && m <= stops[i + 1][0]) { a = stops[i]; b = stops[i + 1]; break; }
+      const t = Math.min(1, Math.max(0, (m - a[0]) / (b[0] - a[0] || 1)));
+      lut[p] = a[1].map((v, k) => v + (b[1][k] - v) * t);
+    }
+    for (let i = 0; i < src.data.length; i += 4) {
+      const c3 = lut[src.data[i]]; out.data[i] = c3[0]; out.data[i + 1] = c3[1]; out.data[i + 2] = c3[2]; out.data[i + 3] = 255;
+    }
+    g.putImageData(out, 0, 0); terrain = c;
+  }
+
+  function path(ring) {
+    ctx.beginPath();
+    let prev = null;
+    for (const [la, lo] of ring) {
+      const x = X(lo), y = Y(la);
+      if (prev === null || Math.abs(lo - prev) > 180) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+      prev = lo;
+    }
+  }
+
+  function draw() {
+    if (!D) return;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.fillStyle = css("--sea"); ctx.fillRect(0, 0, W, H);
+    if (layers.terrain && terrain) {
+      ctx.imageSmoothingEnabled = view.s < 40;
+      ctx.drawImage(terrain, X(-180), Y(D.terrain.latTop), 360 * view.s, (D.terrain.latTop - D.terrain.latBottom) * view.s);
+    }
+    if (layers.coast) {
+      ctx.strokeStyle = css("--coast"); ctx.lineWidth = 0.8;
+      for (const ring of D.land) { path(ring); ctx.stroke(); }
+    }
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = css("--line"); ctx.globalAlpha = .35;
+    const step = view.s > 20 ? 1 : view.s > 6 ? 5 : 15;
+    for (let lo = -180; lo <= 180; lo += step) { ctx.beginPath(); ctx.moveTo(X(lo), 0); ctx.lineTo(X(lo), H); ctx.stroke(); }
+    for (let la = -60; la <= 84; la += step) { ctx.beginPath(); ctx.moveTo(0, Y(la)); ctx.lineTo(W, Y(la)); ctx.stroke(); }
+    ctx.globalAlpha = 1;
+    drawAirspace();
+    if (layers.routes) drawRoutes();
+    if (layers.airports) drawAirports();
+  }
+
+  const colour = f => css(grp(f) === "ctl" ? "--ctl" : grp(f) === "res" ? "--res" : "--oth");
+  function visible(f) {
+    if (!groups[grp(f)]) return false;
+    return f.src === "OFMA" ? layers.ofma : layers.openaip;
+  }
+  function drawAirspace() {
+    if (!(layers.ofma || layers.openaip)) return;
+    ctx.lineWidth = 1.2;
+    for (const f of D.airspace) {
+      if (!visible(f)) continue;
+      const c = colour(f);
+      for (const ring of f.rings) {
+        path(ring); ctx.closePath();
+        ctx.globalAlpha = .16; ctx.fillStyle = c; ctx.fill();
+        ctx.globalAlpha = .85; ctx.strokeStyle = c; ctx.stroke();
+      }
+    }
+    ctx.globalAlpha = 1;
+  }
+  function drawRoutes() {
+    D.legs.forEach((l, i) => {
+      const on = sel === null || sel === i;
+      path(l.points);
+      ctx.lineWidth = on ? 2.4 : 1.4; ctx.strokeStyle = on ? css("--route") : css("--route-dim");
+      ctx.stroke();
+      if (on && sel !== null) {
+        ctx.setLineDash([4, 4]); ctx.lineWidth = 1; ctx.globalAlpha = .6;
+        ctx.stroke(); ctx.setLineDash([]); ctx.globalAlpha = 1;
+      }
+    });
+  }
+  function drawAirports() {
+    ctx.font = "600 11.5px " + css("--mono"); ctx.textBaseline = "middle";
+    for (const [code, a] of Object.entries(D.airports)) {
+      const x = X(a.lon), y = Y(a.lat);
+      ctx.fillStyle = css("--route"); ctx.strokeStyle = css("--bg"); ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.arc(x, y, 4.5, 0, 7); ctx.fill(); ctx.stroke();
+      ctx.fillStyle = css("--ink"); ctx.strokeStyle = css("--sea"); ctx.lineWidth = 3;
+      ctx.strokeText(code, x + 8, y); ctx.fillText(code, x + 8, y);
+    }
+  }
+
+  /* point in polygon */
+  function inside(la, lo, ring) {
+    let c = false;
+    for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+      const [ya, xa] = ring[i], [yb, xb] = ring[j];
+      if ((ya > la) !== (yb > la) && lo < (xb - xa) * (la - ya) / (yb - ya) + xa) c = !c;
+    }
+    return c;
+  }
+  const hit = (la, lo) => D.airspace.filter(f => visible(f) && f.rings.some(r => inside(la, lo, r)));
+
+  /* sheet */
+  function showLeg(i) {
+    const l = D.legs[i], s = el("sheet");
+    const peak = l.profile.reduce((m, p) => p.m != null && p.m > m.m ? p : m, { m: -1, nm: 0 });
+    const crossings = [];
+    for (const f of D.airspace) {
+      if (!visible(f)) continue;
+      let from = null, to = null;
+      l.points.forEach((p, k) => {
+        if (f.rings.some(r => inside(p[0], p[1], r))) { const nm = l.profile[k] ? l.profile[k].nm : k * 10; if (from === null) from = nm; to = nm; }
+      });
+      if (from !== null) crossings.push({ f, from, to });
+    }
+    crossings.sort((a, b) => a.from - b.from);
+    s.innerHTML = `<h2>${l.from} → ${l.to} <span class="mono" style="font-weight:400;color:var(--mute)">${l.nm.toLocaleString()} NM</span></h2>
+      <div class="sub">Highest terrain within ${D.corridorNm} NM either side: <b class="mono">${peak.m < 0 ? "no data" : Math.round(peak.m * FT).toLocaleString() + " ft"}</b>${peak.m >= 0 ? ` at ${peak.nm} NM` : ""}. The dashed line adds the 1,000 ft buffer.</div>
+      <canvas id="profile"></canvas>
+      <div class="tblwrap">${crossings.length ? `<table><thead><tr><th>Airspace</th><th>Type</th><th>Class</th><th>Floor</th><th>Ceiling</th><th>On route (NM)</th><th>Source</th></tr></thead><tbody>${
+        crossings.slice(0, 80).map(c => `<tr><td>${esc(c.f.name || "(unnamed)")}</td><td><span class="tag" style="--tc:${colour(c.f)}">${esc(c.f.type)}</span></td><td>${esc(c.f.cls || "")}</td><td class="mono">${vtxt(c.f.lo)}</td><td class="mono">${vtxt(c.f.hi)}</td><td class="mono">${c.from}–${c.to}</td><td>${c.f.src}</td></tr>`).join("")
+      }</tbody></table>` : `<div class="empty">No airspace from the loaded layers lies on this leg. Oceanic and remote stretches are not covered by these sources.</div>`}</div>`;
+    drawProfile(l);
+  }
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+  function drawProfile(l) {
+    const c = el("profile"), r = c.getBoundingClientRect(), g = c.getContext("2d");
+    c.width = r.width * dpr; c.height = r.height * dpr; g.setTransform(dpr, 0, 0, dpr, 0, 0);
+    const w = r.width, h = r.height, L = 46, B = 18, T = 6, R = 6;
+    const ft = l.profile.map(p => p.m == null ? null : p.m * FT);
+    const top = Math.max(2000, ...ft.filter(v => v != null).map(v => v + 1000)) * 1.1;
+    const ax = nm => L + nm / l.nm * (w - L - R), ay = v => h - B - v / top * (h - B - T);
+    g.font = "11px " + css("--mono"); g.textBaseline = "middle"; g.fillStyle = css("--mute"); g.strokeStyle = css("--line"); g.lineWidth = 1;
+    const tick = top > 20000 ? 10000 : top > 8000 ? 4000 : 2000;
+    for (let v = 0; v <= top; v += tick) { g.beginPath(); g.moveTo(L, ay(v)); g.lineTo(w - R, ay(v)); g.stroke(); g.textAlign = "right"; g.fillText(v.toLocaleString(), L - 5, ay(v)); }
+    g.textAlign = "center"; g.textBaseline = "top";
+    for (let nm = 0; nm <= l.nm; nm += l.nm > 4000 ? 1000 : 500) g.fillText(nm, ax(nm), h - B + 4);
+    const series = (add) => { g.beginPath(); let started = false; l.profile.forEach((p, k) => { if (ft[k] == null) { started = false; return; } const x = ax(p.nm), y = ay(ft[k] + add); if (!started) { g.moveTo(x, y); started = true; } else g.lineTo(x, y); }); };
+    series(0); g.lineTo(ax(l.profile[l.profile.length - 1].nm), ay(0)); g.lineTo(ax(0), ay(0)); g.closePath();
+    g.globalAlpha = .35; g.fillStyle = css("--oth"); g.fill(); g.globalAlpha = 1;
+    series(0); g.strokeStyle = css("--oth"); g.lineWidth = 1.6; g.stroke();
+    series(1000); g.setLineDash([5, 4]); g.strokeStyle = css("--res"); g.lineWidth = 1.2; g.stroke(); g.setLineDash([]);
+  }
+
+  /* interaction */
+  const ptrs = new Map(); let last = null, pinch = null, moved = false;
+  cv.addEventListener("pointerdown", e => { cv.setPointerCapture(e.pointerId); ptrs.set(e.pointerId, [e.clientX, e.clientY]); moved = false; cv.classList.add("drag"); if (ptrs.size === 2) { const [a, b] = [...ptrs.values()]; pinch = { d: Math.hypot(a[0] - b[0], a[1] - b[1]), s: view.s }; } });
+  cv.addEventListener("pointermove", e => {
+    const r = cv.getBoundingClientRect();
+    if (ptrs.has(e.pointerId)) {
+      const p = ptrs.get(e.pointerId), dx = e.clientX - p[0], dy = e.clientY - p[1];
+      ptrs.set(e.pointerId, [e.clientX, e.clientY]);
+      if (ptrs.size === 2 && pinch) { const [a, b] = [...ptrs.values()]; view.s = pinch.s * Math.hypot(a[0] - b[0], a[1] - b[1]) / pinch.d; }
+      else { view.lon -= dx / view.s; view.lat += dy / view.s; }
+      if (Math.abs(dx) + Math.abs(dy) > 1) moved = true;
+      clamp(); draw(); tip(null);
+    } else if (e.pointerType === "mouse") hover(e.clientX - r.left, e.clientY - r.top);
+  });
+  const up = e => { ptrs.delete(e.pointerId); pinch = null; if (!ptrs.size) cv.classList.remove("drag"); };
+  cv.addEventListener("pointerup", e => { if (!moved) click(e.clientX - cv.getBoundingClientRect().left, e.clientY - cv.getBoundingClientRect().top); up(e); });
+  cv.addEventListener("pointercancel", up);
+  cv.addEventListener("wheel", e => {
+    e.preventDefault();
+    const r = cv.getBoundingClientRect(), x = e.clientX - r.left, y = e.clientY - r.top, la = latAt(y), lo = lonAt(x);
+    view.s *= Math.exp(-e.deltaY * 0.0015); clamp();
+    view.lon = lo - (x - W / 2) / view.s; view.lat = la + (y - H / 2) / view.s; clamp(); draw();
+  }, { passive: false });
+  function tip(html, x, y) {
+    const t = el("tip");
+    if (!html) { t.style.display = "none"; return; }
+    t.innerHTML = html; t.style.display = "block";
+    t.style.left = Math.min(W - 290, x + 14) + "px"; t.style.top = Math.min(H - 80, y + 14) + "px";
+  }
+  function describe(la, lo) {
+    const hs = hit(la, lo).slice(0, 6);
+    const cell = terrainAt(la, lo);
+    let h = `<span class="mono">${la.toFixed(2)}°, ${lo.toFixed(2)}°</span>`;
+    if (cell != null) h += ` · terrain up to <b class="mono">${Math.round(cell * FT).toLocaleString()} ft</b>`;
+    for (const f of hs) h += `<br><span class="tag" style="--tc:${colour(f)}">${esc(f.type)}</span> <b>${esc(f.name || "(unnamed)")}</b> <span class="mono">${vtxt(f.lo)}–${vtxt(f.hi)}</span>`;
+    return h;
+  }
+  let tctx = null;
+  function terrainAt(la, lo) {
+    if (!terrain || la > D.terrain.latTop || la < D.terrain.latBottom) return null;
+    if (!tctx) { tctx = document.createElement("canvas"); tctx.width = 1; tctx.height = 1; }
+    return D._h ? D._h(la, lo) : null;
+  }
+  function hover(x, y) { tip(describe(latAt(y), lonAt(x)), x, y); }
+  function click(x, y) {
+    const la = latAt(y), lo = lonAt(x);
+    tip(describe(la, lo), x, y);
+  }
+
+  function zoomTo(pts) {
+    const la = pts.map(p => p[0]), lo = pts.map(p => p[1]);
+    const a = Math.min(...la), b = Math.max(...la), c = Math.min(...lo), d = Math.max(...lo);
+    if (d - c > 180) { fitW(); view.lon = 0; view.lat = 25; return; }
+    view.lat = (a + b) / 2; view.lon = (c + d) / 2;
+    view.s = Math.min(W / Math.max(d - c, 2) * .8, (H) / Math.max(b - a, 2) * .8);
+    clamp();
+  }
+
+  function chip(parent, label, pressed, on, cls, sw) {
+    const b = document.createElement("button"); b.className = "chip" + (cls ? " " + cls : ""); b.textContent = label; b.type = "button";
+    b.setAttribute("aria-pressed", pressed); if (sw) b.style.setProperty("--sw", sw);
+    b.addEventListener("click", () => { on(b); }); parent.appendChild(b); return b;
+  }
+  function ui() {
+    const lg = el("legs"); const btns = [];
+    const set = i => { sel = i; btns.forEach((b, k) => b.setAttribute("aria-pressed", k - 1 === i)); if (i === null) { fitW(); view.lon = 0; view.lat = 25; el("sheet").innerHTML = '<div class="empty">Choose a leg above to see the terrain under the route and the airspace it crosses.</div>'; } else { zoomTo(D.legs[i].points); showLeg(i); } clamp(); draw(); };
+    btns.push(chip(lg, "World", true, () => set(null)));
+    D.legs.forEach((l, i) => btns.push(chip(lg, `${l.from}–${l.to}`, false, () => set(i))));
+    const ly = el("layers");
+    const tog = (key, label, sw) => chip(ly, label, layers[key], b => { layers[key] = !layers[key]; b.setAttribute("aria-pressed", layers[key]); draw(); if (sel !== null) showLeg(sel); }, sw ? "sw" : "", sw);
+    tog("terrain", "Terrain"); tog("coast", "Coast");
+    const gt = (key, label, v) => chip(ly, label, groups[key], b => { groups[key] = !groups[key]; b.setAttribute("aria-pressed", groups[key]); draw(); if (sel !== null) showLeg(sel); }, "sw", `var(${v})`);
+    gt("ctl", "Controlled", "--ctl"); gt("res", "Restricted", "--res"); gt("oth", "Other", "--oth");
+    tog("ofma", "OFMA"); tog("openaip", "openAIP (test)"); tog("routes", "Routes"); tog("airports", "Airports");
+  }
+
+  async function init() {
+    try {
+      D = await (await fetch("viewer_data.json")).json();
+    } catch (e) {
+      el("note").textContent = "World data is not published yet.";
+      el("sheet").innerHTML = '<div class="err">viewer_data.json could not be loaded. Run the “Build world viewer data” workflow in the flighttempo-data repository, then republish.</div>';
+      return;
+    }
+    // height lookup from the terrain png
+    const img = new Image(); img.src = D.terrain.png; await img.decode();
+    const hc = document.createElement("canvas"); hc.width = img.width; hc.height = img.height;
+    const hg = hc.getContext("2d", { willReadFrequently: true }); hg.drawImage(img, 0, 0);
+    const px = hg.getImageData(0, 0, hc.width, hc.height).data;
+    D._h = (la, lo) => {
+      const r = Math.floor((D.terrain.latTop - la) * D.terrain.cellsPerDegree), c = Math.floor((lo + 180) * D.terrain.cellsPerDegree);
+      if (r < 0 || c < 0 || r >= hc.height || c >= hc.width) return null;
+      const p = px[(r * hc.width + c) * 4]; return (p * Math.sqrt(D.terrain.maxM) / 255) ** 2;
+    };
+    await buildTerrain();
+    ui(); resize(); fitW(); view.lon = 0; view.lat = 25; clamp(); draw();
+    el("note").textContent = D.notices[0].split(";")[0] + " · " + D.notices[2];
+    el("note").title = D.notices.join("\n\n");
+  }
+  addEventListener("resize", resize);
+  matchMedia("(prefers-color-scheme: dark)").addEventListener("change", async () => { if (D) { await buildTerrain(); draw(); } });
+  init();
+})();
+</script>
