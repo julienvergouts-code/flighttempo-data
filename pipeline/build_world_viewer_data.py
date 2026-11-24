@@ -62,13 +62,15 @@ def iter_tiles(src: Path):
         yield f.read_bytes()
 
 
-def build_overview(src: Path) -> tuple[np.ndarray, int]:
+def build_overview(src: Path, keep: set | None = None, kept: dict | None = None) -> tuple[np.ndarray, int]:
     rows, cols = (LAT_TOP - LAT_BOTTOM) * CPD, 360 * CPD
     heights = np.zeros((rows, cols), dtype=np.int16)
     n = 0
     block = tt.CELLS // CPD
     for data in iter_tiles(src):
         lat0, lon0, grid = tt.decode_tile(data)
+        if keep is not None and kept is not None and (lat0, lon0) in keep:
+            kept[(lat0, lon0)] = grid
         if not (LAT_BOTTOM <= lat0 < LAT_TOP):
             continue
         small = grid.reshape(CPD, block, CPD, block).max(axis=(1, 3))
@@ -77,6 +79,50 @@ def build_overview(src: Path) -> tuple[np.ndarray, int]:
         heights[r0:r0 + CPD, c0:c0 + CPD] = small
         n += 1
     return heights, n
+
+
+AIRPORT_HALF_DEG = 0.5
+HEIGHT_OFFSET = 500   # airport PNG: value = metres + 500, stored as 16 bit in the red (high) and green (low) bytes
+
+
+def airport_tile_ids(lat: float, lon: float) -> set[tuple[int, int]]:
+    ids = set()
+    for la in (lat - AIRPORT_HALF_DEG, lat + AIRPORT_HALF_DEG - 1e-9):
+        for lo in (lon - AIRPORT_HALF_DEG, lon + AIRPORT_HALF_DEG - 1e-9):
+            ids.add((math.floor(la), math.floor(lo)))
+    return ids
+
+
+def airport_window(tiles: dict, lat: float, lon: float) -> np.ndarray | None:
+    """400 x 400 window (1 degree square, about 280 m cells) centred on the airport; None if no tile is present."""
+    n = tt.CELLS
+    out = np.zeros((n, n), dtype=np.int16)
+    found = False
+    for i in range(n):
+        la = lat + AIRPORT_HALF_DEG - (i + 0.5) / n
+        for_row = None
+        for j in range(n):
+            lo = lon - AIRPORT_HALF_DEG + (j + 0.5) / n
+            g = tiles.get((math.floor(la), math.floor(lo)))
+            if g is None:
+                continue
+            found = True
+            out[i, j] = tt.cell_at(g, math.floor(la), math.floor(lo), la, lo)
+    return out if found else None
+
+
+def png_rgb16(arr: np.ndarray) -> bytes:
+    v = np.clip(arr.astype(np.int32) + HEIGHT_OFFSET, 0, 65535)
+    rgb = np.zeros(arr.shape + (3,), dtype=np.uint8)
+    rgb[..., 0], rgb[..., 1] = v >> 8, v & 255
+    h, w = arr.shape
+    raw = b"".join(b"\x00" + rgb[r].tobytes() for r in range(h))
+
+    def chunk(kind: bytes, body: bytes) -> bytes:
+        c = struct.pack(">I", len(body)) + kind + body
+        return c + struct.pack(">I", zlib.crc32(kind + body) & 0xFFFFFFFF)
+    return (b"\x89PNG\r\n\x1a\n" + chunk(b"IHDR", struct.pack(">IIBBBBB", w, h, 8, 2, 0, 0, 0))
+            + chunk(b"IDAT", zlib.compress(raw, 9)) + chunk(b"IEND", b""))
 
 
 def gc_points(a, b, step_nm: float) -> list[tuple[float, float]]:
@@ -170,7 +216,17 @@ def build(src: Path, out: Path, root: Path = ROOT) -> dict:
     cfg = json.loads((root / "data/viewer_routes.json").read_text())
     airports = cfg["airports"]
     out.mkdir(parents=True, exist_ok=True)
-    heights, tiles = build_overview(src)
+    need = set()
+    for a in airports.values():
+        need |= airport_tile_ids(a["lat"], a["lon"])
+    kept: dict = {}
+    heights, tiles = build_overview(src, need, kept)
+    for code, a in airports.items():
+        win = airport_window(kept, a["lat"], a["lon"])
+        if win is not None:
+            (out / f"airport_{code}.png").write_bytes(png_rgb16(win))
+            a["tile"] = {"png": f"airport_{code}.png", "cells": tt.CELLS, "halfDeg": AIRPORT_HALF_DEG, "offsetM": HEIGHT_OFFSET,
+                         "encoding": "metres = red*256 + green - offsetM"}
     (out / "world_terrain.png").write_bytes(png_gray(encode_height(heights)))
     legs, lines = [], []
     for a, b in cfg["legs"]:
