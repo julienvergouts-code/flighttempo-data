@@ -7,8 +7,10 @@ from datetime import date, datetime, timezone
 from pathlib import Path
 
 try:
+    from . import layer_toggles
     from .commercial_rights import personal_scope_active, redistribution_block_reason
 except ImportError:
+    import layer_toggles
     from commercial_rights import personal_scope_active, redistribution_block_reason
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -199,6 +201,7 @@ def enforce(manifest_path: Path = MANIFEST, today: date | None = None) -> list[s
         | {"Aero.Sors derivatives: redistribution not confirmed",
            "OpenAIP FIR geometry and derived filter: CC BY-NC 4.0"}
     )
+    layer_toggles.apply(manifest)
     manifest_path.write_text(
         json.dumps(manifest, indent=2, ensure_ascii=False) + "\n",
         encoding="utf-8",

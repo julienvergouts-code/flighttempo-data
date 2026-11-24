@@ -1,6 +1,6 @@
 {
   "schemaVersion": 13,
-  "generatedAtUtc": "2026-11-24T12:06:32.357505+00:00",
+  "generatedAtUtc": "2026-11-24T12:08:45Z",
   "procedureAiracCycle": "2611",
   "navaidTypeCounts": {
     "DME": 167,
@@ -167,27 +167,19 @@
     "siaFranceAirwaySegments": true,
     "siaFranceAirspace": true
   },
-  "procedureCoverageStatus": "FAA_US_NAS_ONLY_TEST_DATA; EUROPE_FRANCE_SOURCE_NOT_INGESTED; ASIA_NO_PUBLIC_REDISTRIBUTABLE_SOURCE_CONFIRMED",
+  "procedureCoverageStatus": "FAA_US_NAS_CYCLE_PINNED; FRANCE_SIA_PARTIAL_CURRENT_SIDS_STARS; NO_COMPLETE_WORLDWIDE_IFR_PROCEDURES",
   "procedureOperationalUse": false,
   "procedureSourceRegistryVersion": 1,
   "procedureSourceRegistryCheckedAtUtc": "2026-11-23",
   "regionalProcedureCoverage": {
     "europe": {
-      "status": "partial_current_cycle_imported",
+      "status": "partial_current_france_sia_ingested",
       "operationallyAvailable": false,
-      "summary": "French eAIP DATA procedure tables are partially imported under confirmed commercial redistribution terms (7,988 SID/STAR rows from 239 of 380 source documents; 62.89% document coverage in the recorded audit). France remains partial. Belgium and Germany have no redistributable IFR procedure data confirmed; both are blocked pending product-specific licensing or written permission.",
+      "summary": "France SID/STAR reference legs were extracted from 239 of 380 current SIA eAIP DATA sheets under its commercial-use Open Licence. Unsupported sheets are listed in source metadata and excluded; no complete Europe-wide IFR database is available.",
       "confirmedProcedureCountries": [
         "FR"
       ],
-      "candidateProcedureCountries": [
-        "BE",
-        "DE",
-        "PL",
-        "HU",
-        "CZ",
-        "IE",
-        "GB"
-      ],
+      "candidateProcedureCountries": [],
       "vfrOnlyProviders": [
         "OpenFlightMaps"
       ],
@@ -318,58 +310,6 @@
           "notes": "Do not redistribute UK terminal procedures until the applicable Crown Copyright / NATS licence for extracted procedure data is verified."
         },
         {
-          "id": "FR_SIA_EAIP_DATA_PDFS",
-          "jurisdiction": "FR",
-          "provider": "Service de l'Information Aeronautique (SIA France)",
-          "sourceUrl": "https://www.sia.aviation-civile.gouv.fr/media/dvd/eAIP_29_OCT_2026/FRANCE/AIRAC-2026-10-29/html/eAIP/Cartes/",
-          "indexUrl": "https://www.sia.aviation-civile.gouv.fr/media/dvd/eAIP_29_OCT_2026/FRANCE/AIRAC-2026-10-29/pdf/FR-GEN-0.4-fr-FR.pdf",
-          "format": [
-            "PDF DATA tables embedded in official eAIP chart package"
-          ],
-          "procedureScope": [
-            "RNAV SIDs",
-            "RNAV STARs",
-            "RNP approach DATA tables where complete non-FNA sheets are published"
-          ],
-          "license": "SIA Licence Ouverte / Open Licence",
-          "redistribution": "commercial_public_redistribution",
-          "licenseStatus": "verified_exact_eAIP_product_linked_to_open_license",
-          "attribution": "Service de l'Information Aeronautique (SIA France); include source and last update date; do not imply SIA endorsement.",
-          "cycle": "11/26",
-          "effectiveDate": "2026-10-29",
-          "expiryDate": "2026-11-25",
-          "sourceStatus": "official_eAIP_DATA_procedure_source_commercial_reuse_confirmed",
-          "dataStatus": "partial_current_cycle_imported",
-          "exampleSources": [
-            {
-              "id": "LFPG_SID",
-              "airport": "LFPG",
-              "file": "AD_2_LFPG_DATA_SID_RWY26L-26R_RNAV_CODE_02.pdf",
-              "documentDate": "2026-10-01",
-              "url": "https://www.sia.aviation-civile.gouv.fr/media/dvd/eAIP_29_OCT_2026/FRANCE/AIRAC-2026-10-29/html/eAIP/Cartes/LFPG/AD_2_LFPG_DATA_SID_RWY26L-26R_RNAV_CODE_02.pdf"
-            },
-            {
-              "id": "LFPG_STAR",
-              "airport": "LFPG",
-              "file": "AD_2_LFPG_DATA_STAR_RWY26L_RNAV_CODE_02.pdf",
-              "documentDate": "2026-06-11",
-              "url": "https://www.sia.aviation-civile.gouv.fr/media/dvd/eAIP_29_OCT_2026/FRANCE/AIRAC-2026-10-29/html/eAIP/Cartes/LFPG/AD_2_LFPG_DATA_STAR_RWY26L_RNAV_CODE_02.pdf"
-            }
-          ],
-          "notes": "The exact free eAIP ZIP product page links its licence to the SIA Open Licence. The SIA free-disposition catalogue says every product in its subcategories is under that licence except UAS-zone data. The licence explicitly permits commercial reuse, extraction, adaptation, derivative products and redistribution worldwide, subject to attribution (SIA and last update date) and not distorting the information. Current GEN 0.4 index lists DATA SID/STAR files; parser output remains reference-only and must retain AIRAC, per-file hashes and source links.",
-          "licenseUrl": "https://www.sia.aviation-civile.gouv.fr/produits-numeriques-en-libre-disposition.html",
-          "commercialUseAllowed": true,
-          "recordCount": 7988,
-          "procedureTypeCounts": {
-            "SID": 4665,
-            "STAR": 3323
-          },
-          "sourceDocumentCount": 380,
-          "parsedDocumentCount": 239,
-          "skippedDocumentCount": 141,
-          "documentCoverageRatio": 0.6289
-        },
-        {
           "id": "BE_SKEYES_AIP",
           "jurisdiction": "BE",
           "provider": "AIM Belgium / skeyes",
@@ -449,6 +389,41 @@
           "sourceStatus": "candidate_official_AIP_open_product",
           "dataStatus": "not_imported",
           "notes": "PAC-P AIP is separately published by SIA. Do not assume the main SIA open-product licence applies to this exact PAC-P package until product catalogue/terms explicitly confirm coverage. Verify current AIRAC and product scope, then parser support."
+        },
+        {
+          "id": "FR_SIA_EAIP_DATA_PDFS",
+          "jurisdiction": "FR",
+          "provider": "Service de l'Information Aeronautique (SIA France)",
+          "sourceUrl": "https://www.sia.aviation-civile.gouv.fr/media/dvd/eAIP_29_OCT_2026/FRANCE/AIRAC-2026-10-29/pdf/FR-GEN-0.4-fr-FR.pdf",
+          "format": [
+            "official eAIP GEN 0.4 index",
+            "PDF DATA SID/STAR tables"
+          ],
+          "procedureScope": [
+            "SIDs",
+            "STARs"
+          ],
+          "license": "SIA Licence Ouverte / Open Licence",
+          "licenseUrl": "https://www.sia.aviation-civile.gouv.fr/produits-numeriques-en-libre-disposition.html",
+          "redistribution": "commercial_public_redistribution",
+          "licenseStatus": "verified_exact_eAIP_product_linked_to_open_license",
+          "attribution": "Service de l'Information Aeronautique (SIA France); include source and last update date; do not imply SIA endorsement.",
+          "cycle": "2026-10-29",
+          "effectiveDate": "2026-10-29",
+          "expiryDate": "2026-11-25",
+          "sourceStatus": "official_eAIP_DATA_procedure_source_commercial_reuse_confirmed",
+          "dataStatus": "partial_current_cycle_imported",
+          "recordCount": 7988,
+          "procedureTypeCounts": {
+            "SID": 4665,
+            "STAR": 3323
+          },
+          "sourceDocumentCount": 380,
+          "parsedDocumentCount": 239,
+          "skippedDocumentCount": 141,
+          "documentCoverageRatio": 0.6289,
+          "operationallyAvailable": false,
+          "notes": "Do not treat regional reference procedure legs as an approved operational navigation database."
         }
       ]
     },
@@ -1361,6 +1336,30 @@
       "operationallyAvailable": false,
       "legacyGraphUsed": false,
       "status": "test_phase_not_published_to_app"
+    },
+    {
+      "id": "france_sia_sid_star_legs",
+      "path": "procedures/europe/france/sid_star_legs.csv",
+      "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/procedures/europe/france/sid_star_legs.csv",
+      "available": true,
+      "recordCount": 7988,
+      "sizeBytes": 7133218,
+      "sha256": "0dcfd2d2b2633de45976bb6ec4a10e4a5204a4b01e40505f82be7ba5c7f99f41",
+      "sourceProvider": "Service de l'Information Aeronautique (SIA France)",
+      "sourceUrl": "https://www.sia.aviation-civile.gouv.fr/media/dvd/eAIP_29_OCT_2026/FRANCE/AIRAC-2026-10-29/pdf/FR-GEN-0.4-fr-FR.pdf",
+      "coverage": "France reference coverage: parser extracted 239 of 380 indexed current-cycle DATA SID/STAR sheets.",
+      "license": "SIA Licence Ouverte / Open Licence",
+      "licenseUrl": "https://www.sia.aviation-civile.gouv.fr/produits-numeriques-en-libre-disposition.html",
+      "licenseStatus": "verified_exact_eAIP_product_linked_to_open_license",
+      "commercialUseAllowed": true,
+      "attribution": "Service de l'Information Aeronautique (SIA France); include source and last update date; do not imply SIA endorsement.",
+      "dataCycle": "2026-10-29",
+      "effectiveDate": "2026-10-29",
+      "expiryDate": "2026-11-25",
+      "provenanceVerification": "official_SIA_eAIP_GEN_0_4_index",
+      "downloadPurpose": "regional_reference_only",
+      "operationallyAvailable": false,
+      "status": "partial_current_cycle_regional_reference_dataset"
     }
   ],
   "downloadContract": {
@@ -1500,5 +1499,387 @@
     "flightgearGlideslopeFacilities": 3159,
     "flightgearMarkerBeacons": 3375,
     "flightgearDmeFacilities": 5755
+  },
+  "layers": [
+    {
+      "id": "airports",
+      "label": "Airports and runways",
+      "group": "reference",
+      "datasets": [
+        "ourairports_airports",
+        "runways"
+      ],
+      "availableDatasets": [
+        "ourairports_airports",
+        "runways"
+      ],
+      "unavailableDatasets": [],
+      "userToggle": true,
+      "defaultOn": true,
+      "tier": "commercial_or_public",
+      "recordCount": 133529,
+      "fallbackFor": [],
+      "note": ""
+    },
+    {
+      "id": "navaids_current",
+      "label": "VOR / NDB / DME (current: FAA, France)",
+      "group": "navigation",
+      "datasets": [
+        "faa_nasr_navaids",
+        "sia_france_navaids",
+        "ourairports_navaids"
+      ],
+      "availableDatasets": [
+        "faa_nasr_navaids",
+        "sia_france_navaids",
+        "ourairports_navaids"
+      ],
+      "unavailableDatasets": [],
+      "userToggle": true,
+      "defaultOn": true,
+      "tier": "commercial_or_public",
+      "recordCount": 12710,
+      "fallbackFor": [],
+      "note": ""
+    },
+    {
+      "id": "fixes_current",
+      "label": "Waypoints (current: FAA, France)",
+      "group": "navigation",
+      "datasets": [
+        "faa_nasr_fixes",
+        "sia_france_fixes"
+      ],
+      "availableDatasets": [
+        "faa_nasr_fixes",
+        "sia_france_fixes"
+      ],
+      "unavailableDatasets": [],
+      "userToggle": true,
+      "defaultOn": true,
+      "tier": "commercial_or_public",
+      "recordCount": 71224,
+      "fallbackFor": [],
+      "note": ""
+    },
+    {
+      "id": "airways_current",
+      "label": "Airways (current: FAA, France)",
+      "group": "navigation",
+      "datasets": [
+        "faa_nasr_airway_segments",
+        "sia_france_airway_segments"
+      ],
+      "availableDatasets": [
+        "faa_nasr_airway_segments",
+        "sia_france_airway_segments"
+      ],
+      "unavailableDatasets": [],
+      "userToggle": true,
+      "defaultOn": true,
+      "tier": "commercial_or_public",
+      "recordCount": 18436,
+      "fallbackFor": [],
+      "note": ""
+    },
+    {
+      "id": "navigation_legacy_2012",
+      "label": "World navaids, fixes and airways (2012 fallback)",
+      "group": "navigation",
+      "datasets": [
+        "flightgear_navaids",
+        "flightgear_fixes",
+        "flightgear_airway_segments"
+      ],
+      "availableDatasets": [
+        "flightgear_navaids",
+        "flightgear_fixes",
+        "flightgear_airway_segments"
+      ],
+      "unavailableDatasets": [],
+      "userToggle": true,
+      "defaultOn": true,
+      "tier": "legacy_fallback",
+      "recordCount": 210246,
+      "fallbackFor": [
+        "navaids_current",
+        "fixes_current",
+        "airways_current"
+      ],
+      "note": "Cycle 2012.08. Use only where no current layer covers the area."
+    },
+    {
+      "id": "corridor_graph_2012",
+      "label": "Route corridor graph (2012)",
+      "group": "routing",
+      "datasets": [
+        "world_corridor_graph"
+      ],
+      "availableDatasets": [
+        "world_corridor_graph"
+      ],
+      "unavailableDatasets": [],
+      "userToggle": true,
+      "defaultOn": true,
+      "tier": "legacy_fallback",
+      "recordCount": 156701,
+      "fallbackFor": [],
+      "note": ""
+    },
+    {
+      "id": "procedures",
+      "label": "SIDs and STARs (FAA, France)",
+      "group": "procedures",
+      "datasets": [
+        "sids",
+        "stars",
+        "france_sia_sid_star_legs"
+      ],
+      "availableDatasets": [
+        "sids",
+        "stars",
+        "france_sia_sid_star_legs"
+      ],
+      "unavailableDatasets": [],
+      "userToggle": true,
+      "defaultOn": true,
+      "tier": "commercial_or_public",
+      "recordCount": 85534,
+      "fallbackFor": [],
+      "note": ""
+    },
+    {
+      "id": "approaches",
+      "label": "Approaches",
+      "group": "procedures",
+      "datasets": [
+        "approaches"
+      ],
+      "availableDatasets": [],
+      "unavailableDatasets": [
+        {
+          "id": "approaches",
+          "reason": "The source is public domain, but this procedure import is incomplete and remains in the repository for review."
+        }
+      ],
+      "userToggle": false,
+      "defaultOn": false,
+      "tier": "commercial_or_public",
+      "recordCount": 0,
+      "fallbackFor": [],
+      "note": ""
+    },
+    {
+      "id": "vfr_points",
+      "label": "VFR reporting points (FAA, OFMA)",
+      "group": "vfr",
+      "datasets": [
+        "faa_vfr_reporting_points",
+        "ofma_ofmx_vfr_reference_points"
+      ],
+      "availableDatasets": [
+        "faa_vfr_reporting_points",
+        "ofma_ofmx_vfr_reference_points"
+      ],
+      "unavailableDatasets": [],
+      "userToggle": true,
+      "defaultOn": true,
+      "tier": "commercial_or_public",
+      "recordCount": 5411,
+      "fallbackFor": [],
+      "note": ""
+    },
+    {
+      "id": "airspace_verified",
+      "label": "Airspace: CTR, TMA, restricted (OFMA, France)",
+      "group": "airspace",
+      "datasets": [
+        "ofma_airspace",
+        "sia_france_airspace"
+      ],
+      "availableDatasets": [
+        "ofma_airspace",
+        "sia_france_airspace"
+      ],
+      "unavailableDatasets": [],
+      "userToggle": true,
+      "defaultOn": true,
+      "tier": "commercial_or_public",
+      "recordCount": 35469,
+      "fallbackFor": [],
+      "note": ""
+    },
+    {
+      "id": "airspace_openaip",
+      "label": "Airspace: rest of world (openAIP, test phase)",
+      "group": "airspace",
+      "datasets": [
+        "openaip_airspace"
+      ],
+      "availableDatasets": [
+        "openaip_airspace"
+      ],
+      "unavailableDatasets": [],
+      "userToggle": true,
+      "defaultOn": true,
+      "tier": "personal_use_only",
+      "recordCount": 24644,
+      "fallbackFor": [
+        "airspace_verified"
+      ],
+      "note": "Non-commercial licence. Switch off before any paid release."
+    },
+    {
+      "id": "terrain",
+      "label": "Terrain (Copernicus)",
+      "group": "terrain",
+      "datasets": [
+        "terrain_world",
+        "terrain_tiles"
+      ],
+      "availableDatasets": [
+        "terrain_world",
+        "terrain_tiles"
+      ],
+      "unavailableDatasets": [],
+      "userToggle": true,
+      "defaultOn": true,
+      "tier": "personal_use_only",
+      "recordCount": 21390,
+      "fallbackFor": [],
+      "note": ""
+    },
+    {
+      "id": "airline_data",
+      "label": "Airline profiles and route rules",
+      "group": "reference",
+      "datasets": [
+        "airline_profiles",
+        "route_rules",
+        "global_airline_directory",
+        "route_policy"
+      ],
+      "availableDatasets": [
+        "airline_profiles",
+        "route_rules",
+        "global_airline_directory",
+        "route_policy"
+      ],
+      "unavailableDatasets": [],
+      "userToggle": true,
+      "defaultOn": true,
+      "tier": "commercial_or_public",
+      "recordCount": 3959,
+      "fallbackFor": [],
+      "note": ""
+    },
+    {
+      "id": "advisories_conflict",
+      "label": "Conflict-zone and prohibition advisories (EASA, FAA)",
+      "group": "advisories",
+      "datasets": [
+        "easa_czibs",
+        "easa_safety_directives",
+        "faa_prn_notams"
+      ],
+      "availableDatasets": [],
+      "unavailableDatasets": [
+        {
+          "id": "easa_czibs",
+          "reason": "Commercial redistribution permission is not explicitly verified for this source."
+        },
+        {
+          "id": "easa_safety_directives",
+          "reason": "Commercial redistribution permission is not explicitly verified for this source."
+        },
+        {
+          "id": "faa_prn_notams",
+          "reason": "Commercial redistribution permission is not explicitly verified for this source."
+        }
+      ],
+      "userToggle": false,
+      "defaultOn": false,
+      "tier": "commercial_or_public",
+      "recordCount": 0,
+      "fallbackFor": [],
+      "note": ""
+    },
+    {
+      "id": "observed_routes",
+      "label": "Observed routes from ADS-B (test)",
+      "group": "experimental",
+      "datasets": [
+        "adsb_observed_routes"
+      ],
+      "availableDatasets": [],
+      "unavailableDatasets": [
+        {
+          "id": "adsb_observed_routes",
+          "reason": "test_phase_not_published_to_app"
+        }
+      ],
+      "userToggle": false,
+      "defaultOn": false,
+      "tier": "personal_use_only",
+      "recordCount": 0,
+      "fallbackFor": [],
+      "note": ""
+    },
+    {
+      "id": "airport_reference_enriched",
+      "label": "Airport reference (mixed sources)",
+      "group": "reference",
+      "datasets": [
+        "airport_reference"
+      ],
+      "availableDatasets": [],
+      "unavailableDatasets": [
+        {
+          "id": "airport_reference",
+          "reason": "Commercial redistribution permission is not explicitly verified for this source."
+        }
+      ],
+      "userToggle": false,
+      "defaultOn": false,
+      "tier": "commercial_or_public",
+      "recordCount": 0,
+      "fallbackFor": [],
+      "note": ""
+    }
+  ],
+  "layerPriority": {
+    "airspace": [
+      "sia_france_airspace",
+      "ofma_airspace",
+      "openaip_airspace"
+    ],
+    "navaids": [
+      "faa_nasr_navaids",
+      "sia_france_navaids",
+      "ourairports_navaids",
+      "flightgear_navaids"
+    ],
+    "fixes": [
+      "faa_nasr_fixes",
+      "sia_france_fixes",
+      "flightgear_fixes"
+    ],
+    "airways": [
+      "faa_nasr_airway_segments",
+      "sia_france_airway_segments",
+      "flightgear_airway_segments"
+    ]
+  },
+  "masterSwitches": {
+    "personalUseData": {
+      "layers": [
+        "navigation_legacy_2012",
+        "corridor_graph_2012",
+        "airspace_openaip",
+        "terrain"
+      ],
+      "note": "Data that may only be used personally (non-commercial, legacy or unverified licences). A public or paid build must hide these layers and keep the switch off."
+    }
   }
 }
