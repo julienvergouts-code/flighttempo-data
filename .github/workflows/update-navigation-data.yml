@@ -351,6 +351,8 @@ jobs:
         run: python3 scripts/register_france_sid_star_manifest.py
       - name: Register openAIP airspace layer in navigation manifest
         run: python3 scripts/register_openaip_manifest.py
+      - name: Register openAIP navaids and VFR points in navigation manifest
+        run: python3 scripts/register_openaip_points_manifest.py
       - name: Register SIA France fixes, navaids, airways and airspace in navigation manifest
         run: python3 scripts/register_sia_france_manifest.py
       - name: Register ADS-B observed routes in navigation manifest

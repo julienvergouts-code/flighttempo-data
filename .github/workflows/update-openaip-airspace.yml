@@ -24,7 +24,7 @@ jobs:
         with:
           python-version: '3.12'
       - name: Tests
-        run: python -m unittest tests.test_import_openaip_airspace tests.test_register_openaip_manifest tests.test_personal_use_scope
+        run: python -m unittest tests.test_import_openaip_airspace tests.test_import_openaip_points tests.test_register_openaip_manifest tests.test_personal_use_scope
       - name: Import openAIP airspace (skips cleanly without access)
         id: import
         continue-on-error: true
@@ -32,8 +32,14 @@ jobs:
           ARGS=""
           if [ -n "${{ inputs.country }}" ]; then ARGS="--country ${{ inputs.country }}"; fi
           python pipeline/import_openaip_airspace.py $ARGS
+      - name: Import openAIP navaids and VFR reporting points (skips cleanly without access)
+        id: points
+        continue-on-error: true
+        run: python pipeline/import_openaip_points.py
       - name: Register layer
-        run: python scripts/register_openaip_manifest.py
+        run: |
+          python scripts/register_openaip_manifest.py
+          python scripts/register_openaip_points_manifest.py
       - name: Re-apply cycle and rights gate
         run: python scripts/enforce_app_manifest_rights.py
       - name: Validate manifest datasets
@@ -42,7 +48,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add airspace/openaip navigation_manifest.json
+          git add airspace/openaip navigation/openaip data/openaip_reporting_points.csv navigation_manifest.json
           if git diff --cached --quiet; then echo "No changes."; else
             git commit -m "chore(navdata): update openAIP airspace [skip ci]"
             for attempt in 1 2 3; do
@@ -51,13 +57,15 @@ jobs:
               else
                 git rebase --abort; git reset -q --hard origin/main
                 python pipeline/import_openaip_airspace.py || true
+                python pipeline/import_openaip_points.py || true
                 python scripts/register_openaip_manifest.py
+                python scripts/register_openaip_points_manifest.py
                 python scripts/enforce_app_manifest_rights.py
-                git add airspace/openaip navigation_manifest.json
+                git add airspace/openaip navigation/openaip data/openaip_reporting_points.csv navigation_manifest.json
                 git commit -q -m "chore(navdata): update openAIP airspace [skip ci]" || break
               fi
             done
           fi
       - name: Fail if the importer reported problems
-        if: steps.import.outcome == 'failure'
+        if: steps.import.outcome == 'failure' || steps.points.outcome == 'failure'
         run: exit 1

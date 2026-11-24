@@ -1731,6 +1731,52 @@
       "note": "Non-commercial licence. Switch off before any paid release."
     },
     {
+      "id": "navaids_openaip",
+      "label": "VOR / NDB / DME, rest of world (openAIP, test phase)",
+      "group": "navigation",
+      "datasets": [
+        "openaip_navaids"
+      ],
+      "availableDatasets": [],
+      "unavailableDatasets": [
+        {
+          "id": "openaip_navaids",
+          "reason": "not_in_manifest"
+        }
+      ],
+      "userToggle": false,
+      "defaultOn": false,
+      "tier": "commercial_or_public",
+      "recordCount": 0,
+      "fallbackFor": [
+        "navaids_current"
+      ],
+      "note": "Non-commercial licence. Switch off before any paid release."
+    },
+    {
+      "id": "vfr_points_openaip",
+      "label": "VFR reporting points, rest of world (openAIP, test phase)",
+      "group": "vfr",
+      "datasets": [
+        "openaip_reporting_points"
+      ],
+      "availableDatasets": [],
+      "unavailableDatasets": [
+        {
+          "id": "openaip_reporting_points",
+          "reason": "not_in_manifest"
+        }
+      ],
+      "userToggle": false,
+      "defaultOn": false,
+      "tier": "commercial_or_public",
+      "recordCount": 0,
+      "fallbackFor": [
+        "vfr_points"
+      ],
+      "note": "Non-commercial licence. Includes the compulsory flag."
+    },
+    {
       "id": "terrain",
       "label": "Terrain (Copernicus)",
       "group": "terrain",

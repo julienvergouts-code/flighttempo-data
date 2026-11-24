@@ -13,6 +13,8 @@
     {"id": "vfr_points", "label": "VFR reporting points (FAA, OFMA)", "group": "vfr", "datasets": ["faa_vfr_reporting_points", "ofma_ofmx_vfr_reference_points"], "defaultOn": true},
     {"id": "airspace_verified", "label": "Airspace: CTR, TMA, restricted (OFMA, France)", "group": "airspace", "datasets": ["ofma_airspace", "sia_france_airspace"], "defaultOn": true},
     {"id": "airspace_openaip", "label": "Airspace: rest of world (openAIP, test phase)", "group": "airspace", "datasets": ["openaip_airspace"], "defaultOn": true, "fallbackFor": ["airspace_verified"], "note": "Non-commercial licence. Switch off before any paid release."},
+    {"id": "navaids_openaip", "label": "VOR / NDB / DME, rest of world (openAIP, test phase)", "group": "navigation", "datasets": ["openaip_navaids"], "defaultOn": true, "fallbackFor": ["navaids_current"], "note": "Non-commercial licence. Switch off before any paid release."},
+    {"id": "vfr_points_openaip", "label": "VFR reporting points, rest of world (openAIP, test phase)", "group": "vfr", "datasets": ["openaip_reporting_points"], "defaultOn": true, "fallbackFor": ["vfr_points"], "note": "Non-commercial licence. Includes the compulsory flag."},
     {"id": "terrain", "label": "Terrain (Copernicus)", "group": "terrain", "datasets": ["terrain_world", "terrain_tiles"], "defaultOn": true},
     {"id": "airline_data", "label": "Airline profiles and route rules", "group": "reference", "datasets": ["airline_profiles", "route_rules", "global_airline_directory", "route_policy"], "defaultOn": true},
     {"id": "advisories_conflict", "label": "Conflict-zone and prohibition advisories (EASA, FAA)", "group": "advisories", "datasets": ["easa_czibs", "easa_safety_directives", "faa_prn_notams"], "defaultOn": false},
