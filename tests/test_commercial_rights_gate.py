@@ -2,10 +2,12 @@ import json
 import tempfile
 import unittest
 from datetime import date
+from unittest import mock
 from pathlib import Path
 
 from scripts.commercial_rights import redistribution_block_reason
 from scripts.enforce_app_manifest_rights import enforce
+import scripts.enforce_app_manifest_rights as enforce_module
 
 
 class CommercialRightsGateTests(unittest.TestCase):
@@ -100,7 +102,8 @@ class CommercialRightsGateTests(unittest.TestCase):
                 },
                 "statistics": {"ifrWaypoints": 100},
             }), encoding="utf-8")
-            blocked = enforce(path, today=date(2026, 11, 22))
+            with mock.patch.object(enforce_module, "legacy_fallback_config", return_value={}):
+                blocked = enforce(path, today=date(2026, 11, 22))
             manifest = json.loads(path.read_text(encoding="utf-8"))
 
         self.assertIn("airport_reference", blocked)
