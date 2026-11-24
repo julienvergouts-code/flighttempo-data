@@ -64,6 +64,10 @@ CAPABILITY_FLAGS = {
     "faa_nasr_fixes": ("faaNasrFixes",),
     "faa_nasr_navaids": ("faaNasrNavaids",),
     "faa_nasr_airway_segments": ("faaNasrAirwaySegments",),
+    "sia_france_fixes": ("siaFranceFixes",),
+    "sia_france_navaids": ("siaFranceNavaids",),
+    "sia_france_airway_segments": ("siaFranceAirwaySegments",),
+    "sia_france_airspace": ("siaFranceAirspace",),
 }
 
 
