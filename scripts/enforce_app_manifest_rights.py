@@ -67,6 +67,34 @@ CAPABILITY_FLAGS = {
 }
 
 
+LEGACY_FALLBACK = ROOT / "data" / "legacy_fallback.json"
+RAW_MAIN = "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/"
+
+
+def legacy_fallback_config(personal: bool, path: Path = LEGACY_FALLBACK) -> dict:
+    """Datasets of the 2012 snapshot that stay usable as a labelled fallback (personal scope only)."""
+    if not personal:
+        return {}
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return {}
+    return data if data.get("enabled") is True else {}
+
+
+def apply_legacy_fallback(dataset: dict, config: dict) -> None:
+    dataset["personalUseOnly"] = True
+    dataset["commercialUseAllowed"] = False
+    dataset["legacyFallback"] = True
+    dataset["dataCycle"] = config.get("cycleLabel", "2012.08")
+    dataset["licenseStatus"] = "gpl3_2012_legacy_personal_use_only_commercial_unverified"
+    dataset["status"] = "legacy_fallback_personal_use_only"
+    dataset["usageScopeNote"] = ("Legacy 2012 snapshot. Fallback only: prefer current FAA, OFMA or SIA data where they cover "
+                                 "the area. Stations, fixes and airways may have been changed or withdrawn since 2012.")
+    dataset["preferNewerSources"] = config.get("preferNewerSources", [])
+    dataset.pop("downloadBlockReason", None)
+
+
 def source_cycle_block_reason(dataset: dict, today: date) -> str | None:
     effective_raw = dataset.get("effectiveDate")
     expiry_raw = dataset.get("expiryDate")
@@ -90,15 +118,27 @@ def enforce(manifest_path: Path = MANIFEST, today: date | None = None) -> list[s
         raise ValueError("navigation_manifest.json has no datasets array")
 
     personal = personal_scope_active()
+    legacy_config = legacy_fallback_config(personal)
+    legacy_ids = legacy_config.get("datasets", {})
     blocked = []
     for dataset in datasets:
         dataset_id = dataset.get("id")
-        stale = dataset_id in STALE_DATASET_IDS
+        legacy = dataset_id in legacy_ids
+        if legacy:
+            apply_legacy_fallback(dataset, legacy_config)
+        stale = dataset_id in STALE_DATASET_IDS and not legacy
         excluded = dataset_id in BLOCKED_IDS
         incomplete = dataset_id in INCOMPLETE_DATASET_IDS
         rights_reason = redistribution_block_reason(dataset, personal)
         cycle_reason = source_cycle_block_reason(dataset, today)
         if not (stale or excluded or incomplete or rights_reason or cycle_reason):
+            if legacy:
+                dataset["available"] = True
+                dataset["operationallyAvailable"] = False
+                dataset["downloadPurpose"] = "reference_only"
+                dataset["downloadUrl"] = RAW_MAIN + str(dataset.get("path", ""))
+                for flag in legacy_ids[dataset_id]:
+                    manifest.setdefault("capabilities", {})[flag] = True
             continue
 
         dataset["available"] = False

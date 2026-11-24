@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "enabled": true,
+  "note": "Owner decision 2026-11-24: the 2012 world navigation snapshot (FlightGear/X-Plane, GPLv3) stays in use as a labelled fallback for VORs, NDBs, fixes and airways wherever no current source exists. Only active while data/usage_scope.json says 'personal'. Prefer FAA, OFMA and SIA data where they cover the area.",
+  "datasets": {
+    "flightgear_fixes": ["legacyGlobalFixes"],
+    "flightgear_navaids": ["flightgearNavaids", "legacyGlobalNavaids"],
+    "flightgear_airway_segments": ["legacyGlobalAirways"],
+    "world_corridor_graph": ["worldCorridorGraph"]
+  },
+  "cycleLabel": "2012.08",
+  "preferNewerSources": ["faa_nasr_fixes", "faa_nasr_navaids", "faa_nasr_airway_segments", "france_sia", "ofma"]
+}
