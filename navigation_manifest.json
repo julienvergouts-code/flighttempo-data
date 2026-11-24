@@ -1,6 +1,6 @@
 {
   "schemaVersion": 13,
-  "generatedAtUtc": "2026-11-24T11:38:28.781921+00:00",
+  "generatedAtUtc": "2026-11-24T12:03:14.410119+00:00",
   "procedureAiracCycle": "2611",
   "navaidTypeCounts": {
     "DME": 167,
@@ -43,7 +43,7 @@
       "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
       "provider": "OurAirports",
       "license": "CC0 / Public Domain as stated by OurAirports",
-      "downloadedAt": "2026-11-24T11:37:51.245933+00:00",
+      "downloadedAt": "2026-11-24T12:02:36.926479+00:00",
       "sizeBytes": 12763634,
       "sha256": "a903f63c4a5fef41acd82ed0876acce0d1efd470849e1a6a1f79d34948b6123b",
       "recordCount": 86387
@@ -53,7 +53,7 @@
       "url": "https://davidmegginson.github.io/ourairports-data/runways.csv",
       "provider": "OurAirports",
       "license": "CC0 / Public Domain as stated by OurAirports",
-      "downloadedAt": "2026-11-24T11:37:51.245933+00:00",
+      "downloadedAt": "2026-11-24T12:02:36.926479+00:00",
       "sizeBytes": 3976264,
       "sha256": "9c97fcfefaeb43df9bcfa467ec5634b9a53dcc946b24da06aced9de1bceefda5",
       "recordCount": 47142
@@ -63,7 +63,7 @@
       "url": "https://davidmegginson.github.io/ourairports-data/navaids.csv",
       "provider": "OurAirports",
       "license": "CC0 / Public Domain as stated by OurAirports",
-      "downloadedAt": "2026-11-24T11:37:51.245933+00:00",
+      "downloadedAt": "2026-11-24T12:02:36.926479+00:00",
       "sizeBytes": 1524931,
       "sha256": "d7292380662c33a95214945023ec0a5b13189599305fd18be739e167a97a9bd1",
       "recordCount": 11008
@@ -157,7 +157,11 @@
     "terrainTiles": true,
     "terrainWorld": true,
     "openaipAirspace": true,
-    "adsbObservedRoutes": false
+    "adsbObservedRoutes": false,
+    "siaFranceFixes": false,
+    "siaFranceNavaids": false,
+    "siaFranceAirwaySegments": false,
+    "siaFranceAirspace": false
   },
   "procedureCoverageStatus": "FAA_US_NAS_ONLY_TEST_DATA; EUROPE_FRANCE_SOURCE_NOT_INGESTED; ASIA_NO_PUBLIC_REDISTRIBUTABLE_SOURCE_CONFIRMED",
   "procedureOperationalUse": false,
@@ -919,7 +923,7 @@
       "available": false,
       "recordCount": 16,
       "sizeBytes": 59342,
-      "sha256": "f5d905b652bd7fbeab4d6f5349186d6a542e1c681308570b95fa4cc708c963ad",
+      "sha256": "d2af8d67e8912ec121a3abca982f35237ac76f8c382f6848758f1590cb78e485",
       "status": "not_published_commercial_reuse_unconfirmed_or_restricted",
       "license": "FAA public reference; currentness unverified",
       "operationallyAvailable": false,
@@ -1342,7 +1346,7 @@
     "airportSource": "https://davidmegginson.github.io/ourairports-data/airports.csv",
     "runwaySource": "https://davidmegginson.github.io/ourairports-data/runways.csv",
     "license": "Public Domain / CC0 as stated by OurAirports",
-    "downloadedAtUtc": "2026-11-24T11:38:27.733078+00:00",
+    "downloadedAtUtc": "2026-11-24T12:03:13.273692+00:00",
     "matchedElevationRecords": 28488,
     "matchedAirportMetadataRecords": 29747,
     "matchedAirportsWithRunways": 24175,
