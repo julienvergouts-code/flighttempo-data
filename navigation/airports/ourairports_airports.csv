@@ -2354,7 +2354,7 @@ icao,country,latitude,longitude,elevation_ft,name,source_id,source_ident,source_
 23PN,US,41.03401,-78.45015,1160,Penn Highlands Clearfield Heliport,45740,23PN,heliport,Penn Highlands Clearfield Heliport,41.034006,-78.450147,1160,NA,US,US-PA,Clearfield,no,,,23PN,23PN,,,Clearfield Hospital
 23PS,US,39.85368,-75.69952,399,Constellation Heliport,545834,23PS,heliport,Constellation Heliport,39.853683,-75.699519,399,NA,US,US-PA,Kennett Square,no,,,23PS,23PS,,,
 23S,US,47.1791,-113.445,4235,Seeley Lake Airport,8971,23S,small_airport,Seeley Lake Airport,47.179100036621094,-113.44499969482422,4235,NA,US,US-MT,Seeley Lake,no,,,23S,23S,,,
-23TA,US,33.4873,-96.4558,705,Rowland R Airfield,8972,23TA,small_airport,Rowland R Airfield,33.487301,-96.455803,705,NA,US,US-TX,Whitewright,no,,,23TA,23TA,,,
+23TA,US,33.4873,-96.4558,705,Oaks & Helios Airfield,8972,23TA,small_airport,Oaks & Helios Airfield,33.487301,-96.455803,705,NA,US,US-TX,Whitewright,no,,,23TA,23TA,,,Rowland R
 23TE,US,32.78,-96.56806,492,Texas Regional Medical Center Heliport,8973,23TE,heliport,Texas Regional Medical Center Heliport,32.78,-96.568056,492,NA,US,US-TX,Sunnyvale,no,,,23TE,23TE,,,
 23TN,US,35.02703,-84.38499,1691,Copper Basin Medical Center Heliport,505765,23TN,heliport,Copper Basin Medical Center Heliport,35.027031,-84.384986,1691,NA,US,US-TN,Copperhill,no,,,23TN,23TN,,,
 23TS,US,29.4227,-100.739,1110,Bertani Ranch Airport,8974,23TS,small_airport,Bertani Ranch Airport,29.422700881958008,-100.73899841308594,1110,NA,US,US-TX,Del Rio,no,,,23TS,23TS,,,
@@ -2480,7 +2480,7 @@ icao,country,latitude,longitude,elevation_ft,name,source_id,source_ident,source_
 26AZ,US,34.012,-113.203,2192,Flying Dare's Ranch Airport,9091,26AZ,small_airport,Flying Dare's Ranch Airport,34.012001037597656,-113.2030029296875,2192,NA,US,US-AZ,Aguila,no,,,26AZ,26AZ,,,
 26CA,US,38.4269,-121.172,100,Boeckmann Ranch Airport,9092,26CA,small_airport,Boeckmann Ranch Airport,38.42689895629883,-121.1719970703125,100,NA,US,US-CA,Wilton,no,,,26CA,26CA,,,
 26CN,US,34.48677,-118.11591,3244,SCE Vincent Substation Heliport,9094,26CN,heliport,SCE Vincent Substation Heliport,34.486768,-118.115913,3244,NA,US,US-CA,Palmdale,no,,,26CN,26CN,,,
-26FD,US,27.0512,-81.8481,50,Hennessy Airport,9097,26FD,small_airport,Hennessy Airport,27.05120086669922,-81.84809875488281,50,NA,US,US-FL,Arcadia,no,,,26FD,26FD,,,
+26FD,US,27.05238,-81.8528,50,Hennessy Airport,9097,26FD,small_airport,Hennessy Airport,27.05238,-81.852801,50,NA,US,US-FL,Arcadia,no,,,26FD,26FD,,,
 26FL,US,27.25911,-80.8291,34,HCA Florida Raulerson Hospital Heliport,9098,26FL,heliport,HCA Florida Raulerson Hospital Heliport,27.259106,-80.829104,34,NA,US,US-FL,Okeechobee,no,,,26FL,26FL,,,
 26GA,US,33.3362,-84.9138,760,Murphree Airport,9099,26GA,closed,Murphree Airport,33.336201,-84.913803,760,NA,US,US-GA,Newnan,no,,,,,,,26GA
 26IA,US,42.37378,-95.76515,1355,Midway View Farms Airport,523563,26IA,small_airport,Midway View Farms Airport,42.373777,-95.765149,1355,NA,US,US-IA,Correctionville,no,,,26IA,26IA,,,
@@ -2934,6 +2934,7 @@ icao,country,latitude,longitude,elevation_ft,name,source_id,source_ident,source_
 2MD8,US,39.3334,-79.4414,2500,Greater Gortner Airport,9546,2MD8,small_airport,Greater Gortner Airport,39.33340072631836,-79.44139862060547,2500,NA,US,US-MD,Oakland,no,,,2MD8,2MD8,,,
 2ME2,US,44.12937,-68.87434,48,North Haven Heliport,331719,2ME2,heliport,North Haven Heliport,44.129372,-68.874339,48,NA,US,US-ME,North Haven,no,,,2ME2,2ME2,,,
 2ME3,US,45.04135,-68.99002,230,Heartstone Farm Airport,301205,2ME3,small_airport,Heartstone Farm Airport,45.04135,-68.990021,230,NA,US,US-ME,Charleston,no,,,2ME3,2ME3,,,Charleston / Harte Field
+2MI0,US,42.11835,-83.14242,577,East River Heliport,611768,2MI0,heliport,East River Heliport,42.118353,-83.142419,577,NA,US,US-MI,Grosse Ile,no,,,2MI0,2MI0,,,
 2MI1,US,42.95377,-85.62251,800,Spectrum Health Blodgett Heliport,9548,2MI1,heliport,Spectrum Health Blodgett Heliport,42.953767,-85.622509,800,NA,US,US-MI,Grand Rapids,no,,,2MI1,2MI1,,,Blodgett Memorial Medical Center
 2MI2,US,42.4278,-83.4041,665,St. Mary Hospital Heliport,9549,2MI2,heliport,St. Mary Hospital Heliport,42.427799224853516,-83.40409851074219,665,NA,US,US-MI,Livonia,no,,,2MI2,2MI2,,,
 2MI5,US,42.94173,-85.48511,660,Somerville Airport,9552,2MI5,small_airport,Somerville Airport,42.941727,-85.485112,660,NA,US,US-MI,Ada,no,,,2MI5,2MI5,,,
@@ -4852,7 +4853,7 @@ icao,country,latitude,longitude,elevation_ft,name,source_id,source_ident,source_
 4CO5,US,40.0414,-107.911,6298,Pioneers Heliport,11390,4CO5,heliport,Pioneers Heliport,40.04140090942383,-107.91100311279297,6298,NA,US,US-CO,Meeker,no,,,4CO5,4CO5,,,
 4CO6,US,39.76589,-105.09265,5500,Lutheran Medical Center Heliport,11391,4CO6,closed,Lutheran Medical Center Heliport,39.765893,-105.092651,5500,NA,US,US-CO,Wheat Ridge,no,,,,,,,4CO6
 4CO7,US,39.22035,-104.68074,7028,Ambrosich Field,11392,4CO7,small_airport,Ambrosich Field,39.220351,-104.680738,7028,NA,US,US-CO,Elbert,no,,,4CO7,4CO7,,,
-4CO8,US,39.3069,-104.816,6800,Kelgun Airport,11393,4CO8,small_airport,Kelgun Airport,39.30690002441406,-104.81600189208984,6800,NA,US,US-CO,Castle Rock,no,,,4CO8,4CO8,,,
+4CO8,US,39.30817,-104.81499,6800,Kelgun Airport,11393,4CO8,closed,Kelgun Airport,39.308173,-104.814989,6800,NA,US,US-CO,Castle Rock,no,,,,,,,4CO8
 4CO9,US,39.63123,-106.52436,7500,Beaver Creek Heliport,11394,4CO9,closed,Beaver Creek Heliport,39.63123,-106.52436,7500,NA,US,US-CO,Beaver Creek,no,,,,,,,4CO9
 4D5,US,41.2301,-80.5573,1140,Kirila Heliport,11396,4D5,heliport,Kirila Heliport,41.230098724365234,-80.55729675292969,1140,NA,US,US-OH,Brookfield,no,,,4D5,4D5,,,
 4D8,US,43.3332,-95.159,1439,Fuller Airport,11397,4D8,small_airport,Fuller Airport,43.33319854736328,-95.15899658203125,1439,NA,US,US-IA,Milford,no,,,4D8,4D8,,,
@@ -5898,7 +5899,7 @@ icao,country,latitude,longitude,elevation_ft,name,source_id,source_ident,source_
 5L6,US,61.5864,-149.408,330,Wasilla Lake Seaplane Base,12446,5L6,seaplane_base,Wasilla Lake Seaplane Base,61.5863990784,-149.408004761,330,NA,US,US-AK,Wasilla,no,,,5L6,5L6,,,
 5LA0,US,32.5918,-93.828,200,Juneau Ultralightport Airpark,12447,5LA0,small_airport,Juneau Ultralightport Airpark,32.591801,-93.828003,200,NA,US,US-LA,Shreveport,no,,,5LA0,5LA0,,,
 5LA1,US,31.028,-91.98059,55,Kent's Flying Service Airport,12448,5LA1,small_airport,Kent's Flying Service Airport,31.028004,-91.980589,55,NA,US,US-LA,Moreauville,no,,,5LA1,5LA1,,,
-5LA2,US,29.69056,-91.20095,5,Mobil Heliport,12449,5LA2,heliport,Mobil Heliport,29.69056,-91.20095,5,NA,US,US-LA,Morgan City,no,,,5LA2,5LA2,,,
+5LA2,US,29.69056,-91.20095,5,Mobil Heliport,12449,5LA2,closed,Mobil Heliport,29.69056,-91.20095,5,NA,US,US-LA,Morgan City,no,,,,,,,
 5LA3,US,29.68776,-91.19393,6,Kerr McGee Heliport,12450,5LA3,heliport,Kerr McGee Heliport,29.687757,-91.193933,6,NA,US,US-LA,Morgan City,no,,,5LA3,5LA3,,,
 5LA5,US,29.7005,-91.1943,50,RTI/Data-Com Heliport,12452,5LA5,heliport,RTI/Data-Com Heliport,29.7005,-91.194298,50,NA,US,US-LA,Morgan City,no,,,5LA5,5LA5,,,
 5LA6,US,28.9502,-89.3878,,E-8 Tank Battery Seaplane Base,12453,5LA6,seaplane_base,E-8 Tank Battery Seaplane Base,28.950199127197266,-89.38780212402344,,NA,US,US-LA,Venice,no,,,5LA6,5LA6,,,
@@ -8899,7 +8900,7 @@ icao,country,latitude,longitude,elevation_ft,name,source_id,source_ident,source_
 95ID,US,46.00046,-116.69119,1169,Deer Creek Airport,322512,95ID,small_airport,Deer Creek Airport,46.000458,-116.691186,1169,NA,US,US-ID,Cottonwood,no,,,95ID,95ID,,,
 95IL,US,37.48516,-88.40003,485,Henderson Airport,15451,95IL,small_airport,Henderson Airport,37.48516,-88.40003,485,NA,US,US-IL,Golconda,no,,,95IL,95IL,,,"Rosiclare, Stone RLA"
 95IN,US,38.8875,-85.8264,550,Stewart Field,15452,95IN,small_airport,Stewart Field,38.887501,-85.826401,550,NA,US,US-IN,Seymour,no,,,95IN,95IN,,,
-95IS,US,40.36941,-91.38863,645,Jan Knipe Airport,15453,95IS,small_airport,Jan Knipe Airport,40.36941,-91.38863,645,NA,US,US-IL,Warsaw,no,,,95IS,95IS,,,
+95IS,US,40.36972,-91.38934,645,Jan Knipe Airport,15453,95IS,closed,Jan Knipe Airport,40.369717,-91.389343,645,NA,US,US-IL,Warsaw,no,,,,,,,95IS
 95KS,US,39.02616,-96.01504,1058,Fuller Airfield,329732,95KS,small_airport,Fuller Airfield,39.026161,-96.015042,1058,NA,US,US-KS,Maple Hill,no,,,95KS,95KS,,,
 95KY,US,37.4203,-84.3692,1227,Crawford Ultralightport,15454,95KY,small_airport,Crawford Ultralightport,37.4202995300293,-84.36920166015625,1227,NA,US,US-KY,Brodhead,no,,,95KY,95KY,,,
 95LA,US,31.31667,-92.46837,95,Louisiana State Police Troop E Heliport,15455,95LA,heliport,Louisiana State Police Troop E Heliport,31.31667,-92.468365,95,NA,US,US-LA,Alexandria,no,,,95LA,95LA,,,
@@ -30110,6 +30111,7 @@ GB-1369,GB,53.52385,-2.95751,36,Greenbank Helipad,611334,GB-1369,heliport,Greenb
 GB-1370,GB,53.58422,-2.84859,,Blythe Hall Helipad,611406,GB-1370,heliport,Blythe Hall Helipad,53.584218,-2.848588,,EU,GB,GB-ENG,,no,,,,,,,
 GB-1371,GB,53.4185,-2.8989,144,Alder Hey Children's Hospital Helipad,611407,GB-1371,heliport,Alder Hey Children's Hospital Helipad,53.418504,-2.898901,144,EU,GB,GB-ENG,"West Derby, Liverpool",no,,,,,https://www.alderhey.nhs.uk/,,
 GB-1372,GB,53.47442,-2.93987,,Aintree Racecourse Heliport,611724,GB-1372,heliport,Aintree Racecourse Heliport,53.474421,-2.939873,,EU,GB,GB-ENG,,no,,,,,,,
+GB-1373,GB,51.32447,-2.323,439,Hinton House Helipad,611773,GB-1373,heliport,Hinton House Helipad,51.324467,-2.322997,439,EU,GB,GB-ENG,"Hinton Charterhouse, Somerset",no,,,,,,"https://en.wikipedia.org/wiki/Hinton_House,_Hinton_Charterhouse",
 GB-DOC,GB,57.869,-4.023,1,Dornoch Airfield,30935,GB-DOC,small_airport,Dornoch Airfield,57.868999,-4.023,1,EU,GB,GB-SCT,"Dornoch, Sunderland",no,,,,,http://www.dornochairfield.com/,,"EG08, EGZJ, DOC"
 GB-FLH,GB,58.8258,-3.14278,50,Flotta Isle Airstrip,31147,GB-FLH,small_airport,Flotta Isle Airstrip,58.825802,-3.14278,50,EU,GB,GB-SCT,Flotta Isle,no,,FLH,,,,https://en.wikipedia.org/wiki/Flotta_Isle_Airport,EGZR
 GB-FOA,GB,60.12192,-2.05344,150,Foula Airfield,31199,GB-FOA,small_airport,Foula Airfield,60.121916,-2.053439,150,EU,GB,GB-SCT,Foula,yes,,FOA,EG3G,,,https://en.wikipedia.org/w/index.php?title=Foula_Airfield&oldid=1234064311,EG42
@@ -38090,7 +38092,7 @@ K2S8,US,47.7542,-118.743,2182,Wilbur Airport,18624,K2S8,small_airport,Wilbur Air
 K2S9,US,46.6976,-123.823,13,Willapa Harbor Airport,18625,K2S9,small_airport,Willapa Harbor Airport,46.697601,-123.822998,13,NA,US,US-WA,South Bend/Raymond/,no,,,K2S9,2S9,,https://en.wikipedia.org/wiki/Willapa_Harbor_Airport,
 K2T1,US,34.1851,-102.641,3779,Muleshoe Municipal Airport,18626,K2T1,small_airport,Muleshoe Municipal Airport,34.18510055541992,-102.64099884033203,3779,NA,US,US-TX,Muleshoe,no,,,K2T1,2T1,,,
 K2V6,US,40.1042,-102.713,4136,Yuma Municipal Airport,18630,K2V6,small_airport,Yuma Municipal Airport,40.104198,-102.712997,4136,NA,US,US-CO,Yuma,no,,,K2V6,2V6,,https://en.wikipedia.org/wiki/Yuma_Municipal_Airport,
-K2W5,US,38.59657,-77.07264,170,Maryland Airport,18631,K2W5,small_airport,Maryland Airport,38.596572,-77.072639,170,NA,US,US-MD,Indian Head,no,,,K2W5,2W5,,https://en.wikipedia.org/wiki/Maryland_Airport,
+K2W5,US,38.59657,-77.07264,170,Maryland Airport,18631,K2W5,small_airport,Maryland Airport,38.596572,-77.072639,170,NA,US,US-MD,Indian Head,no,,,2W5,2W5,,https://en.wikipedia.org/wiki/Maryland_Airport,
 K2W6,US,38.3154,-76.5501,142,St. Mary's County Regional Airport,18632,K2W6,small_airport,St. Mary's County Regional Airport,38.315399,-76.550102,142,NA,US,US-MD,California,no,,LTW,,2W6,,https://en.wikipedia.org/wiki/St._Mary's_County_Regional_Airport,
 K2Y4,US,42.38761,-94.61844,1217,Rockwell City Municipal Airport,18633,K2Y4,small_airport,Rockwell City Municipal Airport,42.387612,-94.618444,1217,NA,US,US-IA,Rockwell City,no,,,K2Y4,2Y4,,,
 K30,US,43.1834,-73.6332,230,Heber Airpark,18634,K30,small_airport,Heber Airpark,43.18339920043945,-73.6332015991211,230,NA,US,US-NY,Gansevoort,no,,,K30,K30,,,
@@ -44818,7 +44820,7 @@ LOSM,AT,47.132,13.69587,3642,Mauterndorf Airfield,29478,LOSM,small_airport,Maute
 LOSS,AT,47.32178,13.15437,2046,Kardinal Schwarzenberg Hospital Helipad,43823,AT-0062,heliport,Kardinal Schwarzenberg Hospital Helipad,47.321783,13.154366,2046,EU,AT,AT-5,Schwarzach,no,LOSS,,LOSS,,,,
 LOSU,AT,47.79959,13.0565,1479,Salzburg Trauma Hospital Helistop,609165,LOSU,heliport,Salzburg Trauma Hospital Helistop,47.799591,13.056501,1479,EU,AT,AT-5,Salzburg,no,LOSU,,LOSU,,,,
 LOWG,AT,46.9911,15.4396,1115,Graz Airport,4430,LOWG,large_airport,Graz Airport,46.9911,15.4396,1115,EU,AT,AT-6,Feldkirchen bei Graz,yes,LOWG,GRZ,LOWG,,http://www.flughafen-graz.at/,https://en.wikipedia.org/wiki/Graz_Airport,"Thalerhof Airport, Fliegerhorst Nittner, Nittner Air Base, Christophorus 12"
-LOWI,AT,47.2602,11.344,1907,Innsbruck Airport,4431,LOWI,large_airport,Innsbruck Airport,47.260201,11.344,1907,EU,AT,AT-7,Innsbruck,yes,LOWI,INN,LOWI,,http://www.innsbruck-airport.com/,https://en.wikipedia.org/wiki/Innsbruck_Airport,Kranebitten Airport
+LOWI,AT,47.26028,11.34389,1907,Innsbruck Airport,4431,LOWI,large_airport,Innsbruck Airport,47.260278,11.343889,1907,EU,AT,AT-7,Innsbruck,yes,LOWI,INN,LOWI,,http://www.innsbruck-airport.com/,https://en.wikipedia.org/wiki/Innsbruck_Airport,Kranebitten Airport
 LOWK,AT,46.6425,14.3377,1472,Klagenfurt Airport,4435,LOWK,large_airport,Klagenfurt Airport,46.642502,14.3377,1472,EU,AT,AT-2,Klagenfurt am Wörthersee,yes,LOWK,KLU,LOWK,,http://www.klagenfurt-airport.com/,https://en.wikipedia.org/wiki/Klagenfurt_Airport,"Kärnten Airport, Christophorus 11"
 LOWL,AT,48.23536,14.18813,980,Linz-Hörsching Airport,4432,LOWL,large_airport,Linz-Hörsching Airport,48.235362,14.188128,980,EU,AT,AT-4,Linz,yes,LOWL,LNZ,LOWL,,http://www.flughafen-linz.at/,https://en.wikipedia.org/wiki/Linz_Airport,"Blue Danube Airport, Vogler Air Base, Fliegerhorst Vogler, Christophorus 10"
 LOWS,AT,47.7933,13.0043,1411,Salzburg Airport,4433,LOWS,large_airport,Salzburg Airport,47.793301,13.0043,1411,EU,AT,AT-5,Salzburg,yes,LOWS,SZG,LOWS,,http://www.salzburg-airport.com/,https://en.wikipedia.org/wiki/Salzburg_Airport,Christophorus 6
@@ -51006,6 +51008,7 @@ NR30,US,35.28589,-80.66638,723,Atrium Health Harrisburg Heliport,325064,NR30,hel
 NR35,US,35.46894,-79.18623,328,Central Carolina Hospital Heliport,337166,NR35,heliport,Central Carolina Hospital Heliport,35.468936,-79.186234,328,NA,US,US-NC,Sanford,no,,,NR35,NR35,,,
 NR37,US,35.0571,-77.46227,35,Suter Field,335349,NR37,small_airport,Suter Field,35.057099,-77.462266,35,NA,US,US-NC,Trenton,no,,,NR37,NR37,,,
 NR40,US,35.82083,-77.37889,65,Als Airport,325832,NR40,small_airport,Als Airport,35.820833,-77.378889,65,NA,US,US-NC,Bethel,no,,,NR40,NR40,,,
+NR43,US,36.26711,-76.55347,28,Belvidere/Chappell Hill Fire Dept Heliport,611770,NR43,heliport,Belvidere/Chappell Hill Fire Dept Heliport,36.267112,-76.553468,28,NA,US,US-NC,Belvidere,no,,,NR43,NR43,,,
 NR44,US,34.72586,-76.75314,24,Carteret Hospital Heliport,518209,NR44,heliport,Carteret Hospital Heliport,34.725858,-76.753142,24,NA,US,US-NC,Morehead City,no,,,NR44,NR44,,,
 NR49,US,35.05967,-83.38847,2096,Otto Fire and Rescue Heliport,610160,NR49,heliport,Otto Fire and Rescue Heliport,35.059669,-83.388469,2096,NA,US,US-NC,Otto,no,,,NR49,NR49,,,
 NR51,US,35.79928,-77.60348,48,Firing Range Heliport,341621,NR51,heliport,Firing Range Heliport,35.799285,-77.603479,48,NA,US,US-NC,Pinetops,no,,,NR51,NR51,,,
@@ -65588,7 +65591,7 @@ TH-0066,TH,13.77207,100.54379,22,CAVPAD Helicopter Field,604772,TH-0066,heliport
 TH-0067,TH,8.33028,98.76611,82,Ban Klang Airfield,610525,TH-0067,small_airport,Ban Klang Airfield,8.330278,98.766111,82,AS,TH,TH-81,Amphoe Ao Luek,no,,,,,,,
 TH-0068,TH,13.158,101.03,18,R'sommai Airfield,610560,TH-0068,small_airport,R'sommai Airfield,13.158,101.03,18,AS,TH,TH-20,Si Racha,no,,,,,,,
 THW,LK,8.56,81.22,0,Trincomalee Harbor Waterdrome,313984,THW,seaplane_base,Trincomalee Harbor Waterdrome,8.56,81.22,0,AS,LK,LK-5,Trincomalee,no,,THW,,,,,
-TIST,VI,18.33709,-64.97725,23,Cyril E. King Airport,6369,TIST,large_airport,Cyril E. King Airport,18.337091,-64.977251,23,NA,VI,VI-ST,Charlotte Amalie,yes,TIST,STT,TIST,STT,http://www.viport.com/airports.html,https://en.wikipedia.org/wiki/Cyril_E._King_Airport,Harry S. Truman Airport
+TIST,VI,18.33724,-64.97335,23,Cyril E. King Airport,6369,TIST,large_airport,Cyril E. King Airport,18.337243,-64.973349,23,NA,VI,VI-ST,Charlotte Amalie,yes,TIST,STT,TIST,STT,http://www.viport.com/airports.html,https://en.wikipedia.org/wiki/Cyril_E._King_Airport,Harry S. Truman Airport
 TISX,VI,17.70141,-64.80261,74,Henry E. Rohlsen Airport,6370,TISX,medium_airport,Henry E. Rohlsen Airport,17.701413,-64.802608,74,NA,VI,VI-SC,Christiansted,yes,TISX,STX,TISX,STX,https://www.viport.com/herastx,https://en.wikipedia.org/wiki/Henry_E._Rohlsen_Airport,St Croix
 TJ-0001,TJ,39.22114,71.2078,,Dzhirgatal Airport,44385,TJ-0001,small_airport,Dzhirgatal Airport,39.221141,71.207804,,AS,TJ,TJ-RR,Dzhirgatal,no,,,,,,,Аэропорт Джиргаталь
 TJ-0002,TJ,37.37,68.684,,Dusti Airfield,44404,TJ-0002,small_airport,Dusti Airfield,37.369998931884766,68.68399810791016,,AS,TJ,TJ-KT,Dusti,no,,,,,,,Аэродром Дусти
@@ -71759,6 +71762,7 @@ US-13077,US,41.83881,-76.19372,1520,Chaffee Field,611750,US-13077,small_airport,
 US-13078,US,42.86148,-85.72152,740,UMH West Hospital Heliport,611757,US-13078,heliport,UMH West Hospital Heliport,42.861478,-85.721516,740,NA,US,US-U-A,Wyoming,no,,,MI59,MI59,,,
 US-13079,US,27.20812,-80.33164,16,Florida Coast Medical Center Heliport,611760,US-13079,heliport,Florida Coast Medical Center Heliport,27.208123,-80.33164,16,NA,US,US-U-A,Port St. Lucie,no,,,1FL3,1FL3,,,
 US-1308,US,33.68147,-114.21366,,Ora Acres Airport,334444,US-1308,closed,Ora Acres Airport,33.68147,-114.21366,,NA,US,US-AZ,Quartzsite,no,,,,,,,
+US-13080,US,37.2516,-107.07817,7546,Pagosa Springs Medical Center Heliport,611765,US-13080,heliport,Pagosa Springs Medical Center Heliport,37.251603,-107.078167,7546,NA,US,US-CO,Pagosa Springs,no,,,4CO8,4CO8,,,
 US-1309,US,33.58057,-113.58721,,Salome Emergency Airfield,334445,US-1309,small_airport,Salome Emergency Airfield,33.58057,-113.58721,,NA,US,US-AZ,Salome,no,,,,,,,
 US-1310,US,33.63726,-113.34238,,75E Airport,334446,US-1310,small_airport,75E Airport,33.63726,-113.34238,,NA,US,US-AZ,Salome,no,,,,,,,
 US-1311,US,31.88181,-112.812,,Gringo Pass Airfield,334450,US-1311,closed,Gringo Pass Airfield,31.88181,-112.812,,NA,US,US-AZ,Lukeville,no,,,,,,,"lukeville, gringo pass"
@@ -82055,7 +82059,7 @@ VT08,US,44.0015,-72.1231,465,Bradford Armory Heliport,25504,VT08,heliport,Bradfo
 VT09,US,44.1136,-73.2903,310,Spencer Airport,25505,VT09,small_airport,Spencer Airport,44.11360168457031,-73.29029846191406,310,NA,US,US-VT,Addison,no,,,VT09,VT09,,,
 VT10,US,43.9814,-73.3857,255,Manning Personal Airstrip,25506,VT10,small_airport,Manning Personal Airstrip,43.98139953613281,-73.38569641113281,255,NA,US,US-VT,Bridport,no,,,VT10,VT10,,,
 VT11,US,44.0687,-73.3734,130,Ass-Pirin Acres Airport,25507,VT11,small_airport,Ass-Pirin Acres Airport,44.06869888305664,-73.37339782714844,130,NA,US,US-VT,Addison,no,,,VT11,VT11,,,
-VT12,US,44.2912,-73.2832,127,E.A.Deeds Farm Airport,25508,VT12,small_airport,E.A.Deeds Farm Airport,44.29119873046875,-73.283203125,127,NA,US,US-VT,Charlotte,no,,,VT12,VT12,,,
+VT12,US,44.29165,-73.28327,127,Big Goose Farm Airport,25508,VT12,small_airport,Big Goose Farm Airport,44.291645,-73.283265,127,NA,US,US-VT,Charlotte,no,,,VT12,VT12,,,E.A.Deeds Farm
 VT13,US,43.3001,-72.7176,1520,Holloway Airport,25509,VT13,small_airport,Holloway Airport,43.30009841918945,-72.71759796142578,1520,NA,US,US-VT,Chester,no,,,VT13,VT13,,,
 VT14,US,44.0451,-73.1896,450,Axinn Airport,25510,VT14,small_airport,Axinn Airport,44.045101165771484,-73.1895980834961,450,NA,US,US-VT,Weybridge,no,,,VT14,VT14,,,
 VT15,US,44.7039,-73.246,125,Savage Island Airport,25511,VT15,small_airport,Savage Island Airport,44.70389938354492,-73.24600219726562,125,NA,US,US-VT,Grand Isle,no,,,VT15,VT15,,,
@@ -83333,7 +83337,7 @@ XA32,US,30.9115,-97.1713,500,Wolfe Field,26167,XA32,small_airport,Wolfe Field,30
 XA33,US,32.9587,-96.2644,540,Thorny Woods Airport,26168,XA33,small_airport,Thorny Woods Airport,32.95869827270508,-96.26439666748047,540,NA,US,US-TX,Caddo Mills,no,,,XA33,XA33,,,
 XA34,US,33.2417,-97.428,850,Allison Farm Airport,26169,XA34,small_airport,Allison Farm Airport,33.24169921875,-97.4280014038086,850,NA,US,US-TX,Decatur,no,,,XA34,XA34,,,
 XA36,US,32.73814,-97.34153,641,Cook Children's Medical Center Heliport,26171,XA36,heliport,Cook Children's Medical Center Heliport,32.738138,-97.341534,641,NA,US,US-TX,Fort Worth,no,,,XA36,XA36,,,
-XA37,US,32.73474,-97.34421,607,Plaza Medical Center Heliport,26172,XA37,heliport,Plaza Medical Center Heliport,32.734742,-97.34421,607,NA,US,US-TX,Fort Worth,no,,,XA37,XA37,,,
+XA37,US,32.73474,-97.34421,607,Plaza Medical Center Heliport,26172,XA37,closed,Plaza Medical Center Heliport,32.734742,-97.34421,607,NA,US,US-TX,Fort Worth,no,,,,,,,XA37
 XA38,US,29.4853,-95.2083,38,Mickler Heliport,26173,XA38,heliport,Mickler Heliport,29.485300064086914,-95.20829772949219,38,NA,US,US-TX,Friendswood,no,,,XA38,XA38,,,
 XA40,US,32.99619,-96.66562,615,Richardson Regional Heliport - Bush Highway,26175,XA40,heliport,Richardson Regional Heliport - Bush Highway,32.996194,-96.665619,615,NA,US,US-TX,Richardson,no,,,XA40,XA40,,,
 XA41,US,30.355,-99.2475,2220,Lone Star Flying Service Airport,26176,XA41,small_airport,Lone Star Flying Service Airport,30.354999542236328,-99.24749755859375,2220,NA,US,US-TX,Harper,no,,,XA41,XA41,,,

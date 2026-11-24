@@ -1,6 +1,6 @@
 {
   "schemaVersion": 13,
-  "generatedAtUtc": "2026-11-24T11:25:05.727436+00:00",
+  "generatedAtUtc": "2026-11-24T11:26:53.604807+00:00",
   "procedureAiracCycle": "2611",
   "navaidTypeCounts": {
     "DME": 167,
@@ -14,9 +14,9 @@
   "targetProfile": "FlightTempo downloadable aviation reference data",
   "statistics": {
     "airports": 29747,
-    "runways": 47139,
+    "runways": 47142,
     "navaids": 11008,
-    "ourairportsAirports": 86383,
+    "ourairportsAirports": 86387,
     "airlineProfiles": 2,
     "routeRules": 109,
     "airportReferenceRecords": 29747,
@@ -43,27 +43,27 @@
       "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
       "provider": "OurAirports",
       "license": "CC0 / Public Domain as stated by OurAirports",
-      "downloadedAt": "2026-11-24T02:26:01.116308+00:00",
-      "sizeBytes": 12763057,
-      "sha256": "200f6b42633c9c37e18049d5e7de5a9e347698661c68a52ee7359a0e5d128ee3",
-      "recordCount": 86383
+      "downloadedAt": "2026-11-24T11:26:06.903305+00:00",
+      "sizeBytes": 12763634,
+      "sha256": "a903f63c4a5fef41acd82ed0876acce0d1efd470849e1a6a1f79d34948b6123b",
+      "recordCount": 86387
     },
     {
       "dataset": "runways",
       "url": "https://davidmegginson.github.io/ourairports-data/runways.csv",
       "provider": "OurAirports",
       "license": "CC0 / Public Domain as stated by OurAirports",
-      "downloadedAt": "2026-11-24T02:26:01.116308+00:00",
-      "sizeBytes": 3976372,
-      "sha256": "aecbf51dc5aa2e1d0373297076c0cf82e62e916bbabc63f2d8c487cca4856e23",
-      "recordCount": 47139
+      "downloadedAt": "2026-11-24T11:26:06.903305+00:00",
+      "sizeBytes": 3976264,
+      "sha256": "9c97fcfefaeb43df9bcfa467ec5634b9a53dcc946b24da06aced9de1bceefda5",
+      "recordCount": 47142
     },
     {
       "dataset": "navaids",
       "url": "https://davidmegginson.github.io/ourairports-data/navaids.csv",
       "provider": "OurAirports",
       "license": "CC0 / Public Domain as stated by OurAirports",
-      "downloadedAt": "2026-11-24T02:26:01.116308+00:00",
+      "downloadedAt": "2026-11-24T11:26:06.903305+00:00",
       "sizeBytes": 1524931,
       "sha256": "d7292380662c33a95214945023ec0a5b13189599305fd18be739e167a97a9bd1",
       "recordCount": 11008
@@ -159,19 +159,27 @@
     "openaipAirspace": true,
     "adsbObservedRoutes": false
   },
-  "procedureCoverageStatus": "FAA_US_NAS_CYCLE_PINNED; FRANCE_SIA_PARTIAL_CURRENT_SIDS_STARS; NO_COMPLETE_WORLDWIDE_IFR_PROCEDURES",
+  "procedureCoverageStatus": "FAA_US_NAS_ONLY_TEST_DATA; EUROPE_FRANCE_SOURCE_NOT_INGESTED; ASIA_NO_PUBLIC_REDISTRIBUTABLE_SOURCE_CONFIRMED",
   "procedureOperationalUse": false,
   "procedureSourceRegistryVersion": 1,
   "procedureSourceRegistryCheckedAtUtc": "2026-11-23",
   "regionalProcedureCoverage": {
     "europe": {
-      "status": "partial_current_france_sia_ingested",
+      "status": "partial_current_cycle_imported",
       "operationallyAvailable": false,
-      "summary": "France SID/STAR reference legs were extracted from 239 of 380 current SIA eAIP DATA sheets under its commercial-use Open Licence. Unsupported sheets are listed in source metadata and excluded; no complete Europe-wide IFR database is available.",
+      "summary": "French eAIP DATA procedure tables are partially imported under confirmed commercial redistribution terms (7,988 SID/STAR rows from 239 of 380 source documents; 62.89% document coverage in the recorded audit). France remains partial. Belgium and Germany have no redistributable IFR procedure data confirmed; both are blocked pending product-specific licensing or written permission.",
       "confirmedProcedureCountries": [
         "FR"
       ],
-      "candidateProcedureCountries": [],
+      "candidateProcedureCountries": [
+        "BE",
+        "DE",
+        "PL",
+        "HU",
+        "CZ",
+        "IE",
+        "GB"
+      ],
       "vfrOnlyProviders": [
         "OpenFlightMaps"
       ],
@@ -302,6 +310,58 @@
           "notes": "Do not redistribute UK terminal procedures until the applicable Crown Copyright / NATS licence for extracted procedure data is verified."
         },
         {
+          "id": "FR_SIA_EAIP_DATA_PDFS",
+          "jurisdiction": "FR",
+          "provider": "Service de l'Information Aeronautique (SIA France)",
+          "sourceUrl": "https://www.sia.aviation-civile.gouv.fr/media/dvd/eAIP_29_OCT_2026/FRANCE/AIRAC-2026-10-29/html/eAIP/Cartes/",
+          "indexUrl": "https://www.sia.aviation-civile.gouv.fr/media/dvd/eAIP_29_OCT_2026/FRANCE/AIRAC-2026-10-29/pdf/FR-GEN-0.4-fr-FR.pdf",
+          "format": [
+            "PDF DATA tables embedded in official eAIP chart package"
+          ],
+          "procedureScope": [
+            "RNAV SIDs",
+            "RNAV STARs",
+            "RNP approach DATA tables where complete non-FNA sheets are published"
+          ],
+          "license": "SIA Licence Ouverte / Open Licence",
+          "redistribution": "commercial_public_redistribution",
+          "licenseStatus": "verified_exact_eAIP_product_linked_to_open_license",
+          "attribution": "Service de l'Information Aeronautique (SIA France); include source and last update date; do not imply SIA endorsement.",
+          "cycle": "11/26",
+          "effectiveDate": "2026-10-29",
+          "expiryDate": "2026-11-25",
+          "sourceStatus": "official_eAIP_DATA_procedure_source_commercial_reuse_confirmed",
+          "dataStatus": "partial_current_cycle_imported",
+          "exampleSources": [
+            {
+              "id": "LFPG_SID",
+              "airport": "LFPG",
+              "file": "AD_2_LFPG_DATA_SID_RWY26L-26R_RNAV_CODE_02.pdf",
+              "documentDate": "2026-10-01",
+              "url": "https://www.sia.aviation-civile.gouv.fr/media/dvd/eAIP_29_OCT_2026/FRANCE/AIRAC-2026-10-29/html/eAIP/Cartes/LFPG/AD_2_LFPG_DATA_SID_RWY26L-26R_RNAV_CODE_02.pdf"
+            },
+            {
+              "id": "LFPG_STAR",
+              "airport": "LFPG",
+              "file": "AD_2_LFPG_DATA_STAR_RWY26L_RNAV_CODE_02.pdf",
+              "documentDate": "2026-06-11",
+              "url": "https://www.sia.aviation-civile.gouv.fr/media/dvd/eAIP_29_OCT_2026/FRANCE/AIRAC-2026-10-29/html/eAIP/Cartes/LFPG/AD_2_LFPG_DATA_STAR_RWY26L_RNAV_CODE_02.pdf"
+            }
+          ],
+          "notes": "The exact free eAIP ZIP product page links its licence to the SIA Open Licence. The SIA free-disposition catalogue says every product in its subcategories is under that licence except UAS-zone data. The licence explicitly permits commercial reuse, extraction, adaptation, derivative products and redistribution worldwide, subject to attribution (SIA and last update date) and not distorting the information. Current GEN 0.4 index lists DATA SID/STAR files; parser output remains reference-only and must retain AIRAC, per-file hashes and source links.",
+          "licenseUrl": "https://www.sia.aviation-civile.gouv.fr/produits-numeriques-en-libre-disposition.html",
+          "commercialUseAllowed": true,
+          "recordCount": 7988,
+          "procedureTypeCounts": {
+            "SID": 4665,
+            "STAR": 3323
+          },
+          "sourceDocumentCount": 380,
+          "parsedDocumentCount": 239,
+          "skippedDocumentCount": 141,
+          "documentCoverageRatio": 0.6289
+        },
+        {
           "id": "BE_SKEYES_AIP",
           "jurisdiction": "BE",
           "provider": "AIM Belgium / skeyes",
@@ -381,41 +441,6 @@
           "sourceStatus": "candidate_official_AIP_open_product",
           "dataStatus": "not_imported",
           "notes": "PAC-P AIP is separately published by SIA. Do not assume the main SIA open-product licence applies to this exact PAC-P package until product catalogue/terms explicitly confirm coverage. Verify current AIRAC and product scope, then parser support."
-        },
-        {
-          "id": "FR_SIA_EAIP_DATA_PDFS",
-          "jurisdiction": "FR",
-          "provider": "Service de l'Information Aeronautique (SIA France)",
-          "sourceUrl": "https://www.sia.aviation-civile.gouv.fr/media/dvd/eAIP_29_OCT_2026/FRANCE/AIRAC-2026-10-29/pdf/FR-GEN-0.4-fr-FR.pdf",
-          "format": [
-            "official eAIP GEN 0.4 index",
-            "PDF DATA SID/STAR tables"
-          ],
-          "procedureScope": [
-            "SIDs",
-            "STARs"
-          ],
-          "license": "SIA Licence Ouverte / Open Licence",
-          "licenseUrl": "https://www.sia.aviation-civile.gouv.fr/produits-numeriques-en-libre-disposition.html",
-          "redistribution": "commercial_public_redistribution",
-          "licenseStatus": "verified_exact_eAIP_product_linked_to_open_license",
-          "attribution": "Service de l'Information Aeronautique (SIA France); include source and last update date; do not imply SIA endorsement.",
-          "cycle": "2026-10-29",
-          "effectiveDate": "2026-10-29",
-          "expiryDate": "2026-11-25",
-          "sourceStatus": "official_eAIP_DATA_procedure_source_commercial_reuse_confirmed",
-          "dataStatus": "partial_current_cycle_imported",
-          "recordCount": 7988,
-          "procedureTypeCounts": {
-            "SID": 4665,
-            "STAR": 3323
-          },
-          "sourceDocumentCount": 380,
-          "parsedDocumentCount": 239,
-          "skippedDocumentCount": 141,
-          "documentCoverageRatio": 0.6289,
-          "operationallyAvailable": false,
-          "notes": "Do not treat regional reference procedure legs as an approved operational navigation database."
         }
       ]
     },
@@ -528,8 +553,8 @@
       "path": "airports/airports.csv",
       "available": false,
       "recordCount": 29747,
-      "sizeBytes": 7125269,
-      "sha256": "1d7b2641dce7e39b752ff1074509643a22e4252f20e7b5f4a7488f1d1d982ade",
+      "sizeBytes": 7125037,
+      "sha256": "a4470da23bff47c49e3f85f928ca3b408e5ba5a89b9a6614a5cd430d6e817798",
       "sourceProvider": "FlightTempo airport reference with OurAirports enrichment",
       "sourceUrl": "https://ourairports.com/data/",
       "coverage": "Global airport reference; airport metadata, elevation and runway details enriched where source identifiers match",
@@ -549,9 +574,9 @@
       "path": "navigation/airports/ourairports_airports.csv",
       "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/navigation/airports/ourairports_airports.csv",
       "available": true,
-      "recordCount": 86383,
-      "sizeBytes": 15905949,
-      "sha256": "7293eec3a0766f0415d6c58da87ef4dd597833333e94b5f48f0924aee9c84fac",
+      "recordCount": 86387,
+      "sizeBytes": 15906722,
+      "sha256": "669326e9f24b4fdf8c7051cc0c96be4b5dda1a78d9e31b14564b2d5ed4df6e9c",
       "sourceProvider": "OurAirports",
       "sourceUrl": "",
       "coverage": "",
@@ -568,9 +593,9 @@
       "path": "navigation/runways/runways_parsed.csv",
       "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/navigation/runways/runways_parsed.csv",
       "available": true,
-      "recordCount": 47139,
-      "sizeBytes": 5226271,
-      "sha256": "25d1b2691785b38f0cd841925d2f41d2b66ab43554036c5d6d0b1647d459cf6a",
+      "recordCount": 47142,
+      "sizeBytes": 5226234,
+      "sha256": "96b392544bce7436f73c87bc551bfb8942848af2fd3d28eeeac81a5b89661f2a",
       "sourceProvider": "OurAirports",
       "sourceUrl": "",
       "coverage": "",
@@ -801,6 +826,54 @@
       "license": "GPL-3.0",
       "operationallyAvailable": false,
       "downloadBlockReason": "The global navigation snapshot is cycle 2012.08 and is stale; it remains for provenance only and is excluded from app downloads."
+    },
+    {
+      "id": "easa_czibs",
+      "path": "airspace/advisories/easa_czibs.json",
+      "available": false,
+      "recordCount": 34,
+      "sizeBytes": 18566,
+      "sha256": "35a39fe0daaca99d986f286bccf33cf28ae1db7f33762adc3808851294f4b1a6",
+      "status": "not_published_commercial_reuse_unconfirmed_or_restricted",
+      "license": "EASA source acknowledgement",
+      "operationallyAvailable": false,
+      "downloadBlockReason": "Commercial redistribution permission is not explicitly verified for this source."
+    },
+    {
+      "id": "easa_safety_directives",
+      "path": "airspace/advisories/easa_safety_directives.json",
+      "available": false,
+      "recordCount": 2,
+      "sizeBytes": 3941,
+      "sha256": "531d42feed30978bb7574c75f69782b8b19d32a34424ef67ddef8fe5e3a625d3",
+      "status": "not_published_commercial_reuse_unconfirmed_or_restricted",
+      "license": "EASA source acknowledgement",
+      "operationallyAvailable": false,
+      "downloadBlockReason": "Commercial redistribution permission is not explicitly verified for this source."
+    },
+    {
+      "id": "route_policy",
+      "path": "airspace/route_policy.json",
+      "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/airspace/route_policy.json",
+      "available": true,
+      "recordCount": 1,
+      "sizeBytes": 2075,
+      "sha256": "773b000d643bf8e4d82bbc6734ae439765d184d3154c32f1c8ac018db70ff88a",
+      "status": "route_preview_policy",
+      "license": "FlightTempo original configuration",
+      "operationallyAvailable": false
+    },
+    {
+      "id": "faa_prn_notams",
+      "path": "airspace/faa_prn_notams.json",
+      "available": false,
+      "recordCount": 16,
+      "sizeBytes": 59342,
+      "sha256": "c5ddb160f82b4e1cd9c680d365bc256543d937b577d8150f6ca71d9cce5d2cc4",
+      "status": "not_published_commercial_reuse_unconfirmed_or_restricted",
+      "license": "FAA public reference; currentness unverified",
+      "operationallyAvailable": false,
+      "downloadBlockReason": "Commercial redistribution permission is not explicitly verified for this source."
     },
     {
       "id": "faa_vfr_reporting_points",
@@ -1074,98 +1147,36 @@
       "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/terrain/world-index.json"
     },
     {
-      "id": "easa_czibs",
-      "path": "airspace/advisories/easa_czibs.json",
-      "available": false,
-      "recordCount": 34,
-      "sizeBytes": 18566,
-      "sha256": "35a39fe0daaca99d986f286bccf33cf28ae1db7f33762adc3808851294f4b1a6",
-      "sourceProvider": "European Union Aviation Safety Agency (EASA)",
-      "sourceUrl": "https://www.easa.europa.eu/en/domains/air-operations/czibs",
-      "license": "EASA website copyright notice: reproduction authorised provided source is acknowledged",
-      "licenseStatus": "reproduction_authorised_with_source_acknowledgement",
-      "dataCycle": "not_applicable",
-      "downloadPurpose": "advisory_reference_only",
-      "operationallyAvailable": false,
-      "status": "not_published_commercial_reuse_unconfirmed_or_restricted",
-      "downloadBlockReason": "Commercial redistribution permission is not explicitly verified for this source."
-    },
-    {
-      "id": "easa_safety_directives",
-      "path": "airspace/advisories/easa_safety_directives.json",
-      "available": false,
-      "recordCount": 2,
-      "sizeBytes": 3941,
-      "sha256": "531d42feed30978bb7574c75f69782b8b19d32a34424ef67ddef8fe5e3a625d3",
-      "sourceProvider": "European Union Aviation Safety Agency (EASA)",
-      "sourceUrl": "https://www.easa.europa.eu/en/domains/air-operations/czibs",
-      "license": "EASA website copyright notice: reproduction authorised provided source is acknowledged",
-      "licenseStatus": "reproduction_authorised_with_source_acknowledgement",
-      "dataCycle": "not_applicable",
-      "downloadPurpose": "operator_scope_safety_directive_reference_only",
-      "operationallyAvailable": false,
-      "status": "not_published_commercial_reuse_unconfirmed_or_restricted",
-      "downloadBlockReason": "Commercial redistribution permission is not explicitly verified for this source."
-    },
-    {
-      "id": "france_sia_sid_star_legs",
-      "path": "procedures/europe/france/sid_star_legs.csv",
-      "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/procedures/europe/france/sid_star_legs.csv",
+      "id": "openaip_airspace",
+      "path": "airspace/openaip/index.json",
       "available": true,
-      "recordCount": 7988,
-      "sizeBytes": 7133218,
-      "sha256": "0dcfd2d2b2633de45976bb6ec4a10e4a5204a4b01e40505f82be7ba5c7f99f41",
-      "sourceProvider": "Service de l'Information Aeronautique (SIA France)",
-      "sourceUrl": "https://www.sia.aviation-civile.gouv.fr/media/dvd/eAIP_29_OCT_2026/FRANCE/AIRAC-2026-10-29/pdf/FR-GEN-0.4-fr-FR.pdf",
-      "coverage": "France reference coverage: parser extracted 239 of 380 indexed current-cycle DATA SID/STAR sheets.",
-      "license": "SIA Licence Ouverte / Open Licence",
-      "licenseUrl": "https://www.sia.aviation-civile.gouv.fr/produits-numeriques-en-libre-disposition.html",
-      "licenseStatus": "verified_exact_eAIP_product_linked_to_open_license",
-      "commercialUseAllowed": true,
-      "attribution": "Service de l'Information Aeronautique (SIA France); include source and last update date; do not imply SIA endorsement.",
-      "dataCycle": "2026-10-29",
-      "effectiveDate": "2026-10-29",
-      "expiryDate": "2026-11-25",
-      "provenanceVerification": "official_SIA_eAIP_GEN_0_4_index",
-      "downloadPurpose": "regional_reference_only",
+      "recordCount": 24644,
+      "regionCount": 106,
+      "sizeBytes": 30868,
+      "sha256": "d33f904ce9c3c8593d64e1e199c7a8aa33bd3ff357c66b062c38e31300275bda",
+      "regionBytes": 13001347,
+      "sourceProvider": "openAIP",
+      "sourceUrl": "https://www.openaip.net",
+      "license": "CC BY-NC 4.0 (non-commercial)",
+      "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+      "licenseStatus": "openaip_noncommercial_personal_use_only",
+      "attribution": "Contains data from openAIP (www.openaip.net), licensed CC BY-NC 4.0.",
+      "alterations": [
+        "Reduced to type, class, name, vertical limits and outer polygon rings (other attributes dropped).",
+        "Coordinates rounded to 5 decimal places; polygon holes are not kept.",
+        "FIR, UIR and airway entries are excluded."
+      ],
+      "usage": "non-commercial",
+      "personalUseOnly": true,
+      "commercialUseAllowed": false,
+      "usageScopeNote": "Test-phase layer. Switch off (usage scope) before any paid or public release.",
+      "coverage": "Countries not covered by a verified free-commercial source (gap filling); airspace polygons only.",
+      "dataCycle": null,
+      "provenanceVerification": "source_snapshot",
+      "downloadPurpose": "reference_only",
       "operationallyAvailable": false,
-      "status": "partial_current_cycle_regional_reference_dataset"
-    },
-    {
-      "id": "faa_prn_notams",
-      "path": "airspace/faa_prn_notams.json",
-      "available": false,
-      "recordCount": 16,
-      "sizeBytes": 59342,
-      "sha256": "92731ec8475682d6c13fa5acd3b86dbe909aae1d3ea9d12fa96e6d4693d19c6e",
-      "license": "FAA government source; public information",
-      "status": "not_published_commercial_reuse_unconfirmed_or_restricted",
-      "operationallyAvailable": false,
-      "downloadBlockReason": "Commercial redistribution permission is not explicitly verified for this source."
-    },
-    {
-      "id": "airspace_filter",
-      "path": "airspace/airspace_filter.json",
-      "available": false,
-      "recordCount": 16,
-      "sizeBytes": 23737,
-      "sha256": "4c130448135d99280655770c9222c2b4ae698a2538f145e2195e334cf2a6889f",
-      "license": "EASA acknowledgement + OpenAIP CC BY-NC 4.0 + FAA reference",
-      "status": "not_published_commercial_reuse_unconfirmed_or_restricted",
-      "operationallyAvailable": false,
-      "downloadBlockReason": "Commercial redistribution permission is not explicitly verified for this source."
-    },
-    {
-      "id": "route_policy",
-      "path": "airspace/route_policy.json",
-      "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/airspace/route_policy.json",
-      "available": true,
-      "recordCount": 1,
-      "sizeBytes": 2075,
-      "sha256": "773b000d643bf8e4d82bbc6734ae439765d184d3154c32f1c8ac018db70ff88a",
-      "license": "FlightTempo original configuration",
-      "status": "route_preview_policy",
-      "operationallyAvailable": false
+      "status": "personal_use_only",
+      "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/airspace/openaip/index.json"
     },
     {
       "id": "adsb_observed_routes",
@@ -1197,38 +1208,6 @@
       "operationallyAvailable": false,
       "legacyGraphUsed": false,
       "status": "test_phase_not_published_to_app"
-    },
-    {
-      "id": "openaip_airspace",
-      "path": "airspace/openaip/index.json",
-      "available": true,
-      "recordCount": 24644,
-      "regionCount": 106,
-      "sizeBytes": 30868,
-      "sha256": "d33f904ce9c3c8593d64e1e199c7a8aa33bd3ff357c66b062c38e31300275bda",
-      "regionBytes": 13001347,
-      "sourceProvider": "openAIP",
-      "sourceUrl": "https://www.openaip.net",
-      "license": "CC BY-NC 4.0 (non-commercial)",
-      "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
-      "licenseStatus": "openaip_noncommercial_personal_use_only",
-      "attribution": "Contains data from openAIP (www.openaip.net), licensed CC BY-NC 4.0.",
-      "alterations": [
-        "Reduced to type, class, name, vertical limits and outer polygon rings (other attributes dropped).",
-        "Coordinates rounded to 5 decimal places; polygon holes are not kept.",
-        "FIR, UIR and airway entries are excluded."
-      ],
-      "usage": "non-commercial",
-      "personalUseOnly": true,
-      "commercialUseAllowed": false,
-      "usageScopeNote": "Test-phase layer. Switch off (usage scope) before any paid or public release.",
-      "coverage": "Countries not covered by a verified free-commercial source (gap filling); airspace polygons only.",
-      "dataCycle": null,
-      "provenanceVerification": "source_snapshot",
-      "downloadPurpose": "reference_only",
-      "operationallyAvailable": false,
-      "status": "personal_use_only",
-      "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/airspace/openaip/index.json"
     }
   ],
   "downloadContract": {
@@ -1313,7 +1292,7 @@
     "airportSource": "https://davidmegginson.github.io/ourairports-data/airports.csv",
     "runwaySource": "https://davidmegginson.github.io/ourairports-data/runways.csv",
     "license": "Public Domain / CC0 as stated by OurAirports",
-    "downloadedAtUtc": "2026-11-24T02:26:50.908508+00:00",
+    "downloadedAtUtc": "2026-11-24T11:26:52.326521+00:00",
     "matchedElevationRecords": 28488,
     "matchedAirportMetadataRecords": 29747,
     "matchedAirportsWithRunways": 24175,
