@@ -51,8 +51,18 @@ def main() -> int:
         if t is None:
             continue
         print(f"== PAGE {page} {len(t)} bytes; tables={t.count('<table')}; rows={t.count('<tr')}")
-        start = t.find("<table")
-        print(squash(t[start:start + 6000] if start >= 0 else t, 6000))
+        rows = re.findall(r"<tr[^>]*>(.*?)</tr>", t, flags=re.S)
+        texts = []
+        for r in rows:
+            cells = re.findall(r"<t[dh][^>]*>(.*?)</t[dh]>", r, flags=re.S)
+            cells = [re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", c)).strip() for c in cells]
+            texts.append(" | ".join(c for c in cells if c))
+        coord = [x for x in texts if re.search(r"\d{2,3}[°\s]?\d{2}['\s]?\d{0,2}[.,]?\d*\"?\s?[NSEW]\b", x)]
+        print(f"  text rows {len(texts)}, rows with coordinates {len(coord)}")
+        for x in texts[3:9]:
+            print("  ROW:", x[:300])
+        for x in coord[:10]:
+            print("  COORD ROW:", x[:400])
     return 0
 
 
