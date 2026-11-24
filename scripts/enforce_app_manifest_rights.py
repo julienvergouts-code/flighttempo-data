@@ -55,6 +55,7 @@ CAPABILITY_FLAGS = {
     "ofma_airspace": ("ofmaAirspace",),
     "terrain_tiles": ("terrainTiles",),
     "terrain_world": ("terrainWorld",),
+    "openaip_airspace": ("openaipAirspace",),
     "sids": ("sids",),
     "stars": ("stars",),
     "approaches": ("approaches", "ilsApproaches", "rnavApproaches"),

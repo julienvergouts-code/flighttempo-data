@@ -1,0 +1,63 @@
+name: Update openAIP airspace (non-commercial test layer)
+on:
+  schedule:
+    - cron: '40 2 * * 1'
+  workflow_dispatch:
+    inputs:
+      country:
+        description: 'Only this ISO country code, e.g. US (empty = all not covered by verified sources)'
+        required: false
+        default: ''
+permissions:
+  contents: write
+concurrency:
+  group: flighttempo-shared-manifest-updates
+  cancel-in-progress: false
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    env:
+      OPENAIP_API_KEY: ${{ secrets.OPENAIP_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Tests
+        run: python -m unittest tests.test_import_openaip_airspace tests.test_register_openaip_manifest tests.test_personal_use_scope
+      - name: Import openAIP airspace (skips cleanly without access)
+        id: import
+        continue-on-error: true
+        run: |
+          ARGS=""
+          if [ -n "${{ inputs.country }}" ]; then ARGS="--country ${{ inputs.country }}"; fi
+          python pipeline/import_openaip_airspace.py $ARGS
+      - name: Register layer
+        run: python scripts/register_openaip_manifest.py
+      - name: Re-apply cycle and rights gate
+        run: python scripts/enforce_app_manifest_rights.py
+      - name: Validate manifest datasets
+        run: python scripts/validate_navigation_csvs.py
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add airspace/openaip navigation_manifest.json
+          if git diff --cached --quiet; then echo "No changes."; else
+            git commit -m "chore(navdata): update openAIP airspace [skip ci]"
+            for attempt in 1 2 3; do
+              git fetch -q origin main
+              if git rebase origin/main; then git push origin HEAD:main && break
+              else
+                git rebase --abort; git reset -q --hard origin/main
+                python pipeline/import_openaip_airspace.py || true
+                python scripts/register_openaip_manifest.py
+                python scripts/enforce_app_manifest_rights.py
+                git add airspace/openaip navigation_manifest.json
+                git commit -q -m "chore(navdata): update openAIP airspace [skip ci]" || break
+              fi
+            done
+          fi
+      - name: Fail if the importer reported problems
+        if: steps.import.outcome == 'failure'
+        run: exit 1

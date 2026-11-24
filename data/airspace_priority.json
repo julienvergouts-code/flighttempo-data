@@ -1,0 +1,7 @@
+{
+  "schemaVersion": 1,
+  "note": "Gap-filling rule: the openAIP layer (CC BY-NC, personal/non-commercial phase only) skips countries already covered by a verified free-commercial source. Set --include-covered on the importer to build them anyway (for comparison only).",
+  "coveredByVerifiedSources": {
+    "ofma": ["BE", "DE", "FI", "NL", "DK", "PL", "SE", "ZA", "NA", "HR", "FR", "GR", "HU", "IT", "SI", "CZ", "MT", "AT", "RO", "CH", "SK"]
+  }
+}
