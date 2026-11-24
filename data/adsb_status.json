@@ -1,0 +1,5 @@
+{
+  "feedsApp": false,
+  "phase": "test",
+  "note": "ADS-B observed routes are still a test pipeline (owner decision 2026-11-24). Keep feedsApp false until the weekly runs have proven stable and the owner says it may feed the app."
+}
