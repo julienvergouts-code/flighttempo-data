@@ -7,16 +7,19 @@
  "attribution": "Contains information from ADSB.lol, made available under the Open Database License (ODbL) 1.0.",
  "sourceUrl": "https://github.com/adsblol",
  "file": "observed_routes.json.gz",
- "sizeBytes": 12288,
- "sha256": "bdc910592aa7ae375abf9ed1a74cdcddba2d13a587eda9e4c9f45c38761db29b",
- "airportPairs": 59,
- "routeCount": 60,
- "flightsCounted": 60,
+ "sizeBytes": 85004,
+ "sha256": "f96cb9e2313d390ec3547ce2ab2c31e1f7b707e606315b9036e71fddfc890a3f",
+ "airportPairs": 412,
+ "routeCount": 428,
+ "flightsCounted": 462,
  "confidence": {
-  "LOW": 60
+  "LOW": 426,
+  "HIGH": 1,
+  "MEDIUM": 1
  },
  "processedDates": [
-  "2026-11-20"
+  "2026-11-20",
+  "2026-11-21"
  ],
  "confidenceRule": "LOW 1-2 flights, MEDIUM 3-4, HIGH 5 or more flights in the group.",
  "method": "Complete flights (ground to ground) from airline-style traces; paths grouped within 12 NM mean separation.",
