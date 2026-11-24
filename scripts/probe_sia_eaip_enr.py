@@ -41,8 +41,10 @@ def main() -> int:
             continue
         print(f"== {rel} {len(t)} bytes")
         print(squash(t, 1200))
-        links = sorted(set(re.findall(r'href="([^"#]*(?:ENR|GEN)[^"#]*)"', t)))
-        print("ENR/GEN links:", len(links), links[:80])
+        links = sorted(set(m.split("#")[0] for m in re.findall(r"""href=["']([^"']*(?:ENR|GEN)[^"']*)["']""", t)))
+        print("ENR/GEN files:", len(links), links[:120])
+        i = t.find("ENR")
+        print("first ENR context:", squash(t[max(0, i - 400):i + 600], 1000))
     extra = os.environ.get("EXTRA_PAGES", "").split()
     for page in extra:
         t = get(f"{base}/html/eAIP/{page}")
