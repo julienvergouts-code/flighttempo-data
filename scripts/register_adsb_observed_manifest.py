@@ -23,7 +23,19 @@ MANIFEST = ROOT / "navigation_manifest.json"
 RAW_MAIN = "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/"
 
 
-def register(index_path: Path = INDEX, manifest_path: Path = MANIFEST, scope_path: Path | None = None) -> dict | None:
+STATUS = ROOT / "data" / "adsb_status.json"
+
+
+def feeds_app_enabled(path: Path | None = None) -> bool:
+    """True only when data/adsb_status.json explicitly says feedsApp is true (default: still a test pipeline)."""
+    try:
+        return json.loads((path or STATUS).read_text(encoding="utf-8")).get("feedsApp") is True
+    except (OSError, ValueError):
+        return False
+
+
+def register(index_path: Path = INDEX, manifest_path: Path = MANIFEST, scope_path: Path | None = None,
+             status_path: Path | None = None) -> dict | None:
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     rest = [d for d in manifest.setdefault("datasets", []) if d.get("id") != "adsb_observed_routes"]
     caps = manifest.setdefault("capabilities", {})
@@ -38,8 +50,10 @@ def register(index_path: Path = INDEX, manifest_path: Path = MANIFEST, scope_pat
     if not index.get("routeCount"):
         raise ValueError("observed routes index lists no routes")
     personal = personal_scope_active(scope_path) if scope_path else personal_scope_active()
+    feeds_app = feeds_app_enabled(status_path)
+    live = personal and feeds_app
     entry = {
-        "id": "adsb_observed_routes", "path": "routes/observed/index.json", "available": personal,
+        "id": "adsb_observed_routes", "path": "routes/observed/index.json", "available": live, "testPhase": not feeds_app,
         "recordCount": index["routeCount"], "airportPairs": index["airportPairs"],
         "flightsCounted": index["flightsCounted"],
         "sizeBytes": len(raw), "sha256": hashlib.sha256(raw).hexdigest(), "packFile": "routes/observed/" + index["file"],
@@ -53,16 +67,16 @@ def register(index_path: Path = INDEX, manifest_path: Path = MANIFEST, scope_pat
         "coverage": "Airline flights between airports seen in the ADSB.lol archive days processed so far; grows weekly.",
         "dataCycle": None, "provenanceVerification": "source_snapshot", "downloadPurpose": "reference_only",
         "operationallyAvailable": False, "legacyGraphUsed": False,
-        "status": "personal_use_only" if personal else "blocked_scope_not_personal",
+        "status": ("personal_use_only" if live else "test_phase_not_published_to_app" if personal else "blocked_scope_not_personal"),
     }
-    if personal:
+    if live:
         entry["downloadUrl"] = RAW_MAIN + "routes/observed/index.json"
     manifest["datasets"] = rest + [entry]
-    caps["adsbObservedRoutes"] = personal
+    caps["adsbObservedRoutes"] = live
     manifest.setdefault("statistics", {})["adsbObservedRoutes"] = index["routeCount"]
     manifest["generatedAtUtc"] = datetime.now(timezone.utc).isoformat()
     manifest_path.write_text(json.dumps(manifest, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
-    print(f"Registered adsb_observed_routes: {index['routeCount']} routes, {index['airportPairs']} airport pairs, available={personal}")
+    print(f"Registered adsb_observed_routes: {index['routeCount']} routes, {index['airportPairs']} airport pairs, available={live}")
     return entry
 
 
