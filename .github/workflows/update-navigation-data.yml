@@ -349,6 +349,8 @@ jobs:
           if [ -f terrain/world-index.json ]; then python3 scripts/register_terrain_world_manifest.py; fi
       - name: Register openAIP airspace layer in navigation manifest
         run: python3 scripts/register_openaip_manifest.py
+      - name: Register SIA France fixes, navaids, airways and airspace in navigation manifest
+        run: python3 scripts/register_sia_france_manifest.py
       - name: Register ADS-B observed routes in navigation manifest
         run: |
           if [ -f routes/observed/index.json ]; then python3 scripts/register_adsb_observed_manifest.py; fi
@@ -438,7 +440,7 @@ jobs:
                       count = sum(region["featureCount"] for region in obj["regions"])
                   elif dataset.get("id") == "terrain_tiles":
                       count = sum(region["tileCount"] for region in obj["regions"])
-                  elif dataset.get("id") == "openaip_airspace":
+                  elif dataset.get("id") in {"openaip_airspace", "sia_france_airspace"}:
                       count = sum(region["featureCount"] for region in obj["regions"])
                   elif dataset.get("id") == "terrain_world":
                       count = sum(block["tileCount"] for block in obj["blocks"])

@@ -41,16 +41,41 @@ def main() -> int:
             continue
         print(f"== {rel} {len(t)} bytes")
         print(squash(t, 1200))
-        links = sorted(set(re.findall(r'href="([^"#]*(?:ENR|GEN)[^"#]*)"', t)))
-        print("ENR/GEN links:", len(links), links[:80])
+        links = sorted(set(m.split("#")[0] for m in re.findall(r"""href=["']([^"']*(?:ENR|GEN)[^"']*)["']""", t)))
+        print("ENR/GEN files:", len(links), links[:120])
+        i = t.find("ENR")
+        print("first ENR context:", squash(t[max(0, i - 400):i + 600], 1000))
     extra = os.environ.get("EXTRA_PAGES", "").split()
     for page in extra:
         t = get(f"{base}/html/eAIP/{page}")
         if t is None:
             continue
         print(f"== PAGE {page} {len(t)} bytes; tables={t.count('<table')}; rows={t.count('<tr')}")
-        start = t.find("<table")
-        print(squash(t[start:start + 6000] if start >= 0 else t, 6000))
+        rows = re.findall(r"<tr[^>]*>(.*?)</tr>", t, flags=re.S)
+        texts = []
+        for r in rows:
+            cells = re.findall(r"<t[dh][^>]*>(.*?)</t[dh]>", r, flags=re.S)
+            cells = [re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", c)).strip() for c in cells]
+            texts.append(" | ".join(c for c in cells if c))
+        coord = [x for x in texts if re.search(r"\d{2,3}[°\s]?\d{2}['\s]?\d{0,2}[.,]?\d*\"?\s?[NSEW]\b", x)]
+        print(f"  text rows {len(texts)}, rows with coordinates {len(coord)}")
+        if len(t) < 40000:
+            print("  FULLRAW:", squash(re.sub(r"<[^>]+>", " ", t), 3000))
+        if os.environ.get("AROUND"):
+            for k in [int(v) for v in os.environ["AROUND"].split(",")]:
+                idxs = [n for n, x in enumerate(texts) if x in coord]
+                if k < len(idxs):
+                    n = idxs[k]
+                    for m in range(max(0, n - 5), min(len(texts), n + 3)):
+                        print(f"  A{k}/R{m}:", texts[m][:330])
+        if os.environ.get("ROWS_FROM"):
+            a = int(os.environ["ROWS_FROM"])
+            for k, x in enumerate(texts[a:a + 45]):
+                print(f"  R{a + k}:", x[:260])
+        for x in texts[3:9]:
+            print("  ROW:", x[:300])
+        for x in coord[:10]:
+            print("  COORD ROW:", x[:400])
     return 0
 
 
