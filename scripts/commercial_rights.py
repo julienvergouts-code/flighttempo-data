@@ -47,6 +47,11 @@ def personal_scope_active(path: Path = USAGE_SCOPE) -> bool:
     return data.get("scope") == "personal" and bool(data.get("confirmedBy"))
 
 
+# Non-commercial wording is acceptable only for datasets explicitly marked personalUseOnly
+# while data/usage_scope.json says 'personal' (e.g. the openAIP test-phase layer).
+NONCOMMERCIAL_MARKERS = ("cc by-nc", "cc_by_nc", "non_commercial_only", "non-commercial-only")
+
+
 def redistribution_block_reason(dataset: dict, personal_scope: bool = False) -> str | None:
     """Return a reason unless commercial redistribution is explicitly verified.
 
@@ -57,8 +62,12 @@ def redistribution_block_reason(dataset: dict, personal_scope: bool = False) -> 
         str(dataset.get(key, ""))
         for key in ("license", "licenseStatus", "status", "redistribution")
     ).lower()
+    personal_ok = (personal_scope and dataset.get("personalUseOnly") is True
+                   and dataset.get("commercialUseAllowed") is False)
     for marker in BLOCKED_MARKERS:
         if marker in text:
+            if personal_ok and marker in NONCOMMERCIAL_MARKERS:
+                continue
             return marker
 
     if dataset.get("commercialUseAllowed") is True:

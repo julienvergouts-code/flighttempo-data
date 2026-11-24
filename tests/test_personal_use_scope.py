@@ -33,7 +33,7 @@ class ScopeTests(unittest.TestCase):
     def test_unmarked_or_commercial_blocked_dataset_is_not_rescued(self):
         plain = {"id": "y", "licenseStatus": "unknown"}
         self.assertEqual(cr.redistribution_block_reason(plain, personal_scope=True), "commercial_reuse_not_confirmed")
-        nc = dict(PERSONAL, license="CC BY-NC 4.0")
+        nc = dict(PERSONAL, license="CC BY-NC 4.0", personalUseOnly=False)
         self.assertEqual(cr.redistribution_block_reason(nc, personal_scope=True), "cc by-nc")
 
     def test_real_repo_scope_file_names_the_owner(self):
@@ -42,5 +42,17 @@ class ScopeTests(unittest.TestCase):
         self.assertTrue(data["confirmedBy"])
 
 
+class NonCommercialMarkerTests(unittest.TestCase):
+    def test_noncommercial_wording_only_passes_in_personal_scope(self):
+        from commercial_rights import redistribution_block_reason as r
+        d = {"id": "openaip_airspace", "license": "CC BY-NC 4.0", "personalUseOnly": True, "commercialUseAllowed": False}
+        self.assertIsNone(r(d, True))
+        self.assertEqual(r(d, False), "cc by-nc")
+        d2 = dict(d, license="CC BY-NC 4.0 permission_required")
+        self.assertEqual(r(d2, True), "permission_required")
+        self.assertEqual(r(dict(d, personalUseOnly=False), True), "cc by-nc")
+
+
 if __name__ == "__main__":
     unittest.main()
+
