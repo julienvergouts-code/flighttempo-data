@@ -1,6 +1,6 @@
 {
   "schemaVersion": 13,
-  "generatedAtUtc": "2026-11-24T15:25:20.832254+00:00",
+  "generatedAtUtc": "2026-11-24T15:32:49.143585+00:00",
   "procedureAiracCycle": "2611",
   "navaidTypeCounts": {
     "DME": 167,
@@ -166,8 +166,8 @@
     "siaFranceNavaids": true,
     "siaFranceAirwaySegments": true,
     "siaFranceAirspace": true,
-    "openaipNavaids": false,
-    "openaipReportingPoints": false
+    "openaipNavaids": true,
+    "openaipReportingPoints": true
   },
   "procedureCoverageStatus": "FAA_US_NAS_CYCLE_PINNED; FRANCE_SIA_PARTIAL_CURRENT_SIDS_STARS; NO_COMPLETE_WORLDWIDE_IFR_PROCEDURES",
   "procedureOperationalUse": false,
@@ -1206,38 +1206,6 @@
       "status": "partial_current_cycle_regional_reference_dataset"
     },
     {
-      "id": "openaip_airspace",
-      "path": "airspace/openaip/index.json",
-      "available": true,
-      "recordCount": 24644,
-      "regionCount": 106,
-      "sizeBytes": 30868,
-      "sha256": "d33f904ce9c3c8593d64e1e199c7a8aa33bd3ff357c66b062c38e31300275bda",
-      "regionBytes": 13001347,
-      "sourceProvider": "openAIP",
-      "sourceUrl": "https://www.openaip.net",
-      "license": "CC BY-NC 4.0 (non-commercial)",
-      "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
-      "licenseStatus": "openaip_noncommercial_personal_use_only",
-      "attribution": "Contains data from openAIP (www.openaip.net), licensed CC BY-NC 4.0.",
-      "alterations": [
-        "Reduced to type, class, name, vertical limits and outer polygon rings (other attributes dropped).",
-        "Coordinates rounded to 5 decimal places; polygon holes are not kept.",
-        "FIR, UIR and airway entries are excluded."
-      ],
-      "usage": "non-commercial",
-      "personalUseOnly": true,
-      "commercialUseAllowed": false,
-      "usageScopeNote": "Test-phase layer. Switch off (usage scope) before any paid or public release.",
-      "coverage": "Countries not covered by a verified free-commercial source (gap filling); airspace polygons only.",
-      "dataCycle": null,
-      "provenanceVerification": "source_snapshot",
-      "downloadPurpose": "reference_only",
-      "operationallyAvailable": false,
-      "status": "personal_use_only",
-      "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/airspace/openaip/index.json"
-    },
-    {
       "id": "sia_france_fixes",
       "recordCount": 1839,
       "path": "navigation/sia_france/fixes.csv",
@@ -1362,6 +1330,94 @@
       "operationallyAvailable": false,
       "legacyGraphUsed": false,
       "status": "test_phase_not_published_to_app"
+    },
+    {
+      "id": "openaip_airspace",
+      "path": "airspace/openaip/index.json",
+      "available": true,
+      "recordCount": 24644,
+      "regionCount": 106,
+      "sizeBytes": 30868,
+      "sha256": "d33f904ce9c3c8593d64e1e199c7a8aa33bd3ff357c66b062c38e31300275bda",
+      "regionBytes": 13001347,
+      "sourceProvider": "openAIP",
+      "sourceUrl": "https://www.openaip.net",
+      "license": "CC BY-NC 4.0 (non-commercial)",
+      "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+      "licenseStatus": "openaip_noncommercial_personal_use_only",
+      "attribution": "Contains data from openAIP (www.openaip.net), licensed CC BY-NC 4.0.",
+      "alterations": [
+        "Reduced to type, class, name, vertical limits and outer polygon rings (other attributes dropped).",
+        "Coordinates rounded to 5 decimal places; polygon holes are not kept.",
+        "FIR, UIR and airway entries are excluded."
+      ],
+      "usage": "non-commercial",
+      "personalUseOnly": true,
+      "commercialUseAllowed": false,
+      "usageScopeNote": "Test-phase layer. Switch off (usage scope) before any paid or public release.",
+      "coverage": "Countries not covered by a verified free-commercial source (gap filling); airspace polygons only.",
+      "dataCycle": null,
+      "provenanceVerification": "source_snapshot",
+      "downloadPurpose": "reference_only",
+      "operationallyAvailable": false,
+      "status": "personal_use_only",
+      "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/airspace/openaip/index.json"
+    },
+    {
+      "id": "openaip_navaids",
+      "path": "navigation/openaip/navaids.csv",
+      "available": true,
+      "recordCount": 3555,
+      "sizeBytes": 284435,
+      "sha256": "3f682b4e6d787e02732e07305f47b7eae4b7c552dafa1a3043c2bb676c4adbb1",
+      "sourceProvider": "openAIP",
+      "sourceUrl": "https://www.openaip.net",
+      "license": "CC BY-NC 4.0 (non-commercial)",
+      "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+      "licenseStatus": "openaip_noncommercial_personal_use_only",
+      "attribution": "Contains data from openAIP (www.openaip.net), licensed CC BY-NC 4.0.",
+      "alterations": [
+        "Reduced to identifier, type, name, position, elevation, frequency and country."
+      ],
+      "usage": "non-commercial",
+      "personalUseOnly": true,
+      "commercialUseAllowed": false,
+      "usageScopeNote": "Test-phase layer. Switch off (usage scope) before any paid or public release.",
+      "coverage": "VOR, DME, NDB, TACAN outside the US and France (gap filling).",
+      "dataCycle": null,
+      "provenanceVerification": "source_snapshot",
+      "downloadPurpose": "reference_only",
+      "operationallyAvailable": false,
+      "status": "personal_use_only",
+      "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/navigation/openaip/navaids.csv"
+    },
+    {
+      "id": "openaip_reporting_points",
+      "path": "data/openaip_reporting_points.csv",
+      "available": true,
+      "recordCount": 2804,
+      "sizeBytes": 163258,
+      "sha256": "383a7f338bc1259ee7c53df8400b40c2f7cb4498234a4a61b8df64dd280383f3",
+      "sourceProvider": "openAIP",
+      "sourceUrl": "https://www.openaip.net",
+      "license": "CC BY-NC 4.0 (non-commercial)",
+      "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+      "licenseStatus": "openaip_noncommercial_personal_use_only",
+      "attribution": "Contains data from openAIP (www.openaip.net), licensed CC BY-NC 4.0.",
+      "alterations": [
+        "Reduced to identifier, type, name, position, elevation, frequency and country."
+      ],
+      "usage": "non-commercial",
+      "personalUseOnly": true,
+      "commercialUseAllowed": false,
+      "usageScopeNote": "Test-phase layer. Switch off (usage scope) before any paid or public release.",
+      "coverage": "VFR reporting points (entry/exit, compulsory flag) in countries OFMA and the FAA do not cover.",
+      "dataCycle": null,
+      "provenanceVerification": "source_snapshot",
+      "downloadPurpose": "reference_only",
+      "operationallyAvailable": false,
+      "status": "personal_use_only",
+      "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/data/openaip_reporting_points.csv"
     }
   ],
   "downloadContract": {
@@ -1739,17 +1795,14 @@
       "datasets": [
         "openaip_navaids"
       ],
-      "availableDatasets": [],
-      "unavailableDatasets": [
-        {
-          "id": "openaip_navaids",
-          "reason": "not_in_manifest"
-        }
+      "availableDatasets": [
+        "openaip_navaids"
       ],
-      "userToggle": false,
-      "defaultOn": false,
-      "tier": "commercial_or_public",
-      "recordCount": 0,
+      "unavailableDatasets": [],
+      "userToggle": true,
+      "defaultOn": true,
+      "tier": "personal_use_only",
+      "recordCount": 3555,
       "fallbackFor": [
         "navaids_current"
       ],
@@ -1762,17 +1815,14 @@
       "datasets": [
         "openaip_reporting_points"
       ],
-      "availableDatasets": [],
-      "unavailableDatasets": [
-        {
-          "id": "openaip_reporting_points",
-          "reason": "not_in_manifest"
-        }
+      "availableDatasets": [
+        "openaip_reporting_points"
       ],
-      "userToggle": false,
-      "defaultOn": false,
-      "tier": "commercial_or_public",
-      "recordCount": 0,
+      "unavailableDatasets": [],
+      "userToggle": true,
+      "defaultOn": true,
+      "tier": "personal_use_only",
+      "recordCount": 2804,
       "fallbackFor": [
         "vfr_points"
       ],
@@ -1925,6 +1975,8 @@
         "navigation_legacy_2012",
         "corridor_graph_2012",
         "airspace_openaip",
+        "navaids_openaip",
+        "vfr_points_openaip",
         "terrain"
       ],
       "note": "Data that may only be used personally (non-commercial, legacy or unverified licences). A public or paid build must hide these layers and keep the switch off."
