@@ -50,9 +50,12 @@ class T(unittest.TestCase):
     def test_guards(self):
         with self.assertRaises(m.OpenAipError):
             m.check_country("BE", [], {"stats": {"considered": 3}}, None)
+        m.check_country("IN", [], {"stats": {"skipped_FIR": 4}}, None)  # FIR-only is not an error
         fs, info = m.parse_country(fc(*[feat(t=99, _id=str(i), name=str(i)) for i in range(5)]), "BE")
         with self.assertRaises(m.OpenAipError):
             m.check_country("BE", fs, info, None)
+        fs1, info1 = m.parse_country(fc(feat(t=99)), "CA")
+        m.check_country("CA", fs1, info1, None)  # one odd item is too small a sample to judge
         fs, info = m.parse_country(fc(*[feat(_id=str(i), name=str(i)) for i in range(5)]), "BE")
         with self.assertRaises(m.OpenAipError):
             m.check_country("BE", fs, info, 100)
@@ -90,7 +93,7 @@ class T(unittest.TestCase):
         def getter(url, h=None):
             if "/us_" in url:
                 return fc(*[feat(_id=str(i), name=str(i)) for i in range(6)])
-            return fc(feat(t=99))
+            return fc(*[feat(t=99, _id=str(i), name=str(i)) for i in range(5)])
         with tempfile.TemporaryDirectory() as d:
             rc = m.run(Path(d), ["US", "CA"], getter=getter)
             self.assertEqual(rc, 1)
