@@ -58,6 +58,8 @@ CAPABILITY_FLAGS = {
     "terrain_tiles": ("terrainTiles",),
     "terrain_world": ("terrainWorld",),
     "openaip_airspace": ("openaipAirspace",),
+    "openaip_navaids": ("openaipNavaids",),
+    "openaip_reporting_points": ("openaipReportingPoints",),
     "adsb_observed_routes": ("adsbObservedRoutes",),
     "sids": ("sids",),
     "stars": ("stars",),

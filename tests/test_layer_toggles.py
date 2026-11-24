@@ -39,7 +39,8 @@ class T(unittest.TestCase):
 
     def test_real_config_refers_to_known_datasets(self):
         manifest = json.loads((ROOT / "navigation_manifest.json").read_text())
-        ids = {d["id"] for d in manifest["datasets"]}
+        import register_openaip_points_manifest as pts
+        ids = {d["id"] for d in manifest["datasets"]} | {x["id"] for x in pts.SPECS}  # registered after their first import
         cfg = json.loads((ROOT / "data" / "layer_toggles.json").read_text())
         for layer in cfg["layers"]:
             for i in layer["datasets"]:
