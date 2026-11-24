@@ -1,6 +1,6 @@
 {
   "schemaVersion": 13,
-  "generatedAtUtc": "2026-11-24T01:13:36.350170+00:00",
+  "generatedAtUtc": "2026-11-24T01:17:11.768088+00:00",
   "procedureAiracCycle": "2611",
   "navaidTypeCounts": {
     "DME": 167,
@@ -33,7 +33,8 @@
     "faaNasrAirwaySegments": 17178,
     "ofmaAirspaceFeatures": 33742,
     "terrainTiles": 1982,
-    "terrainWorldTiles": 19408
+    "terrainWorldTiles": 19408,
+    "openaipAirspaces": 24644
   },
   "dataSources": [
     {
@@ -153,7 +154,8 @@
     "faaNasrAirwaySegments": true,
     "ofmaAirspace": true,
     "terrainTiles": true,
-    "terrainWorld": true
+    "terrainWorld": true,
+    "openaipAirspace": true
   },
   "procedureCoverageStatus": "FAA_US_NAS_ONLY_TEST_DATA; EUROPE_FRANCE_SOURCE_NOT_INGESTED; ASIA_NO_PUBLIC_REDISTRIBUTABLE_SOURCE_CONFIRMED",
   "procedureOperationalUse": false,
@@ -1141,6 +1143,38 @@
       "commercialUseAllowed": false,
       "usageScopeNote": "Personal use only until the Copernicus commercial reading is confirmed.",
       "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/terrain/world-index.json"
+    },
+    {
+      "id": "openaip_airspace",
+      "path": "airspace/openaip/index.json",
+      "available": true,
+      "recordCount": 24644,
+      "regionCount": 106,
+      "sizeBytes": 30868,
+      "sha256": "d33f904ce9c3c8593d64e1e199c7a8aa33bd3ff357c66b062c38e31300275bda",
+      "regionBytes": 13001347,
+      "sourceProvider": "openAIP",
+      "sourceUrl": "https://www.openaip.net",
+      "license": "CC BY-NC 4.0 (non-commercial)",
+      "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+      "licenseStatus": "openaip_noncommercial_personal_use_only",
+      "attribution": "Contains data from openAIP (www.openaip.net), licensed CC BY-NC 4.0.",
+      "alterations": [
+        "Reduced to type, class, name, vertical limits and outer polygon rings (other attributes dropped).",
+        "Coordinates rounded to 5 decimal places; polygon holes are not kept.",
+        "FIR, UIR and airway entries are excluded."
+      ],
+      "usage": "non-commercial",
+      "personalUseOnly": true,
+      "commercialUseAllowed": false,
+      "usageScopeNote": "Test-phase layer. Switch off (usage scope) before any paid or public release.",
+      "coverage": "Countries not covered by a verified free-commercial source (gap filling); airspace polygons only.",
+      "dataCycle": null,
+      "provenanceVerification": "source_snapshot",
+      "downloadPurpose": "reference_only",
+      "operationallyAvailable": false,
+      "status": "personal_use_only",
+      "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/airspace/openaip/index.json"
     }
   ],
   "downloadContract": {

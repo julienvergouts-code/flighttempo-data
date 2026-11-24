@@ -1,0 +1,1599 @@
+{
+ "schema": 1,
+ "format": "FlightTempo openAIP airspace packs (non-commercial layer)",
+ "provider": "openAIP",
+ "license": "CC BY-NC 4.0",
+ "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+ "attribution": "Contains data from openAIP (www.openaip.net), licensed CC BY-NC 4.0.",
+ "usage": "non-commercial",
+ "personalUseOnly": true,
+ "commercialUseAllowed": false,
+ "licenseConditions": [
+  "Show the openAIP attribution wherever the data is displayed.",
+  "Non-commercial use only; switch this layer off (data/usage_scope.json) before any paid release.",
+  "openAIP's homepage also says paid apps may ship the data if the data itself is not sold; get that in writing before relying on it."
+ ],
+ "alterations": [
+  "Reduced to type, class, name, vertical limits and outer polygon rings (other attributes dropped).",
+  "Coordinates rounded to 5 decimal places; polygon holes are not kept.",
+  "FIR, UIR and airway entries are excluded."
+ ],
+ "operationalUse": false,
+ "notice": "Reference data only. Not certified, not for navigation or airspace-compliance decisions.",
+ "regions": [
+  {
+   "region": "AE",
+   "file": "AE.json.gz",
+   "featureCount": 135,
+   "sizeBytes": 26495,
+   "sha256": "d968d665bf9111665e8dca71fac2a503d87ef3c0717aff484aa3d5c9a8bc4e54",
+   "types": {
+    "D": 17,
+    "CTR": 10,
+    "ATZ": 3,
+    "R": 31,
+    "P": 21,
+    "CTA": 23,
+    "RMZ": 7,
+    "LOW_OVERFLIGHT": 2,
+    "SPORT": 21
+   }
+  },
+  {
+   "region": "AF",
+   "file": "AF.json.gz",
+   "featureCount": 94,
+   "sizeBytes": 26259,
+   "sha256": "62b28610892c45a711d7b5f9eeb422c02c651923763f6911250b23fb9cde3d61",
+   "types": {
+    "R": 57,
+    "CTR": 8,
+    "TMA": 1,
+    "D": 14,
+    "ATZ": 10,
+    "P": 2,
+    "CTA": 2
+   }
+  },
+  {
+   "region": "AL",
+   "file": "AL.json.gz",
+   "featureCount": 16,
+   "sizeBytes": 2290,
+   "sha256": "a5ca1bd1d16426da4fb8325c854287bbfad3f4a9a50b34dd5dad2633e45667df",
+   "types": {
+    "CTR": 1,
+    "D": 2,
+    "R": 12,
+    "OTHER": 1
+   }
+  },
+  {
+   "region": "AM",
+   "file": "AM.json.gz",
+   "featureCount": 15,
+   "sizeBytes": 9147,
+   "sha256": "fa713f323f18fa85c3e5efd43a019dd9ad5d2bf4e74de3d71bf12cd073bb0c84",
+   "types": {
+    "TMA": 7,
+    "R": 4,
+    "CTR": 2,
+    "P": 1,
+    "ATZ": 1
+   }
+  },
+  {
+   "region": "AO",
+   "file": "AO.json.gz",
+   "featureCount": 9,
+   "sizeBytes": 4556,
+   "sha256": "51f57cbe765351e5460ba4e9da43ef5bf990083b3ab4129fb3846cd285c1770f",
+   "types": {
+    "R": 6,
+    "CTR": 2,
+    "TMA": 1
+   }
+  },
+  {
+   "region": "AR",
+   "file": "AR.json.gz",
+   "featureCount": 221,
+   "sizeBytes": 192633,
+   "sha256": "52069fa7ecab0c0c1c1b0c3d93a7b8ba26aa3f7f76e9b574fda39746b4651e02",
+   "types": {
+    "TMA": 70,
+    "CTR": 50,
+    "P": 19,
+    "R": 52,
+    "ATZ": 11,
+    "D": 1,
+    "GLIDING": 12,
+    "OTHER": 4,
+    "VFR_SECTOR": 2
+   }
+  },
+  {
+   "region": "AU",
+   "file": "AU.json.gz",
+   "featureCount": 1908,
+   "sizeBytes": 1634416,
+   "sha256": "feb767021dc9ce0cd4f32aa4c8504498e19468bf6a0e03a8eb1996d3472b82b4",
+   "types": {
+    "OTHER": 369,
+    "D": 297,
+    "ATZ": 385,
+    "R": 282,
+    "CTA": 192,
+    "RMZ": 342,
+    "CTR": 41
+   }
+  },
+  {
+   "region": "AZ",
+   "file": "AZ.json.gz",
+   "featureCount": 27,
+   "sizeBytes": 18857,
+   "sha256": "f78b3787efe1b3bb3ede97ec1c8c66d34324956398b0054e719c622c9e55b6a3",
+   "types": {
+    "R": 11,
+    "CTA": 3,
+    "TMA": 7,
+    "CTR": 5,
+    "P": 1
+   }
+  },
+  {
+   "region": "BA",
+   "file": "BA.json.gz",
+   "featureCount": 79,
+   "sizeBytes": 12916,
+   "sha256": "4725ef11a30d22c216caab9bb4822f621192af7905ee1efc1483961c0c8d997a",
+   "types": {
+    "GLIDING": 16,
+    "TMA": 4,
+    "D": 32,
+    "CTR": 4,
+    "ATZ": 14,
+    "R": 9
+   }
+  },
+  {
+   "region": "BF",
+   "file": "BF.json.gz",
+   "featureCount": 13,
+   "sizeBytes": 4078,
+   "sha256": "c92c08e35ec0a5f64cae54ed93b370440ee2b1551ff9c458e5be59882861b2d2",
+   "types": {
+    "CTR": 2,
+    "R": 4,
+    "P": 2,
+    "TMA": 5
+   }
+  },
+  {
+   "region": "BG",
+   "file": "BG.json.gz",
+   "featureCount": 189,
+   "sizeBytes": 40428,
+   "sha256": "666ba83e2da78b1eb4b92bfec93344e71482c9e64a31321e5b10aab95033236a",
+   "types": {
+    "TMA": 20,
+    "D": 80,
+    "P": 1,
+    "ATZ": 17,
+    "TRA": 52,
+    "R": 8,
+    "CTR": 5,
+    "TMZ": 6
+   }
+  },
+  {
+   "region": "BH",
+   "file": "BH.json.gz",
+   "featureCount": 8,
+   "sizeBytes": 2908,
+   "sha256": "2dfe9bf28af05a32c63855b60fb6cea979f483586dbd93c3d63f0a78e5ab334b",
+   "types": {
+    "TMA": 2,
+    "CTR": 3,
+    "P": 1,
+    "R": 2
+   }
+  },
+  {
+   "region": "BJ",
+   "file": "BJ.json.gz",
+   "featureCount": 10,
+   "sizeBytes": 3777,
+   "sha256": "3e85cf356f344b723f3164f0d46d41466080af0456dd55a80363021873a58518",
+   "types": {
+    "TMA": 1,
+    "D": 5,
+    "P": 3,
+    "CTR": 1
+   }
+  },
+  {
+   "region": "BN",
+   "file": "BN.json.gz",
+   "featureCount": 4,
+   "sizeBytes": 2418,
+   "sha256": "96913859ae04a6864db7feb01e774314572422e3702e69c5803f5e6213b1f75f",
+   "types": {
+    "CTR": 1,
+    "TMA": 3
+   }
+  },
+  {
+   "region": "BR",
+   "file": "BR.json.gz",
+   "featureCount": 735,
+   "sizeBytes": 155730,
+   "sha256": "63aed5dd844eddf2a18ecb174720378d1a5c6d93b2664c944c4f8afd5480d847",
+   "types": {
+    "OTHER": 472,
+    "R": 119,
+    "P": 55,
+    "CTR": 65,
+    "D": 20,
+    "GLIDING": 2,
+    "SPORT": 1,
+    "TMA": 1
+   }
+  },
+  {
+   "region": "BW",
+   "file": "BW.json.gz",
+   "featureCount": 40,
+   "sizeBytes": 7947,
+   "sha256": "3fd1c14336cf31bdf1ce2fd8974eda902a6437ac521221c50d7ea5fb83f96dca",
+   "types": {
+    "MTA": 4,
+    "R": 15,
+    "D": 5,
+    "TMA": 7,
+    "CTR": 4,
+    "P": 5
+   }
+  },
+  {
+   "region": "BY",
+   "file": "BY.json.gz",
+   "featureCount": 111,
+   "sizeBytes": 34758,
+   "sha256": "b376e5d453a18eea9a19533279bafb175af3d82f0f15cb58ab67df71470eac6d",
+   "types": {
+    "D": 48,
+    "TMA": 14,
+    "R": 18,
+    "CTR": 7,
+    "P": 24
+   }
+  },
+  {
+   "region": "CA",
+   "file": "CA.json.gz",
+   "featureCount": 2262,
+   "sizeBytes": 1411672,
+   "sha256": "89037432eddca7bbabcd0fc65800ad63c1680aed49a2d24c1c1c395c0b8f1d04",
+   "types": {
+    "R": 150,
+    "OTHER": 2093,
+    "D": 19
+   }
+  },
+  {
+   "region": "CF",
+   "file": "CF.json.gz",
+   "featureCount": 6,
+   "sizeBytes": 4777,
+   "sha256": "f060e87df6f43c5708ec86917f169fe33a339942fcead6096373d31a113ba36e",
+   "types": {
+    "P": 1,
+    "D": 2,
+    "TMA": 2,
+    "CTR": 1
+   }
+  },
+  {
+   "region": "CG",
+   "file": "CG.json.gz",
+   "featureCount": 20,
+   "sizeBytes": 7894,
+   "sha256": "38751bf6c39549c88ff0fab7065bb958222cab72315eccea5091d4838bf2222c",
+   "types": {
+    "P": 5,
+    "TMA": 4,
+    "D": 8,
+    "CTR": 2,
+    "R": 1
+   }
+  },
+  {
+   "region": "CL",
+   "file": "CL.json.gz",
+   "featureCount": 36,
+   "sizeBytes": 14478,
+   "sha256": "cd17f3c67c0c98bddf1e881ed7c70a209a9af27ec12f95bd3361f6191d4996ad",
+   "types": {
+    "R": 12,
+    "OTHER": 9,
+    "P": 14,
+    "D": 1
+   }
+  },
+  {
+   "region": "CM",
+   "file": "CM.json.gz",
+   "featureCount": 28,
+   "sizeBytes": 11663,
+   "sha256": "5854482488ff3ca5b515fa0eabd4a9cd4384c4e8f74acbbedd309dffda8a3422",
+   "types": {
+    "R": 4,
+    "TMA": 8,
+    "D": 4,
+    "P": 7,
+    "CTR": 5
+   }
+  },
+  {
+   "region": "CN",
+   "file": "CN.json.gz",
+   "featureCount": 141,
+   "sizeBytes": 71213,
+   "sha256": "f667a4b96822f7eb4e67807b5a5c4b7dca06d70fdde5b0eca88bf656a9e22b58",
+   "types": {
+    "CTR": 97,
+    "CTA": 17,
+    "SPORT": 11,
+    "ACC_SECTOR": 13,
+    "R": 1,
+    "D": 2
+   }
+  },
+  {
+   "region": "CO",
+   "file": "CO.json.gz",
+   "featureCount": 109,
+   "sizeBytes": 27171,
+   "sha256": "896613bc5fb61ee24a53b7add9bb5bb1d18e7121de7b5f86bed2e71bc903f566",
+   "types": {
+    "D": 3,
+    "OTHER": 66,
+    "P": 6,
+    "CTR": 15,
+    "R": 17,
+    "GLIDING": 2
+   }
+  },
+  {
+   "region": "CR",
+   "file": "CR.json.gz",
+   "featureCount": 22,
+   "sizeBytes": 9955,
+   "sha256": "4140334144bb6a482d298b0c3ef163af9e8fb4e90480fb45283eed7a9d0ea181",
+   "types": {
+    "R": 5,
+    "P": 8,
+    "CTA": 4,
+    "CTR": 2,
+    "ATZ": 1,
+    "TMA": 2
+   }
+  },
+  {
+   "region": "CW",
+   "file": "CW.json.gz",
+   "featureCount": 31,
+   "sizeBytes": 11168,
+   "sha256": "f281ee61e88718f040d20c1f089801d2bfdfd936edd7f77f0f4b49227f01ec34",
+   "types": {
+    "R": 2,
+    "TMA": 4,
+    "P": 13,
+    "CTR": 5,
+    "ATZ": 5,
+    "D": 2
+   }
+  },
+  {
+   "region": "CY",
+   "file": "CY.json.gz",
+   "featureCount": 89,
+   "sizeBytes": 18006,
+   "sha256": "5d0bc9021273ffc50cbb941ec9c73a115b9e1fc76aeb9a78fb106d80a219f4dd",
+   "types": {
+    "ATZ": 2,
+    "D": 30,
+    "SPORT": 4,
+    "TRA": 15,
+    "TSA": 10,
+    "LOW_OVERFLIGHT": 3,
+    "ACC_SECTOR": 1,
+    "CTR": 5,
+    "R": 9,
+    "TMA": 7,
+    "P": 1,
+    "CTA": 1,
+    "GLIDING": 1
+   }
+  },
+  {
+   "region": "DJ",
+   "file": "DJ.json.gz",
+   "featureCount": 15,
+   "sizeBytes": 5312,
+   "sha256": "7e2202e988c352dfe716b62585e0fe120c546b456e00235e7fa6198afa822ce1",
+   "types": {
+    "CTR": 1,
+    "D": 11,
+    "SPORT": 1,
+    "R": 2
+   }
+  },
+  {
+   "region": "DZ",
+   "file": "DZ.json.gz",
+   "featureCount": 103,
+   "sizeBytes": 64330,
+   "sha256": "246e96a5faf8b134dfa4b63e99dafb5af76d5125512f3de63a92460c6cfedf69",
+   "types": {
+    "P": 15,
+    "CTR": 28,
+    "R": 10,
+    "D": 41,
+    "OTHER": 9
+   }
+  },
+  {
+   "region": "EE",
+   "file": "EE.json.gz",
+   "featureCount": 115,
+   "sizeBytes": 19439,
+   "sha256": "d823f94d8a069ccbb8eddeaa106e3d954df7ea6d2b4c1df89ded47457ce0ee3e",
+   "types": {
+    "SPORT": 6,
+    "R": 57,
+    "D": 31,
+    "TSA": 6,
+    "TMA": 3,
+    "GLIDING": 3,
+    "RMZ": 5,
+    "CTR": 3,
+    "ATZ": 1
+   }
+  },
+  {
+   "region": "ES",
+   "file": "ES.json.gz",
+   "featureCount": 574,
+   "sizeBytes": 104752,
+   "sha256": "d60cb02df6e3ba55d735bd861d73581eb601ae9b5faa317219f2709251b91fc4",
+   "types": {
+    "TMA": 199,
+    "TSA": 8,
+    "D": 103,
+    "R": 50,
+    "LOW_OVERFLIGHT": 30,
+    "SPORT": 4,
+    "CTR": 47,
+    "CTA": 29,
+    "WARNING": 1,
+    "RMZ": 26,
+    "ATZ": 49,
+    "OTHER": 5,
+    "P": 12,
+    "VFR_SECTOR": 2,
+    "TRA": 9
+   }
+  },
+  {
+   "region": "FK",
+   "file": "FK.json.gz",
+   "featureCount": 1,
+   "sizeBytes": 2121,
+   "sha256": "df06abc7fdc40d526f477f3d4910065d329db52a1bb9ac09fb0796ebfc16fe75",
+   "types": {
+    "CTR": 1
+   }
+  },
+  {
+   "region": "FO",
+   "file": "FO.json.gz",
+   "featureCount": 1,
+   "sizeBytes": 1944,
+   "sha256": "798df57b5830ed76502c48bb5b9e4efe2efeb974d8fb818812e30b6a0e2e2ea2",
+   "types": {
+    "TIZ": 1
+   }
+  },
+  {
+   "region": "GA",
+   "file": "GA.json.gz",
+   "featureCount": 23,
+   "sizeBytes": 13061,
+   "sha256": "4cdd8267dd293a93aaa844c5e3c00518ec37a8df6ab274437d6deef7b4fd3a81",
+   "types": {
+    "TMA": 5,
+    "CTR": 3,
+    "R": 3,
+    "P": 2,
+    "D": 10
+   }
+  },
+  {
+   "region": "GB",
+   "file": "GB.json.gz",
+   "featureCount": 1189,
+   "sizeBytes": 296564,
+   "sha256": "3b8ed649f926dff29914edb8abd1c36c38ee962c50abd3aaf24d7cd72c982fa9",
+   "types": {
+    "TMZ": 36,
+    "TMA": 31,
+    "SPORT": 233,
+    "D": 205,
+    "CTA": 297,
+    "MATZ": 50,
+    "ATZ": 108,
+    "WARNING": 111,
+    "GLIDING": 37,
+    "R": 36,
+    "CTR": 32,
+    "RMZ": 4,
+    "OTHER": 7,
+    "P": 2
+   }
+  },
+  {
+   "region": "GE",
+   "file": "GE.json.gz",
+   "featureCount": 71,
+   "sizeBytes": 12149,
+   "sha256": "ef04509c7952034d37f01abe9bf7258429df96109049bc259333ae03bf8f60cb",
+   "types": {
+    "FIS_SECTOR": 2,
+    "TMA": 26,
+    "MTA": 13,
+    "R": 23,
+    "P": 1,
+    "ATZ": 2,
+    "CTR": 4
+   }
+  },
+  {
+   "region": "GL",
+   "file": "GL.json.gz",
+   "featureCount": 24,
+   "sizeBytes": 31092,
+   "sha256": "e193a29e4a7dc6b1c4d5b6c6eb6ee15975240094cf57fa08674cad4670079074",
+   "types": {
+    "TIZ": 10,
+    "TMA": 4,
+    "R": 1,
+    "CTA": 4,
+    "RMZ": 3,
+    "CTR": 2
+   }
+  },
+  {
+   "region": "GQ",
+   "file": "GQ.json.gz",
+   "featureCount": 3,
+   "sizeBytes": 4336,
+   "sha256": "25045708f6bf3735d613087a05abd6bb520d69fb51a47018fcd423a7ece32633",
+   "types": {
+    "CTR": 3
+   }
+  },
+  {
+   "region": "GW",
+   "file": "GW.json.gz",
+   "featureCount": 7,
+   "sizeBytes": 4344,
+   "sha256": "f5efa28d465fe6eece1caaeef03e6a782d5bbd412306495718507c8e260405d1",
+   "types": {
+    "R": 4,
+    "TMA": 2,
+    "CTR": 1
+   }
+  },
+  {
+   "region": "GY",
+   "file": "GY.json.gz",
+   "featureCount": 5,
+   "sizeBytes": 5775,
+   "sha256": "90741c2a161a3d91d9c417a1c393a6fa38e77846873c04ce3bc8b39d633d6025",
+   "types": {
+    "TMA": 1,
+    "ATZ": 1,
+    "CTA": 1,
+    "CTR": 1,
+    "P": 1
+   }
+  },
+  {
+   "region": "HK",
+   "file": "HK.json.gz",
+   "featureCount": 12,
+   "sizeBytes": 3307,
+   "sha256": "39d6959220eed87d1a3bac57f57e6b03f2fd1ae1810178d35e948666fddd50cf",
+   "types": {
+    "R": 4,
+    "ATZ": 1,
+    "CTR": 1,
+    "TMA": 4,
+    "P": 1,
+    "D": 1
+   }
+  },
+  {
+   "region": "ID",
+   "file": "ID.json.gz",
+   "featureCount": 6,
+   "sizeBytes": 6937,
+   "sha256": "7f9848292ae0e6444b00371ffe016fb38a21513088ed311f12ec7a5cc323c6c6",
+   "types": {
+    "CTR": 3,
+    "TMA": 3
+   }
+  },
+  {
+   "region": "IE",
+   "file": "IE.json.gz",
+   "featureCount": 82,
+   "sizeBytes": 51158,
+   "sha256": "7dbe73490a2a32152c9287ddbafee613fa592b5896f69ab37ae41d15997d3290",
+   "types": {
+    "R": 11,
+    "D": 8,
+    "SPORT": 3,
+    "GLIDING": 2,
+    "CTR": 9,
+    "CTA": 37,
+    "ATZ": 6,
+    "P": 5,
+    "UTA": 1
+   }
+  },
+  {
+   "region": "IL",
+   "file": "IL.json.gz",
+   "featureCount": 78,
+   "sizeBytes": 10741,
+   "sha256": "4e1dc7adf32b7028d4ac887545765ce42e592754f9b0ac52dd249097043d40bd",
+   "types": {
+    "CTR": 11,
+    "ATZ": 4,
+    "CTA": 1,
+    "P": 22,
+    "R": 23,
+    "OTHER": 9,
+    "GLIDING": 8
+   }
+  },
+  {
+   "region": "IM",
+   "file": "IM.json.gz",
+   "featureCount": 6,
+   "sizeBytes": 2051,
+   "sha256": "a6c08c177565d224b72a95b66bc3eac532c6265807d1197ade3b987d815f1586",
+   "types": {
+    "CTA": 1,
+    "CTR": 1,
+    "OTHER": 3,
+    "ATZ": 1
+   }
+  },
+  {
+   "region": "IR",
+   "file": "IR.json.gz",
+   "featureCount": 397,
+   "sizeBytes": 135245,
+   "sha256": "857cc1999d6fc5b8d605b341f6d8908b8426e0849c3b48981e8d5e73ae852636",
+   "types": {
+    "WARNING": 110,
+    "R": 48,
+    "D": 137,
+    "ATZ": 65,
+    "CTR": 16,
+    "TMA": 5,
+    "CTA": 9,
+    "P": 6,
+    "HTZ": 1
+   }
+  },
+  {
+   "region": "IS",
+   "file": "IS.json.gz",
+   "featureCount": 55,
+   "sizeBytes": 11681,
+   "sha256": "9ce2efb034191f21c7652ff03ede0b622c8ad0dc5540488e952e92c5a18d3097",
+   "types": {
+    "D": 37,
+    "TMA": 4,
+    "CTR": 3,
+    "GLIDING": 4,
+    "SPORT": 2,
+    "ATZ": 3,
+    "P": 1,
+    "R": 1
+   }
+  },
+  {
+   "region": "JP",
+   "file": "JP.json.gz",
+   "featureCount": 1182,
+   "sizeBytes": 335604,
+   "sha256": "1a6018833f4401d86dd170010f3b1a6dbd60e69df7f63eca799a3cbdbc9420b0",
+   "types": {
+    "OTHER": 874,
+    "D": 89,
+    "CTR": 84,
+    "R": 107,
+    "GLIDING": 28
+   }
+  },
+  {
+   "region": "KE",
+   "file": "KE.json.gz",
+   "featureCount": 16,
+   "sizeBytes": 14680,
+   "sha256": "f8a334a69cc744cf5199831c871ef1ef66498fc298f982d605ff9afc4f144897",
+   "types": {
+    "CTR": 8,
+    "TMA": 5,
+    "D": 1,
+    "P": 2
+   }
+  },
+  {
+   "region": "KM",
+   "file": "KM.json.gz",
+   "featureCount": 2,
+   "sizeBytes": 2150,
+   "sha256": "772eda6c70fa1b603f638cbf39be5b0cc9e52d1564ed4ba5c7d2450c842b33bc",
+   "types": {
+    "D": 1,
+    "TMA": 1
+   }
+  },
+  {
+   "region": "KP",
+   "file": "KP.json.gz",
+   "featureCount": 19,
+   "sizeBytes": 3224,
+   "sha256": "5dd84de46b1a6867d7ffd46b5a5a4eb02dd479eb1e8447763baa7cd1790ac533",
+   "types": {
+    "P": 4,
+    "D": 7,
+    "R": 6,
+    "TMA": 2
+   }
+  },
+  {
+   "region": "KZ",
+   "file": "KZ.json.gz",
+   "featureCount": 318,
+   "sizeBytes": 116007,
+   "sha256": "ccb17512cd74f0706ab550da6c4d1fa476cdc0818040f8608b4b0511d5941dc3",
+   "types": {
+    "R": 209,
+    "D": 25,
+    "P": 18,
+    "TMA": 33,
+    "CTR": 27,
+    "SPORT": 2,
+    "ATZ": 4
+   }
+  },
+  {
+   "region": "LA",
+   "file": "LA.json.gz",
+   "featureCount": 26,
+   "sizeBytes": 21282,
+   "sha256": "ef27322243498088c28af3021d2679ac310cefb5c1878528c67b02fbfbf664a1",
+   "types": {
+    "OTHER": 5,
+    "D": 3,
+    "CTR": 12,
+    "P": 5,
+    "R": 1
+   }
+  },
+  {
+   "region": "LK",
+   "file": "LK.json.gz",
+   "featureCount": 47,
+   "sizeBytes": 22841,
+   "sha256": "4387293b03da800aa2bf8d832bed45ec674aec58fa0ad22113ae2137e328939c",
+   "types": {
+    "CTR": 11,
+    "OTHER": 14,
+    "R": 12,
+    "D": 5,
+    "P": 5
+   }
+  },
+  {
+   "region": "LT",
+   "file": "LT.json.gz",
+   "featureCount": 101,
+   "sizeBytes": 26613,
+   "sha256": "704ccf74e03beb237006449b0ea55875d1e4580dad3597e98e11c3622be432e3",
+   "types": {
+    "TSA": 8,
+    "TMA": 13,
+    "D": 20,
+    "TIZ": 2,
+    "ATZ": 27,
+    "CTR": 4,
+    "P": 19,
+    "GLIDING": 3,
+    "R": 5
+   }
+  },
+  {
+   "region": "LU",
+   "file": "LU.json.gz",
+   "featureCount": 18,
+   "sizeBytes": 6704,
+   "sha256": "e82c7b90db2b712d0497286b22c27b627dc22aeafe43822becacd29cfcc8f69a",
+   "types": {
+    "D": 3,
+    "TSA": 5,
+    "R": 1,
+    "GLIDING": 2,
+    "TMA": 2,
+    "SPORT": 1,
+    "P": 1,
+    "CTA": 1,
+    "CTR": 1,
+    "OTHER": 1
+   }
+  },
+  {
+   "region": "LV",
+   "file": "LV.json.gz",
+   "featureCount": 162,
+   "sizeBytes": 58416,
+   "sha256": "0d8e47f9487723f82d038a8a5456ebc857bb3800f9ecc164151801bcabb13f13",
+   "types": {
+    "R": 117,
+    "MCTR": 2,
+    "ATZ": 5,
+    "D": 14,
+    "TSA": 5,
+    "TRA": 7,
+    "CTR": 1,
+    "GLIDING": 1,
+    "FIS_SECTOR": 4,
+    "TMA": 3,
+    "ADIZ": 1,
+    "TMZ": 2
+   }
+  },
+  {
+   "region": "LY",
+   "file": "LY.json.gz",
+   "featureCount": 18,
+   "sizeBytes": 13490,
+   "sha256": "8ab669da87c6eaf6135a09cd217a28b3c94ee93fe8636aada10798d8196c7f23",
+   "types": {
+    "R": 8,
+    "CTR": 6,
+    "TMA": 2,
+    "P": 1,
+    "CTA": 1
+   }
+  },
+  {
+   "region": "MA",
+   "file": "MA.json.gz",
+   "featureCount": 89,
+   "sizeBytes": 41294,
+   "sha256": "49248f9363b3bcbadc7079150d57685093f93d1fb39747deb9d5fd676151b692",
+   "types": {
+    "CTR": 18,
+    "OTHER": 14,
+    "R": 6,
+    "ATZ": 11,
+    "D": 26,
+    "P": 14
+   }
+  },
+  {
+   "region": "MD",
+   "file": "MD.json.gz",
+   "featureCount": 41,
+   "sizeBytes": 26350,
+   "sha256": "e9a13eac6a4cf17bc0381910fa26fc14d867d717e1f43d90e01314157a95139b",
+   "types": {
+    "R": 6,
+    "SPORT": 10,
+    "CTR": 2,
+    "D": 8,
+    "ATZ": 3,
+    "TRA": 5,
+    "CTA": 1,
+    "TMA": 2,
+    "P": 4
+   }
+  },
+  {
+   "region": "MG",
+   "file": "MG.json.gz",
+   "featureCount": 59,
+   "sizeBytes": 32694,
+   "sha256": "d4b62daea2517951f29d59cba22b2d97bd25e8887dcf155873f32b2afd3f1aa4",
+   "types": {
+    "R": 20,
+    "CTR": 4,
+    "TMA": 6,
+    "D": 21,
+    "RMZ": 6,
+    "P": 2
+   }
+  },
+  {
+   "region": "MK",
+   "file": "MK.json.gz",
+   "featureCount": 6,
+   "sizeBytes": 2215,
+   "sha256": "eb79b69f9930f30ad7cc85d03f468a4f1465d056cea54d70c5ed6415dc0b8a40",
+   "types": {
+    "TMA": 1,
+    "R": 2,
+    "TSA": 1,
+    "CTR": 2
+   }
+  },
+  {
+   "region": "ML",
+   "file": "ML.json.gz",
+   "featureCount": 15,
+   "sizeBytes": 14727,
+   "sha256": "876e8c62eb87d1d29590002594a46671a7a03ffde81bd03009e4f7411d927923",
+   "types": {
+    "TMA": 4,
+    "CTR": 4,
+    "WARNING": 1,
+    "P": 2,
+    "D": 3,
+    "R": 1
+   }
+  },
+  {
+   "region": "MN",
+   "file": "MN.json.gz",
+   "featureCount": 60,
+   "sizeBytes": 51710,
+   "sha256": "bcc1cfe151b785bc4a4d6a43a9e7e5b18cdec4a017c96fb01c7751dac481d153",
+   "types": {
+    "TIA": 12,
+    "MTA": 13,
+    "CTA": 6,
+    "TMA": 11,
+    "CTR": 10,
+    "P": 4,
+    "R": 4
+   }
+  },
+  {
+   "region": "MR",
+   "file": "MR.json.gz",
+   "featureCount": 15,
+   "sizeBytes": 9291,
+   "sha256": "2c107ee98f9b767adf2b2b9b4ffa9fe81e2dc45e5b2b7464ff4ceb4c03d4e654",
+   "types": {
+    "D": 10,
+    "CTR": 2,
+    "R": 2,
+    "P": 1
+   }
+  },
+  {
+   "region": "MU",
+   "file": "MU.json.gz",
+   "featureCount": 5,
+   "sizeBytes": 4198,
+   "sha256": "7a853700231586d82efad48a14d4a0e519693f3f350e725454ac4566ef239188",
+   "types": {
+    "CTR": 1,
+    "CTA": 3,
+    "TMA": 1
+   }
+  },
+  {
+   "region": "MV",
+   "file": "MV.json.gz",
+   "featureCount": 25,
+   "sizeBytes": 19403,
+   "sha256": "e6a68176f3d2d15d5c60f8974b27b015dd29ddc4e06e36781632ac00c36e3751",
+   "types": {
+    "CTR": 10,
+    "SPORT": 8,
+    "TIZ": 6,
+    "TMA": 1
+   }
+  },
+  {
+   "region": "MW",
+   "file": "MW.json.gz",
+   "featureCount": 17,
+   "sizeBytes": 14028,
+   "sha256": "638ce5c9966d743c0a41c1f5bbf9a886a08e2f10ec68854427610f10f5be423c",
+   "types": {
+    "TMA": 2,
+    "R": 6,
+    "P": 4,
+    "CTR": 2,
+    "D": 1,
+    "MTA": 1,
+    "CTA": 1
+   }
+  },
+  {
+   "region": "MX",
+   "file": "MX.json.gz",
+   "featureCount": 48,
+   "sizeBytes": 15537,
+   "sha256": "e3461ccbf43584e57a73ce355997e301f6ba9f51233e20801b2a61a5ba0525c9",
+   "types": {
+    "ACC_SECTOR": 30,
+    "CTR": 5,
+    "R": 4,
+    "TMA": 8,
+    "ATZ": 1
+   }
+  },
+  {
+   "region": "MY",
+   "file": "MY.json.gz",
+   "featureCount": 159,
+   "sizeBytes": 62723,
+   "sha256": "7eb99b8a558550a746d21f68176e1aecea1ddfe1a55db2c21fde9f3650f3ce0a",
+   "types": {
+    "R": 67,
+    "CTR": 28,
+    "P": 7,
+    "TIZ": 1,
+    "D": 38,
+    "TMA": 15,
+    "ATZ": 2,
+    "MTA": 1
+   }
+  },
+  {
+   "region": "MZ",
+   "file": "MZ.json.gz",
+   "featureCount": 34,
+   "sizeBytes": 31505,
+   "sha256": "934091248c087e7ee567d9c35acbbbb24772a6c1f68f4b86fd2988699958d34b",
+   "types": {
+    "TMA": 8,
+    "D": 2,
+    "CTR": 9,
+    "R": 13,
+    "P": 2
+   }
+  },
+  {
+   "region": "NC",
+   "file": "NC.json.gz",
+   "featureCount": 23,
+   "sizeBytes": 13266,
+   "sha256": "e9ce5d37d48086312387f7f290689b3200b788e2e170769c7c912d5ac81d53e2",
+   "types": {
+    "TMA": 5,
+    "D": 5,
+    "CTR": 4,
+    "R": 7,
+    "CTA": 1,
+    "FIS_SECTOR": 1
+   }
+  },
+  {
+   "region": "NE",
+   "file": "NE.json.gz",
+   "featureCount": 7,
+   "sizeBytes": 7945,
+   "sha256": "55fff8c13fbf9e5cebf8216c183ba61b53556187f8c8b7e50e890460a0c1dacd",
+   "types": {
+    "D": 2,
+    "TMA": 2,
+    "CTR": 3
+   }
+  },
+  {
+   "region": "NO",
+   "file": "NO.json.gz",
+   "featureCount": 599,
+   "sizeBytes": 69396,
+   "sha256": "96811737fab535e69ea5cb2a96f737fd7261e559b366e9c30a6568655cb60b83",
+   "types": {
+    "CTA": 40,
+    "R": 50,
+    "MTA": 146,
+    "D": 115,
+    "TIZ": 35,
+    "TIA": 19,
+    "TMA": 93,
+    "CTR": 19,
+    "SPORT": 36,
+    "ACC_SECTOR": 36,
+    "RMZ": 4,
+    "OTHER": 1,
+    "GLIDING": 4,
+    "UTA": 1
+   }
+  },
+  {
+   "region": "NP",
+   "file": "NP.json.gz",
+   "featureCount": 12,
+   "sizeBytes": 21372,
+   "sha256": "3569350f095501481eb06fc3461f1e4bb8d53757d276baa75ef5f373a3f14d09",
+   "types": {
+    "OTHER": 11,
+    "R": 1
+   }
+  },
+  {
+   "region": "NZ",
+   "file": "NZ.json.gz",
+   "featureCount": 415,
+   "sizeBytes": 123431,
+   "sha256": "525748f1649399e52ff4b461680e64b04a8d28483af3834aa2754bc5c28b3f82",
+   "types": {
+    "OTHER": 189,
+    "D": 79,
+    "CTR": 37,
+    "P": 27,
+    "GLIDING": 60,
+    "R": 23
+   }
+  },
+  {
+   "region": "OM",
+   "file": "OM.json.gz",
+   "featureCount": 113,
+   "sizeBytes": 40381,
+   "sha256": "0df8872a7ae1358e5a2e15d0e1db1c1cbb4f9949a93a75c21472991bd3514641",
+   "types": {
+    "R": 30,
+    "D": 58,
+    "TMA": 13,
+    "ATZ": 5,
+    "CTR": 2,
+    "P": 2,
+    "UTA": 2,
+    "SPORT": 1
+   }
+  },
+  {
+   "region": "PF",
+   "file": "PF.json.gz",
+   "featureCount": 18,
+   "sizeBytes": 8491,
+   "sha256": "d3ae53ec83a41ebb66fc94a69d5c2c993f727064ca6e39ba042634f79dd2a835",
+   "types": {
+    "TMA": 3,
+    "R": 3,
+    "D": 4,
+    "CTR": 5,
+    "P": 3
+   }
+  },
+  {
+   "region": "PH",
+   "file": "PH.json.gz",
+   "featureCount": 134,
+   "sizeBytes": 62289,
+   "sha256": "805fa1c3061f79f5853c99619cfc0634441766d7920eea358b168a8dda262285",
+   "types": {
+    "MTA": 34,
+    "ATZ": 42,
+    "R": 8,
+    "D": 10,
+    "P": 2,
+    "CTR": 21,
+    "TMA": 15,
+    "CTA": 1,
+    "ADIZ": 1
+   }
+  },
+  {
+   "region": "PK",
+   "file": "PK.json.gz",
+   "featureCount": 165,
+   "sizeBytes": 40450,
+   "sha256": "a86b6b2537d869626047d40853593ced97b7061db96f9a2e01a468530a698122",
+   "types": {
+    "CTR": 17,
+    "R": 102,
+    "D": 12,
+    "P": 17,
+    "CTA": 4,
+    "VFR_SECTOR": 4,
+    "TMA": 9
+   }
+  },
+  {
+   "region": "PR",
+   "file": "PR.json.gz",
+   "featureCount": 6,
+   "sizeBytes": 3555,
+   "sha256": "1c1dc37d599b96252ac10f3037b2c1c482f2163bb5c1aa2c2aaab2fc0a18f207",
+   "types": {
+    "CTR": 3,
+    "TMA": 3
+   }
+  },
+  {
+   "region": "PT",
+   "file": "PT.json.gz",
+   "featureCount": 94,
+   "sizeBytes": 32567,
+   "sha256": "27dd1ed31fa210566229d5ce990f7dce70b429bd74954bdb049caa42a2aa2576",
+   "types": {
+    "CTR": 12,
+    "D": 23,
+    "TMZ": 2,
+    "OTHER": 11,
+    "GLIDING": 7,
+    "R": 25,
+    "RMZ": 12,
+    "P": 1,
+    "ATZ": 1
+   }
+  },
+  {
+   "region": "PY",
+   "file": "PY.json.gz",
+   "featureCount": 26,
+   "sizeBytes": 10092,
+   "sha256": "2d9fdd9eea29ed551d4a6bf3676bd7575fe897dbd709e222acb09cf286429627",
+   "types": {
+    "ATZ": 2,
+    "GLIDING": 2,
+    "CTR": 4,
+    "R": 10,
+    "D": 3,
+    "P": 2,
+    "TMA": 3
+   }
+  },
+  {
+   "region": "QA",
+   "file": "QA.json.gz",
+   "featureCount": 33,
+   "sizeBytes": 11018,
+   "sha256": "a01db19cdced1c2b374478912b77d2b670b89f4e9514d9e4186b9031c46d9d53",
+   "types": {
+    "R": 12,
+    "CTR": 3,
+    "P": 6,
+    "TMA": 4,
+    "D": 6,
+    "CTA": 1,
+    "RMZ": 1
+   }
+  },
+  {
+   "region": "RE",
+   "file": "RE.json.gz",
+   "featureCount": 11,
+   "sizeBytes": 5554,
+   "sha256": "fafb809d4bfe8dce4c4adad48c0731550ff15c03136c91a2068c99695882741d",
+   "types": {
+    "TMA": 2,
+    "R": 2,
+    "CTR": 1,
+    "D": 5,
+    "RMZ": 1
+   }
+  },
+  {
+   "region": "RS",
+   "file": "RS.json.gz",
+   "featureCount": 207,
+   "sizeBytes": 60539,
+   "sha256": "dfbfa17d9e3f0398402cf33283894d3150b39f29aef0d94bda42bacc12a406ff",
+   "types": {
+    "GLIDING": 17,
+    "TRA": 113,
+    "RMZ": 30,
+    "D": 25,
+    "CTR": 7,
+    "R": 4,
+    "TMA": 8,
+    "TSA": 1,
+    "ATZ": 2
+   }
+  },
+  {
+   "region": "RU",
+   "file": "RU.json.gz",
+   "featureCount": 2504,
+   "sizeBytes": 637245,
+   "sha256": "511e03361196d199e63f51e2cbf740c1a3497232a78d615cad214caf966972c5",
+   "types": {
+    "R": 1511,
+    "TMA": 61,
+    "TIZ": 7,
+    "CTR": 171,
+    "P": 645,
+    "D": 61,
+    "CTA": 48
+   }
+  },
+  {
+   "region": "RW",
+   "file": "RW.json.gz",
+   "featureCount": 10,
+   "sizeBytes": 4574,
+   "sha256": "f9f6795683a658651e25c3f32692e4281fbf9ca71b40063b3eb11c5a49f51fda",
+   "types": {
+    "ATZ": 2,
+    "R": 6,
+    "CTR": 1,
+    "P": 1
+   }
+  },
+  {
+   "region": "SA",
+   "file": "SA.json.gz",
+   "featureCount": 192,
+   "sizeBytes": 79579,
+   "sha256": "0bbaaaa0ea63051c4e75fcb0e89b4e1a0550df423a11529b3c7f022ef0d28975",
+   "types": {
+    "TMA": 23,
+    "R": 57,
+    "ATZ": 27,
+    "CTR": 20,
+    "D": 52,
+    "P": 13
+   }
+  },
+  {
+   "region": "SC",
+   "file": "SC.json.gz",
+   "featureCount": 11,
+   "sizeBytes": 7691,
+   "sha256": "ea6c5cdbb78278c76491f8826c0b8eb58c25bebaa90702033325c0d2a5971317",
+   "types": {
+    "R": 5,
+    "CTR": 2,
+    "TMA": 3,
+    "CTA": 1
+   }
+  },
+  {
+   "region": "SN",
+   "file": "SN.json.gz",
+   "featureCount": 29,
+   "sizeBytes": 17844,
+   "sha256": "40ac2ba44ab5a4c18f1fe99c0799ffdd3250de2315d14347d82db28a25a686c8",
+   "types": {
+    "D": 11,
+    "R": 11,
+    "CTR": 3,
+    "TMA": 2,
+    "P": 2
+   }
+  },
+  {
+   "region": "SO",
+   "file": "SO.json.gz",
+   "featureCount": 17,
+   "sizeBytes": 16710,
+   "sha256": "29e777abb93693cdd70c93bb8d708a36e7f157b44e6a58765ce558a9c98cd689",
+   "types": {
+    "CTR": 4,
+    "ATZ": 10,
+    "TMA": 1,
+    "R": 1,
+    "P": 1
+   }
+  },
+  {
+   "region": "SS",
+   "file": "SS.json.gz",
+   "featureCount": 5,
+   "sizeBytes": 5345,
+   "sha256": "69367033f341476df00887122e0e5d182055c6042ad24d1022618f0665b162fc",
+   "types": {
+    "R": 1,
+    "P": 1,
+    "TMA": 2,
+    "CTR": 1
+   }
+  },
+  {
+   "region": "TD",
+   "file": "TD.json.gz",
+   "featureCount": 18,
+   "sizeBytes": 15168,
+   "sha256": "6481b36eb9efeeddf527232c7100c1aeb66c7332cd519e1b18efbeaea21c5543",
+   "types": {
+    "D": 8,
+    "R": 3,
+    "CTR": 4,
+    "TMA": 3
+   }
+  },
+  {
+   "region": "TG",
+   "file": "TG.json.gz",
+   "featureCount": 10,
+   "sizeBytes": 4362,
+   "sha256": "09d8d919d292b7f4fcd4cde6f2c96ae99103365386bb0f18a4c5cd7430d69a5f",
+   "types": {
+    "P": 3,
+    "D": 2,
+    "R": 2,
+    "CTR": 2,
+    "TMA": 1
+   }
+  },
+  {
+   "region": "TH",
+   "file": "TH.json.gz",
+   "featureCount": 13,
+   "sizeBytes": 13147,
+   "sha256": "49d7500bfb993b5ef98b9c7f5b4076ea003636584379e444e7c9c57f07cc8a75",
+   "types": {
+    "CTR": 5,
+    "TMA": 7,
+    "D": 1
+   }
+  },
+  {
+   "region": "TJ",
+   "file": "TJ.json.gz",
+   "featureCount": 10,
+   "sizeBytes": 9574,
+   "sha256": "299cfd0454284c6af33a791e55e85ed40c2554c212097938df5b02cb19f293eb",
+   "types": {
+    "TMA": 1,
+    "CTA": 3,
+    "CTR": 4,
+    "P": 1,
+    "D": 1
+   }
+  },
+  {
+   "region": "TL",
+   "file": "TL.json.gz",
+   "featureCount": 9,
+   "sizeBytes": 9933,
+   "sha256": "d59efbc2fec432869f9c214ca8c9aa929c15a77e642ab002361a8adb9b65f789",
+   "types": {
+    "CTA": 7,
+    "CTR": 1,
+    "R": 1
+   }
+  },
+  {
+   "region": "TM",
+   "file": "TM.json.gz",
+   "featureCount": 26,
+   "sizeBytes": 12443,
+   "sha256": "cb76b5d03aed48c89f83891ad362f0d8d73fbcafb5d5c5c61be235d013249dcc",
+   "types": {
+    "TMA": 7,
+    "R": 17,
+    "P": 2
+   }
+  },
+  {
+   "region": "TN",
+   "file": "TN.json.gz",
+   "featureCount": 61,
+   "sizeBytes": 32512,
+   "sha256": "f14baa4d1828b82b9a0d601c6402e3879bcfb3491cb26312566c7477189d784c",
+   "types": {
+    "R": 32,
+    "OTHER": 15,
+    "CTR": 9,
+    "P": 2,
+    "D": 3
+   }
+  },
+  {
+   "region": "TR",
+   "file": "TR.json.gz",
+   "featureCount": 347,
+   "sizeBytes": 113036,
+   "sha256": "6f7e71c8705f9b3ae6f11cee777f48938c83e0c1c651f4b1900e9734aa6e88d7",
+   "types": {
+    "SPORT": 120,
+    "CTR": 83,
+    "R": 35,
+    "D": 44,
+    "GLIDING": 6,
+    "TMA": 41,
+    "P": 4,
+    "MTA": 2,
+    "ACC_SECTOR": 12
+   }
+  },
+  {
+   "region": "US",
+   "file": "US.json.gz",
+   "featureCount": 7672,
+   "sizeBytes": 5887063,
+   "sha256": "20aa92e65f47fa646d9fcaa252929b5283a1dad6dc8b08d2a7d66c1bd5b62583",
+   "types": {
+    "R": 487,
+    "CTR": 1287,
+    "CTA": 4336,
+    "SPORT": 682,
+    "MTA": 597,
+    "PROTECTED": 13,
+    "ALERT": 48,
+    "WARNING": 215,
+    "P": 7
+   }
+  },
+  {
+   "region": "UY",
+   "file": "UY.json.gz",
+   "featureCount": 57,
+   "sizeBytes": 22801,
+   "sha256": "cefee243fcdcd6c2f7a7a1bcd2e692870dabfc09369ddf7d480e4f7010fc1a2a",
+   "types": {
+    "D": 4,
+    "CTR": 5,
+    "P": 32,
+    "ATZ": 6,
+    "MATZ": 5,
+    "CTA": 1,
+    "TMA": 4
+   }
+  },
+  {
+   "region": "UZ",
+   "file": "UZ.json.gz",
+   "featureCount": 62,
+   "sizeBytes": 32860,
+   "sha256": "3e946733abd04507ce5a76af9810c6e5429c4de5ed0aabc1431ced56062ec464",
+   "types": {
+    "P": 6,
+    "R": 24,
+    "CTR": 14,
+    "RMZ": 2,
+    "TMA": 12,
+    "ATZ": 4
+   }
+  },
+  {
+   "region": "VE",
+   "file": "VE.json.gz",
+   "featureCount": 113,
+   "sizeBytes": 62378,
+   "sha256": "e9e5e5f2bc11cce1e8a76fda3a95da799b60546095f254323cce58fed74a09aa",
+   "types": {
+    "CTR": 22,
+    "ATZ": 36,
+    "R": 36,
+    "TMA": 8,
+    "P": 9,
+    "D": 2
+   }
+  },
+  {
+   "region": "VU",
+   "file": "VU.json.gz",
+   "featureCount": 8,
+   "sizeBytes": 6101,
+   "sha256": "d68833970d2749bdb144c281f68ed8f85b703456edec1ea01a7fb729c0e216d2",
+   "types": {
+    "D": 5,
+    "CTR": 1,
+    "TMA": 1,
+    "CTA": 1
+   }
+  }
+ ]
+}
