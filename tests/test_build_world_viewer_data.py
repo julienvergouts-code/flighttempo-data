@@ -1,6 +1,9 @@
 import json, sys, tempfile, unittest, zipfile
 from pathlib import Path
-import numpy as np
+try:
+    import numpy as np
+except ImportError:  # generic regression runs have no numpy; the terrain workflows install it
+    raise unittest.SkipTest("numpy not installed")
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "pipeline"))
 import build_world_viewer_data as v

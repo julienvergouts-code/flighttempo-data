@@ -16,7 +16,10 @@ import zlib
 from collections import OrderedDict
 from datetime import datetime
 
-import requests
+try:  # the range reader needs requests; the pure helpers below work without it (generic regression runs have no extras)
+    import requests
+except ImportError:  # pragma: no cover
+    requests = None
 
 API = "https://api.github.com/repos/adsblol/globe_history_{year}/releases/tags/{tag}"
 MAX_TRACE_MEMBER_BYTES = 50 * 1024 * 1024
