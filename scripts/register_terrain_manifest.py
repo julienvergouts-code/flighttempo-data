@@ -18,6 +18,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 import terrain_notices  # noqa: E402
+from commercial_rights import personal_scope_active  # noqa: E402
 INDEX = ROOT / "terrain" / "index.json"
 CONFIRMATION = ROOT / "data" / "terrain_rights_confirmation.json"
 MANIFEST_PATH = ROOT / "navigation_manifest.json"
@@ -25,20 +26,21 @@ RAW = "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/"
 
 
 def register(index_path: Path = INDEX, confirmation_path: Path = CONFIRMATION,
-             manifest_path: Path = MANIFEST_PATH) -> dict:
+             manifest_path: Path = MANIFEST_PATH, scope_path: Path | None = None) -> dict:
     index = json.loads(index_path.read_bytes())
     if terrain_notices.refresh(index):
         index_path.write_text(json.dumps(index, indent=1, ensure_ascii=False) + "\n", encoding="utf-8")
     raw = index_path.read_bytes()
     confirmation = json.loads(confirmation_path.read_text(encoding="utf-8"))
     confirmed = confirmation.get("commercialUseConfirmed") is True and bool(confirmation.get("confirmedBy"))
+    personal = (personal_scope_active(scope_path) if scope_path else personal_scope_active()) and not confirmed
     tiles = sum(r["tileCount"] for r in index["regions"])
     size = sum(r["sizeBytes"] for r in index["regions"])
     if tiles == 0:
         raise ValueError("terrain index lists no tiles")
     entry = {
         "id": "terrain_tiles", "path": "terrain/index.json",
-        "available": confirmed, "recordCount": tiles,
+        "available": confirmed or personal, "recordCount": tiles,
         "sizeBytes": len(raw), "sha256": hashlib.sha256(raw).hexdigest(),
         "tileBaseUrl": RAW + "terrain-data/", "tileCount": tiles, "tileBytes": size,
         "regions": [{"id": r["id"], "name": r["name"], "bbox": r["bbox"],
@@ -50,16 +52,23 @@ def register(index_path: Path = INDEX, confirmation_path: Path = CONFIRMATION,
                     ". Highest-sample-per-cell terrain (max pooled), not worldwide.",
         "license": index["license"],
         "licenseStatus": ("copernicus_free_licence_owner_confirmed" if confirmed
+                          else "copernicus_free_licence_personal_use_only_commercial_unverified" if personal
                           else "copernicus_free_licence_commercial_reuse_not_confirmed"),
         "licenseUrl": confirmation["licenceUrl"],
         "attribution": index["attribution"], "disclaimer": index["disclaimer"],
         "modificationNotice": index["modificationNotice"],
         "dataCycle": None, "provenanceVerification": "source_snapshot",
         "downloadPurpose": "reference_only", "operationallyAvailable": False,
-        "status": "reference_dataset" if confirmed else "blocked_commercial_reuse_not_confirmed",
+        "status": ("reference_dataset" if confirmed else "personal_use_only" if personal
+                   else "blocked_commercial_reuse_not_confirmed"),
     }
-    if confirmed:
-        entry["commercialUseAllowed"] = True
+    if personal:
+        entry["personalUseOnly"] = True
+        entry["commercialUseAllowed"] = False
+        entry["usageScopeNote"] = "Personal use only until the Copernicus commercial reading is confirmed."
+    if confirmed or personal:
+        if confirmed:
+            entry["commercialUseAllowed"] = True
         entry["downloadUrl"] = RAW + "main/terrain/index.json"
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     datasets = manifest.setdefault("datasets", [])
@@ -70,11 +79,11 @@ def register(index_path: Path = INDEX, confirmation_path: Path = CONFIRMATION,
         datasets[matches[0]] = entry
     else:
         datasets.append(entry)
-    manifest.setdefault("capabilities", {})["terrainTiles"] = confirmed
+    manifest.setdefault("capabilities", {})["terrainTiles"] = confirmed or personal
     manifest.setdefault("statistics", {})["terrainTiles"] = tiles
     manifest["generatedAtUtc"] = datetime.now(timezone.utc).isoformat()
     manifest_path.write_text(json.dumps(manifest, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
-    print(f"Registered terrain_tiles: {tiles} tiles, available={confirmed}")
+    print(f"Registered terrain_tiles: {tiles} tiles, available={entry['available']}")
     return entry
 
 

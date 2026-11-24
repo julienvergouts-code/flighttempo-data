@@ -1,6 +1,9 @@
 """Shared fail-closed commercial reuse rules for downloadable datasets."""
 from __future__ import annotations
 
+import json
+from pathlib import Path
+
 FIRST_PARTY_DATASET_IDS = {"airline_profiles", "route_rules", "route_policy"}
 VERIFIED_LICENSE_STATUSES = {
     "public_domain",
@@ -32,8 +35,24 @@ BLOCKED_MARKERS = (
 )
 
 
-def redistribution_block_reason(dataset: dict) -> str | None:
-    """Return a reason unless commercial redistribution is explicitly verified."""
+USAGE_SCOPE = Path(__file__).resolve().parents[1] / "data" / "usage_scope.json"
+
+
+def personal_scope_active(path: Path = USAGE_SCOPE) -> bool:
+    """True only while the owner's usage-scope file says 'personal' and names who decided."""
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return False
+    return data.get("scope") == "personal" and bool(data.get("confirmedBy"))
+
+
+def redistribution_block_reason(dataset: dict, personal_scope: bool = False) -> str | None:
+    """Return a reason unless commercial redistribution is explicitly verified.
+
+    With ``personal_scope`` a dataset explicitly marked ``personalUseOnly`` (and never
+    marked commercial) passes the rights check; blocked-marker wording still blocks it.
+    """
     text = " ".join(
         str(dataset.get(key, ""))
         for key in ("license", "licenseStatus", "status", "redistribution")
@@ -43,6 +62,8 @@ def redistribution_block_reason(dataset: dict) -> str | None:
             return marker
 
     if dataset.get("commercialUseAllowed") is True:
+        return None
+    if personal_scope and dataset.get("personalUseOnly") is True and dataset.get("commercialUseAllowed") is False:
         return None
     license_status = str(dataset.get("licenseStatus", "")).strip().lower()
     if license_status in VERIFIED_LICENSE_STATUSES:

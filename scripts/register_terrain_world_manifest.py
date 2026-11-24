@@ -17,6 +17,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 import terrain_notices  # noqa: E402
+from commercial_rights import personal_scope_active  # noqa: E402
 WORLD_INDEX = ROOT / "terrain" / "world-index.json"
 TILE_INDEX = ROOT / "terrain" / "index.json"  # source of licence / attribution wording
 CONFIRMATION = ROOT / "data" / "terrain_rights_confirmation.json"
@@ -53,20 +54,21 @@ def merge_index(entries: list[dict], world_index: Path = WORLD_INDEX, tile_index
 
 
 def register(world_index: Path = WORLD_INDEX, confirmation_path: Path = CONFIRMATION,
-             manifest_path: Path = MANIFEST_PATH) -> dict:
+             manifest_path: Path = MANIFEST_PATH, scope_path: Path | None = None) -> dict:
     index = json.loads(world_index.read_bytes())
     if terrain_notices.refresh(index):
         world_index.write_text(json.dumps(index, indent=1, ensure_ascii=False) + "\n", encoding="utf-8")
     raw = world_index.read_bytes()
     confirmation = json.loads(confirmation_path.read_text(encoding="utf-8"))
     confirmed = confirmation.get("commercialUseConfirmed") is True and bool(confirmation.get("confirmedBy"))
+    personal = (personal_scope_active(scope_path) if scope_path else personal_scope_active()) and not confirmed
     blocks = index["blocks"]
     tiles = sum(b["tileCount"] for b in blocks)
     if not blocks or tiles == 0:
         raise ValueError("world terrain index lists no tiles")
     entry = {
         "id": "terrain_world", "path": "terrain/world-index.json",
-        "available": confirmed, "recordCount": tiles,
+        "available": confirmed or personal, "recordCount": tiles,
         "sizeBytes": len(raw), "sha256": hashlib.sha256(raw).hexdigest(),
         "blockCount": len(blocks), "tileCount": tiles, "blockBytes": sum(b["sizeBytes"] for b in blocks),
         "blockDegrees": index["blockDegrees"], "cellsPerDegree": index["cellsPerDegree"], "format": index["format"],
@@ -76,16 +78,23 @@ def register(world_index: Path = WORLD_INDEX, confirmation_path: Path = CONFIRMA
                     "highest-sample-per-cell terrain (max pooled).",
         "license": index["license"],
         "licenseStatus": ("copernicus_free_licence_owner_confirmed" if confirmed
+                          else "copernicus_free_licence_personal_use_only_commercial_unverified" if personal
                           else "copernicus_free_licence_commercial_reuse_not_confirmed"),
         "licenseUrl": confirmation["licenceUrl"],
         "attribution": index["attribution"], "disclaimer": index["disclaimer"],
         "modificationNotice": index["modificationNotice"],
         "dataCycle": None, "provenanceVerification": "source_snapshot",
         "downloadPurpose": "reference_only", "operationallyAvailable": False,
-        "status": "reference_dataset" if confirmed else "blocked_commercial_reuse_not_confirmed",
+        "status": ("reference_dataset" if confirmed else "personal_use_only" if personal
+                   else "blocked_commercial_reuse_not_confirmed"),
     }
-    if confirmed:
-        entry["commercialUseAllowed"] = True
+    if personal:
+        entry["personalUseOnly"] = True
+        entry["commercialUseAllowed"] = False
+        entry["usageScopeNote"] = "Personal use only until the Copernicus commercial reading is confirmed."
+    if confirmed or personal:
+        if confirmed:
+            entry["commercialUseAllowed"] = True
         entry["downloadUrl"] = RAW_MAIN + "terrain/world-index.json"
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     datasets = manifest.setdefault("datasets", [])
@@ -96,11 +105,11 @@ def register(world_index: Path = WORLD_INDEX, confirmation_path: Path = CONFIRMA
         datasets[matches[0]] = entry
     else:
         datasets.append(entry)
-    manifest.setdefault("capabilities", {})["terrainWorld"] = confirmed
+    manifest.setdefault("capabilities", {})["terrainWorld"] = confirmed or personal
     manifest.setdefault("statistics", {})["terrainWorldTiles"] = tiles
     manifest["generatedAtUtc"] = datetime.now(timezone.utc).isoformat()
     manifest_path.write_text(json.dumps(manifest, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
-    print(f"Registered terrain_world: {tiles} tiles in {len(blocks)} blocks, available={confirmed}")
+    print(f"Registered terrain_world: {tiles} tiles in {len(blocks)} blocks, available={entry['available']}")
     return entry
 
 

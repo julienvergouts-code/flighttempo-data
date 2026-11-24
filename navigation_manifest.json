@@ -1,6 +1,6 @@
 {
   "schemaVersion": 13,
-  "generatedAtUtc": "2026-11-24T00:00:18.629033+00:00",
+  "generatedAtUtc": "2026-11-24T00:39:30.176054+00:00",
   "procedureAiracCycle": "2611",
   "navaidTypeCounts": {
     "DME": 167,
@@ -152,8 +152,8 @@
     "faaNasrNavaids": true,
     "faaNasrAirwaySegments": true,
     "ofmaAirspace": true,
-    "terrainTiles": false,
-    "terrainWorld": false
+    "terrainTiles": true,
+    "terrainWorld": true
   },
   "procedureCoverageStatus": "FAA_US_NAS_ONLY_TEST_DATA; EUROPE_FRANCE_SOURCE_NOT_INGESTED; ASIA_NO_PUBLIC_REDISTRIBUTABLE_SOURCE_CONFIRMED",
   "procedureOperationalUse": false,
@@ -1032,10 +1032,10 @@
     {
       "id": "terrain_tiles",
       "path": "terrain/index.json",
-      "available": false,
+      "available": true,
       "recordCount": 1982,
       "sizeBytes": 384239,
-      "sha256": "6517576c50e8b6b0d15b70fc64eb988ae0e8c7c97d3b588ee41762f872a50d1f",
+      "sha256": "13eb6bab4f7049d98bdc2f046ccf10c806ea55450258199ec4df43368fa239f7",
       "tileBaseUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/terrain-data/",
       "tileCount": 1982,
       "tileBytes": 184379284,
@@ -1095,22 +1095,25 @@
       "sourceUrl": "https://registry.opendata.aws/copernicus-dem/",
       "coverage": "Regional tile packs: Europe, Japan, French Polynesia (Tahiti), Saint-Barthelemy (Caribbean). Highest-sample-per-cell terrain (max pooled), not worldwide.",
       "license": "Copernicus DEM free licence (GLO-30)",
-      "licenseStatus": "copernicus_free_licence_commercial_reuse_not_confirmed",
+      "licenseStatus": "copernicus_free_licence_personal_use_only_commercial_unverified",
       "licenseUrl": "https://documentation.dataspace.copernicus.eu/APIs/SentinelHub/Data/DEM/resources/license/License-COPDEM-30.pdf",
-      "attribution": "© DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved. Produced using Copernicus WorldDEM-90.",
-      "disclaimer": "The organisations in charge of the Copernicus programme by law or by delegation do not incur any liability for any use of the Copernicus WorldDEM-90.",
+      "attribution": "© DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved. Produced using Copernicus WorldDEM-30.",
+      "disclaimer": "The organisations in charge of the Copernicus programme by law or by delegation do not incur any liability for any use of the Copernicus WorldDEM-30.",
       "modificationNotice": "Resampled by max pooling from 1 arc-second to 9 arc-second cells.",
       "dataCycle": null,
       "provenanceVerification": "source_snapshot",
       "downloadPurpose": "reference_only",
       "operationallyAvailable": false,
-      "status": "not_published_commercial_reuse_unconfirmed_or_restricted",
-      "downloadBlockReason": "Commercial redistribution permission is not explicitly verified for this source."
+      "status": "personal_use_only",
+      "personalUseOnly": true,
+      "commercialUseAllowed": false,
+      "usageScopeNote": "Personal use only until the Copernicus commercial reading is confirmed.",
+      "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/terrain/index.json"
     },
     {
       "id": "terrain_world",
       "path": "terrain/world-index.json",
-      "available": false,
+      "available": true,
       "recordCount": 19408,
       "sizeBytes": 436515,
       "sha256": "0c3e34c2ede4250786cde615d5a4335368195aeaf526fd633ec5f0429a6d7cfd",
@@ -1124,7 +1127,7 @@
       "sourceUrl": "https://registry.opendata.aws/copernicus-dem/",
       "coverage": "Land between 60S and 84N in 10 degree block zips hosted as GitHub Release assets; highest-sample-per-cell terrain (max pooled).",
       "license": "Copernicus DEM free licence (GLO-30)",
-      "licenseStatus": "copernicus_free_licence_commercial_reuse_not_confirmed",
+      "licenseStatus": "copernicus_free_licence_personal_use_only_commercial_unverified",
       "licenseUrl": "https://documentation.dataspace.copernicus.eu/APIs/SentinelHub/Data/DEM/resources/license/License-COPDEM-30.pdf",
       "attribution": "© DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved. Produced using Copernicus WorldDEM-30.",
       "disclaimer": "The organisations in charge of the Copernicus programme by law or by delegation do not incur any liability for any use of the Copernicus WorldDEM-30.",
@@ -1133,8 +1136,11 @@
       "provenanceVerification": "source_snapshot",
       "downloadPurpose": "reference_only",
       "operationallyAvailable": false,
-      "status": "not_published_commercial_reuse_unconfirmed_or_restricted",
-      "downloadBlockReason": "Commercial redistribution permission is not explicitly verified for this source."
+      "status": "personal_use_only",
+      "personalUseOnly": true,
+      "commercialUseAllowed": false,
+      "usageScopeNote": "Personal use only until the Copernicus commercial reading is confirmed.",
+      "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/terrain/world-index.json"
     }
   ],
   "downloadContract": {

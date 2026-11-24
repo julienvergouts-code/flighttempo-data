@@ -7,9 +7,9 @@ from datetime import date, datetime, timezone
 from pathlib import Path
 
 try:
-    from .commercial_rights import redistribution_block_reason
+    from .commercial_rights import personal_scope_active, redistribution_block_reason
 except ImportError:
-    from commercial_rights import redistribution_block_reason
+    from commercial_rights import personal_scope_active, redistribution_block_reason
 
 ROOT = Path(__file__).resolve().parents[1]
 MANIFEST = ROOT / "navigation_manifest.json"
@@ -87,13 +87,14 @@ def enforce(manifest_path: Path = MANIFEST, today: date | None = None) -> list[s
     if not isinstance(datasets, list):
         raise ValueError("navigation_manifest.json has no datasets array")
 
+    personal = personal_scope_active()
     blocked = []
     for dataset in datasets:
         dataset_id = dataset.get("id")
         stale = dataset_id in STALE_DATASET_IDS
         excluded = dataset_id in BLOCKED_IDS
         incomplete = dataset_id in INCOMPLETE_DATASET_IDS
-        rights_reason = redistribution_block_reason(dataset)
+        rights_reason = redistribution_block_reason(dataset, personal)
         cycle_reason = source_cycle_block_reason(dataset, today)
         if not (stale or excluded or incomplete or rights_reason or cycle_reason):
             continue
