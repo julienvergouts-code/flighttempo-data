@@ -1,0 +1,36 @@
+name: Probe openAIP exports
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Which export files exist for a few countries
+        run: |
+          for cc in be fr us ch; do
+            for k in asp nav rpp apt obs hot hgl rca; do
+              code=$(curl -s -o /tmp/x -w "%{http_code} %{size_download}" -m 60 "https://storage.openaip.net/openaip-system-exports/${cc}_${k}.geojson")
+              echo "${cc}_${k} ${code}"
+            done
+          done
+      - name: Look inside navaids and reporting points
+        run: |
+          for k in nav rpp; do
+            curl -s -m 60 "https://storage.openaip.net/openaip-system-exports/be_${k}.geojson" -o /tmp/$k.json || true
+            python3 - "$k" <<'PY'
+          import json,sys
+          k=sys.argv[1]
+          try:
+              d=json.load(open(f"/tmp/{k}.json"))
+          except Exception as e:
+              print(k,"unreadable",e); raise SystemExit
+          f=d.get("features",[])
+          print(k,len(f))
+          if f:
+              p=f[0]["properties"]; print(sorted(p.keys())); print(json.dumps(p)[:600])
+              from collections import Counter
+              print(Counter(x["properties"].get("type") for x in f).most_common(8))
+          PY
+          done
