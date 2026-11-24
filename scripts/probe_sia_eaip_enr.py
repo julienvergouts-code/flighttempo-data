@@ -61,6 +61,13 @@ def main() -> int:
         print(f"  text rows {len(texts)}, rows with coordinates {len(coord)}")
         if len(t) < 40000:
             print("  FULLRAW:", squash(re.sub(r"<[^>]+>", " ", t), 3000))
+        if os.environ.get("AROUND"):
+            for k in [int(v) for v in os.environ["AROUND"].split(",")]:
+                idxs = [n for n, x in enumerate(texts) if x in coord]
+                if k < len(idxs):
+                    n = idxs[k]
+                    for m in range(max(0, n - 5), min(len(texts), n + 3)):
+                        print(f"  A{k}/R{m}:", texts[m][:330])
         if os.environ.get("ROWS_FROM"):
             a = int(os.environ["ROWS_FROM"])
             for k, x in enumerate(texts[a:a + 45]):

@@ -10,6 +10,10 @@ on:
         description: 'Print 45 text rows starting at this index'
         required: false
         default: ''
+      around:
+        description: 'Comma list of coordinate-row ordinals to show with context'
+        required: false
+        default: ''
 permissions:
   contents: read
 jobs:
@@ -18,6 +22,7 @@ jobs:
     env:
       EXTRA_PAGES: ${{ inputs.pages }}
       ROWS_FROM: ${{ inputs.rows_from }}
+      AROUND: ${{ inputs.around }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
