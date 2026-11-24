@@ -12,6 +12,8 @@ VERIFIED_LICENSE_STATUSES = {
     "verified_open_license_commercial_reuse",
     "verified_exact_eaip_product_linked_to_open_license",
     "commercial_use_permitted_subject_to_ofma_gul",
+    # SIA France: the importer re-checks the free eAIP product price and the Licence Ouverte wording live on every run.
+    "verified_commercial_open_licence",
 }
 BLOCKED_MARKERS = (
     "public_redistribution_not_confirmed",

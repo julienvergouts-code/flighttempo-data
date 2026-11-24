@@ -1,6 +1,6 @@
 {
   "schemaVersion": 13,
-  "generatedAtUtc": "2026-11-24T12:03:55.048971+00:00",
+  "generatedAtUtc": "2026-11-24T12:04:49.468925+00:00",
   "procedureAiracCycle": "2611",
   "navaidTypeCounts": {
     "DME": 167,
@@ -162,10 +162,10 @@
     "terrainWorld": true,
     "openaipAirspace": true,
     "adsbObservedRoutes": false,
-    "siaFranceFixes": false,
-    "siaFranceNavaids": false,
-    "siaFranceAirwaySegments": false,
-    "siaFranceAirspace": false
+    "siaFranceFixes": true,
+    "siaFranceNavaids": true,
+    "siaFranceAirwaySegments": true,
+    "siaFranceAirspace": true
   },
   "procedureCoverageStatus": "FAA_US_NAS_ONLY_TEST_DATA; EUROPE_FRANCE_SOURCE_NOT_INGESTED; ASIA_NO_PUBLIC_REDISTRIBUTABLE_SOURCE_CONFIRMED",
   "procedureOperationalUse": false,
@@ -1271,7 +1271,7 @@
       "id": "sia_france_fixes",
       "recordCount": 1839,
       "path": "navigation/sia_france/fixes.csv",
-      "available": false,
+      "available": true,
       "sizeBytes": 120172,
       "sha256": "bf2d06b7e8baa82ce701dd5f8846d420a27fbbc4b690f387da055e9a98a98799",
       "sourceProvider": "SIA / DGAC (France)",
@@ -1287,14 +1287,14 @@
       "provenanceVerification": "source_snapshot",
       "downloadPurpose": "reference_only",
       "operationallyAvailable": false,
-      "status": "not_published_commercial_reuse_unconfirmed_or_restricted",
-      "downloadBlockReason": "Commercial redistribution permission is not explicitly verified for this source."
+      "status": "present_reference_dataset",
+      "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/navigation/sia_france/fixes.csv"
     },
     {
       "id": "sia_france_navaids",
       "recordCount": 94,
       "path": "navigation/sia_france/navaids.csv",
-      "available": false,
+      "available": true,
       "sizeBytes": 10652,
       "sha256": "ac9fef73a95ed7c3acae989e51cd353d5b8f676caa2098a003d361391e16b5ab",
       "sourceProvider": "SIA / DGAC (France)",
@@ -1310,14 +1310,14 @@
       "provenanceVerification": "source_snapshot",
       "downloadPurpose": "reference_only",
       "operationallyAvailable": false,
-      "status": "not_published_commercial_reuse_unconfirmed_or_restricted",
-      "downloadBlockReason": "Commercial redistribution permission is not explicitly verified for this source."
+      "status": "present_reference_dataset",
+      "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/navigation/sia_france/navaids.csv"
     },
     {
       "id": "sia_france_airway_segments",
       "recordCount": 1258,
       "path": "navigation/sia_france/airway_segments.csv",
-      "available": false,
+      "available": true,
       "sizeBytes": 132026,
       "sha256": "1eba6a7592b3a6ee3a59fa0dba06500e449257c8ff819169cd07e9211f23310d",
       "sourceProvider": "SIA / DGAC (France)",
@@ -1333,8 +1333,8 @@
       "provenanceVerification": "source_snapshot",
       "downloadPurpose": "reference_only",
       "operationallyAvailable": false,
-      "status": "not_published_commercial_reuse_unconfirmed_or_restricted",
-      "downloadBlockReason": "Commercial redistribution permission is not explicitly verified for this source."
+      "status": "present_reference_dataset",
+      "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/navigation/sia_france/airway_segments.csv"
     },
     {
       "id": "sia_france_airspace",
@@ -1342,7 +1342,7 @@
       "regionCount": 1,
       "regionBytes": 201156,
       "path": "airspace/sia/index.json",
-      "available": false,
+      "available": true,
       "sizeBytes": 1199,
       "sha256": "bb15d489b1f41ae4325437e107a97636dfa055b0a773e6f5f8e4e0a7006252f5",
       "sourceProvider": "SIA / DGAC (France)",
@@ -1358,9 +1358,9 @@
       "provenanceVerification": "source_snapshot",
       "downloadPurpose": "reference_only",
       "operationallyAvailable": false,
-      "status": "not_published_commercial_reuse_unconfirmed_or_restricted",
-      "alterations": "Coordinates converted from DMS, arcs/circles approximated by polylines, national-border segments joined by straight lines (flagged approx), vertical limits normalised to feet.",
-      "downloadBlockReason": "Commercial redistribution permission is not explicitly verified for this source."
+      "status": "present_reference_dataset",
+      "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/airspace/sia/index.json",
+      "alterations": "Coordinates converted from DMS, arcs/circles approximated by polylines, national-border segments joined by straight lines (flagged approx), vertical limits normalised to feet."
     }
   ],
   "downloadContract": {

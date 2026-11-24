@@ -53,6 +53,13 @@ class NonCommercialMarkerTests(unittest.TestCase):
         self.assertEqual(r(dict(d, personalUseOnly=False), True), "cc by-nc")
 
 
+class SiaStatusTests(unittest.TestCase):
+    def test_sia_open_licence_passes_without_personal_scope(self):
+        d = {"id": "sia_france_fixes", "license": "SIA Licence Ouverte (commercial reuse with attribution)",
+             "licenseStatus": "verified_commercial_open_licence"}
+        assert cr.redistribution_block_reason(d, False) is None
+
+
 if __name__ == "__main__":
     unittest.main()
 
