@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "note": "App-facing layers. Each layer groups manifest datasets under one on/off toggle. The app may switch a layer off or on only when userToggle is true; a layer whose datasets are blocked here (rights gate, owner decision, test phase) cannot be switched on from the app.",
+  "layers": [
+    {"id": "airports", "label": "Airports and runways", "group": "reference", "datasets": ["ourairports_airports", "runways"], "defaultOn": true},
+    {"id": "navaids_current", "label": "VOR / NDB / DME (current: FAA, France)", "group": "navigation", "datasets": ["faa_nasr_navaids", "sia_france_navaids", "ourairports_navaids"], "defaultOn": true},
+    {"id": "fixes_current", "label": "Waypoints (current: FAA, France)", "group": "navigation", "datasets": ["faa_nasr_fixes", "sia_france_fixes"], "defaultOn": true},
+    {"id": "airways_current", "label": "Airways (current: FAA, France)", "group": "navigation", "datasets": ["faa_nasr_airway_segments", "sia_france_airway_segments"], "defaultOn": true},
+    {"id": "navigation_legacy_2012", "label": "World navaids, fixes and airways (2012 fallback)", "group": "navigation", "datasets": ["flightgear_navaids", "flightgear_fixes", "flightgear_airway_segments"], "defaultOn": true, "fallbackFor": ["navaids_current", "fixes_current", "airways_current"], "note": "Cycle 2012.08. Use only where no current layer covers the area."},
+    {"id": "corridor_graph_2012", "label": "Route corridor graph (2012)", "group": "routing", "datasets": ["world_corridor_graph"], "defaultOn": true},
+    {"id": "procedures", "label": "SIDs and STARs (FAA, France)", "group": "procedures", "datasets": ["sids", "stars", "france_sia_sid_star_legs"], "defaultOn": true},
+    {"id": "approaches", "label": "Approaches", "group": "procedures", "datasets": ["approaches"], "defaultOn": false},
+    {"id": "vfr_points", "label": "VFR reporting points (FAA, OFMA)", "group": "vfr", "datasets": ["faa_vfr_reporting_points", "ofma_ofmx_vfr_reference_points"], "defaultOn": true},
+    {"id": "airspace_verified", "label": "Airspace: CTR, TMA, restricted (OFMA, France)", "group": "airspace", "datasets": ["ofma_airspace", "sia_france_airspace"], "defaultOn": true},
+    {"id": "airspace_openaip", "label": "Airspace: rest of world (openAIP, test phase)", "group": "airspace", "datasets": ["openaip_airspace"], "defaultOn": true, "fallbackFor": ["airspace_verified"], "note": "Non-commercial licence. Switch off before any paid release."},
+    {"id": "terrain", "label": "Terrain (Copernicus)", "group": "terrain", "datasets": ["terrain_world", "terrain_tiles"], "defaultOn": true},
+    {"id": "airline_data", "label": "Airline profiles and route rules", "group": "reference", "datasets": ["airline_profiles", "route_rules", "global_airline_directory", "route_policy"], "defaultOn": true},
+    {"id": "advisories_conflict", "label": "Conflict-zone and prohibition advisories (EASA, FAA)", "group": "advisories", "datasets": ["easa_czibs", "easa_safety_directives", "faa_prn_notams"], "defaultOn": false},
+    {"id": "observed_routes", "label": "Observed routes from ADS-B (test)", "group": "experimental", "datasets": ["adsb_observed_routes"], "defaultOn": false},
+    {"id": "airport_reference_enriched", "label": "Airport reference (mixed sources)", "group": "reference", "datasets": ["airport_reference"], "defaultOn": false}
+  ],
+  "priority": {
+    "airspace": ["sia_france_airspace", "ofma_airspace", "openaip_airspace"],
+    "navaids": ["faa_nasr_navaids", "sia_france_navaids", "ourairports_navaids", "flightgear_navaids"],
+    "fixes": ["faa_nasr_fixes", "sia_france_fixes", "flightgear_fixes"],
+    "airways": ["faa_nasr_airway_segments", "sia_france_airway_segments", "flightgear_airway_segments"]
+  }
+}
