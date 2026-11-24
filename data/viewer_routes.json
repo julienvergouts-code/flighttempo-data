@@ -1,0 +1,15 @@
+{
+  "airports": {
+    "JFK": {"name": "New York JFK", "lat": 40.6398, "lon": -73.7789},
+    "LAX": {"name": "Los Angeles", "lat": 33.9425, "lon": -118.4081},
+    "PPT": {"name": "Tahiti Faa'a", "lat": -17.5537, "lon": -149.6071},
+    "NRT": {"name": "Tokyo Narita", "lat": 35.7647, "lon": 140.3864},
+    "HKG": {"name": "Hong Kong", "lat": 22.3089, "lon": 113.9146},
+    "DXB": {"name": "Dubai", "lat": 25.2528, "lon": 55.3644},
+    "BRU": {"name": "Brussels", "lat": 50.9014, "lon": 4.4844}
+  },
+  "legs": [["JFK", "LAX"], ["LAX", "PPT"], ["PPT", "NRT"], ["NRT", "HKG"], ["HKG", "DXB"], ["DXB", "BRU"]],
+  "corridorNm": 20,
+  "airspaceNm": 40,
+  "airportNm": 30
+}

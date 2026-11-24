@@ -1,0 +1,45 @@
+name: Build world viewer data
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '20 3 * * 1'
+permissions:
+  contents: write
+concurrency:
+  group: flighttempo-shared-manifest-updates
+  cancel-in-progress: false
+env:
+  RELEASE_TAG: terrain-world-v1
+  GH_REPO: ${{ github.repository }}
+  GH_TOKEN: ${{ github.token }}
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install --upgrade pip numpy
+      - name: Tests
+        run: python -m unittest tests.test_build_world_viewer_data
+      - name: Download terrain blocks from the release
+        run: gh release download "$RELEASE_TAG" --pattern 'terrain-*.zip' --dir "$RUNNER_TEMP/blocks" --clobber
+      - name: Build viewer data
+        run: python pipeline/build_world_viewer_data.py --src "$RUNNER_TEMP/blocks" --out viewer
+      - name: Size check
+        run: ls -l viewer
+      - name: Commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add viewer
+          if git diff --cached --quiet; then echo "No changes."; else
+            git commit -m "chore(viewer): update world viewer data [skip ci]"
+            for attempt in 1 2 3; do
+              git fetch -q origin main
+              if git rebase origin/main; then git push origin HEAD:main && break
+              else git rebase --abort; git reset -q --hard origin/main; echo "rebase conflict; retry"; fi
+            done
+          fi
