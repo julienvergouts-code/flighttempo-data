@@ -1,6 +1,6 @@
 {
   "schemaVersion": 13,
-  "generatedAtUtc": "2026-11-23T20:53:03.815814+00:00",
+  "generatedAtUtc": "2026-11-24T00:00:18.629033+00:00",
   "procedureAiracCycle": "2611",
   "navaidTypeCounts": {
     "DME": 167,
@@ -32,7 +32,8 @@
     "faaNasrNavaids": 1608,
     "faaNasrAirwaySegments": 17178,
     "ofmaAirspaceFeatures": 33742,
-    "terrainTiles": 1982
+    "terrainTiles": 1982,
+    "terrainWorldTiles": 19408
   },
   "dataSources": [
     {
@@ -151,7 +152,8 @@
     "faaNasrNavaids": true,
     "faaNasrAirwaySegments": true,
     "ofmaAirspace": true,
-    "terrainTiles": false
+    "terrainTiles": false,
+    "terrainWorld": false
   },
   "procedureCoverageStatus": "FAA_US_NAS_ONLY_TEST_DATA; EUROPE_FRANCE_SOURCE_NOT_INGESTED; ASIA_NO_PUBLIC_REDISTRIBUTABLE_SOURCE_CONFIRMED",
   "procedureOperationalUse": false,
@@ -1097,6 +1099,35 @@
       "licenseUrl": "https://documentation.dataspace.copernicus.eu/APIs/SentinelHub/Data/DEM/resources/license/License-COPDEM-30.pdf",
       "attribution": "© DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved. Produced using Copernicus WorldDEM-90.",
       "disclaimer": "The organisations in charge of the Copernicus programme by law or by delegation do not incur any liability for any use of the Copernicus WorldDEM-90.",
+      "modificationNotice": "Resampled by max pooling from 1 arc-second to 9 arc-second cells.",
+      "dataCycle": null,
+      "provenanceVerification": "source_snapshot",
+      "downloadPurpose": "reference_only",
+      "operationallyAvailable": false,
+      "status": "not_published_commercial_reuse_unconfirmed_or_restricted",
+      "downloadBlockReason": "Commercial redistribution permission is not explicitly verified for this source."
+    },
+    {
+      "id": "terrain_world",
+      "path": "terrain/world-index.json",
+      "available": false,
+      "recordCount": 19408,
+      "sizeBytes": 436515,
+      "sha256": "0c3e34c2ede4250786cde615d5a4335368195aeaf526fd633ec5f0429a6d7cfd",
+      "blockCount": 376,
+      "tileCount": 19408,
+      "blockBytes": 1887508361,
+      "blockDegrees": 10,
+      "cellsPerDegree": 400,
+      "format": "FlightTempo terrain tiles (FTTR v1)",
+      "sourceProvider": "Copernicus DEM GLO-30 (ESA / European Union; DLR, Airbus)",
+      "sourceUrl": "https://registry.opendata.aws/copernicus-dem/",
+      "coverage": "Land between 60S and 84N in 10 degree block zips hosted as GitHub Release assets; highest-sample-per-cell terrain (max pooled).",
+      "license": "Copernicus DEM free licence (GLO-30)",
+      "licenseStatus": "copernicus_free_licence_commercial_reuse_not_confirmed",
+      "licenseUrl": "https://documentation.dataspace.copernicus.eu/APIs/SentinelHub/Data/DEM/resources/license/License-COPDEM-30.pdf",
+      "attribution": "© DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved. Produced using Copernicus WorldDEM-30.",
+      "disclaimer": "The organisations in charge of the Copernicus programme by law or by delegation do not incur any liability for any use of the Copernicus WorldDEM-30.",
       "modificationNotice": "Resampled by max pooling from 1 arc-second to 9 arc-second cells.",
       "dataCycle": null,
       "provenanceVerification": "source_snapshot",
