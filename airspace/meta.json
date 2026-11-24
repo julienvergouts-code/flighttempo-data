@@ -8,7 +8,7 @@
   "files": [
     {
       "path": "airspace_filter.json",
-      "sha256": "cc375ee5f89be8a4f68ff5283a5d64e0cf4da582b7d66141f81a86d6ef84849b",
+      "sha256": "4c130448135d99280655770c9222c2b4ae698a2538f145e2195e334cf2a6889f",
       "sizeBytes": 23737,
       "recordCount": 16
     },
@@ -20,7 +20,7 @@
     },
     {
       "path": "faa_prn_notams.json",
-      "sha256": "0f4e3a454a59304fef905c8a8f4aac67870a3ae7bc21363b2c9f4e5aa0cacc91",
+      "sha256": "92731ec8475682d6c13fa5acd3b86dbe909aae1d3ea9d12fa96e6d4693d19c6e",
       "sizeBytes": 59342,
       "recordCount": 16
     }
