@@ -1,6 +1,6 @@
 {
   "schemaVersion": 13,
-  "generatedAtUtc": "2026-11-24T02:26:52.113634+00:00",
+  "generatedAtUtc": "2026-11-24T02:29:21.017696+00:00",
   "procedureAiracCycle": "2611",
   "navaidTypeCounts": {
     "DME": 167,
@@ -34,7 +34,8 @@
     "ofmaAirspaceFeatures": 33742,
     "terrainTiles": 1982,
     "terrainWorldTiles": 19408,
-    "openaipAirspaces": 24644
+    "openaipAirspaces": 24644,
+    "adsbObservedRoutes": 60
   },
   "dataSources": [
     {
@@ -155,7 +156,8 @@
     "ofmaAirspace": true,
     "terrainTiles": true,
     "terrainWorld": true,
-    "openaipAirspace": true
+    "openaipAirspace": true,
+    "adsbObservedRoutes": true
   },
   "procedureCoverageStatus": "FAA_US_NAS_ONLY_TEST_DATA; EUROPE_FRANCE_SOURCE_NOT_INGESTED; ASIA_NO_PUBLIC_REDISTRIBUTABLE_SOURCE_CONFIRMED",
   "procedureOperationalUse": false,
@@ -1143,6 +1145,37 @@
       "commercialUseAllowed": false,
       "usageScopeNote": "Personal use only until the Copernicus commercial reading is confirmed.",
       "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/terrain/world-index.json"
+    },
+    {
+      "id": "adsb_observed_routes",
+      "path": "routes/observed/index.json",
+      "available": true,
+      "recordCount": 60,
+      "airportPairs": 59,
+      "flightsCounted": 60,
+      "sizeBytes": 1147,
+      "sha256": "b10b01cd3b377219a1a35d28a81ea8939b38e5e313505a1f3e22114d91efa83c",
+      "packFile": "routes/observed/observed_routes.json.gz",
+      "packSizeBytes": 12288,
+      "packSha256": "bdc910592aa7ae375abf9ed1a74cdcddba2d13a587eda9e4c9f45c38761db29b",
+      "sourceProvider": "ADSB.lol",
+      "sourceUrl": "https://github.com/adsblol",
+      "license": "ODbL 1.0 (attribution and share-alike apply)",
+      "licenseUrl": "https://opendatacommons.org/licenses/odbl/1-0/",
+      "licenseStatus": "odbl_1_0_share_alike_obligations_unreviewed_personal_use_only",
+      "attribution": "Contains information from ADSB.lol, made available under the Open Database License (ODbL) 1.0.",
+      "usage": "personal",
+      "personalUseOnly": true,
+      "commercialUseAllowed": false,
+      "usageScopeNote": "ODbL derived-database obligations are unreviewed. Keep this layer separate; confirm before any public release.",
+      "coverage": "Airline flights between airports seen in the ADSB.lol archive days processed so far; grows weekly.",
+      "dataCycle": null,
+      "provenanceVerification": "source_snapshot",
+      "downloadPurpose": "reference_only",
+      "operationallyAvailable": false,
+      "legacyGraphUsed": false,
+      "status": "personal_use_only",
+      "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/routes/observed/index.json"
     }
   ],
   "downloadContract": {
