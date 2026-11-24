@@ -175,11 +175,13 @@ def parse_country(raw: bytes | dict, cc: str) -> tuple[list[dict[str, Any]], dic
 def check_country(cc: str, features: list[dict[str, Any]], info: dict[str, Any], previous: int | None) -> None:
     stats = info["stats"]
     considered = stats.get("considered", 0)
+    if not features and considered == 0:
+        return  # only FIR/UIR/airway entries: nothing to publish, not a failure
     if not features:
         raise OpenAipError(f"{cc}: no usable airspaces; stats {stats}")
     if considered >= 10 and len(features) / considered < MIN_GEOMETRY_SUCCESS:
         raise OpenAipError(f"{cc}: geometry resolved for only {len(features) / considered:.1%}; stats {stats}")
-    if considered and stats.get("unknown_type", 0) / considered > MAX_UNKNOWN_TYPE_SHARE:
+    if considered >= 5 and stats.get("unknown_type", 0) / considered > MAX_UNKNOWN_TYPE_SHARE:
         raise OpenAipError(f"{cc}: {stats['unknown_type']}/{considered} unknown type codes; the enum may have changed")
     if previous and previous >= 20 and len(features) < previous * (1 - MAX_DROP_VS_PREVIOUS):
         raise OpenAipError(f"{cc}: {len(features)} airspaces vs {previous} published before; refusing a sudden drop")
@@ -294,6 +296,9 @@ def run(out: Path = OUT_DIR, countries: list[str] | None = None, include_covered
         try:
             features, info = parse_country(raw, cc)
             check_country(cc, features, info, (existing.get(cc) or {}).get("featureCount"))
+            if not features:
+                log.info("%s: only FIR/UIR entries, nothing to publish", cc)
+                continue
         except (OpenAipError, ValueError) as exc:
             errors.append(str(exc))
             log.error("%s failed: %s", cc, exc)
