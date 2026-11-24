@@ -276,6 +276,8 @@ jobs:
       - name: Build world corridor graph
         run: python3 scripts/build_world_corridor_graph.py
       - name: Refresh FAA PRN reference index (not live NOTAM status)
+        # A timeout on the FAA page must not stop the rest of the daily run (it once skipped every register step).
+        continue-on-error: true
         run: python3 scripts/import_faa_prn.py
       - name: Register graph and airspace datasets in manifest
         run: |
