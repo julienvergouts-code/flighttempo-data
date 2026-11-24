@@ -1,0 +1,39 @@
+{
+ "schema": 1,
+ "format": "FlightTempo SIA France airspace packs",
+ "provider": "SIA / DGAC",
+ "license": "SIA Licence Ouverte",
+ "licenseUrl": "https://www.sia.aviation-civile.gouv.fr/produits-numeriques-en-libre-disposition.html",
+ "attribution": "Source : SIA / DGAC, eAIP France, Licence Ouverte. Donnees retraitees par FlightTempo (geometrie simplifiee). Date de derniere mise a jour : cycle AIRAC 11/26.",
+ "commercialUseAllowed": true,
+ "alterations": "Coordinates converted from DMS, arcs/circles approximated by polylines, national-border segments joined by straight lines (flagged approx), vertical limits normalised to feet.",
+ "effectiveDate": "2026-10-29",
+ "expiryDate": "2026-11-25",
+ "operationalUse": false,
+ "parseStats": {
+  "considered": 1932,
+  "parsed": 1748,
+  "no_geometry": 132,
+  "no_limits": 52,
+  "approx": 275,
+  "arcs": 383,
+  "border_segments": 382,
+  "skipped_fir": 0
+ },
+ "regions": [
+  {
+   "region": "FR",
+   "file": "FR.json.gz",
+   "featureCount": 1727,
+   "sizeBytes": 201156,
+   "sha256": "75a7253c1c0ddc533e3e0f67299e61cd9dc25c11caf3347f5b339f2586536b1f",
+   "types": {
+    "TMA": 354,
+    "OTHER": 646,
+    "R": 492,
+    "P": 61,
+    "D": 174
+   }
+  }
+ ]
+}
