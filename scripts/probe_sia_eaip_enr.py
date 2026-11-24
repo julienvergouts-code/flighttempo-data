@@ -61,6 +61,10 @@ def main() -> int:
         print(f"  text rows {len(texts)}, rows with coordinates {len(coord)}")
         if len(t) < 40000:
             print("  FULLRAW:", squash(re.sub(r"<[^>]+>", " ", t), 3000))
+        if os.environ.get("ROWS_FROM"):
+            a = int(os.environ["ROWS_FROM"])
+            for k, x in enumerate(texts[a:a + 45]):
+                print(f"  R{a + k}:", x[:260])
         for x in texts[3:9]:
             print("  ROW:", x[:300])
         for x in coord[:10]:

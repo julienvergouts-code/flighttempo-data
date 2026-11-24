@@ -6,6 +6,10 @@ on:
         description: 'Paths under html/eAIP/ to dump (space separated), e.g. FR-ENR-4.4-fr-FR.html'
         required: false
         default: ''
+      rows_from:
+        description: 'Print 45 text rows starting at this index'
+        required: false
+        default: ''
 permissions:
   contents: read
 jobs:
@@ -13,6 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       EXTRA_PAGES: ${{ inputs.pages }}
+      ROWS_FROM: ${{ inputs.rows_from }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
