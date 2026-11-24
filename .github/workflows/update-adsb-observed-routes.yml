@@ -1,0 +1,72 @@
+name: Update ADS-B observed routes (weekly)
+
+on:
+  schedule:
+    - cron: '50 4 * * 2'
+  workflow_dispatch:
+    inputs:
+      date:
+        description: 'UTC archive day YYYY-MM-DD (empty = 3 days ago)'
+        required: false
+        default: ''
+      max_flights:
+        description: 'Stop after this many flights'
+        required: false
+        default: '400'
+      force:
+        description: 'Count the day again even if it was already processed (true/false)'
+        required: false
+        default: 'false'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: flighttempo-shared-manifest-updates
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 110
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install -r pipeline/requirements.txt
+      - name: Tests
+        run: python -m unittest tests.test_adsb_observed_routes tests.test_register_adsb_observed_manifest tests.test_personal_use_scope
+      - name: Learn routes from the archive day (a missing archive day is skipped, nothing is published)
+        id: learn
+        continue-on-error: true
+        run: |
+          ARGS="--max-flights ${{ inputs.max_flights || '400' }} --budget-minutes 80"
+          if [ -n "${{ inputs.date }}" ]; then ARGS="$ARGS --date ${{ inputs.date }}"; fi
+          if [ "${{ inputs.force }}" = "true" ]; then ARGS="$ARGS --force"; fi
+          python pipeline/adsb_observed_routes.py $ARGS
+      - name: Register layer
+        run: python scripts/register_adsb_observed_manifest.py
+      - name: Re-apply cycle and rights gate
+        run: python scripts/enforce_app_manifest_rights.py
+      - name: Validate manifest datasets
+        run: python scripts/validate_navigation_csvs.py
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add routes navigation_manifest.json
+          if git diff --cached --quiet; then echo "No changes."; else
+            git commit -m "chore(navdata): update ADS-B observed routes [skip ci]"
+            for attempt in 1 2 3; do
+              git fetch -q origin main
+              if git rebase origin/main; then git push origin HEAD:main && break
+              else
+                git rebase --abort; git reset -q --hard origin/main
+                echo "rebase conflict, giving this run's data up; the next run recounts"; break
+              fi
+            done
+          fi
+      - name: Warn if the importer failed (the run still succeeds, nothing bad was published)
+        if: steps.learn.outcome == 'failure'
+        run: echo "::warning::ADS-B observed-route import failed; see the learn step log. Nothing was published."
