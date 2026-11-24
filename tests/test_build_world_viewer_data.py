@@ -50,5 +50,31 @@ class T(unittest.TestCase):
         self.assertFalse(v.feature_near(far, [line], 10))
 
 
+class AirportTests(unittest.TestCase):
+    def test_window_and_png(self):
+        g = np.zeros((tt.CELLS, tt.CELLS), dtype=np.int16)
+        g[200, 100] = 1234
+        tiles = {(50, 4): g, (50, 3): g * 0, (49, 4): g * 0, (49, 3): g * 0}
+        ids = v.airport_tile_ids(50.5, 4.0)
+        self.assertEqual(ids, {(50, 3), (50, 4), (49, 3), (49, 4)} - {(49, 3), (49, 4)} | {(50, 3), (50, 4)})
+        w = v.airport_window(tiles, 50.5, 4.0)
+        self.assertEqual(w.shape, (tt.CELLS, tt.CELLS))
+        self.assertEqual(int(w.max()), 1234)
+        png = v.png_rgb16(w)
+        self.assertEqual(png[:8], b"\x89PNG\r\n\x1a\n")
+        self.assertIsNone(v.airport_window({}, 50.5, 4.0))
+
+    def test_rgb16_roundtrip(self):
+        import zlib
+        a = np.array([[0, 1234], [-20, 4800]], dtype=np.int16)
+        png = v.png_rgb16(a)
+        i = png.index(b"IDAT")
+        n = int.from_bytes(png[i - 4:i], "big")
+        raw = zlib.decompress(png[i + 4:i + 4 + n])
+        rows = [raw[k * 7 + 1:(k + 1) * 7] for k in range(2)]
+        vals = [(r[c * 3] * 256 + r[c * 3 + 1]) - v.HEIGHT_OFFSET for r in rows for c in range(2)]
+        self.assertEqual(vals, [0, 1234, -20, 4800])
+
+
 if __name__ == "__main__":
     unittest.main()
