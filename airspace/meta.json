@@ -20,7 +20,7 @@
     },
     {
       "path": "faa_prn_notams.json",
-      "sha256": "47a5354c7dc10a9401eff7b69ca5d10e797a3da5dbb5fafbf5d0cd9cc12196a4",
+      "sha256": "f5d905b652bd7fbeab4d6f5349186d6a542e1c681308570b95fa4cc708c963ad",
       "sizeBytes": 59342,
       "recordCount": 16
     }
