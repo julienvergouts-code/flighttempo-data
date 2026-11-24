@@ -58,12 +58,18 @@ jobs:
           git add routes navigation_manifest.json
           if git diff --cached --quiet; then echo "No changes."; else
             git commit -m "chore(navdata): update ADS-B observed routes [skip ci]"
+            mkdir -p "$RUNNER_TEMP/observed" && cp -r routes/observed/. "$RUNNER_TEMP/observed/"
             for attempt in 1 2 3; do
               git fetch -q origin main
               if git rebase origin/main; then git push origin HEAD:main && break
               else
+                # the shared manifest changed underneath us: keep our route files, re-register on the new main
                 git rebase --abort; git reset -q --hard origin/main
-                echo "rebase conflict, giving this run's data up; the next run recounts"; break
+                mkdir -p routes/observed && cp -r "$RUNNER_TEMP/observed/." routes/observed/
+                python scripts/register_adsb_observed_manifest.py
+                python scripts/enforce_app_manifest_rights.py
+                git add routes navigation_manifest.json
+                git commit -q -m "chore(navdata): update ADS-B observed routes [skip ci]" || break
               fi
             done
           fi
