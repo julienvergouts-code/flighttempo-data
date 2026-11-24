@@ -193,7 +193,10 @@ def parse_routes(rows: list[list[str]]) -> list[dict[str, Any]]:
     routes: list[dict[str, Any]] = []
     current: dict[str, Any] | None = None
     point: dict[str, Any] | None = None
-    for cells in rows:
+    for raw_cells in rows:
+        cells = [c for c in raw_cells if c]  # real pages carry empty spacer cells
+        if not cells:
+            continue
         if len(cells) == 1 and ROUTE_ID.match(cells[0]):
             current = {"route": cells[0], "points": []}
             routes.append(current)
