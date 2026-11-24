@@ -1,4 +1,4 @@
-#version,20261123
+#version,20261124
 #columns,iata,icao,timeZone,name,latitude,longitude,elevationFt,runwayPair,runwayHeadingDeg,allRunwayPairs,allRunwayHeadingsDeg,allRunwayLengthsFt,runwayCount,ourairportsId,airportType,continent,isoCountry,isoRegion,municipality,scheduledService,gpsCode,localCode,homeLink,wikipediaLink,keywords,allRunwaySourceIds,allRunwayWidthsFt,allRunwaySurfaces,allRunwayLighted,allRunwayLELatitudes,allRunwayLELongitudes,allRunwayLEElevationsFt,allRunwayLEDisplacedThresholdsFt,allRunwayLEHeadingsDegT,allRunwayHELatitudes,allRunwayHELongitudes,allRunwayHEElevationsFt,allRunwayHEDisplacedThresholdsFt,allRunwayHEHeadingsDegT
 AAA,NTGA,Pacific/Tahiti,Anaa Airport,-17.3526,-145.5100,10,14/32,150,14/32,150,4921,1,4983,medium_airport,OC,PF,PF-U-A,Anaa,yes,NTGA,,,https://en.wikipedia.org/wiki/Anaa_Airport,,235800,60,ASP,0,-17.34670066833496,-145.51400756835938,7,,149.7,-17.35849952697754,-145.50599670410156,7,,329.7
 AAB,YARY,Australia/Brisbane,Arrabury Airport,-26.6964,141.0487,334,16/34,-1,16/34,,3379,1,27342,small_airport,OC,AU,AU-QLD,Tanbar,no,YARY,,,https://en.wikipedia.org/wiki/Arrabury_Airport,,258235,,X,0,,,,,,,,,,
