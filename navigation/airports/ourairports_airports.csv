@@ -6453,7 +6453,7 @@ icao,country,latitude,longitude,elevation_ft,name,source_id,source_ident,source_
 66CA,US,35.6077,-121.11,320,Rancho San Simeon Airport,13018,66CA,small_airport,Rancho San Simeon Airport,35.60770034790039,-121.11000061035156,320,NA,US,US-CA,Cambria,no,,,66CA,66CA,,,
 66CN,US,33.7606,-118.388,1080,Northrop Palos Verdes Heliport,13020,66CN,heliport,Northrop Palos Verdes Heliport,33.76060104370117,-118.38800048828125,1080,NA,US,US-CA,Palos Verdes,no,,,66CN,66CN,,,
 66CO,US,39.0908,-104.544,7260,Rotor Leasing Heliport,13021,66CO,heliport,Rotor Leasing Heliport,39.09080123901367,-104.54399871826172,7260,NA,US,US-CO,Elbert,no,,,66CO,66CO,,,
-66FA,US,25.94217,-80.20227,10,Tootsies Cabaret Heliport,601636,66FA,heliport,Tootsies Cabaret Heliport,25.942167,-80.202269,10,NA,US,US-FL,Miami Gardens,no,,,66FA,66FA,,,
+66FA,US,25.94217,-80.20227,10,Tootsies Cabaret Heliport,601636,66FA,heliport,Tootsies Cabaret Heliport,25.942167,-80.202269,10,NA,US,US-FL,Miami Gardens,no,,,,,,,66FA
 66FD,US,29.00401,-82.55453,50,JR's STOLport,13022,66FD,small_airport,JR's STOLport,29.004012,-82.554531,50,NA,US,US-FL,Dunnellon,no,,,66FD,66FD,,,
 66FL,US,28.25439,-80.7443,29,VA Outpatient Clinic Heliport,13023,66FL,closed,VA Outpatient Clinic Heliport,28.254392,-80.744305,29,NA,US,US-FL,Melbourne,no,,,,,,,66FL
 66G,US,43.31436,-83.71005,645,William Tiny Zehnder Field,13024,66G,small_airport,William Tiny Zehnder Field,43.314364,-83.710055,645,NA,US,US-MI,Frankenmuth,no,,,,66G,,https://en.wikipedia.org/wiki/W.M._%27Tiny%27_Zehnder_Field,
@@ -66126,6 +66126,7 @@ TR-0359,TR,36.28142,33.83583,,Taşucu Navy Helipad,611175,TR-0359,heliport,Taşu
 TR-0360,TR,36.03047,32.78227,,Anamur Air Radar Command Heliport,611176,TR-0360,heliport,Anamur Air Radar Command Heliport,36.03047,32.78227,,AS,TR,TR-33,,no,,,,,,,
 TR-0361,TR,36.09753,32.93677,,Bozyazi Port Helipad,611177,TR-0361,heliport,Bozyazi Port Helipad,36.097528,32.936774,,AS,TR,TR-33,,no,,,,,,,
 TR-0362,TR,36.74438,33.3731,,Mut Ömerağa Firefighting Heliport,611178,TR-0362,heliport,Mut Ömerağa Firefighting Heliport,36.744381,33.3731,,AS,TR,TR-33,,no,,,,,,,
+TR-0363,TR,41.71607,27.24714,563,Kırklareli Helibase,611779,TR-0363,heliport,Kırklareli Helibase,41.716074,27.247145,563,AS,TR,TR-39,Kırklareli,no,,,,,,,
 TRPG,MS,16.79183,-62.1932,550,John A. Osborne Airport,43074,TRPG,large_airport,John A. Osborne Airport,16.791835,-62.193204,550,NA,MS,MS-SP,Gerald's Park,yes,TRPG,MNI,TRPG,,,https://en.wikipedia.org/wiki/John_A._Osborne_Airport,"Gerald's Airport, Brades"
 TS00,US,32.78731,-97.1805,490,Fuller Airport,25017,TS00,small_airport,Fuller Airport,32.787314,-97.180499,490,NA,US,US-TX,Fort Worth,no,,,TS00,TS00,,,
 TS02,US,33.1196,-98.2306,1200,One Sixty Four Place Airport,25019,TS02,small_airport,One Sixty Four Place Airport,33.119598388671875,-98.23059844970703,1200,NA,US,US-TX,Jacksboro,no,,,TS02,TS02,,,
@@ -68198,7 +68199,7 @@ US-0809,US,28.5275,-81.48083,70,Summer Lakes Seaplane Base,326255,US-0809,seapla
 US-0810,US,30.40061,-86.86053,6,GAC Waterfront Heliport,326260,US-0810,heliport,GAC Waterfront Heliport,30.400611,-86.860526,6,NA,US,US-FL,Navarre,no,,,FD32,FD32,,,
 US-0811,US,28.79763,-81.64697,65,Jones Brothers East Seaplane Base,326261,US-0811,seaplane_base,Jones Brothers East Seaplane Base,28.797634,-81.646972,65,NA,US,US-FL,Mount Dora,no,,,FD68,FD68,https://www.jonesairandsea.com/,,
 US-0812,US,43.27777,-97.55854,1362,Mettler Airport,326273,US-0812,small_airport,Mettler Airport,43.277774,-97.558545,1362,NA,US,US-SD,Menno,no,,,SD77,SD77,,,
-US-0813,US,28.53752,-81.38437,197,GEICO Helistop,331524,US-0813,heliport,GEICO Helistop,28.53752,-81.384373,197,NA,US,US-FL,Orlando,no,,,FL05,FL05,,,
+US-0813,US,28.53752,-81.38437,197,South St Garage Helistop,331524,US-0813,heliport,South St Garage Helistop,28.53752,-81.384373,197,NA,US,US-FL,Orlando,no,,,FL05,FL05,,,GEICO Helistop
 US-0814,US,45.67577,-94.82625,1212,Melrose Hospital Heliport,326276,US-0814,heliport,Melrose Hospital Heliport,45.675767,-94.8262469,1212,NA,US,US-MN,Melrose,no,,,MN78,MN78,,,
 US-0815,US,34.73074,-98.01446,1100,Horning Farms Airstrip,326277,US-0815,small_airport,Horning Farms Airstrip,34.730738,-98.014461,1100,NA,US,US-OK,Marlow,no,,,92OK,92OK,,,
 US-0816,US,34.6431,-98.04402,1150,Malcom Farm Airport,326279,US-0816,small_airport,Malcom Farm Airport,34.643097,-98.044016,1150,NA,US,US-OK,Marlow,no,,,OK91,OK91,,,
@@ -71607,7 +71608,7 @@ US-12934,US,27.18831,-81.7501,,Bright Hour Ranch Airport,606267,US-12934,small_a
 US-12935,US,30.84927,-98.20292,1408,HD Farm & Ranch Airport,607824,US-12935,small_airport,HD Farm & Ranch Airport,30.849273,-98.202923,1408,NA,US,US-TX,Burnet,no,,,01TA,01TA,,,
 US-12936,US,28.59887,-81.81436,93,H2oztec Seaplane Base,607826,US-12936,seaplane_base,H2oztec Seaplane Base,28.598868,-81.814355,93,NA,US,US-FL,Groveland,no,,,0FL5,0FL5,,,Cherry Lake
 US-12937,US,30.92648,-88.13481,250,S.C. Stagner Field,607843,US-12937,small_airport,S.C. Stagner Field,30.926483,-88.134805,250,NA,US,US-AL,Saraland,no,,,26AL,26AL,,,
-US-12938,US,30.57627,-92.01771,34,Baham Airstrip,607845,US-12938,small_airport,Baham Airstrip,30.576266,-92.017711,34,NA,US,US-LA,Opelousas,no,,,2LA3,2LA3,,,
+US-12938,US,30.57627,-92.01771,34,Baham Airstrip [CLOSED],607845,US-12938,small_airport,Baham Airstrip [CLOSED],30.576266,-92.017711,34,NA,US,US-LA,Opelousas,no,,,2LA3,2LA3,,,
 US-12939,US,45.93167,-91.47194,1292,BK's Landing Seaplane Base,607847,US-12939,seaplane_base,BK's Landing Seaplane Base,45.93167,-91.471937,1292,NA,US,US-WI,Hayward,no,,,29WI,29WI,,,Windigo Lake
 US-1294,US,32.72332,-113.9385,329,Curry Ridge Airport,334358,US-1294,small_airport,Curry Ridge Airport,32.723321,-113.938501,329,NA,US,US-AZ,Tacna,no,,,AZ60,AZ60,,,
 US-12940,US,29.46028,-98.95186,947,Quihi Creek Vineyard Airport,607850,US-12940,small_airport,Quihi Creek Vineyard Airport,29.460278,-98.951859,947,NA,US,US-TX,Hondo,no,,,45TA,45TA,,,
@@ -71763,6 +71764,7 @@ US-13078,US,42.86148,-85.72152,740,UMH West Hospital Heliport,611757,US-13078,he
 US-13079,US,27.20812,-80.33164,16,Florida Coast Medical Center Heliport,611760,US-13079,heliport,Florida Coast Medical Center Heliport,27.208123,-80.33164,16,NA,US,US-U-A,Port St. Lucie,no,,,1FL3,1FL3,,,
 US-1308,US,33.68147,-114.21366,,Ora Acres Airport,334444,US-1308,closed,Ora Acres Airport,33.68147,-114.21366,,NA,US,US-AZ,Quartzsite,no,,,,,,,
 US-13080,US,37.2516,-107.07817,7546,Pagosa Springs Medical Center Heliport,611765,US-13080,heliport,Pagosa Springs Medical Center Heliport,37.251603,-107.078167,7546,NA,US,US-CO,Pagosa Springs,no,,,4CO8,4CO8,,,
+US-13081,US,27.40759,-80.973,43,Priolo Heliport,611781,US-13081,heliport,Priolo Heliport,27.407587,-80.973002,43,NA,US,US-FL,Okeechobee,no,,,66FA,66FA,,,
 US-1309,US,33.58057,-113.58721,,Salome Emergency Airfield,334445,US-1309,small_airport,Salome Emergency Airfield,33.58057,-113.58721,,NA,US,US-AZ,Salome,no,,,,,,,
 US-1310,US,33.63726,-113.34238,,75E Airport,334446,US-1310,small_airport,75E Airport,33.63726,-113.34238,,NA,US,US-AZ,Salome,no,,,,,,,
 US-1311,US,31.88181,-112.812,,Gringo Pass Airfield,334450,US-1311,closed,Gringo Pass Airfield,31.88181,-112.812,,NA,US,US-AZ,Lukeville,no,,,,,,,"lukeville, gringo pass"
@@ -75640,7 +75642,7 @@ US-5180,US,30.43988,-91.18811,86,Spencer Calahan Office Building Helipad,347729,
 US-5181,US,29.57289,-95.05056,0,Serenity Seaplane Base,347731,US-5181,seaplane_base,Serenity Seaplane Base,29.572889,-95.050561,0,NA,US,US-TX,Seabrook,no,,,95XS,95XS,,,
 US-5182,US,33.60791,-83.35526,488,Home Field,347734,US-5182,small_airport,Home Field,33.607911,-83.355257,488,NA,US,US-GA,Madison,no,,,GA65,GA65,,,
 US-5183,US,42.04631,-90.65686,752,Jackson County Regional Health Center Heliport,347735,US-5183,heliport,Jackson County Regional Health Center Heliport,42.046308,-90.656858,752,NA,US,US-IA,Maquoketa,no,,,IA65,IA65,,,
-US-5184,US,46.32353,-116.71345,1730,Slickpoo MX Park Airport,347737,US-5184,small_airport,Slickpoo MX Park Airport,46.323533,-116.71345,1730,NA,US,US-ID,Slickpoo,no,,,ID45,ID45,,,
+US-5184,US,46.32353,-116.71345,1730,Slickpoo Airport,347737,US-5184,small_airport,Slickpoo Airport,46.323533,-116.71345,1730,NA,US,US-ID,Slickpoo,no,,,ID45,ID45,,,Slickpoo MX Park
 US-5185,US,44.06861,-120.80333,3900,Pearson Airstrip,347739,US-5185,small_airport,Pearson Airstrip,44.068611,-120.803333,3900,NA,US,US-OR,Prineville,no,,,OR84,OR84,,,
 US-5186,US,45.75274,-119.3834,748,K2 Airport,347741,US-5186,small_airport,K2 Airport,45.752743,-119.383403,748,NA,US,US-OR,Echo,no,,,OR92,OR92,,,
 US-5187,US,33.30653,-79.94864,62,Flying Tails Airport,347750,US-5187,small_airport,Flying Tails Airport,33.306528,-79.948642,62,NA,US,US-SC,Bonneau,no,,,SC05,SC05,,,
