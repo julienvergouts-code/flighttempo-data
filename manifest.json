@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "repository": "julienvergouts-code/flighttempo-data",
-  "generatedAtUtc": "2026-11-26T14:00:33.260133+00:00",
+  "generatedAtUtc": "2026-11-26T16:59:19.426581+00:00",
   "purpose": "FlightTempo development and distribution of aviation datasets whose source-specific commercial reuse rights are verified; not an operational navigation database.",
   "rules": {
     "datasetMetaRequired": true,
@@ -190,18 +190,6 @@
       "recordCount": 70291
     },
     {
-      "id": "faa-prn-notams",
-      "path": "airspace/faa_prn_notams.json",
-      "source": "FAA PRN KICZ NOTAM index",
-      "airacCycle": null,
-      "effectiveDate": null,
-      "expiryDate": null,
-      "sha256": "1ec50287ab0e966c16a971b36ede659da96f7e7451702ed9a12b88992f172830",
-      "licenceStatus": "FAA_public_information_reference_currentness_unverified",
-      "coverage": "FAA-published international prohibition/restriction notice references",
-      "recordCount": 16
-    },
-    {
       "id": "easa-safety-directives",
       "path": "airspace/advisories/easa_safety_directives.json",
       "source": "EASA Safety Directives SD-2021-02 and SD-2021-03",
@@ -212,6 +200,18 @@
       "licenceStatus": "EASA_source_acknowledgement",
       "coverage": "Operator-scope-specific safety directives for FIR Minsk (UMMV)",
       "recordCount": 2
+    },
+    {
+      "id": "faa-prn-notams",
+      "path": "airspace/faa_prn_notams.json",
+      "source": "FAA PRN KICZ NOTAM index",
+      "airacCycle": null,
+      "effectiveDate": null,
+      "expiryDate": null,
+      "sha256": "dbd6d1984664dbccc3251f4cb86bfc5fa8ef0c099d94106840d8f127788b33d0",
+      "licenceStatus": "FAA_public_information_reference_currentness_unverified",
+      "coverage": "FAA-published international prohibition/restriction notice references",
+      "recordCount": 16
     }
   ]
 }
