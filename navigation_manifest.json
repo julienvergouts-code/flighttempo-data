@@ -1,6 +1,6 @@
 {
   "schemaVersion": 13,
-  "generatedAtUtc": "2026-11-26T08:47:24.537267+00:00",
+  "generatedAtUtc": "2026-11-26T08:56:01.963377+00:00",
   "procedureAiracCycle": "2611",
   "navaidTypeCounts": {
     "DME": 167,
@@ -25,7 +25,7 @@
     "airportReferenceMultipleRunwayAirports": 3905,
     "airportReferenceOurAirportsMetadataMatches": 29747,
     "globalAirlineDirectory": 3847,
-    "faaVfrReportingPoints": 675,
+    "faaVfrReportingPoints": 681,
     "ofmaOfmxVfrReferencePoints": 4736,
     "franceSiaSidStarLegs": 7988,
     "faaNasrFixes": 69408,
@@ -77,10 +77,10 @@
       "url": "https://www.faa.gov/air_traffic/flight_info/aeronav/Aero_Data/NASR_Subscription/",
       "provider": "FAA Aeronautical Information Services",
       "license": "US Government public-domain data",
-      "downloadedAt": "2026-11-23T15:38:44Z",
-      "sizeBytes": 35258,
-      "sha256": "d1f780fceb047dfa59b993747327087e2bf55a069838afdd78446773b15d33ff",
-      "recordCount": 675
+      "downloadedAt": "2026-11-26T08:56:01Z",
+      "sizeBytes": 35570,
+      "sha256": "6fbbfdbacf7a46bdeea5ddd2dd328c0574eccb8d93cda3530cfb2342438cf232",
+      "recordCount": 681
     },
     {
       "dataset": "faa_nasr_fixes",
@@ -865,24 +865,24 @@
     {
       "id": "faa_vfr_reporting_points",
       "path": "data/vfr_points.csv",
-      "available": false,
-      "recordCount": 675,
-      "sizeBytes": 35258,
-      "sha256": "d1f780fceb047dfa59b993747327087e2bf55a069838afdd78446773b15d33ff",
+      "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/data/vfr_points.csv",
+      "available": true,
+      "recordCount": 681,
+      "sizeBytes": 35570,
+      "sha256": "6fbbfdbacf7a46bdeea5ddd2dd328c0574eccb8d93cda3530cfb2342438cf232",
       "sourceProvider": "FAA Aeronautical Information Services / NASR FIX",
       "sourceUrl": "https://www.faa.gov/air_traffic/flight_info/aeronav/Aero_Data/NASR_Subscription/",
       "coverage": "United States NASR VFR reporting points (VP-prefixed FIX records)",
-      "sourceTag": "FAA_NASR_FIX_2026-10-29",
+      "sourceTag": "FAA_NASR_FIX_2026-11-26",
       "license": "US Government public-domain data",
       "licenseStatus": "public_domain",
-      "dataCycle": "2026-10-29",
-      "effectiveDate": "2026-10-29",
-      "expiryDate": "2026-11-25",
+      "dataCycle": "2026-11-26",
+      "effectiveDate": "2026-11-26",
+      "expiryDate": "2026-12-23",
       "provenanceVerification": "source_snapshot",
       "downloadPurpose": "reference_only",
       "operationallyAvailable": false,
-      "status": "not_published_source_cycle_expired",
-      "downloadBlockReason": "The source cycle is not effective yet, has expired, or has invalid dates."
+      "status": "present_reference_dataset"
     },
     {
       "id": "ofma_ofmx_vfr_reference_points",
@@ -1780,18 +1780,14 @@
         "ofma_ofmx_vfr_reference_points"
       ],
       "availableDatasets": [
+        "faa_vfr_reporting_points",
         "ofma_ofmx_vfr_reference_points"
       ],
-      "unavailableDatasets": [
-        {
-          "id": "faa_vfr_reporting_points",
-          "reason": "The source cycle is not effective yet, has expired, or has invalid dates."
-        }
-      ],
+      "unavailableDatasets": [],
       "userToggle": true,
       "defaultOn": true,
       "tier": "commercial_or_public",
-      "recordCount": 4736,
+      "recordCount": 5417,
       "fallbackFor": [],
       "note": ""
     },
