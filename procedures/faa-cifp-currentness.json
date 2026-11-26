@@ -1,29 +1,9 @@
 {
-  "checkedAtUtc": "2026-11-25T14:15:46.961364+00:00",
+  "checkedAtUtc": "2026-11-26T13:50:43.091108+00:00",
   "source": "FAA AeroNav CIFP",
   "sourcePageUrl": "https://www.faa.gov/air_traffic/flight_info/aeronav/digital_products/cifp/download/",
-  "updateFrequency": "28 days",
-  "status": "packaged_cycle_current_next_cycle_published",
-  "packagedCycle": {
-    "cycleToken": "261029",
-    "effectiveDate": "2026-10-29",
-    "expiryDate": "2026-11-25"
-  },
-  "packagedCycleListedByFaa": true,
-  "latestPublishedCycle": {
-    "cycleToken": "261126",
-    "effectiveDate": "2026-11-26",
-    "expiryDate": "2026-12-24",
-    "downloadUrl": "https://aeronav.faa.gov/Upload_313-d/cifp/CIFP_261126.zip"
-  },
-  "nextFutureCycle": {
-    "cycleToken": "261126",
-    "effectiveDate": "2026-11-26",
-    "expiryDate": "2026-12-24",
-    "downloadUrl": "https://aeronav.faa.gov/Upload_313-d/cifp/CIFP_261126.zip"
-  },
-  "latestPublishedDownloadUrl": "https://aeronav.faa.gov/Upload_313-d/cifp/CIFP_261126.zip",
+  "status": "check_failed",
+  "error": "Expected one consistent packaged CIFP cycle, found ['261029', '261126']",
   "automaticImport": false,
-  "automaticImportReason": "The repository has a validated staging-only archive audit and partial procedure-header extractor. Full ARINC 424 leg semantics, CSV conversion, and end-to-end equivalence checks are not implemented. No packaged procedure dataset may be replaced.",
   "operationalUse": false
 }
