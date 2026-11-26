@@ -1,6 +1,6 @@
 {
   "schemaVersion": 13,
-  "generatedAtUtc": "2026-11-26T08:57:17.321200+00:00",
+  "generatedAtUtc": "2026-11-26T09:29:35.478567+00:00",
   "procedureAiracCycle": "2611",
   "navaidTypeCounts": {
     "DME": 167,
@@ -31,7 +31,7 @@
     "faaNasrFixes": 69408,
     "faaNasrNavaids": 1607,
     "faaNasrAirwaySegments": 17178,
-    "ofmaAirspaceFeatures": 33742,
+    "ofmaAirspaceFeatures": 34576,
     "terrainTiles": 1982,
     "terrainWorldTiles": 19408,
     "openaipAirspaces": 24644,
@@ -157,7 +157,7 @@
     "faaNasrFixes": true,
     "faaNasrNavaids": true,
     "faaNasrAirwaySegments": true,
-    "ofmaAirspace": false,
+    "ofmaAirspace": true,
     "terrainTiles": true,
     "terrainWorld": true,
     "openaipAirspace": true,
@@ -986,13 +986,13 @@
     {
       "id": "ofma_airspace",
       "path": "airspace/ofma/index.json",
-      "available": false,
-      "recordCount": 33742,
-      "sizeBytes": 18856,
-      "sha256": "f4533e057f6b2dc8f0102a034fece4941c4bfe0e1247def544fad101eedeaeb0",
+      "available": true,
+      "recordCount": 34576,
+      "sizeBytes": 17478,
+      "sha256": "e997387802a52493e50ca248e548be8d52ab6bdf3103f9ef0cbfdd9441c70d42",
       "packBaseUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/airspace/ofma/",
       "packCount": 21,
-      "packBytes": 10208934,
+      "packBytes": 10150637,
       "sourceProvider": "OpenFlightMaps Association (OFMA)",
       "sourceUrl": "https://openflightmaps.org/",
       "coverage": "OFMA regions only (not worldwide): EB, ED, EF, EH, EK, EP, ES, FA, FY, LD, LF, LG, LH, LI, LJ, LK, LM, LO, LR, LS, LZ. CTR, TMA, ATZ, RMZ, TMZ, danger/restricted/prohibited and similar areas as polygons.",
@@ -1013,14 +1013,14 @@
         "Border-following (FNT) boundary segments drawn along the published border line; where that border is not in the package they are approximated by straight lines and flagged approx.",
         "FIR and UIR records not exported."
       ],
-      "dataCycle": "2611",
-      "effectiveDate": "2026-10-29",
-      "expiryDate": "2026-11-25",
+      "dataCycle": "2612",
+      "effectiveDate": "2026-11-26",
+      "expiryDate": "2026-12-23",
       "provenanceVerification": "official_OFMA_publication_service_and_snapshot",
       "downloadPurpose": "reference_only",
       "operationallyAvailable": false,
-      "status": "not_published_source_cycle_expired",
-      "downloadBlockReason": "The source cycle is not effective yet, has expired, or has invalid dates."
+      "status": "reference_dataset",
+      "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/airspace/ofma/index.json"
     },
     {
       "id": "terrain_tiles",
@@ -1796,21 +1796,19 @@
         "ofma_airspace",
         "sia_france_airspace"
       ],
-      "availableDatasets": [],
+      "availableDatasets": [
+        "ofma_airspace"
+      ],
       "unavailableDatasets": [
-        {
-          "id": "ofma_airspace",
-          "reason": "The source cycle is not effective yet, has expired, or has invalid dates."
-        },
         {
           "id": "sia_france_airspace",
           "reason": "The source cycle is not effective yet, has expired, or has invalid dates."
         }
       ],
-      "userToggle": false,
-      "defaultOn": false,
+      "userToggle": true,
+      "defaultOn": true,
       "tier": "commercial_or_public",
-      "recordCount": 0,
+      "recordCount": 34576,
       "fallbackFor": [],
       "note": ""
     },
