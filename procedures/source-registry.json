@@ -166,9 +166,9 @@
           "redistribution": "commercial_public_redistribution",
           "licenseStatus": "verified_exact_eAIP_product_linked_to_open_license",
           "attribution": "Service de l'Information Aeronautique (SIA France); include source and last update date; do not imply SIA endorsement.",
-          "cycle": "11/26",
-          "effectiveDate": "2026-10-29",
-          "expiryDate": "2026-11-25",
+          "cycle": "12/26",
+          "effectiveDate": "2026-11-26",
+          "expiryDate": "2026-12-23",
           "sourceStatus": "official_eAIP_DATA_procedure_source_commercial_reuse_confirmed",
           "dataStatus": "partial_current_cycle_imported",
           "exampleSources": [
@@ -190,15 +190,15 @@
           "notes": "The exact free eAIP ZIP product page links its licence to the SIA Open Licence. The SIA free-disposition catalogue says every product in its subcategories is under that licence except UAS-zone data. The licence explicitly permits commercial reuse, extraction, adaptation, derivative products and redistribution worldwide, subject to attribution (SIA and last update date) and not distorting the information. Current GEN 0.4 index lists DATA SID/STAR files; parser output remains reference-only and must retain AIRAC, per-file hashes and source links.",
           "licenseUrl": "https://www.sia.aviation-civile.gouv.fr/produits-numeriques-en-libre-disposition.html",
           "commercialUseAllowed": true,
-          "recordCount": 7988,
+          "recordCount": 8096,
           "procedureTypeCounts": {
-            "SID": 4665,
-            "STAR": 3323
+            "SID": 4684,
+            "STAR": 3412
           },
-          "sourceDocumentCount": 380,
-          "parsedDocumentCount": 239,
-          "skippedDocumentCount": 141,
-          "documentCoverageRatio": 0.6289
+          "sourceDocumentCount": 382,
+          "parsedDocumentCount": 243,
+          "skippedDocumentCount": 139,
+          "documentCoverageRatio": 0.6361
         },
         {
           "id": "BE_SKEYES_AIP",
