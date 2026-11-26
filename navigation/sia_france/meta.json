@@ -1,36 +1,36 @@
 {
  "source": "SIA France eAIP ENR",
- "sourceUrl": "https://www.sia.aviation-civile.gouv.fr/media/dvd/eAIP_29_OCT_2026/FRANCE/AIRAC-2026-10-29/html/eAIP/",
+ "sourceUrl": "https://www.sia.aviation-civile.gouv.fr/media/dvd/eAIP_26_NOV_2026/FRANCE/AIRAC-2026-11-26/html/eAIP/",
  "provider": "SIA / DGAC",
  "license": "SIA Licence Ouverte (commercial reuse with attribution)",
  "licenseStatus": "verified_commercial_open_licence",
  "licenseVerification": {
-  "product": "eAIP AIRAC 11/26",
+  "product": "eAIP AIRAC 12/26",
   "productPrice": "EUR 0",
   "license": "SIA Licence Ouverte",
   "commercialUseAllowed": true,
   "verification": "live_SIA_catalogue_and_licence_terms"
  },
- "attribution": "Source : SIA / DGAC, eAIP France, Licence Ouverte. Donnees retraitees par FlightTempo (geometrie simplifiee). Date de derniere mise a jour : cycle AIRAC 11/26.",
- "cycle": "11/26",
- "effectiveDate": "2026-10-29",
- "expiryDate": "2026-11-25",
- "generatedAtUtc": "2026-11-25T15:41:00.330250+00:00",
+ "attribution": "Source : SIA / DGAC, eAIP France, Licence Ouverte. Donnees retraitees par FlightTempo (geometrie simplifiee). Date de derniere mise a jour : cycle AIRAC 12/26.",
+ "cycle": "12/26",
+ "effectiveDate": "2026-11-26",
+ "expiryDate": "2026-12-23",
+ "generatedAtUtc": "2026-11-26T15:22:47.201889+00:00",
  "files": {
   "fixes.csv": {
-   "recordCount": 1839,
-   "sha256": "bf2d06b7e8baa82ce701dd5f8846d420a27fbbc4b690f387da055e9a98a98799",
-   "sizeBytes": 120172
+   "recordCount": 1841,
+   "sha256": "4441cd3ba2667015ab6925262a019a3da4e80b77327bc9877a4e315e1317f6b6",
+   "sizeBytes": 120296
   },
   "navaids.csv": {
-   "recordCount": 94,
-   "sha256": "ac9fef73a95ed7c3acae989e51cd353d5b8f676caa2098a003d361391e16b5ab",
-   "sizeBytes": 10652
+   "recordCount": 93,
+   "sha256": "12df58c597b363d37db06fa100b9a7ec2105db610cc68a1f2007577d787bf948",
+   "sizeBytes": 10511
   },
   "airway_segments.csv": {
    "recordCount": 1258,
-   "sha256": "1eba6a7592b3a6ee3a59fa0dba06500e449257c8ff819169cd07e9211f23310d",
-   "sizeBytes": 132026
+   "sha256": "ffca852af0b9298609418141a79dda8c366aaf1593689ebbbab56cb473f6ef22",
+   "sizeBytes": 132021
   }
  }
 }

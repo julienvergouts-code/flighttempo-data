@@ -4,20 +4,20 @@
  "provider": "SIA / DGAC",
  "license": "SIA Licence Ouverte",
  "licenseUrl": "https://www.sia.aviation-civile.gouv.fr/produits-numeriques-en-libre-disposition.html",
- "attribution": "Source : SIA / DGAC, eAIP France, Licence Ouverte. Donnees retraitees par FlightTempo (geometrie simplifiee). Date de derniere mise a jour : cycle AIRAC 11/26.",
+ "attribution": "Source : SIA / DGAC, eAIP France, Licence Ouverte. Donnees retraitees par FlightTempo (geometrie simplifiee). Date de derniere mise a jour : cycle AIRAC 12/26.",
  "commercialUseAllowed": true,
  "alterations": "Coordinates converted from DMS, arcs/circles approximated by polylines, national-border segments joined by straight lines (flagged approx), vertical limits normalised to feet.",
- "effectiveDate": "2026-10-29",
- "expiryDate": "2026-11-25",
+ "effectiveDate": "2026-11-26",
+ "expiryDate": "2026-12-23",
  "operationalUse": false,
  "parseStats": {
   "considered": 1932,
   "parsed": 1748,
-  "no_geometry": 132,
-  "no_limits": 52,
-  "approx": 275,
+  "no_geometry": 130,
+  "no_limits": 54,
+  "approx": 274,
   "arcs": 383,
-  "border_segments": 382,
+  "border_segments": 380,
   "skipped_fir": 0
  },
  "regions": [
@@ -25,14 +25,14 @@
    "region": "FR",
    "file": "FR.json.gz",
    "featureCount": 1727,
-   "sizeBytes": 201156,
-   "sha256": "75a7253c1c0ddc533e3e0f67299e61cd9dc25c11caf3347f5b339f2586536b1f",
+   "sizeBytes": 201713,
+   "sha256": "e561cab8ba85119a8b0db27b0cf8ad47782fd229831b4612d564562d97f75546",
    "types": {
-    "TMA": 354,
-    "OTHER": 646,
-    "R": 492,
+    "TMA": 353,
+    "OTHER": 643,
+    "R": 491,
     "P": 61,
-    "D": 174
+    "D": 179
    }
   }
  ]

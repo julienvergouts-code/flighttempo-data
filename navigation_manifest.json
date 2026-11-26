@@ -1,6 +1,6 @@
 {
   "schemaVersion": 13,
-  "generatedAtUtc": "2026-11-26T14:31:04Z",
+  "generatedAtUtc": "2026-11-26T15:22:49.306207+00:00",
   "procedureAiracCycle": "mixed",
   "navaidTypeCounts": {
     "DME": 167,
@@ -36,8 +36,8 @@
     "terrainWorldTiles": 19408,
     "openaipAirspaces": 24644,
     "adsbObservedRoutes": 428,
-    "siaFranceFixes": 1839,
-    "siaFranceNavaids": 94,
+    "siaFranceFixes": 1841,
+    "siaFranceNavaids": 93,
     "siaFranceAirwaySegments": 1258,
     "siaFranceAirspaces": 1727
   },
@@ -162,10 +162,10 @@
     "terrainWorld": true,
     "openaipAirspace": true,
     "adsbObservedRoutes": false,
-    "siaFranceFixes": false,
-    "siaFranceNavaids": false,
-    "siaFranceAirwaySegments": false,
-    "siaFranceAirspace": false,
+    "siaFranceFixes": true,
+    "siaFranceNavaids": true,
+    "siaFranceAirwaySegments": true,
+    "siaFranceAirspace": true,
     "openaipNavaids": true,
     "openaipReportingPoints": true
   },
@@ -1247,98 +1247,98 @@
     },
     {
       "id": "sia_france_fixes",
-      "recordCount": 1839,
+      "recordCount": 1841,
       "path": "navigation/sia_france/fixes.csv",
-      "available": false,
-      "sizeBytes": 120172,
-      "sha256": "bf2d06b7e8baa82ce701dd5f8846d420a27fbbc4b690f387da055e9a98a98799",
+      "available": true,
+      "sizeBytes": 120296,
+      "sha256": "4441cd3ba2667015ab6925262a019a3da4e80b77327bc9877a4e315e1317f6b6",
       "sourceProvider": "SIA / DGAC (France)",
-      "sourceUrl": "https://www.sia.aviation-civile.gouv.fr/media/dvd/eAIP_29_OCT_2026/FRANCE/AIRAC-2026-10-29/html/eAIP/",
+      "sourceUrl": "https://www.sia.aviation-civile.gouv.fr/media/dvd/eAIP_26_NOV_2026/FRANCE/AIRAC-2026-11-26/html/eAIP/",
       "coverage": "France SIA significant points (ENR 4.4)",
-      "sourceTag": "SIA_EAIP_2026-10-29",
+      "sourceTag": "SIA_EAIP_2026-11-26",
       "license": "SIA Licence Ouverte (commercial reuse with attribution)",
       "licenseStatus": "verified_commercial_open_licence",
-      "attribution": "Source : SIA / DGAC, eAIP France, Licence Ouverte. Donnees retraitees par FlightTempo (geometrie simplifiee). Date de derniere mise a jour : cycle AIRAC 11/26.",
-      "dataCycle": "2026-10-29",
-      "effectiveDate": "2026-10-29",
-      "expiryDate": "2026-11-25",
+      "attribution": "Source : SIA / DGAC, eAIP France, Licence Ouverte. Donnees retraitees par FlightTempo (geometrie simplifiee). Date de derniere mise a jour : cycle AIRAC 12/26.",
+      "dataCycle": "2026-11-26",
+      "effectiveDate": "2026-11-26",
+      "expiryDate": "2026-12-23",
       "provenanceVerification": "source_snapshot",
       "downloadPurpose": "reference_only",
       "operationallyAvailable": false,
-      "status": "not_published_source_cycle_expired",
-      "downloadBlockReason": "The source cycle is not effective yet, has expired, or has invalid dates."
+      "status": "present_reference_dataset",
+      "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/navigation/sia_france/fixes.csv"
     },
     {
       "id": "sia_france_navaids",
-      "recordCount": 94,
+      "recordCount": 93,
       "path": "navigation/sia_france/navaids.csv",
-      "available": false,
-      "sizeBytes": 10652,
-      "sha256": "ac9fef73a95ed7c3acae989e51cd353d5b8f676caa2098a003d361391e16b5ab",
+      "available": true,
+      "sizeBytes": 10511,
+      "sha256": "12df58c597b363d37db06fa100b9a7ec2105db610cc68a1f2007577d787bf948",
       "sourceProvider": "SIA / DGAC (France)",
-      "sourceUrl": "https://www.sia.aviation-civile.gouv.fr/media/dvd/eAIP_29_OCT_2026/FRANCE/AIRAC-2026-10-29/html/eAIP/",
+      "sourceUrl": "https://www.sia.aviation-civile.gouv.fr/media/dvd/eAIP_26_NOV_2026/FRANCE/AIRAC-2026-11-26/html/eAIP/",
       "coverage": "France SIA radio navigation aids (ENR 4.1)",
-      "sourceTag": "SIA_EAIP_2026-10-29",
+      "sourceTag": "SIA_EAIP_2026-11-26",
       "license": "SIA Licence Ouverte (commercial reuse with attribution)",
       "licenseStatus": "verified_commercial_open_licence",
-      "attribution": "Source : SIA / DGAC, eAIP France, Licence Ouverte. Donnees retraitees par FlightTempo (geometrie simplifiee). Date de derniere mise a jour : cycle AIRAC 11/26.",
-      "dataCycle": "2026-10-29",
-      "effectiveDate": "2026-10-29",
-      "expiryDate": "2026-11-25",
+      "attribution": "Source : SIA / DGAC, eAIP France, Licence Ouverte. Donnees retraitees par FlightTempo (geometrie simplifiee). Date de derniere mise a jour : cycle AIRAC 12/26.",
+      "dataCycle": "2026-11-26",
+      "effectiveDate": "2026-11-26",
+      "expiryDate": "2026-12-23",
       "provenanceVerification": "source_snapshot",
       "downloadPurpose": "reference_only",
       "operationallyAvailable": false,
-      "status": "not_published_source_cycle_expired",
-      "downloadBlockReason": "The source cycle is not effective yet, has expired, or has invalid dates."
+      "status": "present_reference_dataset",
+      "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/navigation/sia_france/navaids.csv"
     },
     {
       "id": "sia_france_airway_segments",
       "recordCount": 1258,
       "path": "navigation/sia_france/airway_segments.csv",
-      "available": false,
-      "sizeBytes": 132026,
-      "sha256": "1eba6a7592b3a6ee3a59fa0dba06500e449257c8ff819169cd07e9211f23310d",
+      "available": true,
+      "sizeBytes": 132021,
+      "sha256": "ffca852af0b9298609418141a79dda8c366aaf1593689ebbbab56cb473f6ef22",
       "sourceProvider": "SIA / DGAC (France)",
-      "sourceUrl": "https://www.sia.aviation-civile.gouv.fr/media/dvd/eAIP_29_OCT_2026/FRANCE/AIRAC-2026-10-29/html/eAIP/",
+      "sourceUrl": "https://www.sia.aviation-civile.gouv.fr/media/dvd/eAIP_26_NOV_2026/FRANCE/AIRAC-2026-11-26/html/eAIP/",
       "coverage": "France SIA ATS route segments (ENR 3.2)",
-      "sourceTag": "SIA_EAIP_2026-10-29",
+      "sourceTag": "SIA_EAIP_2026-11-26",
       "license": "SIA Licence Ouverte (commercial reuse with attribution)",
       "licenseStatus": "verified_commercial_open_licence",
-      "attribution": "Source : SIA / DGAC, eAIP France, Licence Ouverte. Donnees retraitees par FlightTempo (geometrie simplifiee). Date de derniere mise a jour : cycle AIRAC 11/26.",
-      "dataCycle": "2026-10-29",
-      "effectiveDate": "2026-10-29",
-      "expiryDate": "2026-11-25",
+      "attribution": "Source : SIA / DGAC, eAIP France, Licence Ouverte. Donnees retraitees par FlightTempo (geometrie simplifiee). Date de derniere mise a jour : cycle AIRAC 12/26.",
+      "dataCycle": "2026-11-26",
+      "effectiveDate": "2026-11-26",
+      "expiryDate": "2026-12-23",
       "provenanceVerification": "source_snapshot",
       "downloadPurpose": "reference_only",
       "operationallyAvailable": false,
-      "status": "not_published_source_cycle_expired",
-      "downloadBlockReason": "The source cycle is not effective yet, has expired, or has invalid dates."
+      "status": "present_reference_dataset",
+      "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/navigation/sia_france/airway_segments.csv"
     },
     {
       "id": "sia_france_airspace",
       "recordCount": 1727,
       "regionCount": 1,
-      "regionBytes": 201156,
+      "regionBytes": 201713,
       "path": "airspace/sia/index.json",
-      "available": false,
+      "available": true,
       "sizeBytes": 1199,
-      "sha256": "bb15d489b1f41ae4325437e107a97636dfa055b0a773e6f5f8e4e0a7006252f5",
+      "sha256": "9917bafa82db28dccb337a3bd4aac5c36504a728403db483466ea0d328cc899e",
       "sourceProvider": "SIA / DGAC (France)",
       "sourceUrl": "https://www.sia.aviation-civile.gouv.fr/produits-numeriques-en-libre-disposition/eaip.html",
       "coverage": "France CTA/TMA/CTR/TMZ/RMZ and P/R/D zones (SIA eAIP ENR 2.1, 2.2, 5.1); polygons only",
-      "sourceTag": "SIA_EAIP_2026-10-29",
+      "sourceTag": "SIA_EAIP_2026-11-26",
       "license": "SIA Licence Ouverte",
       "licenseStatus": "verified_commercial_open_licence",
-      "attribution": "Source : SIA / DGAC, eAIP France, Licence Ouverte. Donnees retraitees par FlightTempo (geometrie simplifiee). Date de derniere mise a jour : cycle AIRAC 11/26.",
-      "dataCycle": "2026-10-29",
-      "effectiveDate": "2026-10-29",
-      "expiryDate": "2026-11-25",
+      "attribution": "Source : SIA / DGAC, eAIP France, Licence Ouverte. Donnees retraitees par FlightTempo (geometrie simplifiee). Date de derniere mise a jour : cycle AIRAC 12/26.",
+      "dataCycle": "2026-11-26",
+      "effectiveDate": "2026-11-26",
+      "expiryDate": "2026-12-23",
       "provenanceVerification": "source_snapshot",
       "downloadPurpose": "reference_only",
       "operationallyAvailable": false,
-      "status": "not_published_source_cycle_expired",
-      "alterations": "Coordinates converted from DMS, arcs/circles approximated by polylines, national-border segments joined by straight lines (flagged approx), vertical limits normalised to feet.",
-      "downloadBlockReason": "The source cycle is not effective yet, has expired, or has invalid dates."
+      "status": "present_reference_dataset",
+      "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/airspace/sia/index.json",
+      "alterations": "Coordinates converted from DMS, arcs/circles approximated by polylines, national-border segments joined by straight lines (flagged approx), vertical limits normalised to feet."
     },
     {
       "id": "adsb_observed_routes",
@@ -1617,18 +1617,14 @@
       ],
       "availableDatasets": [
         "faa_nasr_navaids",
+        "sia_france_navaids",
         "ourairports_navaids"
       ],
-      "unavailableDatasets": [
-        {
-          "id": "sia_france_navaids",
-          "reason": "The source cycle is not effective yet, has expired, or has invalid dates."
-        }
-      ],
+      "unavailableDatasets": [],
       "userToggle": true,
       "defaultOn": true,
       "tier": "commercial_or_public",
-      "recordCount": 12615,
+      "recordCount": 12708,
       "fallbackFor": [],
       "note": ""
     },
@@ -1641,18 +1637,14 @@
         "sia_france_fixes"
       ],
       "availableDatasets": [
-        "faa_nasr_fixes"
+        "faa_nasr_fixes",
+        "sia_france_fixes"
       ],
-      "unavailableDatasets": [
-        {
-          "id": "sia_france_fixes",
-          "reason": "The source cycle is not effective yet, has expired, or has invalid dates."
-        }
-      ],
+      "unavailableDatasets": [],
       "userToggle": true,
       "defaultOn": true,
       "tier": "commercial_or_public",
-      "recordCount": 69408,
+      "recordCount": 71249,
       "fallbackFor": [],
       "note": ""
     },
@@ -1665,18 +1657,14 @@
         "sia_france_airway_segments"
       ],
       "availableDatasets": [
-        "faa_nasr_airway_segments"
+        "faa_nasr_airway_segments",
+        "sia_france_airway_segments"
       ],
-      "unavailableDatasets": [
-        {
-          "id": "sia_france_airway_segments",
-          "reason": "The source cycle is not effective yet, has expired, or has invalid dates."
-        }
-      ],
+      "unavailableDatasets": [],
       "userToggle": true,
       "defaultOn": true,
       "tier": "commercial_or_public",
-      "recordCount": 17178,
+      "recordCount": 18436,
       "fallbackFor": [],
       "note": ""
     },
@@ -1796,18 +1784,14 @@
         "sia_france_airspace"
       ],
       "availableDatasets": [
-        "ofma_airspace"
+        "ofma_airspace",
+        "sia_france_airspace"
       ],
-      "unavailableDatasets": [
-        {
-          "id": "sia_france_airspace",
-          "reason": "The source cycle is not effective yet, has expired, or has invalid dates."
-        }
-      ],
+      "unavailableDatasets": [],
       "userToggle": true,
       "defaultOn": true,
       "tier": "commercial_or_public",
-      "recordCount": 34576,
+      "recordCount": 36303,
       "fallbackFor": [],
       "note": ""
     },
