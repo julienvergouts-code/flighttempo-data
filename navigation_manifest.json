@@ -1,6 +1,6 @@
 {
   "schemaVersion": 13,
-  "generatedAtUtc": "2026-11-25T15:41:01.560540+00:00",
+  "generatedAtUtc": "2026-11-26T08:47:24.537267+00:00",
   "procedureAiracCycle": "2611",
   "navaidTypeCounts": {
     "DME": 167,
@@ -28,8 +28,8 @@
     "faaVfrReportingPoints": 675,
     "ofmaOfmxVfrReferencePoints": 4736,
     "franceSiaSidStarLegs": 7988,
-    "faaNasrFixes": 69385,
-    "faaNasrNavaids": 1608,
+    "faaNasrFixes": 69408,
+    "faaNasrNavaids": 1607,
     "faaNasrAirwaySegments": 17178,
     "ofmaAirspaceFeatures": 33742,
     "terrainTiles": 1982,
@@ -87,29 +87,29 @@
       "url": "https://www.faa.gov/air_traffic/flight_info/aeronav/Aero_Data/NASR_Subscription/",
       "provider": "FAA Aeronautical Information Services",
       "license": "US Government public-domain data",
-      "downloadedAt": "2026-11-23T15:49:11Z",
-      "sizeBytes": 4155310,
-      "sha256": "985fae9f674efa0ec2e9bdd40243305ff728c9fda815960c941ff6cbc76b558d",
-      "recordCount": 69385
+      "downloadedAt": "2026-11-26T08:47:24Z",
+      "sizeBytes": 4156708,
+      "sha256": "3f80c3ea832f6378ee3e6c581528d9546748e9cce517632a0714f78f1105c8fa",
+      "recordCount": 69408
     },
     {
       "dataset": "faa_nasr_navaids",
       "url": "https://www.faa.gov/air_traffic/flight_info/aeronav/Aero_Data/NASR_Subscription/",
       "provider": "FAA Aeronautical Information Services",
       "license": "US Government public-domain data",
-      "downloadedAt": "2026-11-23T15:49:11Z",
-      "sizeBytes": 161841,
-      "sha256": "13a13351589e679c36281a3f26a24b3569da469084905eb99ad8dfec700a47d2",
-      "recordCount": 1608
+      "downloadedAt": "2026-11-26T08:47:24Z",
+      "sizeBytes": 161755,
+      "sha256": "529b603fd40b6c13a56219a2a0f6ba30de52c6930aaf8e48b85110d89ca25c4a",
+      "recordCount": 1607
     },
     {
       "dataset": "faa_nasr_airway_segments",
       "url": "https://www.faa.gov/air_traffic/flight_info/aeronav/Aero_Data/NASR_Subscription/",
       "provider": "FAA Aeronautical Information Services",
       "license": "US Government public-domain data",
-      "downloadedAt": "2026-11-23T15:49:11Z",
+      "downloadedAt": "2026-11-26T08:47:24Z",
       "sizeBytes": 1912757,
-      "sha256": "2b19de7210b654624abe746ad2f09ba10a5f1b080df6e2a87f3f7c3a982e4b12",
+      "sha256": "b58899c5298e5f50c6b647cc28ae2c08e8019da943b8f0e5cabb228c8dc2897a",
       "recordCount": 17178
     }
   ],
@@ -138,7 +138,7 @@
     "legacyGlobalAirways": true,
     "legacyGlobalIlsFacilities": true,
     "worldCorridorGraph": true,
-    "faaPrnReferences": true,
+    "faaPrnReferences": false,
     "faaLiveNotamCurrentnessVerified": false,
     "conflictZoneAdvisories": false,
     "firBoundaries": false,
@@ -152,20 +152,20 @@
     "globalAirlineDirectory": true,
     "easaSafetyDirectives": false,
     "ofmaOfmxVfrReferencePoints": true,
-    "franceSids": true,
-    "franceStars": true,
+    "franceSids": false,
+    "franceStars": false,
     "faaNasrFixes": true,
     "faaNasrNavaids": true,
     "faaNasrAirwaySegments": true,
-    "ofmaAirspace": true,
+    "ofmaAirspace": false,
     "terrainTiles": true,
     "terrainWorld": true,
     "openaipAirspace": true,
     "adsbObservedRoutes": false,
-    "siaFranceFixes": true,
-    "siaFranceNavaids": true,
-    "siaFranceAirwaySegments": true,
-    "siaFranceAirspace": true,
+    "siaFranceFixes": false,
+    "siaFranceNavaids": false,
+    "siaFranceAirwaySegments": false,
+    "siaFranceAirspace": false,
     "openaipNavaids": true,
     "openaipReportingPoints": true
   },
@@ -713,14 +713,13 @@
     {
       "id": "sids",
       "path": "procedures/sids/sids.csv",
-      "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/procedures/sids/sids.csv",
-      "available": true,
+      "available": false,
       "recordCount": 33349,
       "sizeBytes": 1646963,
       "sha256": "be974a777fe0da70bb143bedce4f05d5744c2c62ad382691937c4b35494bf3cf",
       "sourceProvider": "FAA AeroNav",
       "sourceUrl": "https://aeronav.faa.gov/Upload_313-d/cifp/CIFP_261029.zip",
-      "coverage": "United States / FAA National Airspace System \u2014 departure procedures",
+      "coverage": "United States / FAA National Airspace System — departure procedures",
       "sourceTag": "FAA_CIFP_2611",
       "license": "US Government Public Domain (FAA AeroNav)",
       "licenseStatus": "public_domain",
@@ -731,19 +730,19 @@
       "testDownloadAvailable": true,
       "downloadPurpose": "development_test_only",
       "operationallyAvailable": false,
-      "status": "present_unverified_test_only"
+      "status": "not_published_source_cycle_expired",
+      "downloadBlockReason": "The source cycle is not effective yet, has expired, or has invalid dates."
     },
     {
       "id": "stars",
       "path": "procedures/stars/stars.csv",
-      "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/procedures/stars/stars.csv",
-      "available": true,
+      "available": false,
       "recordCount": 44197,
       "sizeBytes": 2257773,
       "sha256": "6bf123c683e442c1a07fbc46f4f11ad45045f8322a1b2506d65f6719055c0c06",
       "sourceProvider": "FAA AeroNav",
       "sourceUrl": "https://aeronav.faa.gov/Upload_313-d/cifp/CIFP_261029.zip",
-      "coverage": "United States / FAA National Airspace System \u2014 arrival procedures",
+      "coverage": "United States / FAA National Airspace System — arrival procedures",
       "sourceTag": "FAA_CIFP_2611",
       "license": "US Government Public Domain (FAA AeroNav)",
       "licenseStatus": "public_domain",
@@ -754,7 +753,8 @@
       "testDownloadAvailable": true,
       "downloadPurpose": "development_test_only",
       "operationallyAvailable": false,
-      "status": "present_unverified_test_only"
+      "status": "not_published_source_cycle_expired",
+      "downloadBlockReason": "The source cycle is not effective yet, has expired, or has invalid dates."
     },
     {
       "id": "approaches",
@@ -765,7 +765,7 @@
       "sha256": "ff7b9121e79b56ff616a77e285c9cba764575fd2c58335b3281124813362d3dd",
       "sourceProvider": "FAA AeroNav",
       "sourceUrl": "https://aeronav.faa.gov/Upload_313-d/cifp/CIFP_261029.zip",
-      "coverage": "United States / FAA National Airspace System \u2014 instrument approaches",
+      "coverage": "United States / FAA National Airspace System — instrument approaches",
       "sourceTag": "FAA_CIFP_2611",
       "license": "US Government Public Domain (FAA AeroNav)",
       "licenseStatus": "public_domain",
@@ -776,8 +776,8 @@
       "testDownloadAvailable": true,
       "downloadPurpose": "development_test_only",
       "operationallyAvailable": false,
-      "status": "not_published_incomplete_import",
-      "downloadBlockReason": "The source is public domain, but this procedure import is incomplete and remains in the repository for review."
+      "status": "not_published_source_cycle_expired",
+      "downloadBlockReason": "The source cycle is not effective yet, has expired, or has invalid dates."
     },
     {
       "id": "airline_profiles",
@@ -865,8 +865,7 @@
     {
       "id": "faa_vfr_reporting_points",
       "path": "data/vfr_points.csv",
-      "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/data/vfr_points.csv",
-      "available": true,
+      "available": false,
       "recordCount": 675,
       "sizeBytes": 35258,
       "sha256": "d1f780fceb047dfa59b993747327087e2bf55a069838afdd78446773b15d33ff",
@@ -882,7 +881,8 @@
       "provenanceVerification": "source_snapshot",
       "downloadPurpose": "reference_only",
       "operationallyAvailable": false,
-      "status": "present_reference_dataset"
+      "status": "not_published_source_cycle_expired",
+      "downloadBlockReason": "The source cycle is not effective yet, has expired, or has invalid dates."
     },
     {
       "id": "ofma_ofmx_vfr_reference_points",
@@ -916,19 +916,19 @@
       "id": "faa_nasr_fixes",
       "path": "navigation/faa_nasr/fixes.csv",
       "available": true,
-      "recordCount": 69385,
-      "sizeBytes": 4155310,
-      "sha256": "985fae9f674efa0ec2e9bdd40243305ff728c9fda815960c941ff6cbc76b558d",
+      "recordCount": 69408,
+      "sizeBytes": 4156708,
+      "sha256": "3f80c3ea832f6378ee3e6c581528d9546748e9cce517632a0714f78f1105c8fa",
       "sourceProvider": "FAA Aeronautical Information Services / NASR",
       "sourceUrl": "https://www.faa.gov/air_traffic/flight_info/aeronav/Aero_Data/NASR_Subscription/",
       "coverage": "United States NASR named fixes and waypoints (VFR reporting points excluded)",
-      "sourceTag": "FAA_NASR_2026-10-29",
+      "sourceTag": "FAA_NASR_2026-11-26",
       "license": "US Government public-domain data",
       "licenseStatus": "public_domain",
       "attribution": "Federal Aviation Administration, Aeronautical Information Services, NASR.",
-      "dataCycle": "2026-10-29",
-      "effectiveDate": "2026-10-29",
-      "expiryDate": "2026-11-25",
+      "dataCycle": "2026-11-26",
+      "effectiveDate": "2026-11-26",
+      "expiryDate": "2026-12-23",
       "provenanceVerification": "source_snapshot",
       "downloadPurpose": "reference_only",
       "operationallyAvailable": false,
@@ -939,19 +939,19 @@
       "id": "faa_nasr_navaids",
       "path": "navigation/faa_nasr/navaids.csv",
       "available": true,
-      "recordCount": 1608,
-      "sizeBytes": 161841,
-      "sha256": "13a13351589e679c36281a3f26a24b3569da469084905eb99ad8dfec700a47d2",
+      "recordCount": 1607,
+      "sizeBytes": 161755,
+      "sha256": "529b603fd40b6c13a56219a2a0f6ba30de52c6930aaf8e48b85110d89ca25c4a",
       "sourceProvider": "FAA Aeronautical Information Services / NASR",
       "sourceUrl": "https://www.faa.gov/air_traffic/flight_info/aeronav/Aero_Data/NASR_Subscription/",
       "coverage": "United States NASR navaids (VOR, VORTAC, VOR/DME, NDB, TACAN, DME)",
-      "sourceTag": "FAA_NASR_2026-10-29",
+      "sourceTag": "FAA_NASR_2026-11-26",
       "license": "US Government public-domain data",
       "licenseStatus": "public_domain",
       "attribution": "Federal Aviation Administration, Aeronautical Information Services, NASR.",
-      "dataCycle": "2026-10-29",
-      "effectiveDate": "2026-10-29",
-      "expiryDate": "2026-11-25",
+      "dataCycle": "2026-11-26",
+      "effectiveDate": "2026-11-26",
+      "expiryDate": "2026-12-23",
       "provenanceVerification": "source_snapshot",
       "downloadPurpose": "reference_only",
       "operationallyAvailable": false,
@@ -964,17 +964,17 @@
       "available": true,
       "recordCount": 17178,
       "sizeBytes": 1912757,
-      "sha256": "2b19de7210b654624abe746ad2f09ba10a5f1b080df6e2a87f3f7c3a982e4b12",
+      "sha256": "b58899c5298e5f50c6b647cc28ae2c08e8019da943b8f0e5cabb228c8dc2897a",
       "sourceProvider": "FAA Aeronautical Information Services / NASR",
       "sourceUrl": "https://www.faa.gov/air_traffic/flight_info/aeronav/Aero_Data/NASR_Subscription/",
       "coverage": "United States NASR airway segments with endpoint coordinates",
-      "sourceTag": "FAA_NASR_2026-10-29",
+      "sourceTag": "FAA_NASR_2026-11-26",
       "license": "US Government public-domain data",
       "licenseStatus": "public_domain",
       "attribution": "Federal Aviation Administration, Aeronautical Information Services, NASR.",
-      "dataCycle": "2026-10-29",
-      "effectiveDate": "2026-10-29",
-      "expiryDate": "2026-11-25",
+      "dataCycle": "2026-11-26",
+      "effectiveDate": "2026-11-26",
+      "expiryDate": "2026-12-23",
       "provenanceVerification": "source_snapshot",
       "downloadPurpose": "reference_only",
       "operationallyAvailable": false,
@@ -984,7 +984,7 @@
     {
       "id": "ofma_airspace",
       "path": "airspace/ofma/index.json",
-      "available": true,
+      "available": false,
       "recordCount": 33742,
       "sizeBytes": 18856,
       "sha256": "f4533e057f6b2dc8f0102a034fece4941c4bfe0e1247def544fad101eedeaeb0",
@@ -1017,8 +1017,8 @@
       "provenanceVerification": "official_OFMA_publication_service_and_snapshot",
       "downloadPurpose": "reference_only",
       "operationallyAvailable": false,
-      "status": "reference_dataset",
-      "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/airspace/ofma/index.json"
+      "status": "not_published_source_cycle_expired",
+      "downloadBlockReason": "The source cycle is not effective yet, has expired, or has invalid dates."
     },
     {
       "id": "terrain_tiles",
@@ -1088,7 +1088,7 @@
       "license": "Copernicus DEM free licence (GLO-30)",
       "licenseStatus": "copernicus_free_licence_personal_use_only_commercial_unverified",
       "licenseUrl": "https://documentation.dataspace.copernicus.eu/APIs/SentinelHub/Data/DEM/resources/license/License-COPDEM-30.pdf",
-      "attribution": "\u00a9 DLR e.V. 2010-2014 and \u00a9 Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved. Produced using Copernicus WorldDEM-30.",
+      "attribution": "© DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved. Produced using Copernicus WorldDEM-30.",
       "disclaimer": "The organisations in charge of the Copernicus programme by law or by delegation do not incur any liability for any use of the Copernicus WorldDEM-30.",
       "modificationNotice": "Resampled by max pooling from 1 arc-second to 9 arc-second cells.",
       "dataCycle": null,
@@ -1120,7 +1120,7 @@
       "license": "Copernicus DEM free licence (GLO-30)",
       "licenseStatus": "copernicus_free_licence_personal_use_only_commercial_unverified",
       "licenseUrl": "https://documentation.dataspace.copernicus.eu/APIs/SentinelHub/Data/DEM/resources/license/License-COPDEM-30.pdf",
-      "attribution": "\u00a9 DLR e.V. 2010-2014 and \u00a9 Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved. Produced using Copernicus WorldDEM-30.",
+      "attribution": "© DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved. Produced using Copernicus WorldDEM-30.",
       "disclaimer": "The organisations in charge of the Copernicus programme by law or by delegation do not incur any liability for any use of the Copernicus WorldDEM-30.",
       "modificationNotice": "Resampled by max pooling from 1 arc-second to 9 arc-second cells.",
       "dataCycle": null,
@@ -1225,7 +1225,7 @@
       "id": "sia_france_fixes",
       "recordCount": 1839,
       "path": "navigation/sia_france/fixes.csv",
-      "available": true,
+      "available": false,
       "sizeBytes": 120172,
       "sha256": "bf2d06b7e8baa82ce701dd5f8846d420a27fbbc4b690f387da055e9a98a98799",
       "sourceProvider": "SIA / DGAC (France)",
@@ -1241,14 +1241,14 @@
       "provenanceVerification": "source_snapshot",
       "downloadPurpose": "reference_only",
       "operationallyAvailable": false,
-      "status": "present_reference_dataset",
-      "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/navigation/sia_france/fixes.csv"
+      "status": "not_published_source_cycle_expired",
+      "downloadBlockReason": "The source cycle is not effective yet, has expired, or has invalid dates."
     },
     {
       "id": "sia_france_navaids",
       "recordCount": 94,
       "path": "navigation/sia_france/navaids.csv",
-      "available": true,
+      "available": false,
       "sizeBytes": 10652,
       "sha256": "ac9fef73a95ed7c3acae989e51cd353d5b8f676caa2098a003d361391e16b5ab",
       "sourceProvider": "SIA / DGAC (France)",
@@ -1264,14 +1264,14 @@
       "provenanceVerification": "source_snapshot",
       "downloadPurpose": "reference_only",
       "operationallyAvailable": false,
-      "status": "present_reference_dataset",
-      "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/navigation/sia_france/navaids.csv"
+      "status": "not_published_source_cycle_expired",
+      "downloadBlockReason": "The source cycle is not effective yet, has expired, or has invalid dates."
     },
     {
       "id": "sia_france_airway_segments",
       "recordCount": 1258,
       "path": "navigation/sia_france/airway_segments.csv",
-      "available": true,
+      "available": false,
       "sizeBytes": 132026,
       "sha256": "1eba6a7592b3a6ee3a59fa0dba06500e449257c8ff819169cd07e9211f23310d",
       "sourceProvider": "SIA / DGAC (France)",
@@ -1287,8 +1287,8 @@
       "provenanceVerification": "source_snapshot",
       "downloadPurpose": "reference_only",
       "operationallyAvailable": false,
-      "status": "present_reference_dataset",
-      "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/navigation/sia_france/airway_segments.csv"
+      "status": "not_published_source_cycle_expired",
+      "downloadBlockReason": "The source cycle is not effective yet, has expired, or has invalid dates."
     },
     {
       "id": "sia_france_airspace",
@@ -1296,7 +1296,7 @@
       "regionCount": 1,
       "regionBytes": 201156,
       "path": "airspace/sia/index.json",
-      "available": true,
+      "available": false,
       "sizeBytes": 1199,
       "sha256": "bb15d489b1f41ae4325437e107a97636dfa055b0a773e6f5f8e4e0a7006252f5",
       "sourceProvider": "SIA / DGAC (France)",
@@ -1312,9 +1312,9 @@
       "provenanceVerification": "source_snapshot",
       "downloadPurpose": "reference_only",
       "operationallyAvailable": false,
-      "status": "present_reference_dataset",
-      "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/airspace/sia/index.json",
-      "alterations": "Coordinates converted from DMS, arcs/circles approximated by polylines, national-border segments joined by straight lines (flagged approx), vertical limits normalised to feet."
+      "status": "not_published_source_cycle_expired",
+      "alterations": "Coordinates converted from DMS, arcs/circles approximated by polylines, national-border segments joined by straight lines (flagged approx), vertical limits normalised to feet.",
+      "downloadBlockReason": "The source cycle is not effective yet, has expired, or has invalid dates."
     },
     {
       "id": "adsb_observed_routes",
@@ -1384,8 +1384,7 @@
     {
       "id": "france_sia_sid_star_legs",
       "path": "procedures/europe/france/sid_star_legs.csv",
-      "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/procedures/europe/france/sid_star_legs.csv",
-      "available": true,
+      "available": false,
       "recordCount": 7988,
       "sizeBytes": 7133218,
       "sha256": "0dcfd2d2b2633de45976bb6ec4a10e4a5204a4b01e40505f82be7ba5c7f99f41",
@@ -1403,31 +1402,32 @@
       "provenanceVerification": "official_SIA_eAIP_GEN_0_4_index",
       "downloadPurpose": "regional_reference_only",
       "operationallyAvailable": false,
-      "status": "partial_current_cycle_regional_reference_dataset"
+      "status": "not_published_source_cycle_expired",
+      "downloadBlockReason": "The source cycle is not effective yet, has expired, or has invalid dates."
     },
     {
       "id": "faa_prn_notams",
       "path": "airspace/faa_prn_notams.json",
-      "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/airspace/faa_prn_notams.json",
-      "available": true,
+      "available": false,
       "recordCount": 16,
       "sizeBytes": 59342,
       "sha256": "4c77605c97fba405badd9e505cb32b477c0b10c893aeb34cbf2acc7a1aad018d",
       "license": "FAA government source; public information",
-      "status": "reference_only_currentness_unverified",
-      "operationallyAvailable": false
+      "status": "not_published_commercial_reuse_unconfirmed_or_restricted",
+      "operationallyAvailable": false,
+      "downloadBlockReason": "Commercial redistribution permission is not explicitly verified for this source."
     },
     {
       "id": "airspace_filter",
       "path": "airspace/airspace_filter.json",
-      "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/airspace/airspace_filter.json",
-      "available": true,
+      "available": false,
       "recordCount": 16,
       "sizeBytes": 23737,
       "sha256": "c1c93878db376257f3fefa4ab3bdbb12d6678d63b6c7de970477c5b5a58d20b2",
       "license": "EASA acknowledgement + OpenAIP CC BY-NC 4.0 + FAA reference",
-      "status": "advisory_and_conditional_reference_only",
-      "operationallyAvailable": false
+      "status": "not_published_commercial_reuse_unconfirmed_or_restricted",
+      "operationallyAvailable": false,
+      "downloadBlockReason": "Commercial redistribution permission is not explicitly verified for this source."
     },
     {
       "id": "route_policy",
@@ -1612,14 +1612,18 @@
       ],
       "availableDatasets": [
         "faa_nasr_navaids",
-        "sia_france_navaids",
         "ourairports_navaids"
       ],
-      "unavailableDatasets": [],
+      "unavailableDatasets": [
+        {
+          "id": "sia_france_navaids",
+          "reason": "The source cycle is not effective yet, has expired, or has invalid dates."
+        }
+      ],
       "userToggle": true,
       "defaultOn": true,
       "tier": "commercial_or_public",
-      "recordCount": 12710,
+      "recordCount": 12615,
       "fallbackFor": [],
       "note": ""
     },
@@ -1632,14 +1636,18 @@
         "sia_france_fixes"
       ],
       "availableDatasets": [
-        "faa_nasr_fixes",
-        "sia_france_fixes"
+        "faa_nasr_fixes"
       ],
-      "unavailableDatasets": [],
+      "unavailableDatasets": [
+        {
+          "id": "sia_france_fixes",
+          "reason": "The source cycle is not effective yet, has expired, or has invalid dates."
+        }
+      ],
       "userToggle": true,
       "defaultOn": true,
       "tier": "commercial_or_public",
-      "recordCount": 71224,
+      "recordCount": 69408,
       "fallbackFor": [],
       "note": ""
     },
@@ -1652,14 +1660,18 @@
         "sia_france_airway_segments"
       ],
       "availableDatasets": [
-        "faa_nasr_airway_segments",
-        "sia_france_airway_segments"
+        "faa_nasr_airway_segments"
       ],
-      "unavailableDatasets": [],
+      "unavailableDatasets": [
+        {
+          "id": "sia_france_airway_segments",
+          "reason": "The source cycle is not effective yet, has expired, or has invalid dates."
+        }
+      ],
       "userToggle": true,
       "defaultOn": true,
       "tier": "commercial_or_public",
-      "recordCount": 18436,
+      "recordCount": 17178,
       "fallbackFor": [],
       "note": ""
     },
@@ -1716,16 +1728,25 @@
         "stars",
         "france_sia_sid_star_legs"
       ],
-      "availableDatasets": [
-        "sids",
-        "stars",
-        "france_sia_sid_star_legs"
+      "availableDatasets": [],
+      "unavailableDatasets": [
+        {
+          "id": "sids",
+          "reason": "The source cycle is not effective yet, has expired, or has invalid dates."
+        },
+        {
+          "id": "stars",
+          "reason": "The source cycle is not effective yet, has expired, or has invalid dates."
+        },
+        {
+          "id": "france_sia_sid_star_legs",
+          "reason": "The source cycle is not effective yet, has expired, or has invalid dates."
+        }
       ],
-      "unavailableDatasets": [],
-      "userToggle": true,
-      "defaultOn": true,
+      "userToggle": false,
+      "defaultOn": false,
       "tier": "commercial_or_public",
-      "recordCount": 85534,
+      "recordCount": 0,
       "fallbackFor": [],
       "note": ""
     },
@@ -1740,7 +1761,7 @@
       "unavailableDatasets": [
         {
           "id": "approaches",
-          "reason": "The source is public domain, but this procedure import is incomplete and remains in the repository for review."
+          "reason": "The source cycle is not effective yet, has expired, or has invalid dates."
         }
       ],
       "userToggle": false,
@@ -1759,14 +1780,18 @@
         "ofma_ofmx_vfr_reference_points"
       ],
       "availableDatasets": [
-        "faa_vfr_reporting_points",
         "ofma_ofmx_vfr_reference_points"
       ],
-      "unavailableDatasets": [],
+      "unavailableDatasets": [
+        {
+          "id": "faa_vfr_reporting_points",
+          "reason": "The source cycle is not effective yet, has expired, or has invalid dates."
+        }
+      ],
       "userToggle": true,
       "defaultOn": true,
       "tier": "commercial_or_public",
-      "recordCount": 5411,
+      "recordCount": 4736,
       "fallbackFor": [],
       "note": ""
     },
@@ -1778,15 +1803,21 @@
         "ofma_airspace",
         "sia_france_airspace"
       ],
-      "availableDatasets": [
-        "ofma_airspace",
-        "sia_france_airspace"
+      "availableDatasets": [],
+      "unavailableDatasets": [
+        {
+          "id": "ofma_airspace",
+          "reason": "The source cycle is not effective yet, has expired, or has invalid dates."
+        },
+        {
+          "id": "sia_france_airspace",
+          "reason": "The source cycle is not effective yet, has expired, or has invalid dates."
+        }
       ],
-      "unavailableDatasets": [],
-      "userToggle": true,
-      "defaultOn": true,
+      "userToggle": false,
+      "defaultOn": false,
       "tier": "commercial_or_public",
-      "recordCount": 35469,
+      "recordCount": 0,
       "fallbackFor": [],
       "note": ""
     },

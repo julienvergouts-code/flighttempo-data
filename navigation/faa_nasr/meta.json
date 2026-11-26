@@ -5,47 +5,47 @@
   "licenseStatus": "public_domain",
   "attribution": "Federal Aviation Administration, Aeronautical Information Services, NASR.",
   "coverage": "United States National Airspace System (FIX, NAV and AWY groups, one cycle)",
-  "effectiveDate": "2026-10-29",
-  "expiryDate": "2026-11-25",
-  "dataCycle": "2026-10-29",
+  "effectiveDate": "2026-11-26",
+  "expiryDate": "2026-12-23",
+  "dataCycle": "2026-11-26",
   "operationalUse": "Reference only. Not an approved operational navigation database.",
   "files": {
     "fixes.csv": {
-      "sha256": "985fae9f674efa0ec2e9bdd40243305ff728c9fda815960c941ff6cbc76b558d",
-      "sizeBytes": 4155310,
-      "recordCount": 69385
+      "sha256": "3f80c3ea832f6378ee3e6c581528d9546748e9cce517632a0714f78f1105c8fa",
+      "sizeBytes": 4156708,
+      "recordCount": 69408
     },
     "navaids.csv": {
-      "sha256": "13a13351589e679c36281a3f26a24b3569da469084905eb99ad8dfec700a47d2",
-      "sizeBytes": 161841,
-      "recordCount": 1608
+      "sha256": "529b603fd40b6c13a56219a2a0f6ba30de52c6930aaf8e48b85110d89ca25c4a",
+      "sizeBytes": 161755,
+      "recordCount": 1607
     },
     "airway_segments.csv": {
-      "sha256": "2b19de7210b654624abe746ad2f09ba10a5f1b080df6e2a87f3f7c3a982e4b12",
+      "sha256": "b58899c5298e5f50c6b647cc28ae2c08e8019da943b8f0e5cabb228c8dc2897a",
       "sizeBytes": 1912757,
       "recordCount": 17178
     }
   },
   "sourceArchives": {
     "awy": {
-      "url": "https://nfdc.faa.gov/webContent/28DaySub/extra/29_Oct_2026_AWY_CSV.zip",
-      "sha256": "904eb8a300398223388bb957856d1142d8ed62bce2d919fecb5c94f4c98ad34a",
-      "sizeBytes": 1048767
+      "url": "https://nfdc.faa.gov/webContent/28DaySub/extra/26_Nov_2026_AWY_CSV.zip",
+      "sha256": "ebaf13c6c4572cc21b13b43252574def039b94c00359b6bf36a22208ac850036",
+      "sizeBytes": 1051713
     },
     "fix": {
-      "url": "https://nfdc.faa.gov/webContent/28DaySub/extra/29_Oct_2026_FIX_CSV.zip",
-      "sha256": "9c7361147c3bb5bd3298e2711208d14a68d7c0224bcbcab720cabeabac8edd3f",
-      "sizeBytes": 3805057
+      "url": "https://nfdc.faa.gov/webContent/28DaySub/extra/26_Nov_2026_FIX_CSV.zip",
+      "sha256": "93389f4414716ed330c0e838ed1e403ca78c24e2ae96653ffa218ff83b005c54",
+      "sizeBytes": 3808444
     },
     "nav": {
-      "url": "https://nfdc.faa.gov/webContent/28DaySub/extra/29_Oct_2026_NAV_CSV.zip",
-      "sha256": "a17d2851849594630fbfc9c6f7b06c09827c461aa680f632398741c9e7f55627",
-      "sizeBytes": 660975
+      "url": "https://nfdc.faa.gov/webContent/28DaySub/extra/26_Nov_2026_NAV_CSV.zip",
+      "sha256": "83ea508100751172382104fc589f060512dfe3c72e4a976fdae8d6a39269089d",
+      "sizeBytes": 663915
     }
   },
   "importStatistics": {
     "fixes": {
-      "vfr_reporting_points_skipped": 675,
+      "vfr_reporting_points_skipped": 681,
       "rejected": 0
     },
     "navaids": {
@@ -113,5 +113,5 @@
       ]
     }
   },
-  "generatedAtUtc": "2026-11-23T15:49:11Z"
+  "generatedAtUtc": "2026-11-26T08:47:24Z"
 }
