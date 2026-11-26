@@ -1,20 +1,21 @@
 {
   "source": "FAA AeroNav CIFP",
-  "airacCycle": "2611",
-  "effectiveDate": "2026-10-29",
-  "expiryDate": "2026-11-25",
-  "sha256": "be974a777fe0da70bb143bedce4f05d5744c2c62ad382691937c4b35494bf3cf",
+  "airacCycle": "2612",
+  "effectiveDate": "2026-11-26",
+  "expiryDate": "2026-12-23",
+  "sha256": "db9e88664cbb764b1d1a0b39b968fc388e6a94a2be03473513c3a1950546f1b6",
   "licenceStatus": "US_government_public_domain_review_FAA_terms_and_error_notification",
-  "sourceUrl": "https://aeronav.faa.gov/Upload_313-d/cifp/CIFP_261029.zip",
+  "sourceUrl": "https://aeronav.faa.gov/Upload_313-d/cifp/CIFP_261126.zip",
   "licenseName": "US Government work / public domain",
   "coverage": "United States NAS only; no European coverage",
   "recordCount": 33349,
+  "sourceArchiveSha256": "9bf85e1d01882b215b0d4b0e3ed3c056034d24f453c8cbf9554aa84337ea8e64",
   "files": [
     {
       "path": "sids.csv",
-      "sha256": "be974a777fe0da70bb143bedce4f05d5744c2c62ad382691937c4b35494bf3cf",
+      "sha256": "db9e88664cbb764b1d1a0b39b968fc388e6a94a2be03473513c3a1950546f1b6",
       "sizeBytes": 1646963
     }
   ],
-  "notes": "FAA CIFP cycle 2611. Not a worldwide SID database."
+  "notes": "FAA CIFP cycle 2612, decoded unattended from ARINC 424 (primary leg records). Not a worldwide procedure database; reference data only."
 }
