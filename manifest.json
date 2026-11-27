@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "repository": "julienvergouts-code/flighttempo-data",
-  "generatedAtUtc": "2026-11-27T13:48:48.442315+00:00",
+  "generatedAtUtc": "2026-11-27T13:59:42.468813+00:00",
   "purpose": "FlightTempo development and distribution of aviation datasets whose source-specific commercial reuse rights are verified; not an operational navigation database.",
   "rules": {
     "datasetMetaRequired": true,
@@ -151,18 +151,6 @@
       "commercialUseAllowed": false
     },
     {
-      "id": "easa-safety-directives",
-      "path": "airspace/advisories/easa_safety_directives.json",
-      "source": "EASA Safety Directives SD-2021-02 and SD-2021-03",
-      "airacCycle": null,
-      "effectiveDate": "2021-06-02",
-      "expiryDate": null,
-      "sha256": "531d42feed30978bb7574c75f69782b8b19d32a34424ef67ddef8fe5e3a625d3",
-      "licenceStatus": "EASA_source_acknowledgement",
-      "coverage": "Operator-scope-specific safety directives for FIR Minsk (UMMV)",
-      "recordCount": 2
-    },
-    {
       "id": "legacy-global-ifr-fixes",
       "path": "navigation/waypoints/flightgear_fixes.csv",
       "source": "X-Plane default navigation data mirror (ptsmonteiro/x-plane-navdata)",
@@ -212,6 +200,18 @@
       "licenceStatus": "FAA_public_information_reference_currentness_unverified",
       "coverage": "FAA-published international prohibition/restriction notice references",
       "recordCount": 16
+    },
+    {
+      "id": "easa-safety-directives",
+      "path": "airspace/advisories/easa_safety_directives.json",
+      "source": "EASA Safety Directives SD-2021-02 and SD-2021-03",
+      "airacCycle": null,
+      "effectiveDate": "2021-06-02",
+      "expiryDate": null,
+      "sha256": "531d42feed30978bb7574c75f69782b8b19d32a34424ef67ddef8fe5e3a625d3",
+      "licenceStatus": "EASA_source_acknowledgement",
+      "coverage": "Operator-scope-specific safety directives for FIR Minsk (UMMV)",
+      "recordCount": 2
     }
   ]
 }

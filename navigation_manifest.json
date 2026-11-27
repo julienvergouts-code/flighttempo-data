@@ -863,30 +863,6 @@
       "downloadPurpose": "reference_only"
     },
     {
-      "id": "easa_czibs",
-      "path": "airspace/advisories/easa_czibs.json",
-      "available": false,
-      "recordCount": 34,
-      "sizeBytes": 18566,
-      "sha256": "40431c2dd9bfc05d24e3827e357adfdab83983ce521b5784de92000635322147",
-      "status": "not_published_commercial_reuse_unconfirmed_or_restricted",
-      "license": "EASA source acknowledgement",
-      "operationallyAvailable": false,
-      "downloadBlockReason": "Commercial redistribution permission is not explicitly verified for this source."
-    },
-    {
-      "id": "easa_safety_directives",
-      "path": "airspace/advisories/easa_safety_directives.json",
-      "available": false,
-      "recordCount": 2,
-      "sizeBytes": 3941,
-      "sha256": "531d42feed30978bb7574c75f69782b8b19d32a34424ef67ddef8fe5e3a625d3",
-      "status": "not_published_commercial_reuse_unconfirmed_or_restricted",
-      "license": "EASA source acknowledgement",
-      "operationallyAvailable": false,
-      "downloadBlockReason": "Commercial redistribution permission is not explicitly verified for this source."
-    },
-    {
       "id": "route_policy",
       "path": "airspace/route_policy.json",
       "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/airspace/route_policy.json",
@@ -1418,6 +1394,57 @@
       "operationallyAvailable": false,
       "legacyGraphUsed": false,
       "status": "test_phase_not_published_to_app"
+    },
+    {
+      "id": "easa_czibs",
+      "path": "airspace/advisories/easa_czibs.json",
+      "available": false,
+      "recordCount": 34,
+      "sizeBytes": 18566,
+      "sha256": "7ab25ac8633b39b1f98b3c913832872d06a03a0e9da110df7a4c8f8accce668b",
+      "sourceProvider": "European Union Aviation Safety Agency (EASA)",
+      "sourceUrl": "https://www.easa.europa.eu/en/domains/air-operations/czibs",
+      "license": "EASA website copyright notice: reproduction authorised provided source is acknowledged",
+      "licenseStatus": "reproduction_authorised_with_source_acknowledgement",
+      "dataCycle": "not_applicable",
+      "downloadPurpose": "advisory_reference_only",
+      "operationallyAvailable": false,
+      "status": "not_published_commercial_reuse_unconfirmed_or_restricted",
+      "downloadBlockReason": "Commercial redistribution permission is not explicitly verified for this source."
+    },
+    {
+      "id": "easa_safety_directives",
+      "path": "airspace/advisories/easa_safety_directives.json",
+      "available": false,
+      "recordCount": 2,
+      "sizeBytes": 3941,
+      "sha256": "531d42feed30978bb7574c75f69782b8b19d32a34424ef67ddef8fe5e3a625d3",
+      "sourceProvider": "European Union Aviation Safety Agency (EASA)",
+      "sourceUrl": "https://www.easa.europa.eu/en/domains/air-operations/czibs",
+      "license": "EASA website copyright notice: reproduction authorised provided source is acknowledged",
+      "licenseStatus": "reproduction_authorised_with_source_acknowledgement",
+      "dataCycle": "not_applicable",
+      "downloadPurpose": "operator_scope_safety_directive_reference_only",
+      "operationallyAvailable": false,
+      "status": "not_published_commercial_reuse_unconfirmed_or_restricted",
+      "downloadBlockReason": "Commercial redistribution permission is not explicitly verified for this source."
+    },
+    {
+      "id": "airspace_filter",
+      "path": "airspace/airspace_filter.json",
+      "available": false,
+      "recordCount": 16,
+      "sizeBytes": 23737,
+      "sha256": "98948499281f9dcc72982085ab8f945e75992c87b8ce32f94e8524a1dda86a8b",
+      "sourceProvider": "European Union Aviation Safety Agency (EASA)",
+      "sourceUrl": "https://www.easa.europa.eu/en/domains/air-operations/czibs",
+      "license": "EASA website copyright notice: reproduction authorised provided source is acknowledged",
+      "licenseStatus": "reproduction_authorised_with_source_acknowledgement",
+      "dataCycle": "not_applicable",
+      "downloadPurpose": "route_preview_advisory_filter_only",
+      "operationallyAvailable": false,
+      "status": "not_published_commercial_reuse_unconfirmed_or_restricted",
+      "downloadBlockReason": "Commercial redistribution permission is not explicitly verified for this source."
     }
   ],
   "downloadContract": {
