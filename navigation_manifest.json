@@ -1,6 +1,6 @@
 {
   "schemaVersion": 13,
-  "generatedAtUtc": "2026-11-27T13:48:51.624250+00:00",
+  "generatedAtUtc": "2026-11-27T14:23:20Z",
   "procedureAiracCycle": "mixed",
   "navaidTypeCounts": {
     "DME": 167,
@@ -1158,30 +1158,6 @@
       "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/terrain/world-index.json"
     },
     {
-      "id": "france_sia_sid_star_legs",
-      "path": "procedures/europe/france/sid_star_legs.csv",
-      "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/procedures/europe/france/sid_star_legs.csv",
-      "available": true,
-      "recordCount": 8096,
-      "sizeBytes": 7229909,
-      "sha256": "caac2784418a2ec66240e9fdabb6d6814a2882d06accbc7a4bff4d5d0c08c872",
-      "sourceProvider": "Service de l'Information Aeronautique (SIA France)",
-      "sourceUrl": "https://www.sia.aviation-civile.gouv.fr/media/dvd/eAIP_26_NOV_2026/FRANCE/AIRAC-2026-11-26/pdf/FR-GEN-0.4-fr-FR.pdf",
-      "coverage": "France reference coverage: parser extracted 243 of 382 indexed current-cycle DATA SID/STAR sheets.",
-      "license": "SIA Licence Ouverte / Open Licence",
-      "licenseUrl": "https://www.sia.aviation-civile.gouv.fr/produits-numeriques-en-libre-disposition.html",
-      "licenseStatus": "verified_exact_eAIP_product_linked_to_open_license",
-      "commercialUseAllowed": true,
-      "attribution": "Service de l'Information Aeronautique (SIA France); include source and last update date; do not imply SIA endorsement.",
-      "dataCycle": "2026-11-26",
-      "effectiveDate": "2026-11-26",
-      "expiryDate": "2026-12-23",
-      "provenanceVerification": "official_SIA_eAIP_GEN_0_4_index",
-      "downloadPurpose": "regional_reference_only",
-      "operationallyAvailable": false,
-      "status": "partial_current_cycle_regional_reference_dataset"
-    },
-    {
       "id": "openaip_airspace",
       "path": "airspace/openaip/index.json",
       "available": true,
@@ -1445,6 +1421,30 @@
       "operationallyAvailable": false,
       "status": "not_published_commercial_reuse_unconfirmed_or_restricted",
       "downloadBlockReason": "Commercial redistribution permission is not explicitly verified for this source."
+    },
+    {
+      "id": "france_sia_sid_star_legs",
+      "path": "procedures/europe/france/sid_star_legs.csv",
+      "downloadUrl": "https://raw.githubusercontent.com/julienvergouts-code/flighttempo-data/main/procedures/europe/france/sid_star_legs.csv",
+      "available": true,
+      "recordCount": 8096,
+      "sizeBytes": 7229909,
+      "sha256": "caac2784418a2ec66240e9fdabb6d6814a2882d06accbc7a4bff4d5d0c08c872",
+      "sourceProvider": "Service de l'Information Aeronautique (SIA France)",
+      "sourceUrl": "https://www.sia.aviation-civile.gouv.fr/media/dvd/eAIP_26_NOV_2026/FRANCE/AIRAC-2026-11-26/pdf/FR-GEN-0.4-fr-FR.pdf",
+      "coverage": "France reference coverage: parser extracted 243 of 382 indexed current-cycle DATA SID/STAR sheets.",
+      "license": "SIA Licence Ouverte / Open Licence",
+      "licenseUrl": "https://www.sia.aviation-civile.gouv.fr/produits-numeriques-en-libre-disposition.html",
+      "licenseStatus": "verified_exact_eAIP_product_linked_to_open_license",
+      "commercialUseAllowed": true,
+      "attribution": "Service de l'Information Aeronautique (SIA France); include source and last update date; do not imply SIA endorsement.",
+      "dataCycle": "2026-11-26",
+      "effectiveDate": "2026-11-26",
+      "expiryDate": "2026-12-23",
+      "provenanceVerification": "official_SIA_eAIP_GEN_0_4_index",
+      "downloadPurpose": "regional_reference_only",
+      "operationallyAvailable": false,
+      "status": "partial_current_cycle_regional_reference_dataset"
     }
   ],
   "downloadContract": {
